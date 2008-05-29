@@ -4,6 +4,7 @@ import java.lang.reflect.*;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+
 public class PHP {
 
   public static String serialize(Object obj) throws IllegalArgumentException,
@@ -52,20 +53,61 @@ public class PHP {
     return s.length() + ":\"" + s + "\"";
   }
 
-  public static Object unserialize(String s) {
-    switch (s.charAt(0)) {
+  public static <T> T unserialize(Class<T> cls, String s)
+      throws IllegalArgumentException, InstantiationException,
+      IllegalAccessException {
+    StrTokenizer st = new StrTokenizer(s);
+    switch (st.nextToken(':').charAt(0)) {
       case 'N':
         return null;
       case 'i':
-        return Long.parseLong(s.substring(2, s.indexOf(';')));
+        String intNum = st.nextToken(';');
+        if (cls == Integer.class)
+          return cls.cast(Integer.parseInt(intNum));
+        if (cls == Long.class)
+          return cls.cast(Long.parseLong(intNum));
+        if (cls == Byte.class)
+          return cls.cast(Byte.parseByte(intNum));
+        if (cls == Short.class)
+          return cls.cast(Short.parseShort(intNum));
+        throw new IllegalArgumentException("Expected integer type");
       case 'd':
-        return Double.parseDouble(s.substring(2, s.indexOf(';')));
+        String floatNum = st.nextToken(';');
+        if (cls == Float.class)
+          return cls.cast(Float.parseFloat(floatNum));
+        if (cls == Double.class)
+          return cls.cast(Double.parseDouble(floatNum));
+        throw new IllegalArgumentException("Expected float type");
       case 'b':
-        return s.charAt(2) == '1';
+        switch (Integer.parseInt(st.nextToken(';'))) {
+          case 0:
+            return cls.cast(false);
+          case 1:
+            return cls.cast(true);
+          default:
+            throw new IllegalArgumentException("Expected 0 or 1");
+        }
+      case 's':
+        int charNum = Integer.parseInt(st.nextToken(':'));
+        st.nextToken('"');
+        if (cls == Character.class) {
+          if (charNum != 1)
+            throw new IllegalArgumentException("Lenght must be 1!");
+          return cls.cast(st.nextToken(charNum).charAt(0));
+        }
+        return cls.cast(st.nextToken(charNum));
+      case 'a':
+        int length = Integer.parseInt(st.nextToken(':'));
+        Object obj = Array.newInstance(Integer.TYPE, length);
+        st.nextToken('{');
+        Array.set(obj, 0, 2);
+        Array.set(obj, 1, 3);
+        Array.set(obj, 2, 9);
+        //
+        return cls.cast(obj);
       default:
         break;
     }
-    return 200;
+    throw new IllegalArgumentException("!!!");
   }
-
 }

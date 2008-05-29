@@ -7,7 +7,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import Client.PHP;
+import Client.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -32,60 +32,68 @@ public class TestSerialize {
   }
 
   @Test
-  public void testNull() throws IllegalAccessException {
+  public void testNull() throws IllegalAccessException,
+      IllegalArgumentException, InstantiationException {
     assertEquals("N;", PHP.serialize(null));
-    assertEquals(null, PHP.unserialize("N;"));
+    assertEquals(null, PHP.unserialize(null, "N;"));
+  }
+
+  @Test
+  public void testPrimitiveTypes() throws IllegalAccessException,
+      IllegalArgumentException, InstantiationException {
+    // Одиночные переменные - примитивные типы
+    for (int a = 1; a < 3; a++)
+      assertEquals("i:" + a + ";", PHP.serialize(a));
+    for (int i = 1; i < 101; i++) {
+      int ii = PHP.unserialize(Integer.class, "i:" + i + ";");
+      assertEquals(i, ii);
+    }
+    long l = 922372036854775807L;
+    assertEquals("i:" + l + ";", PHP.serialize(l));
+    assertEquals(l, PHP.unserialize(Long.class, PHP.serialize(l)));
+    byte b = 21;
+    assertEquals("i:" + b + ";", PHP.serialize(b));
+    assertEquals(b, PHP.unserialize(Byte.class, PHP.serialize(b)));
+    short s = 32767;
+    assertEquals("i:" + s + ";", PHP.serialize(s));
+    assertEquals(s, PHP.unserialize(Short.class, PHP.serialize(s)));
+    char c = 'a';
+    assertEquals("s:1:\"a\";", PHP.serialize(c));
+    char cc = PHP.unserialize(Character.class, PHP.serialize(c));
+    assertEquals(c, cc);
+    String tt = "Test string";
+    assertEquals("s:11:\"Test string\";", PHP.serialize(tt));
+    // assertEquals(s, PHP.unserialize(String.class, PHP.serialize(s)));
   }
 
   @Test
   public void testSerialize() throws IllegalArgumentException,
-      IllegalAccessException {
-
-    // Одиночные переменные - примитивные типы
-    for (int a = 1; a < 3; a++)
-      assertEquals("i:" + a + ";", PHP.serialize(a));
-    for (int i = 1; i < 101; i++)
-      assertEquals(i, PHP.unserialize("i:" + i + ";"));
-    long l = 922372036854775807L;
-    assertEquals("i:" + l + ";", PHP.serialize(l));
-    assertEquals(l, PHP.unserialize(PHP.serialize(l)));
-    byte b = 21;
-    assertEquals("i:" + b + ";", PHP.serialize(b));
-    assertEquals(b, PHP.unserialize(PHP.serialize(b)));
-    short s = 32767;
-    assertEquals("i:" + s + ";", PHP.serialize(s));
-    assertEquals(s, PHP.unserialize(PHP.serialize(s)));
-    char c = 'a';
-    assertEquals("s:1:\"a\";", PHP.serialize(c));
-    assertEquals(c, PHP.unserialize(PHP.serialize(c)));
-    String tt = "Test string";
-    assertEquals("s:11:\"Test string\";", PHP.serialize(tt));
-    assertEquals(s, PHP.unserialize(PHP.serialize(s)));
+      IllegalAccessException, InstantiationException {
 
     // Вещественные типы переменных
     float f = 1.3232f;
     assertEquals("d:1.3232;", PHP.serialize(f));
-    assertEquals(f, PHP.unserialize(PHP.serialize(f)));
+    assertEquals(f, PHP.unserialize(Float.class, PHP.serialize(f)));
     double d = 2.34;
     assertEquals("d:2.34;", PHP.serialize(d));
-    assertEquals(d, PHP.unserialize(PHP.serialize(d)));
+    assertEquals(d, PHP.unserialize(Double.class, PHP.serialize(d)));
 
     // Булевский тип переменных
     assertEquals("b:1;", PHP.serialize(true));
-    assertEquals(true, PHP.unserialize("b:1;"));
+    assertEquals(true, PHP.unserialize(Boolean.class, "b:1;"));
     assertEquals("b:0;", PHP.serialize(false));
-    assertEquals(false, PHP.unserialize("b:0;"));
+    assertEquals(false, PHP.unserialize(Boolean.class, "b:0;"));
 
     // Одномерные массивы
     int[] ar = { 2, 3, 9 };
     assertEquals("a:3:{i:0;i:2;i:1;i:3;i:2;i:9;}", PHP.serialize(ar));
-    int[] arr = (int[]) PHP.unserialize(PHP.serialize(ar));
+    int[] arr = PHP.unserialize(int[].class, PHP.serialize(ar));
     assertArrayEquals(ar, arr);
 
     String[] sa = { "s1", "s2" };
     assertEquals("a:2:{i:0;s:2:\"s1\";i:1;s:2:\"s2\";}", PHP.serialize(sa));
-    String[] saa = (String[]) PHP.unserialize(PHP.serialize(sa));
-    assertArrayEquals(sa, saa);
+    // String[] saa = (String[]) PHP.unserialize(PHP.serialize(sa));
+    // assertArrayEquals(sa, saa);
 
     // Многомерные массивы
     int[][] aa = { { 1, 2 }, { 3, 4 } };
@@ -117,5 +125,18 @@ public class TestSerialize {
     assertEquals(
         "O:8:\"BigClass\":2:{s:1:\"a\";O:7:\"MyClass\":2:{s:5:\"login\";i:6;s:1:\"g\";i:7;}s:1:\"b\";a:2:{i:0;i:453;i:1;i:64;}}",
         PHP.serialize(bc));
+  }
+
+  @Test
+  public void testTokenizer() throws IllegalArgumentException,
+      IllegalAccessException, InstantiationException {
+    StrTokenizer st = new StrTokenizer("s:11:\"Test string\";");
+    assertEquals('s', st.curChar());
+    assertEquals("s", st.nextToken(':'));
+    assertEquals('1', st.curChar());
+    assertEquals("11", st.nextToken(':', '"'));
+    assertEquals("Test string", st.nextToken(11));
+    assertEquals('"', st.curChar());
+    assertEquals("", st.nextToken('"', ';'));
   }
 }
