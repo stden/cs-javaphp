@@ -37,4 +37,8 @@ public class StrTokenizer {
     return str.substring(beginIndex, endIndex);
   }
 
+  @Override
+  public String toString() {
+    return str.substring(0, pos) + "#" + str.substring(pos);
+  }
 }

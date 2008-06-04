@@ -4,8 +4,20 @@ import java.lang.reflect.*;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-
 public class PHP {
+
+  static HashMap<Class<?>, Class<?>> types = new HashMap<Class<?>, Class<?>>();
+
+  static {
+    types.put(Byte.TYPE, Byte.class);
+    types.put(Integer.TYPE, Integer.class);
+    types.put(Long.TYPE, Long.class);
+    types.put(Short.TYPE, Short.class);
+    types.put(Float.TYPE, Float.class);
+    types.put(Double.TYPE, Double.class);
+    types.put(Character.TYPE, Character.class);
+    types.put(Boolean.TYPE, Boolean.class);
+  }
 
   public static String serialize(Object obj) throws IllegalArgumentException,
       IllegalAccessException {
@@ -51,33 +63,43 @@ public class PHP {
 
   private static String serStr(String s) {
     return s.length() + ":\"" + s + "\"";
+  };
+
+  public static Class<?> type2Class(Class<?> type) {
+    Class<?> cls = types.get(type);
+    return cls != null ? cls : type;
   }
 
   public static <T> T unserialize(Class<T> cls, String s)
       throws IllegalArgumentException, InstantiationException,
       IllegalAccessException {
-    StrTokenizer st = new StrTokenizer(s);
+    return unserialize(cls, new StrTokenizer(s));
+  }
+
+  static <T> T unserialize(Class<T> cls, StrTokenizer st) {
     switch (st.nextToken(':').charAt(0)) {
       case 'N':
         return null;
       case 'i':
         String intNum = st.nextToken(';');
-        if (cls == Integer.class)
-          return cls.cast(Integer.parseInt(intNum));
-        if (cls == Long.class)
-          return cls.cast(Long.parseLong(intNum));
         if (cls == Byte.class)
           return cls.cast(Byte.parseByte(intNum));
         if (cls == Short.class)
           return cls.cast(Short.parseShort(intNum));
-        throw new IllegalArgumentException("Expected integer type");
+        if (cls == Integer.class)
+          return cls.cast(Integer.parseInt(intNum));
+        if (cls == Long.class)
+          return cls.cast(Long.parseLong(intNum));
+        throw new IllegalArgumentException("Expected integer type, found: "
+            + cls.getCanonicalName());
       case 'd':
         String floatNum = st.nextToken(';');
         if (cls == Float.class)
           return cls.cast(Float.parseFloat(floatNum));
         if (cls == Double.class)
           return cls.cast(Double.parseDouble(floatNum));
-        throw new IllegalArgumentException("Expected float type");
+        throw new IllegalArgumentException("Expected float type, found: "
+            + cls.getCanonicalName());
       case 'b':
         switch (Integer.parseInt(st.nextToken(';'))) {
           case 0:
@@ -90,24 +112,33 @@ public class PHP {
       case 's':
         int charNum = Integer.parseInt(st.nextToken(':'));
         st.nextToken('"');
+        String s = st.nextToken(charNum);
+        st.nextToken(';');
         if (cls == Character.class) {
           if (charNum != 1)
             throw new IllegalArgumentException("Lenght must be 1!");
-          return cls.cast(st.nextToken(charNum).charAt(0));
+          return cls.cast(s.charAt(0));
         }
-        return cls.cast(st.nextToken(charNum));
+        if (cls == String.class)
+          return cls.cast(s);
+        throw new IllegalArgumentException("Expected string type, found: "
+            + cls.getCanonicalName());
       case 'a':
         int length = Integer.parseInt(st.nextToken(':'));
-        Object obj = Array.newInstance(Integer.TYPE, length);
+        Object array = Array.newInstance(cls.getComponentType(), length);
         st.nextToken('{');
-        Array.set(obj, 0, 2);
-        Array.set(obj, 1, 3);
-        Array.set(obj, 2, 9);
-        //
-        return cls.cast(obj);
+        for (int i = 0; i < length; i++) {
+          int index = unserialize(Integer.class, st);
+          Array.set(array, index, unserialize(
+              type2Class(cls.getComponentType()), st));
+        }
+        st.nextToken('}');
+        return cls.cast(array);
       default:
         break;
     }
-    throw new IllegalArgumentException("!!!");
+    throw new IllegalArgumentException("!! " + cls.getCanonicalName() + " "
+        + st.toString());
   }
+
 }
