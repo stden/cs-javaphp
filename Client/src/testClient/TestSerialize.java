@@ -27,8 +27,14 @@ public class TestSerialize {
     Assert.assertTrue(ar.getClass().isArray());
     Assert.assertTrue(arr.getClass().isArray());
     assertEquals(Array.getLength(ar), Array.getLength(arr));
-    for (int k = 0; k < Array.getLength(ar); k++)
-      assertEquals(Array.get(ar, k), Array.get(arr, k));
+    for (int k = 0; k < Array.getLength(ar); k++) {
+      Object obj1 = Array.get(ar, k);
+      Object obj2 = Array.get(arr, k);
+      if (obj1.getClass().isArray() && obj2.getClass().isArray())
+        assertArrayEquals(obj1, obj2);
+      else
+        assertEquals(obj1, obj2);
+    }
   }
 
   @Test
@@ -63,7 +69,7 @@ public class TestSerialize {
     assertEquals(c, cc);
     String tt = "Test string";
     assertEquals("s:11:\"Test string\";", PHP.serialize(tt));
-    // assertEquals(s, PHP.unserialize(String.class, PHP.serialize(s)));
+    assertEquals(tt, PHP.unserialize(String.class, PHP.serialize(tt)));
   }
 
   @Test
@@ -92,13 +98,20 @@ public class TestSerialize {
 
     String[] sa = { "s1", "s2" };
     assertEquals("a:2:{i:0;s:2:\"s1\";i:1;s:2:\"s2\";}", PHP.serialize(sa));
-    // String[] saa = (String[]) PHP.unserialize(PHP.serialize(sa));
-    // assertArrayEquals(sa, saa);
+    String[] saa = PHP.unserialize(String[].class, PHP.serialize(sa));
+    assertArrayEquals(sa, saa);
+
+    char[] ca = { 'a', 'b' };
+    assertEquals("a:2:{i:0;s:1:\"a\";i:1;s:1:\"b\";}", PHP.serialize(ca));
+    char[] caa = PHP.unserialize(char[].class, PHP.serialize(ca));
+    assertArrayEquals(ca, caa);
 
     // Многомерные массивы
-    int[][] aa = { { 1, 2 }, { 3, 4 } };
+    int[][] mda = { { 1, 2 }, { 3, 4 } };
     assertEquals("a:2:{i:0;a:2:{i:0;i:1;i:1;i:2;}i:1;a:2:{i:0;i:3;i:1;i:4;}}",
-        PHP.serialize(aa));
+        PHP.serialize(mda));
+    int[][] mdaa = PHP.unserialize(mda.getClass(), PHP.serialize(mda));
+    assertArrayEquals(mda, mdaa);
 
     // Хеш-таблицы
     HashMap<String, String> hm = new HashMap<String, String>();
@@ -138,5 +151,20 @@ public class TestSerialize {
     assertEquals("Test string", st.nextToken(11));
     assertEquals('"', st.curChar());
     assertEquals("", st.nextToken('"', ';'));
+  }
+
+  @Test
+  public void type2Class() {
+    // Целые типы
+    assertEquals(Byte.class, PHP.type2Class(Byte.TYPE));
+    assertEquals(Short.class, PHP.type2Class(Short.TYPE));
+    assertEquals(Integer.class, PHP.type2Class(Integer.TYPE));
+    assertEquals(Long.class, PHP.type2Class(Long.TYPE));
+    // Вещественные типы
+    assertEquals(Float.class, PHP.type2Class(Float.TYPE));
+    assertEquals(Double.class, PHP.type2Class(Double.TYPE));
+    // Символы
+    assertEquals(Character.class, PHP.type2Class(Character.TYPE));
+    // Логический тип
   }
 }
