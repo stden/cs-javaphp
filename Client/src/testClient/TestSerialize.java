@@ -2,6 +2,7 @@ package testClient;
 
 import java.lang.reflect.Array;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import junit.framework.Assert;
 
@@ -13,14 +14,7 @@ import static org.junit.Assert.assertEquals;
 
 public class TestSerialize {
 
-  public class BigClass {
-    public MyClass a;
-    public int[]   b;
-  }
-
-  public class MyClass {
-    public int login;
-    public int g;
+  public static class HSS extends HashMap<String, String> {
   }
 
   private void assertArrayEquals(Object ar, Object arr) {
@@ -37,16 +31,25 @@ public class TestSerialize {
     }
   }
 
+  private void assertHashMapEquals(HashMap<?, ?> expected, HashMap<?, ?> actual) {
+    assertEquals("HashMap size: ", expected.size(), actual.size());
+    for (Entry<?, ?> entry : expected.entrySet())
+      assertEquals("HashMap[" + entry.getKey() + "]: ", entry.getValue(),
+          actual.get(entry.getKey()));
+  }
+
   @Test
   public void testNull() throws IllegalAccessException,
-      IllegalArgumentException, InstantiationException {
+      IllegalArgumentException, InstantiationException, Exception,
+      NoSuchFieldException {
     assertEquals("N;", PHP.serialize(null));
     assertEquals(null, PHP.unserialize(null, "N;"));
   }
 
   @Test
   public void testPrimitiveTypes() throws IllegalAccessException,
-      IllegalArgumentException, InstantiationException {
+      IllegalArgumentException, InstantiationException, SecurityException,
+      NoSuchFieldException {
     // Одиночные переменные - примитивные типы
     for (int a = 1; a < 3; a++)
       assertEquals("i:" + a + ";", PHP.serialize(a));
@@ -74,7 +77,8 @@ public class TestSerialize {
 
   @Test
   public void testSerialize() throws IllegalArgumentException,
-      IllegalAccessException, InstantiationException {
+      IllegalAccessException, InstantiationException, SecurityException,
+      NoSuchFieldException {
 
     // Вещественные типы переменных
     float f = 1.3232f;
@@ -119,6 +123,8 @@ public class TestSerialize {
     hm.put("test", "aa 2");
     assertEquals("a:2:{s:3:\"a b\";s:4:\"ss 1\";s:4:\"test\";s:4:\"aa 2\";}",
         PHP.serialize(hm));
+    HSS hma = PHP.unserialize(HSS.class, PHP.serialize(hm));
+    assertHashMapEquals(hm, hma);
 
     // Классы
     MyClass m = new MyClass();
@@ -126,6 +132,9 @@ public class TestSerialize {
     m.g = 2;
     assertEquals("O:7:\"MyClass\":2:{s:5:\"login\";i:1;s:1:\"g\";i:2;}", PHP
         .serialize(m));
+    MyClass ma = PHP.unserialize(MyClass.class, PHP.serialize(m));
+    assertEquals(m.login, ma.login);
+    assertEquals(m.g, ma.g);
 
     // Вложенные классы
     BigClass bc = new BigClass();
@@ -138,6 +147,9 @@ public class TestSerialize {
     assertEquals(
         "O:8:\"BigClass\":2:{s:1:\"a\";O:7:\"MyClass\":2:{s:5:\"login\";i:6;s:1:\"g\";i:7;}s:1:\"b\";a:2:{i:0;i:453;i:1;i:64;}}",
         PHP.serialize(bc));
+    BigClass bca = PHP.unserialize(BigClass.class, PHP.serialize(bc));
+    assertEquals(bc.b.length, bca.b.length);
+    assertEquals(bc.a.login, bca.a.login);
   }
 
   @Test
@@ -166,5 +178,6 @@ public class TestSerialize {
     // Символы
     assertEquals(Character.class, PHP.type2Class(Character.TYPE));
     // Логический тип
+    assertEquals(Boolean.class, PHP.type2Class(Boolean.TYPE));
   }
-}
+};
