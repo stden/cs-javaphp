@@ -21,7 +21,7 @@
     $path = $v['path'];
     echo "<hr>Get \"$path\"  contents from the last repository version<br>";
     $f = $svn->getFile($path);
-    $fileName = str_replace("trunk/Server/SVN/","out/",$path);
+    $fileName = str_replace("trunk/Server/SVN/","",$path);
     echo "Save to: $fileName<br>";
     $fd = fopen($fileName, "w");
     fwrite($fd,$f);
