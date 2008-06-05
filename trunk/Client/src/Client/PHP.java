@@ -9,14 +9,26 @@ public class PHP {
   static HashMap<Class<?>, Class<?>> types = new HashMap<Class<?>, Class<?>>();
 
   static {
+    // Целые типы
     types.put(Byte.TYPE, Byte.class);
     types.put(Integer.TYPE, Integer.class);
     types.put(Long.TYPE, Long.class);
     types.put(Short.TYPE, Short.class);
+    // Вещественные типы
     types.put(Float.TYPE, Float.class);
     types.put(Double.TYPE, Double.class);
+    // Символный тип
     types.put(Character.TYPE, Character.class);
+    // Логический тип
     types.put(Boolean.TYPE, Boolean.class);
+  }
+
+  private static String getString(StrTokenizer st, char endDelim) {
+    int charNum = Integer.parseInt(st.nextToken(':'));
+    st.nextToken('"');
+    String s = st.nextToken(charNum);
+    st.nextToken('"', endDelim);
+    return s;
   }
 
   public static String serialize(Object obj) throws IllegalArgumentException,
@@ -58,12 +70,12 @@ public class PHP {
         s += "s:" + serStr(f.getName()) + ";" + serialize(f.get(obj));
       return s + "}";
     }
-    return "Незнакомый тип!";
-  }
+    throw new IllegalArgumentException("Unknown type " + obj.getClass());
+  };
 
   private static String serStr(String s) {
     return s.length() + ":\"" + s + "\"";
-  };
+  }
 
   public static Class<?> type2Class(Class<?> type) {
     Class<?> cls = types.get(type);
@@ -72,11 +84,13 @@ public class PHP {
 
   public static <T> T unserialize(Class<T> cls, String s)
       throws IllegalArgumentException, InstantiationException,
-      IllegalAccessException {
+      IllegalAccessException, SecurityException, NoSuchFieldException {
     return unserialize(cls, new StrTokenizer(s));
   }
 
-  static <T> T unserialize(Class<T> cls, StrTokenizer st) {
+  static <T> T unserialize(Class<T> cls, StrTokenizer st)
+      throws InstantiationException, IllegalAccessException, SecurityException,
+      NoSuchFieldException {
     switch (st.nextToken(':').charAt(0)) {
       case 'N':
         return null;
@@ -110,12 +124,9 @@ public class PHP {
             throw new IllegalArgumentException("Expected 0 or 1");
         }
       case 's':
-        int charNum = Integer.parseInt(st.nextToken(':'));
-        st.nextToken('"');
-        String s = st.nextToken(charNum);
-        st.nextToken(';');
+        String s = getString(st, ';');
         if (cls == Character.class) {
-          if (charNum != 1)
+          if (s.length() != 1)
             throw new IllegalArgumentException("Lenght must be 1!");
           return cls.cast(s.charAt(0));
         }
@@ -125,20 +136,49 @@ public class PHP {
             + cls.getCanonicalName());
       case 'a':
         int length = Integer.parseInt(st.nextToken(':'));
-        Object array = Array.newInstance(cls.getComponentType(), length);
         st.nextToken('{');
-        for (int i = 0; i < length; i++) {
-          int index = unserialize(Integer.class, st);
-          Array.set(array, index, unserialize(
-              type2Class(cls.getComponentType()), st));
+        if (cls.isArray()) {
+          Object array = Array.newInstance(cls.getComponentType(), length);
+          for (int i = 0; i < length; i++) {
+            int index = unserialize(Integer.class, st);
+            Array.set(array, index, unserialize(type2Class(cls
+                .getComponentType()), st));
+          }
+          st.nextToken('}');
+          return cls.cast(array);
+        }
+        if (cls.asSubclass(HashMap.class) != null) {
+          ParameterizedType t = (ParameterizedType) cls.getGenericSuperclass();
+          Type[] params = t.getActualTypeArguments();
+          Class K = (Class) params[0];
+          Class V = (Class) params[1];
+          HashMap hm = (HashMap) cls.newInstance();
+          for (int i = 0; i < length; i++)
+            hm.put(unserialize(K, st), unserialize(V, st));
+          st.nextToken('}');
+          return cls.cast(hm);
+        }
+      case 'O':
+        // Можно игнорировать имя класса, тогда можно будет десериалировать в
+        // потомка
+        String className = getString(st, ':');
+        if (className.compareTo(cls.getSimpleName()) != 0)
+          throw new IllegalArgumentException(className + " != "
+              + cls.getSimpleName());
+        Object obj = cls.newInstance(); // Создаём объект
+        int fieldsNum = Integer.parseInt(st.nextToken(':'));
+        st.nextToken('{');
+        for (int i = 0; i < fieldsNum; i++) { // Заполняем поля
+          String fieldName = unserialize(String.class, st);
+          Field f = cls.getField(fieldName);
+          f.set(obj, unserialize(type2Class(f.getType()), st));
         }
         st.nextToken('}');
-        return cls.cast(array);
+        return cls.cast(obj);
       default:
         break;
     }
     throw new IllegalArgumentException("!! " + cls.getCanonicalName() + " "
         + st.toString());
   }
-
 }
