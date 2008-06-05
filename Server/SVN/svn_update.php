@@ -16,7 +16,7 @@
     echo "<hr>Get \"$path\"  contents from the last repository version<br>";
     $f = $svn->getFile($path);
     $fileName = str_replace("$subDir/","",$path);
-    echo "Save to: $fileName<br>";
+    echo "Save to: <b>$fileName</b> last-mod = ".$v['last-mod']."   ".date("F d Y H:i:s.",filemtime($fileName))."<br>";
     $fd = fopen($fileName, "w");
     fwrite($fd,$f);
     fclose($fd);
