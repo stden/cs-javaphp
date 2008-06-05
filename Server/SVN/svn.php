@@ -16,19 +16,19 @@
   foreach($files_now as $k=>$v){
     $path = $v['path'];
     echo "<hr>Get \"$path\"  contents from the last repository version<br>";
-    $f = $svn->getFile($path);
     $fileName = str_replace("$subDir/","",$path);
     echo "Save to: <b>$fileName</b> last-mod = ".$v['last-mod']."   ".date("F d Y H:i:s.",filemtime($fileName))."<br>";
+    $f = $svn->getFile($path);
     $fd = fopen($fileName, "w");
     fwrite($fd,$f);
     fclose($fd);
   }
 
-  echo 'Get all logs of /trunk/phpajax/phpajax.org from  between 2 version until the last';
+  echo 'Get all logs between 2 version until the last';
   $logs = $svn->getRepositoryLogs(2);
   print_r($logs);
 
-  echo 'Get all logs of /trunk/phpajax/phpajax.org from  between 2 version until 5 version.';
+  echo 'Get all logs between 2 version until 5 version.';
   $logs = $svn->getRepositoryLogs(2,5);
   print_r($logs);
 
