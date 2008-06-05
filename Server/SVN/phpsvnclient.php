@@ -28,8 +28,8 @@
 */
 define("PHPSVN_DIR",dirname(__FILE__) );
 
-require(PHPSVN_DIR."/http.php");
-require(PHPSVN_DIR."/xml_parser.php");
+require(PHPSVN_DIR."/http_client/http.php");
+require(PHPSVN_DIR."/xml_parser/xml_parser.php");
 require(PHPSVN_DIR."/definitions.php");
 
 
