@@ -7,6 +7,8 @@
 
   $svn = new phpsvnclient;
   $svn->setRespository("http://cs-javaphp.googlecode.com/svn/");
+  echo "Revision: ".$svn->getVersion();
+
   $subDir = "trunk/Server/SVN";
   $files_now = $svn->getDirectoryFiles("/$subDir");
   echo "<pre>"; print_r($files_now); echo "</pre>";
