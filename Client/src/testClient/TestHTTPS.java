@@ -1,17 +1,22 @@
 package testClient;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.*;
+import java.util.Random;
 
 import javax.net.ssl.HttpsURLConnection;
 
 import org.junit.Test;
 
+import Client.ServerConn;
+
+import static org.junit.Assert.assertEquals;
+
 public class TestHTTPS {
-  @Test
-  void TTT() throws MalformedURLException, IOException {
-    HttpsURLConnection conn = (HttpsURLConnection) (new URL(
-        "https://www.sun.com/")).openConnection();
+  private HttpsURLConnection OpenConnection(String URL_string)
+      throws IOException, MalformedURLException, ProtocolException {
+    HttpsURLConnection conn = (HttpsURLConnection) new URL(URL_string)
+        .openConnection();
     conn.setRequestMethod("GET");
     conn
         .setRequestProperty(
@@ -30,9 +35,67 @@ public class TestHTTPS {
     conn.setRequestProperty("Cache-Control", "max-age=0");
     // conn.setRequestProperty("Cookie",cookie);
     conn.setConnectTimeout(5000);
-    int code = conn.getResponseCode();
-    System.out.println("Code = " + code);
+    conn.setDoOutput(true);
+    return conn;
+  }
+
+  @Test
+  public void testConnect() throws MalformedURLException, IOException {
+    HttpsURLConnection conn = OpenConnection("https://www.sun.com/");
+    assertEquals(true, conn.getDoOutput());
+    assertEquals(HttpURLConnection.HTTP_OK, conn.getResponseCode());
+    assertEquals("OK", conn.getResponseMessage());
+  }
+
+  @Test
+  public void testRead() throws IOException {
+    HttpsURLConnection connec = null;
+    URL url = new URL("https://www.sun.com/");
+    connec = (HttpsURLConnection) url.openConnection();
+    connec.setDoInput(true);
+    connec.setUseCaches(false);
+
+    // String authentication = proxyUser + ":" + proxyPwd;
+    // String encodedPassword = "Basic " + new
+    // sun.misc.BASE64Encoder().encode(authentication.getBytes());
+    // connec.setRequestProperty("Proxy-Authorization", encodedPassword);
+
+    connec.setRequestMethod("POST");
+    connec.setDoOutput(true);
+
+    String msg = "---" + "\r\n";
+    PrintWriter out = new PrintWriter(connec.getOutputStream(), true);
+    out.println(msg);
+
+    int statusCode = connec.getResponseCode();
+
+    System.err.println("Certificats  --->" + connec.getServerCertificates());
+    System.err.println("HEADER --->" + connec.getHeaderFields());
+
+    StringBuffer pageContents = new StringBuffer();
+    if (statusCode == HttpURLConnection.HTTP_OK) {
+      System.err.println("Connected ...!");
+
+      BufferedReader in = new BufferedReader(new InputStreamReader(connec
+          .getInputStream()));
+
+      String curLine = in.readLine();
+      while (curLine != null) {
+        pageContents.append(curLine);
+        System.out.println(curLine);
+        curLine = in.readLine();
+      }
+    }
 
   }
 
-}
+  @Test
+  public void testSumHTTP() throws IOException {
+    ServerConn sc = new ServerConn("http://ipo.spb.ru/svn/a.php");
+    assertEquals("sum=13", sc.doPost("a=11&b=2"));
+    Random random = new Random();
+    int a = random.nextInt();
+    int b = random.nextInt();
+    assertEquals("sum=" + (a + b), sc.doPost("a=" + a + "&b=" + b));
+  }
+};
