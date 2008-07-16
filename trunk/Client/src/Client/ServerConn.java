@@ -2,10 +2,22 @@ package Client;
 
 import java.io.*;
 import java.net.*;
+import java.util.HashMap;
 
 public class ServerConn {
 
-  private final String URL_string;
+  private final String              URL_string;
+
+  static HashMap<Character, String> rep = new HashMap<Character, String>();
+
+  static {
+    rep.put('%', "%25");
+    rep.put('&', "%26");
+    rep.put((char) 0x00, "%00");
+    rep.put('+', "%2B");
+    rep.put((char) 0x0A, "%0A");
+    rep.put((char) 0x0D, "%0D");
+  }
 
   public ServerConn(String URL_string) {
     this.URL_string = URL_string;
@@ -39,4 +51,14 @@ public class ServerConn {
     return result;
   }
 
+  // Подготовка строки к передаче в GET/POST запросе
+  public String StringPrepare(String string) {
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < string.length(); i++)
+      if (rep.containsKey(string.charAt(i)))
+        sb.append(rep.get(string.charAt(i)));
+      else
+        sb.append(string.charAt(i));
+    return sb.toString();
+  }
 }
