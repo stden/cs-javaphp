@@ -40,6 +40,39 @@ public class TestHTTPS {
   }
 
   @Test
+  public void testAllSymbols() throws IOException {
+    // Адрес скрипта, который "переворачивает" строку
+    ServerConn sc = new ServerConn("http://ipo.spb.ru/svn/rev_str.php");
+    // Переворачивание отдельной строки
+    assertEquals("321", sc.doPost("a=123"));
+    // Специальные символы
+    assertEquals("%`!&", sc.doPost("a=" + sc.StringPrepare("&!`%")));
+    // Символ " - двойная кавычка
+    assertEquals("\"\"", sc.doPost("a=\"\""));
+
+    System.out.println("!!! = " + (char) 0x25);
+
+    // Символы "по-одному"
+    for (int code = 0; code < 100; code++) {
+      String s = "" + (char) code;
+      String result = sc.doPost("a=" + sc.StringPrepare(s));
+      if (!result.equals(s))
+        System.out.println("code = " + code / 16 + "|" + code % 16 + "  s = "
+            + s + " res = " + result);
+    }
+
+    // Все символы сразу
+    String s = "", rev_str = "";
+    for (int code = 0; code < 10; code++) {
+      s += (char) code;
+      rev_str = (char) code + rev_str;
+    }
+    assertEquals(rev_str, sc.doPost("a=" + sc.StringPrepare(s)));
+
+    System.out.println(s);
+  }
+
+  @Test
   public void testConnect() throws MalformedURLException, IOException {
     HttpsURLConnection conn = OpenConnection("https://www.sun.com/");
     assertEquals(true, conn.getDoOutput());
@@ -98,4 +131,5 @@ public class TestHTTPS {
     int b = random.nextInt();
     assertEquals("sum=" + (a + b), sc.doPost("a=" + a + "&b=" + b));
   }
+
 };
