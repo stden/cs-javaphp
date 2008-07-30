@@ -87,6 +87,13 @@ public class ClientView extends FrameView {
     containerPanel = new javax.swing.JPanel();
     SplitPane = new javax.swing.JSplitPane();
     showPluginPanel = new javax.swing.JPanel();
+    LoginEdit = new javax.swing.JTextField();
+    LoginLabel = new javax.swing.JLabel();
+    PasswordLabel = new javax.swing.JLabel();
+    PasswordEdit = new javax.swing.JTextField();
+    jButton1 = new javax.swing.JButton();
+    ServerLabel = new javax.swing.JLabel();
+    ServerEdit = new javax.swing.JTextField();
     selectPluginPanel = new javax.swing.JPanel();
     openLoginPluginButton = new javax.swing.JButton();
     statusPanel = new javax.swing.JPanel();
@@ -102,22 +109,82 @@ public class ClientView extends FrameView {
 
     showPluginPanel.setName("showPluginPanel"); // NOI18N
 
+    org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(clientapp.ClientApp.class).getContext().getResourceMap(ClientView.class);
+    LoginEdit.setText(resourceMap.getString("LoginEdit.text")); // NOI18N
+    LoginEdit.setName("LoginEdit"); // NOI18N
+
+    LoginLabel.setText(resourceMap.getString("LoginLabel.text")); // NOI18N
+    LoginLabel.setName("LoginLabel"); // NOI18N
+
+    PasswordLabel.setText(resourceMap.getString("PasswordLabel.text")); // NOI18N
+    PasswordLabel.setName("PasswordLabel"); // NOI18N
+
+    PasswordEdit.setText(resourceMap.getString("PasswordEdit.text")); // NOI18N
+    PasswordEdit.setName("PasswordEdit"); // NOI18N
+    PasswordEdit.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        PasswordEditActionPerformed(evt);
+      }
+    });
+
+    jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
+    jButton1.setName("jButton1"); // NOI18N
+
+    ServerLabel.setText(resourceMap.getString("ServerLabel.text")); // NOI18N
+    ServerLabel.setName("ServerLabel"); // NOI18N
+
+    ServerEdit.setText(resourceMap.getString("ServerEdit.text")); // NOI18N
+    ServerEdit.setName("ServerEdit"); // NOI18N
+
     javax.swing.GroupLayout showPluginPanelLayout = new javax.swing.GroupLayout(showPluginPanel);
     showPluginPanel.setLayout(showPluginPanelLayout);
     showPluginPanelLayout.setHorizontalGroup(
       showPluginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 309, Short.MAX_VALUE)
+      .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, showPluginPanelLayout.createSequentialGroup()
+        .addContainerGap(141, Short.MAX_VALUE)
+        .addComponent(jButton1)
+        .addGap(95, 95, 95))
+      .addGroup(showPluginPanelLayout.createSequentialGroup()
+        .addGap(26, 26, 26)
+        .addGroup(showPluginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addGroup(showPluginPanelLayout.createSequentialGroup()
+            .addComponent(ServerLabel)
+            .addGap(18, 18, 18)
+            .addComponent(ServerEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
+          .addGroup(showPluginPanelLayout.createSequentialGroup()
+            .addGroup(showPluginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+              .addComponent(PasswordLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+              .addComponent(LoginLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addGroup(showPluginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+              .addComponent(LoginEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+              .addComponent(PasswordEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))))
+        .addContainerGap(68, Short.MAX_VALUE))
     );
     showPluginPanelLayout.setVerticalGroup(
       showPluginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 284, Short.MAX_VALUE)
+      .addGroup(showPluginPanelLayout.createSequentialGroup()
+        .addGap(46, 46, 46)
+        .addGroup(showPluginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+          .addComponent(ServerLabel)
+          .addComponent(ServerEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addGroup(showPluginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+          .addComponent(LoginLabel)
+          .addComponent(LoginEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addGroup(showPluginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+          .addComponent(PasswordLabel)
+          .addComponent(PasswordEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addGap(18, 18, 18)
+        .addComponent(jButton1)
+        .addContainerGap(125, Short.MAX_VALUE))
     );
 
     SplitPane.setRightComponent(showPluginPanel);
 
     selectPluginPanel.setName("selectPluginPanel"); // NOI18N
 
-    org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(clientapp.ClientApp.class).getContext().getResourceMap(ClientView.class);
     openLoginPluginButton.setText(resourceMap.getString("openLoginPluginButton.text")); // NOI18N
     openLoginPluginButton.setName("openLoginPluginButton"); // NOI18N
 
@@ -192,9 +259,20 @@ public class ClientView extends FrameView {
     setStatusBar(statusPanel);
   }// </editor-fold>//GEN-END:initComponents
 
+private void PasswordEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PasswordEditActionPerformed
+// TODO add your handling code here:
+}//GEN-LAST:event_PasswordEditActionPerformed
+
   // Variables declaration - do not modify//GEN-BEGIN:variables
+  private javax.swing.JTextField LoginEdit;
+  private javax.swing.JLabel LoginLabel;
+  private javax.swing.JTextField PasswordEdit;
+  private javax.swing.JLabel PasswordLabel;
+  private javax.swing.JTextField ServerEdit;
+  private javax.swing.JLabel ServerLabel;
   private javax.swing.JSplitPane SplitPane;
   private javax.swing.JPanel containerPanel;
+  private javax.swing.JButton jButton1;
   private javax.swing.JButton openLoginPluginButton;
   private javax.swing.JProgressBar progressBar;
   private javax.swing.JPanel selectPluginPanel;
