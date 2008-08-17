@@ -1,87 +1,115 @@
 package clientapp;
 
-import org.jdesktop.application.ResourceMap;
-import org.jdesktop.application.SingleFrameApplication;
-import org.jdesktop.application.FrameView;
-import org.jdesktop.application.TaskMonitor;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.Timer;
-import javax.swing.Icon;
-import javax.swing.JDialog;
+import java.awt.event.*;
+
+import javax.swing.*;
+
+import org.jdesktop.application.*;
 
 /**
  * The application's main frame.
  */
 public class ClientView extends FrameView {
 
-    public ClientView(SingleFrameApplication app) {
-        super(app);
+  // Variables declaration - do not modify//GEN-BEGIN:variables
+  private javax.swing.JTextField   LoginEdit;
 
-        initComponents();
+  private javax.swing.JLabel       LoginLabel;
 
-        // status bar initialization - message timeout, idle icon and busy animation, etc
-        ResourceMap resourceMap = getResourceMap();
-        int messageTimeout = resourceMap.getInteger("StatusBar.messageTimeout");
-        messageTimer = new Timer(messageTimeout, new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                statusMessageLabel.setText("");
+  private javax.swing.JTextField   PasswordEdit;
+
+  private javax.swing.JLabel       PasswordLabel;
+  private javax.swing.JTextField   ServerEdit;
+  private javax.swing.JLabel       ServerLabel;
+  private javax.swing.JSplitPane   SplitPane;
+  private javax.swing.JPanel       containerPanel;
+  private javax.swing.JButton      LoginButton;
+  private javax.swing.JButton      openLoginPluginButton;
+  private javax.swing.JProgressBar progressBar;
+  private javax.swing.JPanel       selectPluginPanel;
+  private javax.swing.JPanel       showPluginPanel;
+  private javax.swing.JLabel       statusAnimationLabel;
+  private javax.swing.JLabel       statusMessageLabel;
+  private javax.swing.JPanel       statusPanel;
+  // End of variables declaration//GEN-END:variables
+  private final Timer              messageTimer;
+  private final Timer              busyIconTimer;
+  private final Icon               idleIcon;
+
+  private final Icon[]             busyIcons     = new Icon[15];
+  private int                      busyIconIndex = 0;
+  private JDialog                  aboutBox;
+
+  public ClientView(SingleFrameApplication app) {
+    super(app);
+
+    initComponents();
+
+    // status bar initialization - message timeout, idle icon and busy
+    // animation, etc
+    ResourceMap resourceMap = getResourceMap();
+    int messageTimeout = resourceMap.getInteger("StatusBar.messageTimeout");
+    messageTimer = new Timer(messageTimeout, new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        statusMessageLabel.setText("");
+      }
+    });
+    messageTimer.setRepeats(false);
+    int busyAnimationRate = resourceMap
+        .getInteger("StatusBar.busyAnimationRate");
+    for (int i = 0; i < busyIcons.length; i++)
+      busyIcons[i] = resourceMap.getIcon("StatusBar.busyIcons[" + i + "]");
+    busyIconTimer = new Timer(busyAnimationRate, new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        busyIconIndex = (busyIconIndex + 1) % busyIcons.length;
+        statusAnimationLabel.setIcon(busyIcons[busyIconIndex]);
+      }
+    });
+    idleIcon = resourceMap.getIcon("StatusBar.idleIcon");
+    statusAnimationLabel.setIcon(idleIcon);
+    progressBar.setVisible(false);
+
+    // connecting action tasks to status bar via TaskMonitor
+    TaskMonitor taskMonitor = new TaskMonitor(getApplication().getContext());
+    taskMonitor
+        .addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+          public void propertyChange(java.beans.PropertyChangeEvent evt) {
+            String propertyName = evt.getPropertyName();
+            if ("started".equals(propertyName)) {
+              if (!busyIconTimer.isRunning()) {
+                statusAnimationLabel.setIcon(busyIcons[0]);
+                busyIconIndex = 0;
+                busyIconTimer.start();
+              }
+              progressBar.setVisible(true);
+              progressBar.setIndeterminate(true);
+            } else if ("done".equals(propertyName)) {
+              busyIconTimer.stop();
+              statusAnimationLabel.setIcon(idleIcon);
+              progressBar.setVisible(false);
+              progressBar.setValue(0);
+            } else if ("message".equals(propertyName)) {
+              String text = (String) evt.getNewValue();
+              statusMessageLabel.setText(text == null ? "" : text);
+              messageTimer.restart();
+            } else if ("progress".equals(propertyName)) {
+              int value = (Integer) evt.getNewValue();
+              progressBar.setVisible(true);
+              progressBar.setIndeterminate(false);
+              progressBar.setValue(value);
             }
+          }
         });
-        messageTimer.setRepeats(false);
-        int busyAnimationRate = resourceMap.getInteger("StatusBar.busyAnimationRate");
-        for (int i = 0; i < busyIcons.length; i++) {
-            busyIcons[i] = resourceMap.getIcon("StatusBar.busyIcons[" + i + "]");
-        }
-        busyIconTimer = new Timer(busyAnimationRate, new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                busyIconIndex = (busyIconIndex + 1) % busyIcons.length;
-                statusAnimationLabel.setIcon(busyIcons[busyIconIndex]);
-            }
-        });
-        idleIcon = resourceMap.getIcon("StatusBar.idleIcon");
-        statusAnimationLabel.setIcon(idleIcon);
-        progressBar.setVisible(false);
+  }
 
-        // connecting action tasks to status bar via TaskMonitor
-        TaskMonitor taskMonitor = new TaskMonitor(getApplication().getContext());
-        taskMonitor.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                String propertyName = evt.getPropertyName();
-                if ("started".equals(propertyName)) {
-                    if (!busyIconTimer.isRunning()) {
-                        statusAnimationLabel.setIcon(busyIcons[0]);
-                        busyIconIndex = 0;
-                        busyIconTimer.start();
-                    }
-                    progressBar.setVisible(true);
-                    progressBar.setIndeterminate(true);
-                } else if ("done".equals(propertyName)) {
-                    busyIconTimer.stop();
-                    statusAnimationLabel.setIcon(idleIcon);
-                    progressBar.setVisible(false);
-                    progressBar.setValue(0);
-                } else if ("message".equals(propertyName)) {
-                    String text = (String)(evt.getNewValue());
-                    statusMessageLabel.setText((text == null) ? "" : text);
-                    messageTimer.restart();
-                } else if ("progress".equals(propertyName)) {
-                    int value = (Integer)(evt.getNewValue());
-                    progressBar.setVisible(true);
-                    progressBar.setIndeterminate(false);
-                    progressBar.setValue(value);
-                }
-            }
-        });
-    }
-
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
-     */
-    @SuppressWarnings("unchecked")
-  // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+  /**
+   * This method is called from within the constructor to initialize the form.
+   * WARNING: Do NOT modify this code. The content of this method is always
+   * regenerated by the Form Editor.
+   */
+  @SuppressWarnings("unchecked")
+  // <editor-fold defaultstate="collapsed"
+  // desc="Generated Code">//GEN-BEGIN:initComponents
   private void initComponents() {
 
     containerPanel = new javax.swing.JPanel();
@@ -91,7 +119,7 @@ public class ClientView extends FrameView {
     LoginLabel = new javax.swing.JLabel();
     PasswordLabel = new javax.swing.JLabel();
     PasswordEdit = new javax.swing.JTextField();
-    jButton1 = new javax.swing.JButton();
+    LoginButton = new javax.swing.JButton();
     ServerLabel = new javax.swing.JLabel();
     ServerEdit = new javax.swing.JTextField();
     selectPluginPanel = new javax.swing.JPanel();
@@ -109,7 +137,9 @@ public class ClientView extends FrameView {
 
     showPluginPanel.setName("showPluginPanel"); // NOI18N
 
-    org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(clientapp.ClientApp.class).getContext().getResourceMap(ClientView.class);
+    org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application
+        .getInstance(clientapp.ClientApp.class).getContext().getResourceMap(
+            ClientView.class);
     LoginEdit.setText(resourceMap.getString("LoginEdit.text")); // NOI18N
     LoginEdit.setName("LoginEdit"); // NOI18N
 
@@ -127,8 +157,8 @@ public class ClientView extends FrameView {
       }
     });
 
-    jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
-    jButton1.setName("jButton1"); // NOI18N
+    LoginButton.setText(resourceMap.getString("jButton1.text")); // NOI18N
+    LoginButton.setName("Login!"); // NOI18N
 
     ServerLabel.setText(resourceMap.getString("ServerLabel.text")); // NOI18N
     ServerLabel.setName("ServerLabel"); // NOI18N
@@ -136,87 +166,138 @@ public class ClientView extends FrameView {
     ServerEdit.setText(resourceMap.getString("ServerEdit.text")); // NOI18N
     ServerEdit.setName("ServerEdit"); // NOI18N
 
-    javax.swing.GroupLayout showPluginPanelLayout = new javax.swing.GroupLayout(showPluginPanel);
+    javax.swing.GroupLayout showPluginPanelLayout = new javax.swing.GroupLayout(
+        showPluginPanel);
     showPluginPanel.setLayout(showPluginPanelLayout);
-    showPluginPanelLayout.setHorizontalGroup(
-      showPluginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, showPluginPanelLayout.createSequentialGroup()
-        .addContainerGap(141, Short.MAX_VALUE)
-        .addComponent(jButton1)
-        .addGap(95, 95, 95))
-      .addGroup(showPluginPanelLayout.createSequentialGroup()
-        .addGap(26, 26, 26)
-        .addGroup(showPluginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addGroup(showPluginPanelLayout.createSequentialGroup()
-            .addComponent(ServerLabel)
-            .addGap(18, 18, 18)
-            .addComponent(ServerEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
-          .addGroup(showPluginPanelLayout.createSequentialGroup()
-            .addGroup(showPluginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-              .addComponent(PasswordLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-              .addComponent(LoginLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addGroup(showPluginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-              .addComponent(LoginEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-              .addComponent(PasswordEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))))
-        .addContainerGap(68, Short.MAX_VALUE))
-    );
-    showPluginPanelLayout.setVerticalGroup(
-      showPluginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(showPluginPanelLayout.createSequentialGroup()
-        .addGap(46, 46, 46)
-        .addGroup(showPluginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(ServerLabel)
-          .addComponent(ServerEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addGroup(showPluginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(LoginLabel)
-          .addComponent(LoginEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addGroup(showPluginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(PasswordLabel)
-          .addComponent(PasswordEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        .addGap(18, 18, 18)
-        .addComponent(jButton1)
-        .addContainerGap(125, Short.MAX_VALUE))
-    );
+    showPluginPanelLayout
+        .setHorizontalGroup(showPluginPanelLayout
+            .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(
+                javax.swing.GroupLayout.Alignment.TRAILING,
+                showPluginPanelLayout.createSequentialGroup().addContainerGap(
+                    141, Short.MAX_VALUE).addComponent(LoginButton).addGap(95,
+                    95, 95))
+            .addGroup(
+                showPluginPanelLayout
+                    .createSequentialGroup()
+                    .addGap(26, 26, 26)
+                    .addGroup(
+                        showPluginPanelLayout
+                            .createParallelGroup(
+                                javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(
+                                showPluginPanelLayout.createSequentialGroup()
+                                    .addComponent(ServerLabel).addGap(18, 18,
+                                        18).addComponent(ServerEdit,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        161,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(
+                                showPluginPanelLayout
+                                    .createSequentialGroup()
+                                    .addGroup(
+                                        showPluginPanelLayout
+                                            .createParallelGroup(
+                                                javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(
+                                                PasswordLabel,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                50,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(
+                                                LoginLabel,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                50,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addPreferredGap(
+                                        javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(
+                                        showPluginPanelLayout
+                                            .createParallelGroup(
+                                                javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(
+                                                LoginEdit,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                161,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(
+                                                PasswordEdit,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                161,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addContainerGap(68, Short.MAX_VALUE)));
+    showPluginPanelLayout.setVerticalGroup(showPluginPanelLayout
+        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(
+            showPluginPanelLayout.createSequentialGroup().addGap(46, 46, 46)
+                .addGroup(
+                    showPluginPanelLayout.createParallelGroup(
+                        javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(ServerLabel).addComponent(ServerEdit,
+                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                            javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(
+                    javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(
+                    showPluginPanelLayout.createParallelGroup(
+                        javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(LoginLabel).addComponent(LoginEdit,
+                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                            javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(
+                    javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(
+                    showPluginPanelLayout.createParallelGroup(
+                        javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(PasswordLabel).addComponent(PasswordEdit,
+                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                            javax.swing.GroupLayout.PREFERRED_SIZE)).addGap(18,
+                    18, 18).addComponent(LoginButton).addContainerGap(125,
+                    Short.MAX_VALUE)));
 
     SplitPane.setRightComponent(showPluginPanel);
 
     selectPluginPanel.setName("selectPluginPanel"); // NOI18N
 
-    openLoginPluginButton.setText(resourceMap.getString("openLoginPluginButton.text")); // NOI18N
+    openLoginPluginButton.setText(resourceMap
+        .getString("openLoginPluginButton.text")); // NOI18N
     openLoginPluginButton.setName("openLoginPluginButton"); // NOI18N
 
-    javax.swing.GroupLayout selectPluginPanelLayout = new javax.swing.GroupLayout(selectPluginPanel);
+    javax.swing.GroupLayout selectPluginPanelLayout = new javax.swing.GroupLayout(
+        selectPluginPanel);
     selectPluginPanel.setLayout(selectPluginPanelLayout);
-    selectPluginPanelLayout.setHorizontalGroup(
-      selectPluginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addComponent(openLoginPluginButton, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
-    );
-    selectPluginPanelLayout.setVerticalGroup(
-      selectPluginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(selectPluginPanelLayout.createSequentialGroup()
-        .addComponent(openLoginPluginButton)
-        .addContainerGap(261, Short.MAX_VALUE))
-    );
+    selectPluginPanelLayout.setHorizontalGroup(selectPluginPanelLayout
+        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(openLoginPluginButton,
+            javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE));
+    selectPluginPanelLayout.setVerticalGroup(selectPluginPanelLayout
+        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(
+            selectPluginPanelLayout.createSequentialGroup().addComponent(
+                openLoginPluginButton).addContainerGap(261, Short.MAX_VALUE)));
 
     SplitPane.setLeftComponent(selectPluginPanel);
 
-    javax.swing.GroupLayout containerPanelLayout = new javax.swing.GroupLayout(containerPanel);
+    javax.swing.GroupLayout containerPanelLayout = new javax.swing.GroupLayout(
+        containerPanel);
     containerPanel.setLayout(containerPanelLayout);
-    containerPanelLayout.setHorizontalGroup(
-      containerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 446, Short.MAX_VALUE)
-      .addGroup(containerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addComponent(SplitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE))
-    );
-    containerPanelLayout.setVerticalGroup(
-      containerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 286, Short.MAX_VALUE)
-      .addGroup(containerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addComponent(SplitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE))
-    );
+    containerPanelLayout.setHorizontalGroup(containerPanelLayout
+        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+            0, 446, Short.MAX_VALUE).addGroup(
+            containerPanelLayout.createParallelGroup(
+                javax.swing.GroupLayout.Alignment.LEADING).addComponent(
+                SplitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 446,
+                Short.MAX_VALUE)));
+    containerPanelLayout.setVerticalGroup(containerPanelLayout
+        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+            0, 286, Short.MAX_VALUE).addGroup(
+            containerPanelLayout.createParallelGroup(
+                javax.swing.GroupLayout.Alignment.LEADING).addComponent(
+                SplitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 286,
+                Short.MAX_VALUE)));
 
     statusPanel.setName("statusPanel"); // NOI18N
 
@@ -224,69 +305,52 @@ public class ClientView extends FrameView {
 
     statusMessageLabel.setName("statusMessageLabel"); // NOI18N
 
-    statusAnimationLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+    statusAnimationLabel
+        .setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
     statusAnimationLabel.setName("statusAnimationLabel"); // NOI18N
 
     progressBar.setName("progressBar"); // NOI18N
 
-    javax.swing.GroupLayout statusPanelLayout = new javax.swing.GroupLayout(statusPanel);
+    javax.swing.GroupLayout statusPanelLayout = new javax.swing.GroupLayout(
+        statusPanel);
     statusPanel.setLayout(statusPanelLayout);
-    statusPanelLayout.setHorizontalGroup(
-      statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addComponent(statusPanelSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
-      .addGroup(statusPanelLayout.createSequentialGroup()
-        .addContainerGap()
-        .addComponent(statusMessageLabel)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 276, Short.MAX_VALUE)
-        .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(statusAnimationLabel)
-        .addContainerGap())
-    );
-    statusPanelLayout.setVerticalGroup(
-      statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(statusPanelLayout.createSequentialGroup()
-        .addComponent(statusPanelSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        .addGroup(statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(statusMessageLabel)
-          .addComponent(statusAnimationLabel)
-          .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        .addGap(3, 3, 3))
-    );
+    statusPanelLayout.setHorizontalGroup(statusPanelLayout.createParallelGroup(
+        javax.swing.GroupLayout.Alignment.LEADING).addComponent(
+        statusPanelSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, 446,
+        Short.MAX_VALUE).addGroup(
+        statusPanelLayout.createSequentialGroup().addContainerGap()
+            .addComponent(statusMessageLabel).addPreferredGap(
+                javax.swing.LayoutStyle.ComponentPlacement.RELATED, 276,
+                Short.MAX_VALUE).addComponent(progressBar,
+                javax.swing.GroupLayout.PREFERRED_SIZE,
+                javax.swing.GroupLayout.DEFAULT_SIZE,
+                javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(
+                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(statusAnimationLabel).addContainerGap()));
+    statusPanelLayout.setVerticalGroup(statusPanelLayout.createParallelGroup(
+        javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+        statusPanelLayout.createSequentialGroup().addComponent(
+            statusPanelSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 2,
+            javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(
+            javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+            javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addGroup(
+            statusPanelLayout.createParallelGroup(
+                javax.swing.GroupLayout.Alignment.BASELINE).addComponent(
+                statusMessageLabel).addComponent(statusAnimationLabel)
+                .addComponent(progressBar,
+                    javax.swing.GroupLayout.PREFERRED_SIZE,
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.PREFERRED_SIZE)).addGap(3, 3, 3)));
 
     setComponent(containerPanel);
     setStatusBar(statusPanel);
   }// </editor-fold>//GEN-END:initComponents
 
-private void PasswordEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PasswordEditActionPerformed
-// TODO add your handling code here:
-}//GEN-LAST:event_PasswordEditActionPerformed
-
-  // Variables declaration - do not modify//GEN-BEGIN:variables
-  private javax.swing.JTextField LoginEdit;
-  private javax.swing.JLabel LoginLabel;
-  private javax.swing.JTextField PasswordEdit;
-  private javax.swing.JLabel PasswordLabel;
-  private javax.swing.JTextField ServerEdit;
-  private javax.swing.JLabel ServerLabel;
-  private javax.swing.JSplitPane SplitPane;
-  private javax.swing.JPanel containerPanel;
-  private javax.swing.JButton jButton1;
-  private javax.swing.JButton openLoginPluginButton;
-  private javax.swing.JProgressBar progressBar;
-  private javax.swing.JPanel selectPluginPanel;
-  private javax.swing.JPanel showPluginPanel;
-  private javax.swing.JLabel statusAnimationLabel;
-  private javax.swing.JLabel statusMessageLabel;
-  private javax.swing.JPanel statusPanel;
-  // End of variables declaration//GEN-END:variables
-
-    private final Timer messageTimer;
-    private final Timer busyIconTimer;
-    private final Icon idleIcon;
-    private final Icon[] busyIcons = new Icon[15];
-    private int busyIconIndex = 0;
-
-    private JDialog aboutBox;
+  private void PasswordEditActionPerformed(java.awt.event.ActionEvent evt) {// GEN
+    // -
+    // FIRST
+    // :
+    // event_PasswordEditActionPerformed
+    // TODO add your handling code here:
+  }// GEN-LAST:event_PasswordEditActionPerformed
 }

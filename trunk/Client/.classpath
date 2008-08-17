@@ -11,5 +11,6 @@
 			<attribute name="javadoc_location" value="jar:file:/E:/java_workspace1/JavaClient/lib/forms-javadoc.zip!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/TableLayout.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
