@@ -1,4 +1,4 @@
-package testClient;
+package ru.ipo.dces.tests;
 
 import java.awt.Component;
 import java.util.List;
@@ -7,8 +7,9 @@ import javax.swing.*;
 
 import org.junit.Test;
 
-import Client.*;
-import Client.ClientDialog.OpenPanelAction;
+import ru.ipo.dces.client.*;
+import ru.ipo.dces.client.ClientDialog.OpenPanelAction;
+
 
 import static org.junit.Assert.*;
 

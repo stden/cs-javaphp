@@ -1,4 +1,4 @@
-package testClient;
+package ru.ipo.dces.tests;
 
 import java.io.*;
 import java.net.*;
@@ -8,7 +8,8 @@ import javax.net.ssl.HttpsURLConnection;
 
 import org.junit.Test;
 
-import Client.ServerConn;
+import ru.ipo.dces.client.ServerConn;
+
 
 import static org.junit.Assert.assertEquals;
 

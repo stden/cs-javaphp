@@ -1,8 +1,9 @@
-package testClient;
+package ru.ipo.dces.tests;
 
 import java.util.List;
 
-import Client.Contest;
+import ru.ipo.dces.client.Contest;
+
 
 public interface IServer {
 

@@ -1,4 +1,4 @@
-package Client;
+package ru.ipo.dces.client;
 
 import java.lang.reflect.*;
 import java.util.HashMap;

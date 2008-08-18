@@ -1,4 +1,4 @@
-package Client;
+package ru.ipo.dces.client;
 
 import java.io.*;
 import java.net.*;

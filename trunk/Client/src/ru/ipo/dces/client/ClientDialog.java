@@ -1,4 +1,4 @@
-package Client;
+package ru.ipo.dces.client;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -10,7 +10,7 @@ import org.jdesktop.application.Application;
 
 import ru.ipo.dces.clientservercommunication.InfoFrame;
 import ru.ipo.dces.pluginapi.Client;
-import testClient.IServer;
+import ru.ipo.dces.tests.IServer;
 
 public class ClientDialog extends JDialog implements Client {
 

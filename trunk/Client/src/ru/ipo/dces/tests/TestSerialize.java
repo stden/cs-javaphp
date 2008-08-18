@@ -1,4 +1,4 @@
-package testClient;
+package ru.ipo.dces.tests;
 
 import java.lang.reflect.Array;
 import java.util.HashMap;
@@ -8,7 +8,8 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import Client.*;
+import ru.ipo.dces.client.*;
+
 
 import static org.junit.Assert.assertEquals;
 
