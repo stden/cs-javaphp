@@ -10,4 +10,6 @@ public interface IServer {
 
   List<Contest> getAvaibleContests();
 
+  Contest getContest(int i);
+
 }
