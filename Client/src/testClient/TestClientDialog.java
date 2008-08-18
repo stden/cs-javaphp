@@ -56,6 +56,12 @@ public class TestClientDialog {
   @Test
   public void test2() {
     // Анонимный пользователь хочет посмотреть контест.
+    ClientDialog cd = new ClientDialog(new JFrame());
+    cd.server = new MockServer();
+    IServer server = cd.server;
+    server.addContest("Example contest #1");
+    Contest contest = server.getContest(0);
+    assertEquals("Example contest #1", contest.name);
   }
 
   @Test

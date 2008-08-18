@@ -10,14 +10,18 @@ public class MockServer implements IServer {
 
   @Override
   public void addContest(String contestName) {
-    Contest contest = new Contest();
-    contest.name = contestName;
+    Contest contest = new Contest(contestName);
     contestsList.add(contest);
   }
 
   @Override
   public List<Contest> getAvaibleContests() {
     return contestsList;
+  }
+
+  @Override
+  public Contest getContest(int i) {
+    return contestsList.get(i);
   }
 
 }

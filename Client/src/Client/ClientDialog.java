@@ -8,9 +8,11 @@ import javax.swing.*;
 
 import org.jdesktop.application.Application;
 
+import ru.ipo.dces.clientservercommunication.InfoFrame;
+import ru.ipo.dces.pluginapi.Client;
 import testClient.IServer;
 
-public class ClientDialog extends JDialog {
+public class ClientDialog extends JDialog implements Client {
 
   static public class OpenPanelAction implements ActionListener {
     public void actionPerformed(ActionEvent evt) {
@@ -78,7 +80,7 @@ public class ClientDialog extends JDialog {
             userPanelButton.addActionListener(new OpenPanelAction());
             leftPanel.add(userPanelButton, BorderLayout.NORTH);
 
-            for (int i = 2; i < 15; i++) {
+            for (int i = 2; i < 7; i++) {
               JButton panelButton = new JButton();
               panelButton.setText("Plugin " + i);
               panelButton.addActionListener(new OpenPanelAction());
@@ -95,5 +97,11 @@ public class ClientDialog extends JDialog {
       e.printStackTrace();
     }
 
+  }
+
+  @Override
+  public InfoFrame submitSolution(InfoFrame solution) {
+    // TODO Auto-generated method stub
+    return null;
   }
 }
