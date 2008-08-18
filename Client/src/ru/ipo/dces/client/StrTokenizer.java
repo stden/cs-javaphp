@@ -1,4 +1,4 @@
-package Client;
+package ru.ipo.dces.client;
 
 public class StrTokenizer {
 

@@ -1,4 +1,4 @@
-package testClient;
+package ru.ipo.dces.tests;
 
 public class MyClass {
   public int login;
