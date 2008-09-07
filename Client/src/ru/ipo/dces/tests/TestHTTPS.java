@@ -8,12 +8,14 @@ import javax.net.ssl.HttpsURLConnection;
 
 import org.junit.Test;
 
-import ru.ipo.dces.client.ServerConn;
-
+import ru.ipo.dces.client.*;
 
 import static org.junit.Assert.assertEquals;
 
 public class TestHTTPS {
+
+  private static final String ServerURL = "http://ipo.spb.ru/dces/";
+
   private HttpsURLConnection OpenConnection(String URL_string)
       throws IOException, MalformedURLException, ProtocolException {
     HttpsURLConnection conn = (HttpsURLConnection) new URL(URL_string)
@@ -42,35 +44,39 @@ public class TestHTTPS {
 
   @Test
   public void testAllSymbols() throws IOException {
-    // Адрес скрипта, который "переворачивает" строку
-    ServerConn sc = new ServerConn("http://ipo.spb.ru/svn/rev_str.php");
-    // Переворачивание отдельной строки
-    assertEquals("321", sc.doPost("a=123"));
+    // Скрипт, который просто показывает строку
+    ServerConn sc = new ServerConn(ServerURL + "str.php");
+    // Вывод отдельной строки
+    assertEquals("123", sc.doPost("a=123"));
     // Специальные символы
-    assertEquals("%`!&", sc.doPost("a=" + sc.StringPrepare("&!`%")));
+    assertEquals("&!`%", sc.doPost("a=" + sc.StringPrepare("&!`%")));
     // Символ " - двойная кавычка
-    assertEquals("\"\"", sc.doPost("a=\"\""));
-
-    System.out.println("!!! = " + (char) 0x25);
+    assertEquals("\"", sc.doPost("a=\""));
 
     // Символы "по-одному"
-    for (int code = 0; code < 100; code++) {
-      String s = "" + (char) code;
-      String result = sc.doPost("a=" + sc.StringPrepare(s));
-      if (!result.equals(s))
-        System.out.println("code = " + code / 16 + "|" + code % 16 + "  s = "
-            + s + " res = " + result);
-    }
+    for (int code = 0; code < 128; code++)
+      if (code != 13 && code != 10 && code != 128) {
+        String s = "" + (char) code;
+        String result = sc.doPost("a=" + sc.StringPrepare(s));
+        if (!result.equals(s)) {
+          System.out.println("code = " + code / 16 + "|" + code % 16 + "  s = "
+              + s + " res = " + result);
+          System.out.println("-- " + sc.doPost("code=" + sc.StringPrepare(s)));
+        }
+        assertEquals(s, result);
+      }
+
+    // Русские буквы
+    assertEquals("Привет!", sc.doPost("a=Привет!"));
 
     // Все символы сразу
-    String s = "", rev_str = "";
-    for (int code = 0; code < 10; code++) {
-      s += (char) code;
-      rev_str = (char) code + rev_str;
-    }
-    assertEquals(rev_str, sc.doPost("a=" + sc.StringPrepare(s)));
-
-    System.out.println(s);
+    /*
+     * String s = "", rev_str = ""; for (int code = 0; code < 10; code++) { s +=
+     * (char) code; rev_str = (char) code + rev_str; } assertEquals(rev_str,
+     * sc.doPost("a=" + sc.StringPrepare(s)));
+     * 
+     * System.out.println(s);
+     */
   }
 
   @Test
@@ -124,12 +130,29 @@ public class TestHTTPS {
   }
 
   @Test
+  // Сумма с применением сериализации
+  public void testSum_serialize() throws IOException, IllegalArgumentException,
+      IllegalAccessException, Exception, InstantiationException,
+      NoSuchFieldException {
+    // Скрипт, который суммирует числа с использованием сериализации /
+    // десериализации
+    Sum s = new Sum();
+    Random random = new Random();
+    s.a = random.nextInt() % 10000;
+    s.b = random.nextInt() % 10000;
+    ServerConn sc = new ServerConn(ServerURL + "x.php");
+    int i = PHP
+        .unserialize(Integer.class, sc.doPost("sum=" + PHP.serialize(s)));
+    assertEquals(s.a + s.b, i);
+  }
+
+  @Test
   public void testSumHTTP() throws IOException {
-    ServerConn sc = new ServerConn("http://ipo.spb.ru/svn/a.php");
+    ServerConn sc = new ServerConn(ServerURL + "sum.php");
     assertEquals("sum=13", sc.doPost("a=11&b=2"));
     Random random = new Random();
-    int a = random.nextInt();
-    int b = random.nextInt();
+    int a = random.nextInt() % 10000;
+    int b = random.nextInt() % 10000;
     assertEquals("sum=" + (a + b), sc.doPost("a=" + a + "&b=" + b));
   }
 
