@@ -1,3 +1,3 @@
 <?php
-  echo "sum=".($a+$b);
+  echo "sum=".($_REQUEST['a']+$_REQUEST['b']);
 ?>
