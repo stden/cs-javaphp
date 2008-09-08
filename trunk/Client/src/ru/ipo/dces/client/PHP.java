@@ -132,7 +132,7 @@ public class PHP {
         }
         if (cls == String.class)
           return cls.cast(s);
-        throw new IllegalArgumentException("Expected string type, found: "
+        throw new IllegalArgumentException(" \"" + s + "\"  string != "
             + cls.getCanonicalName());
       case 'a':
         int length = Integer.parseInt(st.nextToken(':'));

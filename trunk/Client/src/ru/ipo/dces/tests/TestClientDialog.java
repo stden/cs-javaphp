@@ -1,7 +1,6 @@
 package ru.ipo.dces.tests;
 
 import java.awt.Component;
-import java.util.List;
 
 import javax.swing.*;
 
@@ -9,7 +8,7 @@ import org.junit.Test;
 
 import ru.ipo.dces.client.*;
 import ru.ipo.dces.client.ClientDialog.OpenPanelAction;
-
+import ru.ipo.dces.clientservercommunication.ContestDescription;
 
 import static org.junit.Assert.*;
 
@@ -39,29 +38,26 @@ public class TestClientDialog {
   }
 
   @Test
-  public void test1() {
+  public void test1() throws Exception {
     // ”частник контеста взаимодействует с системой дл€ получени€ доступных
     // контестов. ќн просит выдать список доступных контестов. —истема выдает
     // список.
     ClientDialog cd = new ClientDialog(new JFrame());
-    cd.server = new MockServer();
     // TODO: —делать, чтобы запрос происходил по кнопке
-    IServer server = cd.server;
-    server.addContest("Example contest #1");
-    server.addContest("Example contest #2");
-    List<Contest> contestList = server.getAvaibleContests();
-    assertEquals("Example contest #1", contestList.get(0).name);
-    assertEquals("Example contest #2", contestList.get(1).name);
+    cd.server = new MockServer();
+    testContestList(cd);
+    cd.server = new RealServer(TestHTTPS.ServerURL);
+    testContestList(cd);
   }
 
   @Test
-  public void test2() {
+  public void test2() throws Exception {
     // јнонимный пользователь хочет посмотреть контест.
     ClientDialog cd = new ClientDialog(new JFrame());
     cd.server = new MockServer();
     IServer server = cd.server;
     server.addContest("Example contest #1");
-    Contest contest = server.getContest(0);
+    ContestDescription contest = server.getContest(0);
     assertEquals("Example contest #1", contest.name);
   }
 
@@ -92,6 +88,15 @@ public class TestClientDialog {
     // повторной отправки решени€ - в случае, если администратор разрешил такую
     // возможность). “акже система отображает список других задач, оставшеес€
     // врем€ (если оно указано), возможность вернутьс€ к странице контеста.
+  }
+
+  private void testContestList(ClientDialog cd) throws Exception {
+    IServer server = cd.server;
+    server.addContest("Example contest #1");
+    server.addContest("Example contest #2");
+    ContestDescription[] contestList = server.getAvaibleContests();
+    assertEquals("Example contest #1", contestList[0].name);
+    assertEquals("Example contest #2", contestList[1].name);
   }
 
 }

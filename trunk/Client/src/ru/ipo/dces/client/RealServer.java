@@ -4,7 +4,10 @@ import java.io.*;
 import java.net.*;
 import java.util.HashMap;
 
-public class ServerConn {
+import ru.ipo.dces.clientservercommunication.*;
+import ru.ipo.dces.tests.IServer;
+
+public class RealServer implements IServer {
 
   private final String              URL_string;
 
@@ -19,8 +22,16 @@ public class ServerConn {
     rep.put((char) 0x0D, "%0D");
   }
 
-  public ServerConn(String URL_string) {
+  public RealServer(String URL_string) {
     this.URL_string = URL_string;
+  }
+
+  @Override
+  public void addContest(String contestName) throws Exception {
+    CreateContestRequest f = new CreateContestRequest();
+    f.contest = new ContestDescription();
+    f.contest.name = contestName;
+    doPost(PHP.serialize(f));
   }
 
   public String doPost(String sendToServer) throws MalformedURLException,
@@ -49,6 +60,24 @@ public class ServerConn {
     }
     String result = pageContents.toString();
     return result;
+  }
+
+  public <T> T doRequest(Class<T> cls, Object obj) throws Exception {
+    return PHP.unserialize(cls, doPost("x=" + PHP.serialize(obj)));
+  }
+
+  @Override
+  public ContestDescription[] getAvaibleContests() throws Exception {
+    AvailableContestsRequest a = new AvailableContestsRequest();
+    a.getInvisibleContests = true;
+    AvailableContestsResponse r = doRequest(AvailableContestsResponse.class, a);
+    return r.contests;
+  }
+
+  @Override
+  public ContestDescription getContest(int i) {
+    // TODO Auto-generated method stub
+    return null;
   }
 
   // Подготовка строки к передаче в GET/POST запросе
