@@ -1,16 +1,13 @@
 package ru.ipo.dces.tests;
 
-import java.util.List;
-
-import ru.ipo.dces.client.Contest;
-
+import ru.ipo.dces.clientservercommunication.ContestDescription;
 
 public interface IServer {
 
-  void addContest(String contestName);
+  void addContest(String contestName) throws Exception;
 
-  List<Contest> getAvaibleContests();
+  ContestDescription[] getAvaibleContests() throws Exception;
 
-  Contest getContest(int i);
+  ContestDescription getContest(int i);
 
 }

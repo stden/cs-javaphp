@@ -8,17 +8,20 @@ import javax.net.ssl.HttpsURLConnection;
 
 import org.junit.Test;
 
-import ru.ipo.dces.client.*;
+import ru.ipo.dces.client.RealServer;
 
 import static org.junit.Assert.assertEquals;
 
 public class TestHTTPS {
 
-  private static final String ServerURL = "http://ipo.spb.ru/dces/";
+  static final boolean        onlyLocalTests = true;
+  private static final String ServerBaseURL  = onlyLocalTests ? "http://localhost:3569/"
+                                                 : "http://ipo.spb.ru/dces/";
+  public static final String  ServerURL      = ServerBaseURL + "x.php";
 
   private HttpsURLConnection OpenConnection(String URL_string)
       throws IOException, MalformedURLException, ProtocolException {
-    HttpsURLConnection conn = (HttpsURLConnection) new URL(URL_string)
+    final HttpsURLConnection conn = (HttpsURLConnection) new URL(URL_string)
         .openConnection();
     conn.setRequestMethod("GET");
     conn
@@ -45,7 +48,7 @@ public class TestHTTPS {
   @Test
   public void testAllSymbols() throws IOException {
     // Скрипт, который просто показывает строку
-    ServerConn sc = new ServerConn(ServerURL + "str.php");
+    final RealServer sc = new RealServer(ServerBaseURL + "str.php");
     // Вывод отдельной строки
     assertEquals("123", sc.doPost("a=123"));
     // Специальные символы
@@ -56,8 +59,8 @@ public class TestHTTPS {
     // Символы "по-одному"
     for (int code = 0; code < 128; code++)
       if (code != 13 && code != 10 && code != 128) {
-        String s = "" + (char) code;
-        String result = sc.doPost("a=" + sc.StringPrepare(s));
+        final String s = "" + (char) code;
+        final String result = sc.doPost("a=" + sc.StringPrepare(s));
         if (!result.equals(s)) {
           System.out.println("code = " + code / 16 + "|" + code % 16 + "  s = "
               + s + " res = " + result);
@@ -81,16 +84,24 @@ public class TestHTTPS {
 
   @Test
   public void testConnect() throws MalformedURLException, IOException {
-    HttpsURLConnection conn = OpenConnection("https://www.sun.com/");
+    if (onlyLocalTests)
+      return;
+    final HttpsURLConnection conn = OpenConnection("https://www.sun.com/");
     assertEquals(true, conn.getDoOutput());
     assertEquals(HttpURLConnection.HTTP_OK, conn.getResponseCode());
     assertEquals("OK", conn.getResponseMessage());
   }
 
   @Test
+  public void testContest() throws IOException {
+  }
+
+  @Test
   public void testRead() throws IOException {
+    if (onlyLocalTests)
+      return;
     HttpsURLConnection connec = null;
-    URL url = new URL("https://www.sun.com/");
+    final URL url = new URL("https://www.sun.com/");
     connec = (HttpsURLConnection) url.openConnection();
     connec.setDoInput(true);
     connec.setUseCaches(false);
@@ -103,20 +114,20 @@ public class TestHTTPS {
     connec.setRequestMethod("POST");
     connec.setDoOutput(true);
 
-    String msg = "---" + "\r\n";
-    PrintWriter out = new PrintWriter(connec.getOutputStream(), true);
+    final String msg = "---" + "\r\n";
+    final PrintWriter out = new PrintWriter(connec.getOutputStream(), true);
     out.println(msg);
 
-    int statusCode = connec.getResponseCode();
+    final int statusCode = connec.getResponseCode();
 
     System.err.println("Certificats  --->" + connec.getServerCertificates());
     System.err.println("HEADER --->" + connec.getHeaderFields());
 
-    StringBuffer pageContents = new StringBuffer();
+    final StringBuffer pageContents = new StringBuffer();
     if (statusCode == HttpURLConnection.HTTP_OK) {
       System.err.println("Connected ...!");
 
-      BufferedReader in = new BufferedReader(new InputStreamReader(connec
+      final BufferedReader in = new BufferedReader(new InputStreamReader(connec
           .getInputStream()));
 
       String curLine = in.readLine();
@@ -136,23 +147,22 @@ public class TestHTTPS {
       NoSuchFieldException {
     // Скрипт, который суммирует числа с использованием сериализации /
     // десериализации
-    Sum s = new Sum();
-    Random random = new Random();
+    final Sum s = new Sum();
+    final Random random = new Random();
     s.a = random.nextInt() % 10000;
     s.b = random.nextInt() % 10000;
-    ServerConn sc = new ServerConn(ServerURL + "x.php");
-    int i = PHP
-        .unserialize(Integer.class, sc.doPost("sum=" + PHP.serialize(s)));
+    final RealServer sc = new RealServer(ServerURL);
+    final int i = sc.doRequest(Integer.class, s);
     assertEquals(s.a + s.b, i);
   }
 
   @Test
   public void testSumHTTP() throws IOException {
-    ServerConn sc = new ServerConn(ServerURL + "sum.php");
+    final RealServer sc = new RealServer(ServerBaseURL + "sum.php");
     assertEquals("sum=13", sc.doPost("a=11&b=2"));
-    Random random = new Random();
-    int a = random.nextInt() % 10000;
-    int b = random.nextInt() % 10000;
+    final Random random = new Random();
+    final int a = random.nextInt() % 10000;
+    final int b = random.nextInt() % 10000;
     assertEquals("sum=" + (a + b), sc.doPost("a=" + a + "&b=" + b));
   }
 
