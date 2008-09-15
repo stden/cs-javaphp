@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import ru.ipo.dces.client.*;
 import ru.ipo.dces.client.ClientDialog.OpenPanelAction;
-import ru.ipo.dces.clientservercommunication.ContestDescription;
+import ru.ipo.dces.clientservercommunication.*;
 
 import static org.junit.Assert.*;
 
@@ -38,7 +38,7 @@ public class TestClientDialog {
   }
 
   @Test
-  public void test1() throws Exception {
+  public void test1() throws Exception, RequestFailedResponse {
     // ”частник контеста взаимодействует с системой дл€ получени€ доступных
     // контестов. ќн просит выдать список доступных контестов. —истема выдает
     // список.
@@ -69,6 +69,8 @@ public class TestClientDialog {
     // данные, система провер€ет данные на корректность и полноту, и, в случае
     // успеха, выдает список доступных дл€ участи€ контестов. ¬ случае неудачи
     // система просит пользовател€ повторно ввести данные.
+    // RegisterForm rf = new RegisterForm(new JFrame());
+
   }
 
   @Test
@@ -90,7 +92,8 @@ public class TestClientDialog {
     // врем€ (если оно указано), возможность вернутьс€ к странице контеста.
   }
 
-  private void testContestList(ClientDialog cd) throws Exception {
+  private void testContestList(ClientDialog cd) throws Exception,
+      RequestFailedResponse {
     IServer server = cd.server;
     server.addContest("Example contest #1");
     server.addContest("Example contest #2");

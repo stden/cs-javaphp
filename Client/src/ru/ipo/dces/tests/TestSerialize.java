@@ -9,6 +9,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import ru.ipo.dces.client.*;
+import ru.ipo.dces.tests.samples.*;
 
 
 import static org.junit.Assert.assertEquals;

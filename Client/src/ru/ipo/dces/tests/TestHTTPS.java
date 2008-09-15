@@ -9,6 +9,8 @@ import javax.net.ssl.HttpsURLConnection;
 import org.junit.Test;
 
 import ru.ipo.dces.client.RealServer;
+import ru.ipo.dces.clientservercommunication.RequestFailedResponse;
+import ru.ipo.dces.tests.samples.Sum;
 
 import static org.junit.Assert.assertEquals;
 
@@ -144,7 +146,7 @@ public class TestHTTPS {
   // Сумма с применением сериализации
   public void testSum_serialize() throws IOException, IllegalArgumentException,
       IllegalAccessException, Exception, InstantiationException,
-      NoSuchFieldException {
+      NoSuchFieldException, RequestFailedResponse {
     // Скрипт, который суммирует числа с использованием сериализации /
     // десериализации
     final Sum s = new Sum();

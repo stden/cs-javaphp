@@ -3,36 +3,38 @@ package ru.ipo.dces.clientservercommunication;
 import java.util.Date;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Илья
- * Date: 21.05.2008
- * Time: 15:09:41
+ * Created by IntelliJ IDEA. User: Илья Date: 21.05.2008 Time: 15:09:41
  */
 public class ContestDescription implements InfoFrame {
-                
-    public int contestID;
 
-    //названия доступных контестов
-    public String name;
+  public int    contestID;
 
-    //описание контеста
-    public String description;
+  // названия доступных контестов
+  public String name;
 
-    //время начала контеста
-    public Date start;
+  // описание контеста
+  public String description;
 
-    //время окончания контеста
-    public Date finish;
+  // время начала контеста
+  public Date   start;
 
-    //свойство контеста - способ регистрации.
-    // 0 - можно регистрироваться самому с помощью Клиента
-    // 1 - регистриуют только администраторы
-    //-1 - значение не установлено
-    public int registrationType;
+  // время окончания контеста
+  public Date   finish;
 
-    // 0 - невидимый
-    // 1 - видимый
-    //-1 - значение не установлено    
-    public int visible; //контесты во время настройки не должны быть видимы, видимость можно включать отключать
+  // свойство контеста - способ регистрации.
+  // 0 - можно регистрироваться самому с помощью Клиента
+  // 1 - регистриуют только администраторы
+  // -1 - значение не установлено
+  public int    registrationType;
+
+  // 0 - невидимый
+  // 1 - видимый
+  // -1 - значение не установлено
+  public int    visible;         // контесты во время настройки не должны быть
+                                  // видимы, видимость можно включать отключать
+
+  public ContestDescription(String name) {
+    this.name = name;
+  }
 
 }
