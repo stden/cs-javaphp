@@ -8,9 +8,8 @@ import javax.swing.*;
 
 import org.jdesktop.application.Application;
 
-import ru.ipo.dces.clientservercommunication.InfoFrame;
+import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.pluginapi.Client;
-import ru.ipo.dces.tests.IServer;
 
 public class ClientDialog extends JDialog implements Client {
 
@@ -49,7 +48,7 @@ public class ClientDialog extends JDialog implements Client {
     initGUI();
   }
 
-  public List<Contest> getAvaibleContests() {
+  public List<ContestDescription> getAvaibleContests() {
     // TODO Auto-generated method stub
     return null;
   }

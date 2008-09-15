@@ -5,7 +5,6 @@ import java.net.*;
 import java.util.HashMap;
 
 import ru.ipo.dces.clientservercommunication.*;
-import ru.ipo.dces.tests.IServer;
 
 public class RealServer implements IServer {
 
@@ -29,7 +28,7 @@ public class RealServer implements IServer {
   @Override
   public void addContest(String contestName) throws Exception {
     CreateContestRequest f = new CreateContestRequest();
-    f.contest = new ContestDescription();
+    f.contest = new ContestDescription(contestName);
     f.contest.name = contestName;
     doPost(PHP.serialize(f));
   }
@@ -62,12 +61,23 @@ public class RealServer implements IServer {
     return result;
   }
 
-  public <T> T doRequest(Class<T> cls, Object obj) throws Exception {
-    return PHP.unserialize(cls, doPost("x=" + PHP.serialize(obj)));
+  public <T> T doRequest(Class<T> cls, Object obj) throws Exception,
+      RequestFailedResponse {
+    String answer = doPost("x=" + PHP.serialize(obj));
+    try {
+      return PHP.unserialize(cls, answer);
+    } catch (Exception e2) {
+      try {
+        throw PHP.unserialize(RequestFailedResponse.class, answer);
+      } catch (Exception e4) {
+        throw new Exception(answer);
+      }
+    }
   }
 
   @Override
-  public ContestDescription[] getAvaibleContests() throws Exception {
+  public ContestDescription[] getAvaibleContests() throws Exception,
+      RequestFailedResponse {
     AvailableContestsRequest a = new AvailableContestsRequest();
     a.getInvisibleContests = true;
     AvailableContestsResponse r = doRequest(AvailableContestsResponse.class, a);

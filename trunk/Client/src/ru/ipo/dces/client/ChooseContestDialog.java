@@ -8,6 +8,8 @@ import javax.swing.*;
 
 import org.jdesktop.application.Application;
 
+import ru.ipo.dces.clientservercommunication.ContestDescription;
+
 /**
  * This code was edited or generated using CloudGarden's Jigloo SWT/Swing GUI
  * Builder, which is free for non-commercial use. If Jigloo is being used
@@ -69,9 +71,9 @@ public class ChooseContestDialog extends javax.swing.JDialog {
         }
       }
       {
-        List<Contest> c = new ArrayList<Contest>();
-        c.add(new Contest("Test #1"));
-        c.add(new Contest("Test #2"));
+        List<ContestDescription> c = new ArrayList<ContestDescription>();
+        c.add(new ContestDescription("Test #1"));
+        c.add(new ContestDescription("Test #2"));
         ListModel jList1Model = new DefaultComboBoxModel(c.toArray());
         contestsList = new JList();
         getContentPane().add(contestsList, BorderLayout.CENTER);
@@ -84,11 +86,6 @@ public class ChooseContestDialog extends javax.swing.JDialog {
     } catch (Exception e) {
       e.printStackTrace();
     }
-  }
-
-  private void OKButtonActionPerformed(ActionEvent evt) {
-    System.out.println("OKButton.actionPerformed, event=" + evt);
-    // TODO add your code for OKButton.actionPerformed
   }
 
 }
