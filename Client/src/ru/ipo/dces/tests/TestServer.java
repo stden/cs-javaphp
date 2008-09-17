@@ -63,6 +63,8 @@ public class TestServer {
     cpr.sessionID = ct.sessionID;
     cpr.oldPassword = con.password;
     cpr.newPassword = "newdenispass";
-    server.doRequest(ChangePasswordRequest.class, cpr);
+    AcceptedResponse ar = server.doRequest(AcceptedResponse.class, cpr);
+    assertNotNull(ar);
+    // 
   }
 }

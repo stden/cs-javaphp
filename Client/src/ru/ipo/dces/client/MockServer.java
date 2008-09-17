@@ -48,6 +48,9 @@ public class MockServer implements IServer {
       res.sessionID = "sdfgdsgdf";
       return cls.cast(res);
     }
+    if (obj instanceof ChangePasswordRequest) {
+      return cls.cast(new AcceptedResponse());
+    }
     return null;
   }
 
