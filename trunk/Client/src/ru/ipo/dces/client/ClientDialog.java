@@ -99,8 +99,9 @@ public class ClientDialog extends JDialog implements Client {
   }
 
   @Override
-  public InfoFrame submitSolution(InfoFrame solution) {
+  public SubmitSolutionResponse submitSolution(SubmitSolutionRequest solution) {
     // TODO Auto-generated method stub
     return null;
   }
+
 }

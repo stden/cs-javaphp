@@ -1,12 +1,8 @@
 package ru.ipo.dces.clientservercommunication;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Илья
- * Date: 21.05.2008
- * Time: 3:11:42
+ * Ответ: присоединились к соревнованию
  */
-public class ConnectToContestResponse implements InfoFrame {
-    //id сессии
-    public String sessionID;
+public class ConnectToContestResponse implements Response {
+  public String sessionID;
 }

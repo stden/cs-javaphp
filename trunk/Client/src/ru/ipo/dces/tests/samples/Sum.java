@@ -1,6 +1,8 @@
 package ru.ipo.dces.tests.samples;
 
-public class Sum {
+import ru.ipo.dces.clientservercommunication.Request;
+
+public class Sum implements Request {
   public int a;
   public int b;
 }

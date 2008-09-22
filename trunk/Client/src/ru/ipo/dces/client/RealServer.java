@@ -25,14 +25,6 @@ public class RealServer implements IServer {
     this.URL_string = URL_string;
   }
 
-  @Override
-  public void addContest(String contestName) throws Exception {
-    CreateContestRequest f = new CreateContestRequest();
-    f.contest = new ContestDescription(contestName);
-    f.contest.name = contestName;
-    doPost(PHP.serialize(f));
-  }
-
   public String doPost(String sendToServer) throws MalformedURLException,
       IOException {
     HttpURLConnection con = (HttpURLConnection) new URL(URL_string)
@@ -61,7 +53,7 @@ public class RealServer implements IServer {
     return result;
   }
 
-  public <T> T doRequest(Class<T> cls, Object obj) throws Exception,
+  public <T> T doRequest(Class<T> cls, Request obj) throws Exception,
       RequestFailedResponse {
     String answer = doPost("x=" + PHP.serialize(obj));
     try {
@@ -73,21 +65,6 @@ public class RealServer implements IServer {
         throw new Exception(answer);
       }
     }
-  }
-
-  @Override
-  public ContestDescription[] getAvaibleContests() throws Exception,
-      RequestFailedResponse {
-    AvailableContestsRequest a = new AvailableContestsRequest();
-    a.getInvisibleContests = true;
-    AvailableContestsResponse r = doRequest(AvailableContestsResponse.class, a);
-    return r.contests;
-  }
-
-  @Override
-  public ContestDescription getContest(int i) {
-    // TODO Auto-generated method stub
-    return null;
   }
 
   // Подготовка строки к передаче в GET/POST запросе

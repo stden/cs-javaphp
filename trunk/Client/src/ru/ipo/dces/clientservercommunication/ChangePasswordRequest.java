@@ -1,15 +1,12 @@
 package ru.ipo.dces.clientservercommunication;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Илья
- * Date: 25.05.2008
- * Time: 20:34:32
+ * Запрос на изменение пароля
  */
-public class ChangePasswordRequest implements InfoFrame {
+public class ChangePasswordRequest implements Request {
 
-    public String sessionID;
-    public String oldPassword;
-    public String newPassword;
+  public String sessionID;
+  public String oldPassword;
+  public String newPassword;
 
 }

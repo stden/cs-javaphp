@@ -1,14 +1,9 @@
 package ru.ipo.dces.clientservercommunication;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Илья
- * Date: 23.05.2008
- * Time: 22:33:58
+ * Зарегистрироваться для участия в контесте
  */
-public class RegisterToContestRequest implements InfoFrame {
-
-    public String contestID;
-    public UserDescription user; 
-
+public class RegisterToContestRequest implements Request {
+  public String          contestID;
+  public UserDescription user;
 }

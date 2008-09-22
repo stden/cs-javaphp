@@ -1,14 +1,15 @@
 package ru.ipo.dces.clientservercommunication;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Илья
- * Date: 24.05.2008
- * Time: 14:08:19
+ * Создание нового контеста
  */
-public class CreateContestRequest implements InfoFrame {
+public class CreateContestRequest implements Request {
 
-    public String sessionID;
-    public ContestDescription contest;
+  public String             sessionID;
+  public ContestDescription contest;
+
+  public CreateContestRequest(String contestName) {
+    contest = new ContestDescription(contestName);
+  }
 
 }

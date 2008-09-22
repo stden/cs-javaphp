@@ -1,13 +1,9 @@
 package ru.ipo.dces.clientservercommunication;
 
 /**
- * Created by IntelliJ IDEA.
- * User: »ль€
- * Date: 23.05.2008
- * Time: 19:24:26
+ * ѕолучить архив с Plugin'ом
  */
-public class InstallClientPluginResponse implements InfoFrame {
-
-    public byte[] pluginInstaller; //видимо, архив с содержимым плагина
-
+public class InstallClientPluginResponse implements Response {
+  /** архив с содержимым плагина */
+  public byte[] pluginInstaller;
 }

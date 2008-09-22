@@ -3,9 +3,9 @@ package ru.ipo.dces.clientservercommunication;
 import java.util.Date;
 
 /**
- * Created by IntelliJ IDEA. User: Илья Date: 21.05.2008 Time: 15:09:41
+ * Описание контеста
  */
-public class ContestDescription implements InfoFrame {
+public class ContestDescription {
 
   public int    contestID;
 
@@ -31,7 +31,8 @@ public class ContestDescription implements InfoFrame {
   // 1 - видимый
   // -1 - значение не установлено
   public int    visible;         // контесты во время настройки не должны быть
-                                  // видимы, видимость можно включать отключать
+
+  // видимы, видимость можно включать отключать
 
   public ContestDescription(String name) {
     this.name = name;

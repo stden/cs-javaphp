@@ -1,13 +1,8 @@
 package ru.ipo.dces.clientservercommunication;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Илья
- * Date: 24.05.2008
- * Time: 1:40:58
+ * Ответ: список пользователей сервера
  */
-public class GetUsersResponse implements InfoFrame {
-
-    public UserDescription[] users;
-
+public class GetUsersResponse implements Response {
+  public UserDescription[] users;
 }
