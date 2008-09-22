@@ -1,17 +1,21 @@
 package ru.ipo.dces.clientservercommunication;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Илья
- * Date: 21.05.2008
- * Time: 15:20:38
+ * Описание задачи
  */
-public class ProblemDescription implements InfoFrame {
-
-    public String id; //идентификатор задачи
-    public String clientPluginID; //ID плагина, который будет обрабатывать задачу
-    public String serverPluginID; //ID плагина, который стороны сервера, получает результаты по задаче
-    public String name; //название
-    public byte[] problemData; //условие задачи. Вероятнее всего, это архив, который будет автоматически раскрываться в каталог, соответствующий задаче
+public class ProblemDescription {
+  /** идентификатор задачи */
+  public String id;
+  /** ID плагина, который будет обрабатывать задачу */
+  public String clientPluginID;
+  /** ID плагина, который стороны сервера, получает результаты по задаче */
+  public String serverPluginID;
+  /** название */
+  public String name;
+  /**
+   * Условие задачи. Вероятнее всего, это архив, который будет автоматически
+   * раскрываться в каталог, соответствующий задаче
+   */
+  public byte[] problemData;
 
 }

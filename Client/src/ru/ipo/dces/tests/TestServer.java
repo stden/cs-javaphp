@@ -13,14 +13,17 @@ public class TestServer {
   MockServer server;
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() throws Exception, RequestFailedResponse {
     // Создаём новый сервер-подделку
     server = new MockServer();
-    // Добавляем два контеста для примера
-    server.addContest("Contest #1");
-    server.addContest("Contest #2");
+    // Добавляем 2 контеста
+    assertNotNull(server.doRequest(AcceptedResponse.class,
+        new CreateContestRequest("Contest #1")));
+    assertNotNull(server.doRequest(AcceptedResponse.class,
+        new CreateContestRequest("Contest #2")));
     // Добавляем пользователя
-    server.addUser("denis", "denispass");
+    CreateUserRequest cur = new CreateUserRequest("denis", "denispass");
+    assertNotNull(server.doRequest(AcceptedResponse.class, cur));
   }
 
   @Test
@@ -65,6 +68,7 @@ public class TestServer {
     cpr.newPassword = "newdenispass";
     AcceptedResponse ar = server.doRequest(AcceptedResponse.class, cpr);
     assertNotNull(ar);
+
     // 
   }
 }

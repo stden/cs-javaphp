@@ -10,21 +10,7 @@ public class MockServer implements IServer {
   private final List<UserDescription>    usersList    = new ArrayList<UserDescription>();
 
   @Override
-  public void addContest(String contestName) {
-    ContestDescription contest = new ContestDescription(contestName);
-    contest.name = contestName;
-    contestsList.add(contest);
-  }
-
-  public void addUser(String login, String password) {
-    UserDescription ud = new UserDescription();
-    ud.login = login;
-    ud.password = password;
-    usersList.add(ud);
-  }
-
-  @Override
-  public <T> T doRequest(Class<T> cls, Object obj) throws Exception,
+  public <T> T doRequest(Class<T> cls, Request obj) throws Exception,
       RequestFailedResponse {
     if (obj instanceof AvailableContestsRequest) {
       AvailableContestsResponse res = new AvailableContestsResponse();
@@ -48,20 +34,18 @@ public class MockServer implements IServer {
       res.sessionID = "sdfgdsgdf";
       return cls.cast(res);
     }
-    if (obj instanceof ChangePasswordRequest) {
+    if (obj instanceof ChangePasswordRequest)
+      return cls.cast(new AcceptedResponse());
+    if (obj instanceof CreateContestRequest) {
+      CreateContestRequest ccr = (CreateContestRequest) obj;
+      contestsList.add(ccr.contest);
+      return cls.cast(new AcceptedResponse());
+    }
+    if (obj instanceof CreateUserRequest) {
+      CreateUserRequest cur = (CreateUserRequest) obj;
+      usersList.add(cur.user);
       return cls.cast(new AcceptedResponse());
     }
     return null;
   }
-
-  @Override
-  public ContestDescription[] getAvaibleContests() {
-    return contestsList.toArray(new ContestDescription[0]);
-  }
-
-  @Override
-  public ContestDescription getContest(int i) {
-    return contestsList.get(i);
-  }
-
 }

@@ -1,14 +1,9 @@
 package ru.ipo.dces.clientservercommunication;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Илья
- * Date: 24.05.2008
- * Time: 14:15:37
+ * Запрос: удалить контест
  */
-public class RemoveContestRequest implements InfoFrame {
-
-    public String sessionID;
-    public String contestID;
-
+public class RemoveContestRequest implements Request {
+  public String sessionID;
+  public String contestID;
 }

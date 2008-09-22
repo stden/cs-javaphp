@@ -1,14 +1,15 @@
 package ru.ipo.dces.clientservercommunication;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Илья
- * Date: 23.05.2008
- * Time: 19:41:09
+ * Создание пользователя
  */
-public class CreateUserRequest implements InfoFrame {
+public class CreateUserRequest implements Request {
+  public String          sessionID;
+  public UserDescription user;
 
-    public String sessionID;
-    public UserDescription user;
-
+  public CreateUserRequest(String login, String password) {
+    user = new UserDescription();
+    user.login = login;
+    user.password = password;
+  }
 }

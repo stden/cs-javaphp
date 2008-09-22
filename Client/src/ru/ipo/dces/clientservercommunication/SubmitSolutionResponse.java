@@ -1,15 +1,10 @@
 package ru.ipo.dces.clientservercommunication;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Илья
- * Date: 21.05.2008
- * Time: 14:41:06
+ * Ответ: Решение отправлено
  */
-public class SubmitSolutionResponse implements InfoFrame {
-
-    InfoFrame problemResult; //вернувшиеся данные о решенной задаче
-
-    //возможно, дополнительные данные о процессе проверки
-
+public class SubmitSolutionResponse implements Response {
+  /** вернувшиеся данные о решенной задаче */
+  String problemResult;
+  // возможно, дополнительные данные о процессе проверки
 }

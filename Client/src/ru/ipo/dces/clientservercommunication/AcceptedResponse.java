@@ -1,9 +1,9 @@
 package ru.ipo.dces.clientservercommunication;
 
 /**
- * Запрос успешно выполнен
+ * Ответ: Запрос успешно выполнен
  */
-public class AcceptedResponse implements InfoFrame {
+public class AcceptedResponse implements Response {
 
   // no data
 

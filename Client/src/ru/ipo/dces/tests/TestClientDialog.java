@@ -51,13 +51,16 @@ public class TestClientDialog {
   }
 
   @Test
-  public void test2() throws Exception {
+  public void test2() throws Exception, RequestFailedResponse {
     // Анонимный пользователь хочет посмотреть контест.
     ClientDialog cd = new ClientDialog(new JFrame());
     cd.server = new MockServer();
     IServer server = cd.server;
-    server.addContest("Example contest #1");
-    ContestDescription contest = server.getContest(0);
+    server.doRequest(AcceptedResponse.class, new CreateContestRequest(
+        "Example contest #1"));
+    AvailableContestsResponse acr = server.doRequest(
+        AvailableContestsResponse.class, new AvailableContestsRequest());
+    ContestDescription contest = acr.contests[0];
     assertEquals("Example contest #1", contest.name);
   }
 
@@ -95,9 +98,12 @@ public class TestClientDialog {
   private void testContestList(ClientDialog cd) throws Exception,
       RequestFailedResponse {
     IServer server = cd.server;
-    server.addContest("Example contest #1");
-    server.addContest("Example contest #2");
-    ContestDescription[] contestList = server.getAvaibleContests();
+    server.doRequest(AcceptedResponse.class, new CreateContestRequest(
+        "Example contest #1"));
+    server.doRequest(AcceptedResponse.class, new CreateContestRequest(
+        "Example contest #2"));
+    ContestDescription[] contestList = server.doRequest(
+        AvailableContestsResponse.class, new AvailableContestsRequest()).contests;
     assertEquals("Example contest #1", contestList[0].name);
     assertEquals("Example contest #2", contestList[1].name);
   }

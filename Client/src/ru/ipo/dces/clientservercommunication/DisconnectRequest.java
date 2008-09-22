@@ -1,13 +1,8 @@
 package ru.ipo.dces.clientservercommunication;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Илья
- * Date: 26.05.2008
- * Time: 1:17:00
+ * Запрос: Отключиться от сервера
  */
-public class DisconnectRequest implements InfoFrame {
-
-    public String sessionID;
-
+public class DisconnectRequest implements Request {
+  public String sessionID;
 }

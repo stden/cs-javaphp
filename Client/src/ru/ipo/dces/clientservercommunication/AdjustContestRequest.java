@@ -1,15 +1,12 @@
 package ru.ipo.dces.clientservercommunication;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Илья
- * Date: 21.05.2008
- * Time: 21:58:03
+ * Получить задачи текущего контеста
  */
-public class AdjustContestRequest implements InfoFrame {
+public class AdjustContestRequest implements Request {
 
-    public String sessionID;
-    public ContestDescription contest;
-    public ProblemDescription[] problems;
+  public String               sessionID;
+  public ContestDescription   contest;
+  public ProblemDescription[] problems;
 
 }

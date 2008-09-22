@@ -1,13 +1,10 @@
 package ru.ipo.dces.clientservercommunication;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Илья
- * Date: 20.05.2008
- * Time: 23:22:27
+ * Ответ - список всех контестов
  */
-public class AvailableContestsResponse implements InfoFrame {
+public class AvailableContestsResponse implements Response {
 
-    public ContestDescription[] contests;
+  public ContestDescription[] contests;
 
 }
