@@ -1,12 +1,30 @@
 package ru.ipo.dces.clientservercommunication;
 
 /**
- * ѕолучить задачи текущего контеста
+ * Adjust = Ќастроить. Ќастроить текущий контест, задав ему новое описание и новый список задач.
+ *
+ * Ќастройка любого параметра контеста может быть сделана только одним этим запросом.
+ * ƒл€ измен€ющихс€ параметров контеста надо задать новое значение, дл€ не измен€ющихс€
+ * параметров - null. —м. описани€ полей
  */
 public class AdjustContestRequest implements Request {
 
-  public String               sessionID;
-  public ContestDescription   contest;
-  public ProblemDescription[] problems;
+    public String               sessionID;
+
+    /**
+     * Ќовое описание контеста. ¬озможно null, если описание мен€ть не нужно.
+     *
+     * ≈сли некоторые пол€ нужно оставить как прежде (например, € хочу помен€ть
+     * только тип регистрации и не хочу мен€ть больше ничего другого), то они посылаютс€ как null или
+     * другое дефолтовое значение, -1 дл€ int, см. класс ContestDescription
+     */
+    public ContestDescription   contest;
+
+    /**
+     * ќписание задач. null, если мен€ть задачи не нужно.
+     *
+     * ≈сли не null, то задачи замен€ютс€ на новые. “ам, где значени€ элемента массива null, задача не замен€етс€
+     */
+    public ProblemDescription[] problems;
 
 }
