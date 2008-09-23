@@ -6,6 +6,7 @@ import java.util.Date;
  * Описание контеста
  */
 public class ContestDescription {
+  //TODO: подумать, не заменить ли int на Integer, чтобы задавать дефолтовое значение через null, а не -1 
 
   public int    contestID;
 
@@ -33,6 +34,9 @@ public class ContestDescription {
   public int    visible;         // контесты во время настройки не должны быть
 
   // видимы, видимость можно включать отключать
+
+  //названия данных, которые должны быть у каждого участника контеста. Например, {'Имя','Фамилия','Школа','Класс'} 
+  public String[] data;
 
   public ContestDescription(String name) {
     this.name = name;
