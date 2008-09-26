@@ -11,7 +11,6 @@ import org.junit.Test;
 import ru.ipo.dces.client.*;
 import ru.ipo.dces.tests.samples.*;
 
-
 import static org.junit.Assert.assertEquals;
 
 public class TestSerialize {
@@ -85,10 +84,10 @@ public class TestSerialize {
     // Вещественные типы переменных
     float f = 1.3232f;
     assertEquals("d:1.3232;", PHP.serialize(f));
-//    assertEquals(f, (float) PHP.unserialize(Float.class, PHP.serialize(f)));
+    assertEquals(f, (float) PHP.unserialize(Float.class, PHP.serialize(f)));
     double d = 2.34;
     assertEquals("d:2.34;", PHP.serialize(d));
-//    assertEquals(d, (double) PHP.unserialize(Double.class, PHP.serialize(d)));
+    assertEquals(d, (double) PHP.unserialize(Double.class, PHP.serialize(d)));
 
     // Булевский тип переменных
     assertEquals("b:1;", PHP.serialize(true));
