@@ -9,6 +9,7 @@ import org.junit.Test;
 import ru.ipo.dces.client.*;
 import ru.ipo.dces.client.ClientDialog.OpenPanelAction;
 import ru.ipo.dces.clientservercommunication.*;
+import ru.ipo.dces.mock.MockServer;
 
 import static org.junit.Assert.*;
 
@@ -56,10 +57,9 @@ public class TestClientDialog {
     ClientDialog cd = new ClientDialog(new JFrame());
     cd.server = new MockServer();
     IServer server = cd.server;
-    server.doRequest(AcceptedResponse.class, new CreateContestRequest(
-        "Example contest #1"));
-    AvailableContestsResponse acr = server.doRequest(
-        AvailableContestsResponse.class, new AvailableContestsRequest());
+    server.doRequest(new CreateContestRequest("Example contest #1"));
+    AvailableContestsResponse acr = server
+        .doRequest(new AvailableContestsRequest());
     ContestDescription contest = acr.contests[0];
     assertEquals("Example contest #1", contest.name);
   }
@@ -98,12 +98,10 @@ public class TestClientDialog {
   private void testContestList(ClientDialog cd) throws Exception,
       RequestFailedResponse {
     IServer server = cd.server;
-    server.doRequest(AcceptedResponse.class, new CreateContestRequest(
-        "Example contest #1"));
-    server.doRequest(AcceptedResponse.class, new CreateContestRequest(
-        "Example contest #2"));
-    ContestDescription[] contestList = server.doRequest(
-        AvailableContestsResponse.class, new AvailableContestsRequest()).contests;
+    server.doRequest(new CreateContestRequest("Example contest #1"));
+    server.doRequest(new CreateContestRequest("Example contest #2"));
+    ContestDescription[] contestList = server
+        .doRequest(new AvailableContestsRequest()).contests;
     assertEquals("Example contest #1", contestList[0].name);
     assertEquals("Example contest #2", contestList[1].name);
   }

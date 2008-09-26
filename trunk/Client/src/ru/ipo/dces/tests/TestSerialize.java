@@ -16,6 +16,11 @@ import static org.junit.Assert.assertEquals;
 public class TestSerialize {
 
   public static class HSS extends HashMap<String, String> {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -8510773967258880104L;
   }
 
   private void assertArrayEquals(Object ar, Object arr) {

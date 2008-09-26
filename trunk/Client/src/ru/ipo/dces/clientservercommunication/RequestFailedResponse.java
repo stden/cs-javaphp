@@ -4,7 +4,7 @@ package ru.ipo.dces.clientservercommunication;
  * Ответ: запрос окончился неудачей
  */
 @SuppressWarnings("serial")
-public class RequestFailedResponse extends Throwable implements Response {
+public class RequestFailedResponse extends Exception implements Response {
   /**
    * 0 - контест еще не начался, если пытаешься подключится. 1 - контест уже
    * кончился, при попытке подключиться. 2 - логин или пароль не соответствуют,
