@@ -16,4 +16,8 @@ public class RequestFailedResponse extends Throwable implements Response {
    * регистрации каких полей не хватает
    */
   public String message;
+
+  public RequestFailedResponse(String message) {
+    this.message = message;
+  }
 }
