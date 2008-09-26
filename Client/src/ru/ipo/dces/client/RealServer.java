@@ -53,8 +53,23 @@ public class RealServer implements IServer {
     return result;
   }
 
-  public <T> T doRequest(Class<T> cls, Request obj) throws Exception,
-      RequestFailedResponse {
+  @Override
+  public AcceptedResponse doRequest(AdjustContestRequest ad) throws Exception {
+    return doRequest(AcceptedResponse.class, ad);
+  }
+
+  @Override
+  public AvailableContestsResponse doRequest(AvailableContestsRequest acr)
+      throws Exception {
+    return doRequest(AvailableContestsResponse.class, acr);
+  }
+
+  @Override
+  public AcceptedResponse doRequest(ChangePasswordRequest cpr) throws Exception {
+    return doRequest(AcceptedResponse.class, cpr);
+  }
+
+  public <T> T doRequest(Class<T> cls, Request obj) throws Exception {
     String answer = doPost("x=" + PHP.serialize(obj));
     try {
       return PHP.unserialize(cls, answer);
@@ -62,9 +77,66 @@ public class RealServer implements IServer {
       try {
         throw PHP.unserialize(RequestFailedResponse.class, answer);
       } catch (Exception e4) {
-        throw new Exception(answer);
+        throw new RequestFailedResponse(answer);
       }
     }
+  }
+
+  @Override
+  public ConnectToContestResponse doRequest(ConnectToContestRequest con)
+      throws Exception {
+    return doRequest(ConnectToContestResponse.class, con);
+  }
+
+  @Override
+  public AcceptedResponse doRequest(CreateContestRequest createContestRequest)
+      throws Exception {
+    return doRequest(AcceptedResponse.class, createContestRequest);
+  }
+
+  @Override
+  public AcceptedResponse doRequest(CreateUserRequest cur) throws Exception {
+    return doRequest(AcceptedResponse.class, cur);
+  }
+
+  @Override
+  public AcceptedResponse doRequest(DisconnectRequest disconnectRequest)
+      throws Exception {
+    return doRequest(AcceptedResponse.class, disconnectRequest);
+  }
+
+  @Override
+  public GetContestDataResponse doRequest(GetContestDataRequest gc)
+      throws Exception {
+    return doRequest(GetContestDataResponse.class, gc);
+  }
+
+  @Override
+  public GetUsersResponse doRequest(GetUsersRequest gur) throws Exception {
+    return doRequest(GetUsersResponse.class, gur);
+  }
+
+  @Override
+  public InstallClientPluginResponse doRequest(InstallClientPluginRequest r)
+      throws Exception {
+    return doRequest(InstallClientPluginResponse.class, r);
+  }
+
+  @Override
+  public AcceptedResponse doRequest(
+      RegisterToContestRequest registerToContestRequest) throws Exception {
+    return doRequest(AcceptedResponse.class, registerToContestRequest);
+  }
+
+  @Override
+  public AcceptedResponse doRequest(RemoveClientPluginRequest r)
+      throws Exception {
+    return doRequest(AcceptedResponse.class, r);
+  }
+
+  @Override
+  public AcceptedResponse doRequest(RestorePasswordRequest r) throws Exception {
+    return doRequest(AcceptedResponse.class, r);
   }
 
   // Подготовка строки к передаче в GET/POST запросе

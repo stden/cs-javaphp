@@ -22,6 +22,11 @@ import ru.ipo.dces.clientservercommunication.ContestDescription;
  */
 public class ChooseContestDialog extends javax.swing.JDialog {
   /**
+   * 
+   */
+  private static final long serialVersionUID = 9203404106398135141L;
+
+  /**
    * Auto-generated main method to display this JDialog
    */
   public static void main(String[] args) {

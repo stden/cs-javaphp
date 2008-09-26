@@ -1,4 +1,4 @@
-package ru.ipo.dces.client;
+package ru.ipo.dces.mock;
 
 /**
  * Данные о текущей сессии пользователя. Вообще-то хранятся на сервере, но

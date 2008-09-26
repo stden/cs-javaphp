@@ -88,6 +88,7 @@ public class PHP {
     return unserialize(cls, new StrTokenizer(s));
   }
 
+  @SuppressWarnings("unchecked")
   static <T> T unserialize(Class<T> cls, StrTokenizer st)
       throws InstantiationException, IllegalAccessException, SecurityException,
       NoSuchFieldException {
