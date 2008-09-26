@@ -36,4 +36,7 @@ public interface IServer {
 
   public AcceptedResponse doRequest(
       RestorePasswordRequest restorePasswordRequest) throws Exception;
+
+  public AcceptedResponse doRequest(
+      UploadClientPluginRequest uploadClientPluginRequest) throws Exception;
 }
