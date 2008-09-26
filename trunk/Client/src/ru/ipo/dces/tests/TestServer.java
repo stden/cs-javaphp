@@ -64,11 +64,22 @@ public class TestServer {
     // Меняем свой пароль
     ChangePasswordRequest cpr = new ChangePasswordRequest();
     cpr.sessionID = ct.sessionID;
-    cpr.oldPassword = con.password;
+    cpr.oldPassword = "denispass";
     cpr.newPassword = "newdenispass";
     AcceptedResponse ar = server.doRequest(AcceptedResponse.class, cpr);
     assertNotNull(ar);
 
-    // 
+    // А теперь задаём неправильный пароль и снова пытаемся сменить пароль
+    ChangePasswordRequest cpr2 = new ChangePasswordRequest();
+    cpr.sessionID = ct.sessionID;
+    cpr.oldPassword = "wrongpassword";
+    cpr.newPassword = "newdenispass";
+    try {
+      // Должны получить сообщение об ошибке
+      server.doRequest(AcceptedResponse.class, cpr2);
+      fail("Должны были получить сообщение об ошибке, ибо пароль неправильный");
+    } catch (RequestFailedResponse rfr) {
+      assertEquals("Неверный пароль", rfr.message);
+    }
   }
 }
