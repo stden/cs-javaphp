@@ -2,7 +2,6 @@ package ru.ipo.dces.tests;
 
 import org.junit.*;
 
-import ru.ipo.dces.client.IServer;
 import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.mock.MockServer;
 
@@ -11,7 +10,7 @@ import static org.junit.Assert.*;
 /** Обработка всех сообщений Mock/Real Server'ом */
 public class TestServer {
 
-  IServer server;
+  MockServer server;
 
   /**
    * Отключаемся от контеста
@@ -142,9 +141,19 @@ public class TestServer {
     // Например, зададим ему новое имя
     ad.contest = new ContestDescription("Contest #1!");
     ad.contest.contestID = 1;
+    // Добавим 8 задач
+    ad.problems = new ProblemDescription[8];
+    for (int i = 0; i < 7; i++) {
+      ad.problems[i] = new ProblemDescription();
+      ad.problems[i].name = "problem " + ('A' + i);
+    }
     assertNotNull(server.doRequest(ad));
 
     // Получаем задачи, которые входят в контест
+    GetContestDataRequest cc = new GetContestDataRequest();
+    cc.sessionID = curUser.sessionID;
+    GetContestDataResponse cdd = server.doRequest(cc);
+    assertEquals("Contest #1", cdd.contest.name);
 
     InstallClientPluginResponse dd = server
         .doRequest(new InstallClientPluginRequest());
@@ -156,6 +165,8 @@ public class TestServer {
     restorePassword();
 
     removePlugin();
+
+    assertNotNull(server.doRequest(new UploadClientPluginRequest()));
 
     disconnect(curUser.sessionID);
 

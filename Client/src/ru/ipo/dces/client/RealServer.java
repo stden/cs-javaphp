@@ -54,19 +54,19 @@ public class RealServer implements IServer {
   }
 
   @Override
-  public AcceptedResponse doRequest(AdjustContestRequest ad) throws Exception {
-    return doRequest(AcceptedResponse.class, ad);
+  public AcceptedResponse doRequest(AdjustContestRequest r) throws Exception {
+    return doRequest(AcceptedResponse.class, r);
   }
 
   @Override
-  public AvailableContestsResponse doRequest(AvailableContestsRequest acr)
+  public AvailableContestsResponse doRequest(AvailableContestsRequest r)
       throws Exception {
-    return doRequest(AvailableContestsResponse.class, acr);
+    return doRequest(AvailableContestsResponse.class, r);
   }
 
   @Override
-  public AcceptedResponse doRequest(ChangePasswordRequest cpr) throws Exception {
-    return doRequest(AcceptedResponse.class, cpr);
+  public AcceptedResponse doRequest(ChangePasswordRequest r) throws Exception {
+    return doRequest(AcceptedResponse.class, r);
   }
 
   public <T> T doRequest(Class<T> cls, Request obj) throws Exception {
@@ -83,37 +83,35 @@ public class RealServer implements IServer {
   }
 
   @Override
-  public ConnectToContestResponse doRequest(ConnectToContestRequest con)
+  public ConnectToContestResponse doRequest(ConnectToContestRequest r)
       throws Exception {
-    return doRequest(ConnectToContestResponse.class, con);
+    return doRequest(ConnectToContestResponse.class, r);
   }
 
   @Override
-  public AcceptedResponse doRequest(CreateContestRequest createContestRequest)
+  public AcceptedResponse doRequest(CreateContestRequest r) throws Exception {
+    return doRequest(AcceptedResponse.class, r);
+  }
+
+  @Override
+  public AcceptedResponse doRequest(CreateUserRequest r) throws Exception {
+    return doRequest(AcceptedResponse.class, r);
+  }
+
+  @Override
+  public AcceptedResponse doRequest(DisconnectRequest r) throws Exception {
+    return doRequest(AcceptedResponse.class, r);
+  }
+
+  @Override
+  public GetContestDataResponse doRequest(GetContestDataRequest r)
       throws Exception {
-    return doRequest(AcceptedResponse.class, createContestRequest);
+    return doRequest(GetContestDataResponse.class, r);
   }
 
   @Override
-  public AcceptedResponse doRequest(CreateUserRequest cur) throws Exception {
-    return doRequest(AcceptedResponse.class, cur);
-  }
-
-  @Override
-  public AcceptedResponse doRequest(DisconnectRequest disconnectRequest)
-      throws Exception {
-    return doRequest(AcceptedResponse.class, disconnectRequest);
-  }
-
-  @Override
-  public GetContestDataResponse doRequest(GetContestDataRequest gc)
-      throws Exception {
-    return doRequest(GetContestDataResponse.class, gc);
-  }
-
-  @Override
-  public GetUsersResponse doRequest(GetUsersRequest gur) throws Exception {
-    return doRequest(GetUsersResponse.class, gur);
+  public GetUsersResponse doRequest(GetUsersRequest r) throws Exception {
+    return doRequest(GetUsersResponse.class, r);
   }
 
   @Override
@@ -123,9 +121,9 @@ public class RealServer implements IServer {
   }
 
   @Override
-  public AcceptedResponse doRequest(
-      RegisterToContestRequest registerToContestRequest) throws Exception {
-    return doRequest(AcceptedResponse.class, registerToContestRequest);
+  public AcceptedResponse doRequest(RegisterToContestRequest r)
+      throws Exception {
+    return doRequest(AcceptedResponse.class, r);
   }
 
   @Override
@@ -136,6 +134,12 @@ public class RealServer implements IServer {
 
   @Override
   public AcceptedResponse doRequest(RestorePasswordRequest r) throws Exception {
+    return doRequest(AcceptedResponse.class, r);
+  }
+
+  @Override
+  public AcceptedResponse doRequest(UploadClientPluginRequest r)
+      throws Exception {
     return doRequest(AcceptedResponse.class, r);
   }
 

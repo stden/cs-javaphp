@@ -1,15 +1,16 @@
 package ru.ipo.dces.mock;
 
 import java.util.*;
+import java.util.Map.Entry;
 
 import ru.ipo.dces.client.IServer;
 import ru.ipo.dces.clientservercommunication.*;
 
 public class MockServer implements IServer {
 
-  private final List<ContestDescription> contestsList = new ArrayList<ContestDescription>();
-  private final List<UserDescription>    usersList    = new ArrayList<UserDescription>();
-  HashMap<String, SessionData>           sessions     = new HashMap<String, SessionData>();
+  private final HashMap<Integer, ContestDescription> contestsList = new HashMap<Integer, ContestDescription>();
+  private final List<UserDescription>                usersList    = new ArrayList<UserDescription>();
+  HashMap<String, SessionData>                       sessions     = new HashMap<String, SessionData>();
 
   private void CheckPassword(String sessionID, String password)
       throws RequestFailedResponse {
@@ -26,7 +27,9 @@ public class MockServer implements IServer {
   @Override
   public AvailableContestsResponse doRequest(AvailableContestsRequest acr) {
     AvailableContestsResponse res = new AvailableContestsResponse();
-    res.contests = contestsList.toArray(new ContestDescription[0]);
+    res.contests = new ContestDescription[contestsList.size()];
+    for (Entry<Integer, ContestDescription> entry : contestsList.entrySet())
+      res.contests[entry.getKey()] = entry.getValue();
     return res;
   }
 
@@ -52,6 +55,7 @@ public class MockServer implements IServer {
     SessionData sd = new SessionData();
     sd.login = cc.login;
     sd.password = cc.password;
+    sd.contest = contestsList.get(cc.contestID);
     sessions.put(sessionID, sd);
     ConnectToContestResponse res = new ConnectToContestResponse();
     res.sessionID = sessionID;
@@ -59,9 +63,9 @@ public class MockServer implements IServer {
   }
 
   @Override
-  public AcceptedResponse doRequest(CreateContestRequest createContestRequest)
-      throws Exception {
-    contestsList.add(createContestRequest.contest);
+  public AcceptedResponse doRequest(CreateContestRequest r) throws Exception {
+    r.contest.contestID = contestsList.size();
+    contestsList.put(r.contest.contestID, r.contest);
     return new AcceptedResponse();
   }
 
@@ -84,6 +88,9 @@ public class MockServer implements IServer {
   public GetContestDataResponse doRequest(GetContestDataRequest gc)
       throws Exception {
     GetContestDataResponse res = new GetContestDataResponse();
+    SessionData sd = sessions.get(gc.sessionID);
+    res.contest = sd.contest;
+    // / res.problems = sd.problems;
     return res;
   }
 
@@ -115,6 +122,11 @@ public class MockServer implements IServer {
   @Override
   public AcceptedResponse doRequest(
       RestorePasswordRequest restorePasswordRequest) throws Exception {
+    return new AcceptedResponse();
+  }
+
+  public AcceptedResponse doRequest(
+      UploadClientPluginRequest uploadClientPluginRequest) {
     return new AcceptedResponse();
   }
 
