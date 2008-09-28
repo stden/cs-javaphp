@@ -73,12 +73,11 @@ public class RealServer implements IServer {
     String answer = doPost("x=" + PHP.serialize(obj));
     try {
       return PHP.unserialize(cls, answer);
-    } catch (Exception e2) {
-      try {
+    } catch (IllegalClassException e) {
+      if (e.actual == RequestFailedResponse.class.getSimpleName())
         throw PHP.unserialize(RequestFailedResponse.class, answer);
-      } catch (Exception e4) {
-        throw new RequestFailedResponse(answer);
-      }
+      else
+        throw e;
     }
   }
 

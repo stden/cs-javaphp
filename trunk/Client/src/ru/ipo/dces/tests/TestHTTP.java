@@ -12,7 +12,7 @@ import ru.ipo.dces.tests.samples.Sum;
 import static org.junit.Assert.assertEquals;
 
 public class TestHTTP {
-  static final boolean        localTests    = true;
+  static final boolean        localTests    = false;
   private static final String ServerBaseURL = localTests ? "http://localhost:3569/"
                                                 : "http://ipo.spb.ru/dces/";
   public static final String  ServerURL     = ServerBaseURL + "x.php";
