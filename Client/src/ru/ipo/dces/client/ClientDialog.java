@@ -13,10 +13,15 @@ import ru.ipo.dces.pluginapi.Client;
 public class ClientDialog extends JDialog implements Client {
 
   public class OpenPanelAction implements ActionListener {
+    private final JPanel panel;
+
+    public OpenPanelAction(JPanel panel) {
+      this.panel = panel;
+    }
+
     public void actionPerformed(ActionEvent evt) {
       System.out.println("userPanelButton.actionPerformed, event=" + evt);
-      AdminPanel ap = new AdminPanel();
-      splitPane.add(ap, JSplitPane.RIGHT);
+      splitPane.add(panel, JSplitPane.RIGHT);
     }
   }
 
@@ -56,7 +61,7 @@ public class ClientDialog extends JDialog implements Client {
       {
         splitPane = new JSplitPane();
         getContentPane().add(splitPane);
-        rightPanel = new JPanel();
+        rightPanel = new AdminPanel();
         splitPane.add(rightPanel, JSplitPane.RIGHT);
         {
 
@@ -71,13 +76,13 @@ public class ClientDialog extends JDialog implements Client {
             userPanelButton = new JButton();
             userPanelButton.setText("User Panel");
             userPanelButton.setName("User Panel");
-            userPanelButton.addActionListener(new OpenPanelAction());
+            userPanelButton.addActionListener(new OpenPanelAction(rightPanel));
             leftPanel.add(userPanelButton, BorderLayout.NORTH);
 
             for (int i = 2; i < 7; i++) {
               JButton panelButton = new JButton();
               panelButton.setText("Plugin " + i);
-              panelButton.addActionListener(new OpenPanelAction());
+              panelButton.addActionListener(new OpenPanelAction(new JPanel()));
               leftPanel.add(panelButton, BorderLayout.NORTH);
             }
           }
@@ -85,6 +90,7 @@ public class ClientDialog extends JDialog implements Client {
       }
       setSize(400, 300);
       setTitle("DCES Client");
+
       Application.getInstance().getContext().getResourceMap(getClass())
           .injectComponents(getContentPane());
     } catch (Exception e) {
