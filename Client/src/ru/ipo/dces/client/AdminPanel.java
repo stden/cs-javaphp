@@ -20,10 +20,13 @@ public class AdminPanel extends JPanel {
 
     final JLabel contestsLabel = new JLabel();
     contestsLabel.setText("Contests:");
-    add(contestsLabel, new CellConstraints());
+    add(contestsLabel, new CellConstraints(1, 1));
 
     final JList contestList = new JList();
     add(contestList, new CellConstraints(3, 1));
+    JLabel l = new JLabel();
+    l.setText("sssss");
+    contestList.add("11", l);
 
     final JLabel loginLabel = new JLabel();
     loginLabel.setText("Login:");

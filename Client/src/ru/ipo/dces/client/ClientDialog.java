@@ -2,7 +2,6 @@ package ru.ipo.dces.client;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.List;
 
 import javax.swing.*;
 
@@ -13,10 +12,11 @@ import ru.ipo.dces.pluginapi.Client;
 
 public class ClientDialog extends JDialog implements Client {
 
-  static public class OpenPanelAction implements ActionListener {
+  public class OpenPanelAction implements ActionListener {
     public void actionPerformed(ActionEvent evt) {
       System.out.println("userPanelButton.actionPerformed, event=" + evt);
-      // TODO add your code for jButton1.actionPerformed
+      AdminPanel ap = new AdminPanel();
+      splitPane.add(ap, JSplitPane.RIGHT);
     }
   }
 
@@ -46,11 +46,6 @@ public class ClientDialog extends JDialog implements Client {
   public ClientDialog(JFrame frame) {
     super(frame);
     initGUI();
-  }
-
-  public List<ContestDescription> getAvaibleContests() {
-    // TODO Auto-generated method stub
-    return null;
   }
 
   private void initGUI() {
