@@ -47,7 +47,7 @@ public class TestClientDialog {
     // TODO: Сделать, чтобы запрос происходил по кнопке
     cd.server = new MockServer();
     testContestList(cd);
-    cd.server = new RealServer(TestHTTPS.ServerURL);
+    cd.server = new RealServer(TestHTTP.ServerURL);
     testContestList(cd);
   }
 
