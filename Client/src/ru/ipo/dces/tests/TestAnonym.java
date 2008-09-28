@@ -24,7 +24,6 @@ public class TestAnonym {
   public void testAnonymUser() throws Exception, RequestFailedResponse {
     server = new MockServer();
 
-    // Пробуем настроить контест
     try {
       server.doRequest(new AdjustContestRequest());
       fail(msg_Expected_wrong_SessionID);
@@ -34,7 +33,6 @@ public class TestAnonym {
 
     assertNotNull(server.doRequest(new AvailableContestsRequest()));
 
-    // Пробуем сменить пароль
     try {
       server.doRequest(new ChangePasswordRequest());
       fail(msg_Expected_wrong_SessionID);
@@ -42,7 +40,6 @@ public class TestAnonym {
       assertEquals("Неверный sessionID", e.message);
     }
 
-    // Пробуем сменить пароль
     try {
       server.doRequest(new ConnectToContestRequest());
       fail(msg_Expected_wrong_SessionID);
@@ -50,7 +47,6 @@ public class TestAnonym {
       assertEquals("Неверный логин или пароль", e.message);
     }
 
-    // Пробуем добавить контест незалогинившись
     try {
       server.doRequest(new CreateContestRequest("Contest #1"));
       fail(msg_Expected_wrong_SessionID);
@@ -58,7 +54,6 @@ public class TestAnonym {
       assertEquals("Неверный sessionID", e.message);
     }
 
-    // Пробуем создать пользователя
     try {
       server.doRequest(new CreateUserRequest("login", "password"));
       fail(msg_Expected_wrong_SessionID);
@@ -66,9 +61,43 @@ public class TestAnonym {
       assertEquals("Неверный sessionID", e.message);
     }
 
-    // Пробуем создать пользователя
     try {
       server.doRequest(new DisconnectRequest("wrong sessionID"));
+      fail(msg_Expected_wrong_SessionID);
+    } catch (RequestFailedResponse e) {
+      assertEquals("Неверный sessionID", e.message);
+    }
+
+    try {
+      server.doRequest(new GetContestDataRequest());
+      fail(msg_Expected_wrong_SessionID);
+    } catch (RequestFailedResponse e) {
+      assertEquals("Неверный sessionID", e.message);
+    }
+
+    try {
+      server.doRequest(new GetUsersRequest());
+      fail(msg_Expected_wrong_SessionID);
+    } catch (RequestFailedResponse e) {
+      assertEquals("Неверный sessionID", e.message);
+    }
+
+    try {
+      server.doRequest(new InstallClientPluginRequest());
+      fail(msg_Expected_wrong_SessionID);
+    } catch (RequestFailedResponse e) {
+      assertEquals("Неверный sessionID", e.message);
+    }
+
+    try {
+      server.doRequest(new RestorePasswordRequest());
+      fail(msg_Expected_wrong_SessionID);
+    } catch (RequestFailedResponse e) {
+      assertEquals("Неверный sessionID", e.message);
+    }
+
+    try {
+      server.doRequest(new SubmitSolutionRequest());
       fail(msg_Expected_wrong_SessionID);
     } catch (RequestFailedResponse e) {
       assertEquals("Неверный sessionID", e.message);

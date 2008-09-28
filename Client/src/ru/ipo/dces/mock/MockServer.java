@@ -163,6 +163,11 @@ public class MockServer implements ServerFacade {
     return new AcceptedResponse();
   }
 
+  public SubmitSolutionResponse doRequest(SubmitSolutionRequest r) {
+    SubmitSolutionResponse res = new SubmitSolutionResponse();
+    return res;
+  }
+
   public AcceptedResponse doRequest(UploadClientPluginRequest r)
       throws RequestFailedResponse {
     getSession(r.sessionID);
