@@ -5,13 +5,17 @@ package ru.ipo.dces.clientservercommunication;
  */
 public class UserDescription {
 
-  public String login;
-  public String password;
+  public String   login;
+  public String   password;
 
   /**
-   * Данные об участнике. Имя, школа, класс и все что угодно. Смыслы каждого элемента массива хранятся в описании
-   * контеста. ContestDescription содержит String[] data c информацией вида {'Имя','Фамилия','Школа','Класс'}
-  */
+   * Данные об участнике. Имя, школа, класс и все что угодно. Смыслы каждого
+   * элемента массива хранятся в описании контеста. ContestDescription содержит
+   * String[] data c информацией вида {'Имя','Фамилия','Школа','Класс'}
+   */
   public String[] dataValue;
+
+  /** Является ли администратором */
+  public boolean  isAdmin = false;
 
 }

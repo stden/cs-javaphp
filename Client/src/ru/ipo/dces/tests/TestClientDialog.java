@@ -4,7 +4,7 @@ import java.awt.Component;
 
 import javax.swing.*;
 
-import org.junit.Test;
+import org.junit.*;
 
 import ru.ipo.dces.client.*;
 import ru.ipo.dces.client.ClientDialog.OpenPanelAction;
@@ -15,31 +15,31 @@ import static org.junit.Assert.*;
 
 public class TestClientDialog {
 
-  /** Тестирование панелей и кнопок на левой панели */
-  @Test
-  public void baseTest() {
+  ClientDialog cd;
+
+  /**
+   * Перед запуском каждого теста создаём MockServer и главное окно клиента для
+   * тестирования
+   * 
+   * @throws Exception
+   */
+  @Before
+  public void setUp() throws Exception {
     ClientData.server = new MockServer();
-    // При старте клиента появляется диалоговое окно
-    ClientDialog cd = new ClientDialog(new JFrame());
-    // с заголовком "DCES Client"
-    assertEquals("DCES Client", cd.getTitle());
-    // Окно разделено на две части с помощью SplitPane
-    JSplitPane sp = (JSplitPane) cd.getContentPane().getComponent(0);
-    assertNotNull(sp);
-    // Левую и правую панель
-    JPanel leftPanel = (JPanel) sp.getComponent(2);
-    assertNotNull(leftPanel);
-    assertEquals("Left panel", leftPanel.getName());
-    JPanel rightPanel = (JPanel) sp.getComponent(1);
-    assertNotNull(rightPanel);
-    // На левой панели - кнопки для выбора Plugin'а
-    for (Component c : leftPanel.getComponents()) {
-      JButton btn = (JButton) c;
-      assertNotNull(btn);
-      // Для каждой кнопки указан обработчик, который открывает панель
-      OpenPanelAction action = (OpenPanelAction) btn.getActionListeners()[0];
-      assertNotNull(action);
-    }
+    cd = new ClientDialog(new JFrame());
+
+    // Логинимся как администратор
+    ConnectToContestRequest cc = new ConnectToContestRequest();
+    cc.contestID = -1;
+    cc.login = "admin";
+    cc.password = "adminpass";
+    ClientData.sessionID = ClientData.server.doRequest(cc).sessionID;
+
+    // Добавляем 2 контеста
+    assertNotNull(ClientData.server.doRequest(new CreateContestRequest(
+        "Contest #1")));
+    assertNotNull(ClientData.server.doRequest(new CreateContestRequest(
+        "Contest #2")));
   }
 
   /**
@@ -49,30 +49,26 @@ public class TestClientDialog {
    */
   @Test
   public void test1() throws Exception, RequestFailedResponse {
-    ClientData.server = new MockServer();
-    testContestList(new ClientDialog(new JFrame()));
-    ClientData.server = new RealServer(TestHTTP.ServerURL);
-    testContestList(new ClientDialog(new JFrame()));
+    ContestDescription[] contestList = ClientData.server
+        .doRequest(new AvailableContestsRequest()).contests;
+    assertEquals("Contest #1", contestList[0].name);
+    assertEquals("Contest #2", contestList[1].name);
     // Запрос происходит по кнопке
-    ClientDialog cd = new ClientDialog(new JFrame());
     cd.adminPanel.reloadButton.getActionListeners()[0].actionPerformed(null);
     // Проверяем, что вывелось в интерфейс
     cd.adminPanel.contestList.setSelectedIndex(0);
     ContestDescription cc = (ContestDescription) cd.adminPanel.contestList
         .getSelectedValue();
-    assertEquals("Example contest #1", cc.name);
+    assertEquals("Contest #1", cc.name);
   }
 
   /** Анонимный пользователь хочет посмотреть контест. */
   @Test
   public void test2() throws Exception, RequestFailedResponse {
-    new ClientDialog(new JFrame());
-    ClientData.server = new MockServer();
-    ClientData.server.doRequest(new CreateContestRequest("Example contest #1"));
     AvailableContestsResponse acr = ClientData.server
         .doRequest(new AvailableContestsRequest());
     ContestDescription contest = acr.contests[0];
-    assertEquals("Example contest #1", contest.name);
+    assertEquals("Contest #1", contest.name);
   }
 
   @Test
@@ -106,13 +102,29 @@ public class TestClientDialog {
     // время (если оно указано), возможность вернуться к странице контеста.
   }
 
-  private void testContestList(ClientDialog cd) throws Exception {
-    ClientData.server.doRequest(new CreateContestRequest("Example contest #1"));
-    ClientData.server.doRequest(new CreateContestRequest("Example contest #2"));
-    ContestDescription[] contestList = ClientData.server
-        .doRequest(new AvailableContestsRequest()).contests;
-    assertEquals("Example contest #1", contestList[0].name);
-    assertEquals("Example contest #2", contestList[1].name);
+  /** Тестирование панелей и кнопок на левой панели */
+  @Test
+  public void testPanels() {
+    // При старте клиента появляется диалоговое окно
+    // с заголовком "DCES Client"
+    assertEquals("DCES Client", cd.getTitle());
+    // Окно разделено на две части с помощью SplitPane
+    JSplitPane sp = (JSplitPane) cd.getContentPane().getComponent(0);
+    assertNotNull(sp);
+    // Левую и правую панель
+    JPanel leftPanel = (JPanel) sp.getComponent(2);
+    assertNotNull(leftPanel);
+    assertEquals("Left panel", leftPanel.getName());
+    JPanel rightPanel = (JPanel) sp.getComponent(1);
+    assertNotNull(rightPanel);
+    // На левой панели - кнопки для выбора Plugin'а
+    for (Component c : leftPanel.getComponents()) {
+      JButton btn = (JButton) c;
+      assertNotNull(btn);
+      // Для каждой кнопки указан обработчик, который открывает панель
+      OpenPanelAction action = (OpenPanelAction) btn.getActionListeners()[0];
+      assertNotNull(action);
+    }
   }
 
 }

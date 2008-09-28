@@ -1,7 +1,8 @@
 package ru.ipo.dces.tests;
 
-import org.junit.*;
+import org.junit.Test;
 
+import ru.ipo.dces.client.ClientData;
 import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.mock.MockServer;
 
@@ -10,7 +11,9 @@ import static org.junit.Assert.*;
 /** Обработка всех сообщений Mock/Real Server'ом */
 public class TestServer {
 
-  MockServer server;
+  MockServer                  server;
+
+  private static final String msg_Expected_wrong_SessionID = "Должно быть исключение: Неверный sessionID";
 
   /**
    * Отключаемся от контеста
@@ -23,7 +26,7 @@ public class TestServer {
     // Пробуем отключиться с явно неправильным sessionID
     try {
       server.doRequest(new DisconnectRequest("wrong sessionID"));
-      fail("Должно быть исключение: Неверный sessionID");
+      fail(msg_Expected_wrong_SessionID);
     } catch (RequestFailedResponse e) {
       assertEquals("Неверный sessionID", e.message);
     }
@@ -33,7 +36,7 @@ public class TestServer {
     // этой сессии)
     try {
       server.doRequest(new DisconnectRequest(sessionID));
-      fail("Должно быть исключение: Неверный sessionID");
+      fail(msg_Expected_wrong_SessionID);
     } catch (RequestFailedResponse e) {
       assertEquals("Неверный sessionID", e.message);
     }
@@ -53,10 +56,18 @@ public class TestServer {
     assertNotNull(server.doRequest(new RestorePasswordRequest()));
   }
 
-  @Before
-  public void setUp() throws Exception, RequestFailedResponse {
+  @Test
+  public void testContests() throws Exception, RequestFailedResponse {
     // Создаём новый сервер-подделку
     server = new MockServer();
+
+    // Логинимся как администратор
+    ConnectToContestRequest cc = new ConnectToContestRequest();
+    cc.contestID = -1;
+    cc.login = "admin";
+    cc.password = "adminpass";
+    ClientData.sessionID = server.doRequest(cc).sessionID;
+
     // Добавляем 2 контеста
     assertNotNull(server.doRequest(new CreateContestRequest("Contest #1")));
     assertNotNull(server.doRequest(new CreateContestRequest("Contest #2")));
@@ -67,10 +78,7 @@ public class TestServer {
     // Добавляем пользователя
     CreateUserRequest cur = new CreateUserRequest("denis", "denispass");
     assertNotNull(server.doRequest(cur));
-  }
 
-  @Test
-  public void testContests() throws Exception, RequestFailedResponse {
     // Запрашиваем доступные видимые контесты
     AvailableContestsRequest acr = new AvailableContestsRequest();
     acr.getInvisibleContests = false;
@@ -128,13 +136,13 @@ public class TestServer {
     assertNotNull(ar);
 
     // А теперь задаём неправильный пароль и снова пытаемся сменить пароль
-    ChangePasswordRequest cpr2 = new ChangePasswordRequest();
+    cpr = new ChangePasswordRequest();
     cpr.sessionID = curUser.sessionID;
     cpr.oldPassword = "wrongpassword";
     cpr.newPassword = "newdenispass";
     // Должны были получить сообщение об ошибке, ибо пароль неправильный
     try {
-      server.doRequest(cpr2);
+      server.doRequest(cpr);
       fail("Должно быть исключение: \"" + "Неверный пароль" + "\"");
     } catch (RequestFailedResponse e) {
       assertEquals("Неверный пароль", e.message);
@@ -156,14 +164,15 @@ public class TestServer {
     assertNotNull(server.doRequest(ad));
 
     // Получаем задачи, которые входят в контест
-    GetContestDataRequest cc = new GetContestDataRequest();
-    cc.sessionID = curUser.sessionID;
-    GetContestDataResponse cdd = server.doRequest(cc);
+    GetContestDataRequest c2 = new GetContestDataRequest();
+    c2.sessionID = curUser.sessionID;
+    GetContestDataResponse cdd = server.doRequest(c2);
     assertEquals("Contest #1", cdd.contest.name);
     assertEquals("problem A", cdd.problems[0].name);
 
-    InstallClientPluginResponse dd = server
-        .doRequest(new InstallClientPluginRequest());
+    InstallClientPluginRequest r2 = new InstallClientPluginRequest();
+    r2.sessionID = curUser.sessionID;
+    InstallClientPluginResponse dd = server.doRequest(r2);
     assertNotNull(dd);
 
     AcceptedResponse ar11 = server.doRequest(new RegisterToContestRequest());
