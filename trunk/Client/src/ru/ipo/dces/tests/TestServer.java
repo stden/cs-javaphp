@@ -60,6 +60,10 @@ public class TestServer {
     // Добавляем 2 контеста
     assertNotNull(server.doRequest(new CreateContestRequest("Contest #1")));
     assertNotNull(server.doRequest(new CreateContestRequest("Contest #2")));
+    // И один невидимый
+    CreateContestRequest invCont = new CreateContestRequest("Contest Invisible");
+    invCont.contest.visible = false;
+    assertNotNull(server.doRequest(invCont));
     // Добавляем пользователя
     CreateUserRequest cur = new CreateUserRequest("denis", "denispass");
     assertNotNull(server.doRequest(cur));
@@ -67,7 +71,7 @@ public class TestServer {
 
   @Test
   public void testContests() throws Exception, RequestFailedResponse {
-    // Запрашиваем доступные контесты
+    // Запрашиваем доступные видимые контесты
     AvailableContestsRequest acr = new AvailableContestsRequest();
     acr.getInvisibleContests = false;
     AvailableContestsResponse r = server.doRequest(acr);
@@ -107,6 +111,7 @@ public class TestServer {
     GetUsersResponse rr = server.doRequest(gur);
     // И видим там самого себя
     assertEquals(1, rr.users.length);
+    assertEquals("denis", rr.users[0].login);
 
     // Получаем данные о контесте #1
     GetContestDataRequest gc = new GetContestDataRequest();
@@ -154,6 +159,7 @@ public class TestServer {
     cc.sessionID = curUser.sessionID;
     GetContestDataResponse cdd = server.doRequest(cc);
     assertEquals("Contest #1", cdd.contest.name);
+    assertEquals("problem A", cdd.problems[0].name);
 
     InstallClientPluginResponse dd = server
         .doRequest(new InstallClientPluginRequest());

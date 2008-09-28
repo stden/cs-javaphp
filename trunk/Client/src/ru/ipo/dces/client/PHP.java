@@ -61,6 +61,9 @@ public class PHP {
         s += serialize(entry.getKey()) + serialize(entry.getValue());
       return s + "}";
     }
+    // Enum
+    if (obj instanceof Enum)
+      return "s:" + serStr(obj.toString()) + ";";
     // Классы
     if (!obj.getClass().isPrimitive()) {
       Class<?> c = obj.getClass();
@@ -134,6 +137,8 @@ public class PHP {
         }
         if (cls == String.class)
           return cls.cast(s);
+        if (cls.isEnum())
+          return (T) Enum.valueOf((Class<Enum>) cls, s);
         throw new IllegalArgumentException(" \"" + s + "\"  string != "
             + cls.getCanonicalName());
       case 'a':
