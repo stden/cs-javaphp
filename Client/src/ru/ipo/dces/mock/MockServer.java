@@ -25,11 +25,15 @@ public class MockServer implements IServer {
   }
 
   @Override
-  public AvailableContestsResponse doRequest(AvailableContestsRequest acr) {
+  public AvailableContestsResponse doRequest(AvailableContestsRequest r) {
     AvailableContestsResponse res = new AvailableContestsResponse();
-    res.contests = new ContestDescription[contestsList.size()];
-    for (Entry<Integer, ContestDescription> entry : contestsList.entrySet())
-      res.contests[entry.getKey()] = entry.getValue();
+    ArrayList<ContestDescription> l = new ArrayList<ContestDescription>();
+    for (Entry<Integer, ContestDescription> entry : contestsList.entrySet()) {
+      if (!r.getInvisibleContests && !entry.getValue().visible)
+        continue;
+      l.add(entry.getValue());
+    }
+    res.contests = l.toArray(new ContestDescription[0]);
     return res;
   }
 
@@ -90,7 +94,7 @@ public class MockServer implements IServer {
     GetContestDataResponse res = new GetContestDataResponse();
     SessionData sd = sessions.get(gc.sessionID);
     res.contest = sd.contest;
-    // / res.problems = sd.problems;
+    res.problems = sd.problems;
     return res;
   }
 

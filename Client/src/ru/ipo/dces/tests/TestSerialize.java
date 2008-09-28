@@ -17,9 +17,6 @@ public class TestSerialize {
 
   public static class HSS extends HashMap<String, String> {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = -8510773967258880104L;
   }
 
@@ -79,6 +76,10 @@ public class TestSerialize {
     String tt = "Test string";
     assertEquals("s:11:\"Test string\";", PHP.serialize(tt));
     assertEquals(tt, PHP.unserialize(String.class, PHP.serialize(tt)));
+    // Enum'û
+    TestEnum te = TestEnum.Value1;
+    assertEquals("s:6:\"Value1\";", PHP.serialize(te));
+    assertEquals(te, PHP.unserialize(TestEnum.class, PHP.serialize(te)));
   }
 
   @Test
