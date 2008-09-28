@@ -1,6 +1,5 @@
 package ru.ipo.dces.mock;
 
-
 /**
  * ƒанные о текущей сессии пользовател€. ¬ообще-то хран€тс€ на сервере, но
  * сервер-подделка MockServer хранит их в списке таких структур
@@ -8,7 +7,11 @@ package ru.ipo.dces.mock;
 public class SessionData {
 
   public String login;
-  public String password;
   public int    contestID;
+
+  public SessionData(String login, int contestID) {
+    this.login = login;
+    this.contestID = contestID;
+  }
 
 }

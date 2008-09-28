@@ -1,5 +1,7 @@
 package ru.ipo.dces.clientservercommunication;
 
+import ru.ipo.dces.client.ClientData;
+
 /**
  * Создание пользователя
  */
@@ -11,5 +13,6 @@ public class CreateUserRequest implements Request {
     user = new UserDescription();
     user.login = login;
     user.password = password;
+    sessionID = ClientData.sessionID;
   }
 }

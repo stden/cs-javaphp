@@ -10,24 +10,34 @@ public class MockServer implements ServerFacade {
 
   private final HashMap<Integer, ContestDescription> contestsList = new HashMap<Integer, ContestDescription>();
   private final HashMap<Integer, ProblemDescription> problemsList = new HashMap<Integer, ProblemDescription>();
-  private final List<UserDescription>                usersList    = new ArrayList<UserDescription>();
+  private final HashMap<String, UserDescription>     usersList    = new HashMap<String, UserDescription>();
   HashMap<String, SessionData>                       sessions     = new HashMap<String, SessionData>();
+
+  /** Начальное заполнение БД */
+  public MockServer() {
+    UserDescription admin = new UserDescription();
+    admin.isAdmin = true;
+    admin.login = "admin";
+    admin.password = "adminpass";
+    usersList.put(admin.login, admin);
+  }
 
   private void CheckPassword(String sessionID, String password)
       throws RequestFailedResponse {
     if (sessions.get(sessionID) == null
-        || sessions.get(sessionID).password != password)
+        || usersList.get(sessions.get(sessionID).login).password != password)
       throw new RequestFailedResponse("Неверный пароль");
   }
 
   /** Настройка контеста */
   @Override
-  public AcceptedResponse doRequest(AdjustContestRequest ad) throws Exception {
+  public AcceptedResponse doRequest(AdjustContestRequest r) throws Exception {
+    SessionData session = getSession(r.sessionID);
     // Если заданы новые параметры контеста => сначала меняем параметры контеста
-    if (ad.contest != null)
-      contestsList.put(ad.contest.contestID, ad.contest);
-    contestsList.get(getSession(ad.sessionID).contestID);
-    for (ProblemDescription problem : ad.problems)
+    if (r.contest != null)
+      contestsList.put(r.contest.contestID, r.contest);
+    contestsList.get(session.contestID);
+    for (ProblemDescription problem : r.problems)
       problemsList.put(problem.id, problem);
     return new AcceptedResponse();
   }
@@ -47,27 +57,22 @@ public class MockServer implements ServerFacade {
 
   @Override
   public AcceptedResponse doRequest(ChangePasswordRequest r) throws Exception {
+    getSession(r.sessionID);
     CheckPassword(r.sessionID, r.oldPassword);
     return new AcceptedResponse();
   }
 
   @Override
-  public ConnectToContestResponse doRequest(ConnectToContestRequest cc)
+  public ConnectToContestResponse doRequest(ConnectToContestRequest r)
       throws Exception {
-    boolean found = false;
-    for (UserDescription user : usersList)
-      if (user.login == cc.login && user.password == cc.password) {
-        found = true;
-        break;
-      }
-    if (!found)
+    UserDescription user = usersList.get(r.login);
+    if (user == null || user.password != r.password)
       throw new RequestFailedResponse("Неверный логин или пароль");
 
     String sessionID = getSessionID();
-    SessionData sd = new SessionData();
-    sd.login = cc.login;
-    sd.password = cc.password;
-    sd.contestID = cc.contestID;
+    SessionData sd = new SessionData(user.login, r.contestID);
+    sd.login = r.login;
+    sd.contestID = r.contestID;
     sessions.put(sessionID, sd);
     ConnectToContestResponse res = new ConnectToContestResponse();
     res.sessionID = sessionID;
@@ -76,22 +81,23 @@ public class MockServer implements ServerFacade {
 
   @Override
   public AcceptedResponse doRequest(CreateContestRequest r) throws Exception {
+    getSession(r.sessionID);
     r.contest.contestID = contestsList.size();
     contestsList.put(r.contest.contestID, r.contest);
     return new AcceptedResponse();
   }
 
   @Override
-  public AcceptedResponse doRequest(CreateUserRequest cur) throws Exception {
-    usersList.add(cur.user);
+  public AcceptedResponse doRequest(CreateUserRequest r) throws Exception {
+    getSession(r.sessionID);
+    usersList.put(r.user.login, r.user);
     return new AcceptedResponse();
   }
 
   @Override
-  public AcceptedResponse doRequest(DisconnectRequest disconnectRequest)
-      throws Exception {
-    getSession(disconnectRequest.sessionID);
-    sessions.remove(disconnectRequest.sessionID);
+  public AcceptedResponse doRequest(DisconnectRequest r) throws Exception {
+    getSession(r.sessionID);
+    sessions.remove(r.sessionID);
     return new AcceptedResponse();
   }
 
@@ -112,39 +118,55 @@ public class MockServer implements ServerFacade {
     return res;
   }
 
+  /** Получение списка всех пользователей, которые в том же контесте */
   @Override
   public GetUsersResponse doRequest(GetUsersRequest gur) throws Exception {
+    SessionData session = getSession(gur.sessionID);
+    // if (!session.isAdmin)
+    // throw new RequestFailedResponse("Требуются права администратора");
+
     GetUsersResponse getUsersResponse = new GetUsersResponse();
-    getUsersResponse.users = usersList.toArray(new UserDescription[0]);
+    ArrayList<UserDescription> uList = new ArrayList<UserDescription>();
+    for (Entry<String, SessionData> s : sessions.entrySet())
+      if (s.getValue().contestID == session.contestID)
+        uList.add(usersList.get(s.getValue().login));
+
+    getUsersResponse.users = uList.toArray(new UserDescription[0]);
     return getUsersResponse;
   }
 
   @Override
-  public InstallClientPluginResponse doRequest(
-      InstallClientPluginRequest installClientPluginRequest) {
+  public InstallClientPluginResponse doRequest(InstallClientPluginRequest r)
+      throws Exception {
+    getSession(r.sessionID);
+
     return new InstallClientPluginResponse();
   }
 
   @Override
-  public AcceptedResponse doRequest(
-      RegisterToContestRequest registerToContestRequest) {
+  public AcceptedResponse doRequest(RegisterToContestRequest r) {
+
     return new AcceptedResponse();
   }
 
   @Override
-  public AcceptedResponse doRequest(
-      RemoveClientPluginRequest removeClientPluginRequest) {
+  public AcceptedResponse doRequest(RemoveClientPluginRequest r)
+      throws Exception {
+    getSession(r.sessionID);
+
     return new AcceptedResponse();
   }
 
   @Override
-  public AcceptedResponse doRequest(
-      RestorePasswordRequest restorePasswordRequest) throws Exception {
+  public AcceptedResponse doRequest(RestorePasswordRequest r) throws Exception {
+
     return new AcceptedResponse();
   }
 
-  public AcceptedResponse doRequest(
-      UploadClientPluginRequest uploadClientPluginRequest) {
+  public AcceptedResponse doRequest(UploadClientPluginRequest r)
+      throws RequestFailedResponse {
+    getSession(r.sessionID);
+
     return new AcceptedResponse();
   }
 
