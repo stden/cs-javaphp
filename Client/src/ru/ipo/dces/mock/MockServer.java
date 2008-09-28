@@ -3,12 +3,13 @@ package ru.ipo.dces.mock;
 import java.util.*;
 import java.util.Map.Entry;
 
-import ru.ipo.dces.client.IServer;
+import ru.ipo.dces.client.ServerFacade;
 import ru.ipo.dces.clientservercommunication.*;
 
-public class MockServer implements IServer {
+public class MockServer implements ServerFacade {
 
   private final HashMap<Integer, ContestDescription> contestsList = new HashMap<Integer, ContestDescription>();
+  private final HashMap<Integer, ProblemDescription> problemsList = new HashMap<Integer, ProblemDescription>();
   private final List<UserDescription>                usersList    = new ArrayList<UserDescription>();
   HashMap<String, SessionData>                       sessions     = new HashMap<String, SessionData>();
 
@@ -19,8 +20,15 @@ public class MockServer implements IServer {
       throw new RequestFailedResponse("Неверный пароль");
   }
 
+  /** Настройка контеста */
   @Override
-  public AcceptedResponse doRequest(AdjustContestRequest ad) {
+  public AcceptedResponse doRequest(AdjustContestRequest ad) throws Exception {
+    // Если заданы новые параметры контеста => сначала меняем параметры контеста
+    if (ad.contest != null)
+      contestsList.put(ad.contest.contestID, ad.contest);
+    contestsList.get(getSession(ad.sessionID).contestID);
+    for (ProblemDescription problem : ad.problems)
+      problemsList.put(problem.id, problem);
     return new AcceptedResponse();
   }
 
@@ -59,7 +67,7 @@ public class MockServer implements IServer {
     SessionData sd = new SessionData();
     sd.login = cc.login;
     sd.password = cc.password;
-    sd.contest = contestsList.get(cc.contestID);
+    sd.contestID = cc.contestID;
     sessions.put(sessionID, sd);
     ConnectToContestResponse res = new ConnectToContestResponse();
     res.sessionID = sessionID;
@@ -82,19 +90,25 @@ public class MockServer implements IServer {
   @Override
   public AcceptedResponse doRequest(DisconnectRequest disconnectRequest)
       throws Exception {
-    if (sessions.get(disconnectRequest.sessionID) == null)
-      throw new RequestFailedResponse("Неверный sessionID");
+    getSession(disconnectRequest.sessionID);
     sessions.remove(disconnectRequest.sessionID);
     return new AcceptedResponse();
   }
 
+  /** Получение подробных данных о контесте */
   @Override
-  public GetContestDataResponse doRequest(GetContestDataRequest gc)
+  public GetContestDataResponse doRequest(GetContestDataRequest r)
       throws Exception {
     GetContestDataResponse res = new GetContestDataResponse();
-    SessionData sd = sessions.get(gc.sessionID);
-    res.contest = sd.contest;
-    res.problems = sd.problems;
+    SessionData sd = getSession(r.sessionID);
+    res.contest = contestsList.get(sd.contestID);
+    // Получаем задачи с данным contestID
+    ArrayList<ProblemDescription> pList = new ArrayList<ProblemDescription>();
+    for (Entry<Integer, ProblemDescription> e : problemsList.entrySet())
+      if (e.getValue().contestID == sd.contestID)
+        pList.add(e.getValue());
+    Collections.sort(pList);
+    res.problems = pList.toArray(new ProblemDescription[0]);
     return res;
   }
 
@@ -132,6 +146,19 @@ public class MockServer implements IServer {
   public AcceptedResponse doRequest(
       UploadClientPluginRequest uploadClientPluginRequest) {
     return new AcceptedResponse();
+  }
+
+  public void genData() throws Exception {
+    doRequest(new CreateContestRequest("Contest #1"));
+    doRequest(new CreateContestRequest("Contest #2"));
+    doRequest(new CreateContestRequest("Contest #3"));
+  }
+
+  private SessionData getSession(String sessionID) throws RequestFailedResponse {
+    SessionData sessionData = sessions.get(sessionID);
+    if (sessionData == null)
+      throw new RequestFailedResponse("Неверный sessionID");
+    return sessionData;
   }
 
   private String getSessionID() {

@@ -3,19 +3,32 @@ package ru.ipo.dces.clientservercommunication;
 /**
  * Описание задачи
  */
-public class ProblemDescription {
+public class ProblemDescription implements Comparable<ProblemDescription> {
+
   /** идентификатор задачи */
-  public String id;
+  public int    id;
+
   /** ID плагина, который будет обрабатывать задачу */
   public String clientPluginID;
+
   /** ID плагина, который стороны сервера, получает результаты по задаче */
   public String serverPluginID;
+
   /** название */
   public String name;
+
   /**
    * Условие задачи. Вероятнее всего, это архив, который будет автоматически
    * раскрываться в каталог, соответствующий задаче
    */
   public byte[] problemData;
+
+  /** ID контеста */
+  public int    contestID;
+
+  @Override
+  public int compareTo(ProblemDescription o) {
+    return name.compareTo(o.name);
+  }
 
 }

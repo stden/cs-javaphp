@@ -8,6 +8,7 @@ import javax.swing.*;
 import org.jdesktop.application.Application;
 
 import ru.ipo.dces.clientservercommunication.*;
+import ru.ipo.dces.mock.MockServer;
 import ru.ipo.dces.pluginapi.Client;
 
 public class ClientDialog extends JDialog implements Client {
@@ -20,7 +21,6 @@ public class ClientDialog extends JDialog implements Client {
     }
 
     public void actionPerformed(ActionEvent evt) {
-      System.out.println("userPanelButton.actionPerformed, event=" + evt);
       splitPane.add(panel, JSplitPane.RIGHT);
     }
   }
@@ -35,6 +35,14 @@ public class ClientDialog extends JDialog implements Client {
   public static void main(String[] args) {
     SwingUtilities.invokeLater(new Runnable() {
       public void run() {
+        MockServer ms = new MockServer();
+        try {
+          ms.genData();
+        } catch (Exception e) {
+          JOptionPane.showMessageDialog(null, e.getMessage(), "Ошибка",
+              JOptionPane.ERROR_MESSAGE);
+        }
+        ClientData.server = ms;
         JFrame frame = new JFrame();
         ClientDialog inst = new ClientDialog(frame);
         inst.setVisible(true);
@@ -43,10 +51,9 @@ public class ClientDialog extends JDialog implements Client {
   }
 
   private JSplitPane splitPane;
-  private JPanel     rightPanel;
+  public AdminPanel  adminPanel;
   private JPanel     leftPanel;
   private JButton    userPanelButton;
-  public IServer     server;
 
   public ClientDialog(JFrame frame) {
     super(frame);
@@ -61,11 +68,11 @@ public class ClientDialog extends JDialog implements Client {
       {
         splitPane = new JSplitPane();
         getContentPane().add(splitPane);
-        rightPanel = new AdminPanel();
-        splitPane.add(rightPanel, JSplitPane.RIGHT);
+        adminPanel = new AdminPanel(this);
+        splitPane.add(adminPanel, JSplitPane.RIGHT);
         {
-
           leftPanel = new JPanel();
+          leftPanel.setName("Left panel");
           GridLayout bLayout = new GridLayout(10, 1);
           bLayout.setColumns(1);
           bLayout.setHgap(2);
@@ -76,13 +83,16 @@ public class ClientDialog extends JDialog implements Client {
             userPanelButton = new JButton();
             userPanelButton.setText("User Panel");
             userPanelButton.setName("User Panel");
-            userPanelButton.addActionListener(new OpenPanelAction(rightPanel));
+            userPanelButton.addActionListener(new OpenPanelAction(adminPanel));
             leftPanel.add(userPanelButton, BorderLayout.NORTH);
 
             for (int i = 2; i < 7; i++) {
               JButton panelButton = new JButton();
-              panelButton.setText("Plugin " + i);
-              panelButton.addActionListener(new OpenPanelAction(new JPanel()));
+              JPanel panel = new JPanel();
+              String pluginName = "Plugin " + i;
+              panelButton.setText(pluginName);
+              panel.setName(pluginName);
+              panelButton.addActionListener(new OpenPanelAction(panel));
               leftPanel.add(panelButton, BorderLayout.NORTH);
             }
           }
