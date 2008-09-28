@@ -1,4 +1,4 @@
-package ru.ipo.dces.client;
+package ru.ipo.dces.gen;
 
 import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.tests.samples.Sum;
@@ -9,7 +9,7 @@ public class GenPHP {
    * @param args
    */
   public static void main(String[] args) {
-    Class forPHP[] = { AcceptedResponse.class, AdjustContestRequest.class,
+    Class<?> forPHP[] = { AcceptedResponse.class, AdjustContestRequest.class,
         AvailableContestsRequest.class, AvailableContestsResponse.class,
         ChangePasswordRequest.class, ConnectToContestRequest.class,
         ConnectToContestResponse.class, ContestDescription.class,
@@ -24,7 +24,7 @@ public class GenPHP {
         SubmitSolutionRequest.class, SubmitSolutionResponse.class,
         UploadClientPluginRequest.class, UserDescription.class, Sum.class };
 
-    for (Class cls : forPHP)
+    for (Class<?> cls : forPHP)
       System.out.println("class " + cls.getSimpleName() + "{};");
   }
 
