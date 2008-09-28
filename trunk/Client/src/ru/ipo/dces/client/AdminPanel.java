@@ -63,11 +63,17 @@ public class AdminPanel extends Plugin {
 
     final JButton button = new JButton();
     button.addActionListener(new ActionListener() {
-      public void actionPerformed(final ActionEvent e) {
-
+      public void actionPerformed(final ActionEvent ae) {
+        try {
+          ClientData.server.doRequest(new ConnectToContestRequest());
+        } catch (Exception e) {
+          JOptionPane.showMessageDialog(null, e.getMessage(), "Ошибка",
+              JOptionPane.ERROR_MESSAGE);
+          e.printStackTrace();
+        }
       }
     });
-    button.setText("Присоединиться!");
+    button.setText("Присоединиться к контесту!");
     add(button, new CellConstraints(3, 7));
     //
   }
