@@ -95,8 +95,7 @@ public class TestClientDialog {
     // время (если оно указано), возможность вернуться к странице контеста.
   }
 
-  private void testContestList(ClientDialog cd) throws Exception,
-      RequestFailedResponse {
+  private void testContestList(ClientDialog cd) throws Exception {
     IServer server = cd.server;
     server.doRequest(new CreateContestRequest("Example contest #1"));
     server.doRequest(new CreateContestRequest("Example contest #2"));

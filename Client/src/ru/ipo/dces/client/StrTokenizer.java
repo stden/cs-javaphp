@@ -1,5 +1,6 @@
 package ru.ipo.dces.client;
 
+/** Разбор строки */
 public class StrTokenizer {
 
   private final String str;

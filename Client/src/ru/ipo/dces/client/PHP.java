@@ -84,14 +84,15 @@ public class PHP {
 
   public static <T> T unserialize(Class<T> cls, String s)
       throws IllegalArgumentException, InstantiationException,
-      IllegalAccessException, SecurityException, NoSuchFieldException {
+      IllegalAccessException, SecurityException, NoSuchFieldException,
+      IllegalClassException {
     return unserialize(cls, new StrTokenizer(s));
   }
 
   @SuppressWarnings("unchecked")
   static <T> T unserialize(Class<T> cls, StrTokenizer st)
       throws InstantiationException, IllegalAccessException, SecurityException,
-      NoSuchFieldException {
+      NoSuchFieldException, IllegalClassException {
     switch (st.nextToken(':').charAt(0)) {
       case 'N':
         return null;
@@ -164,8 +165,7 @@ public class PHP {
         // потомка
         String className = getString(st, ':');
         if (className.compareTo(cls.getSimpleName()) != 0)
-          throw new IllegalArgumentException(className + " != "
-              + cls.getSimpleName());
+          throw new IllegalClassException(cls.getSimpleName(), className);
         Object obj = cls.newInstance(); // Создаём объект
         int fieldsNum = Integer.parseInt(st.nextToken(':'));
         st.nextToken('{');
@@ -179,7 +179,7 @@ public class PHP {
       default:
         break;
     }
-    throw new IllegalArgumentException("!! " + cls.getCanonicalName() + " "
+    throw new IllegalArgumentException(cls.getCanonicalName() + " "
         + st.toString());
   }
 }

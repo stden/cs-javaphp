@@ -55,7 +55,7 @@ public class TestSerialize {
   @Test
   public void testPrimitiveTypes() throws IllegalAccessException,
       IllegalArgumentException, InstantiationException, SecurityException,
-      NoSuchFieldException {
+      NoSuchFieldException, IllegalClassException {
     // Одиночные переменные - примитивные типы
     for (int a = 1; a < 3; a++)
       assertEquals("i:" + a + ";", PHP.serialize(a));
@@ -82,9 +82,7 @@ public class TestSerialize {
   }
 
   @Test
-  public void testSerialize() throws IllegalArgumentException,
-      IllegalAccessException, InstantiationException, SecurityException,
-      NoSuchFieldException {
+  public void testSerialize() throws Exception {
 
     // Вещественные типы переменных
     float f = 1.3232f;
