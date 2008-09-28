@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 import ru.ipo.dces.clientservercommunication.*;
 
-public class RealServer implements IServer {
+public class RealServer implements ServerFacade {
 
   private final String              URL_string;
 

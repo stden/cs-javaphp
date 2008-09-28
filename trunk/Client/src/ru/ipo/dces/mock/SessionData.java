@@ -1,6 +1,5 @@
 package ru.ipo.dces.mock;
 
-import ru.ipo.dces.clientservercommunication.*;
 
 /**
  * Данные о текущей сессии пользователя. Вообще-то хранятся на сервере, но
@@ -8,9 +7,8 @@ import ru.ipo.dces.clientservercommunication.*;
  */
 public class SessionData {
 
-  public String               login;
-  public String               password;
-  public ContestDescription   contest;
-  public ProblemDescription[] problems;
+  public String login;
+  public String password;
+  public int    contestID;
 
 }

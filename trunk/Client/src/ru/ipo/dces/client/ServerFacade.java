@@ -2,7 +2,7 @@ package ru.ipo.dces.client;
 
 import ru.ipo.dces.clientservercommunication.*;
 
-public interface IServer {
+public interface ServerFacade {
 
   public AcceptedResponse doRequest(AdjustContestRequest r) throws Exception;
 

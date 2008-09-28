@@ -148,9 +148,10 @@ public class TestServer {
     ad.contest.contestID = 1;
     // Добавим 8 задач
     ad.problems = new ProblemDescription[8];
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < ad.problems.length; i++) {
       ad.problems[i] = new ProblemDescription();
-      ad.problems[i].name = "problem " + ('A' + i);
+      ad.problems[i].id = i;
+      ad.problems[i].name = "problem " + (char) ('A' + i);
     }
     assertNotNull(server.doRequest(ad));
 
