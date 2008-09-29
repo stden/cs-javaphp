@@ -8,10 +8,10 @@ import ru.ipo.dces.clientservercommunication.*;
 
 public class MockServer implements ServerFacade {
 
-  private final HashMap<Integer, ContestDescription> contestsList = new HashMap<Integer, ContestDescription>();
-  private final HashMap<Integer, ProblemDescription> problemsList = new HashMap<Integer, ProblemDescription>();
-  private final HashMap<String, UserDescription>     usersList    = new HashMap<String, UserDescription>();
-  HashMap<String, SessionData>                       sessions     = new HashMap<String, SessionData>();
+  private final HashMap<Integer, ContestDescription> contests = new HashMap<Integer, ContestDescription>();
+  private final HashMap<Integer, ProblemDescription> problems = new HashMap<Integer, ProblemDescription>();
+  private final HashMap<String, UserDescription>     users    = new HashMap<String, UserDescription>();
+  HashMap<String, SessionServer>                       sessions = new HashMap<String, SessionServer>();
 
   /** Начальное заполнение БД */
   public MockServer() {
@@ -20,26 +20,26 @@ public class MockServer implements ServerFacade {
     admin.isAdmin = true;
     admin.login = "admin";
     admin.password = "adminpass";
-    usersList.put(admin.login, admin);
+    users.put(admin.login, admin);
   }
 
   private void CheckPassword(String sessionID, String password)
       throws RequestFailedResponse {
     if (sessions.get(sessionID) == null
-        || usersList.get(sessions.get(sessionID).login).password != password)
+        || users.get(sessions.get(sessionID).login).password != password)
       throw new RequestFailedResponse("Неверный пароль");
   }
 
   /** Настройка контеста */
   @Override
   public AcceptedResponse doRequest(AdjustContestRequest r) throws Exception {
-    SessionData session = getSession(r.sessionID);
+    SessionServer session = getSession(r.sessionID);
     // Если заданы новые параметры контеста => сначала меняем параметры контеста
     if (r.contest != null)
-      contestsList.put(r.contest.contestID, r.contest);
-    contestsList.get(session.contestID);
+      contests.put(r.contest.contestID, r.contest);
+    contests.get(session.contestID);
     for (ProblemDescription problem : r.problems)
-      problemsList.put(problem.id, problem);
+      problems.put(problem.id, problem);
     return new AcceptedResponse();
   }
 
@@ -47,7 +47,7 @@ public class MockServer implements ServerFacade {
   public AvailableContestsResponse doRequest(AvailableContestsRequest r) {
     AvailableContestsResponse res = new AvailableContestsResponse();
     ArrayList<ContestDescription> l = new ArrayList<ContestDescription>();
-    for (Entry<Integer, ContestDescription> entry : contestsList.entrySet()) {
+    for (Entry<Integer, ContestDescription> entry : contests.entrySet()) {
       if (!r.getInvisibleContests && !entry.getValue().visible)
         continue;
       l.add(entry.getValue());
@@ -66,12 +66,12 @@ public class MockServer implements ServerFacade {
   @Override
   public ConnectToContestResponse doRequest(ConnectToContestRequest r)
       throws Exception {
-    UserDescription user = usersList.get(r.login);
+    UserDescription user = users.get(r.login);
     if (user == null || user.password != r.password)
       throw new RequestFailedResponse("Неверный логин или пароль");
 
     String sessionID = getSessionID();
-    SessionData sd = new SessionData(user.login, r.contestID);
+    SessionServer sd = new SessionServer(user.login, r.contestID);
     sd.login = r.login;
     sd.contestID = r.contestID;
     sessions.put(sessionID, sd);
@@ -83,15 +83,15 @@ public class MockServer implements ServerFacade {
   @Override
   public AcceptedResponse doRequest(CreateContestRequest r) throws Exception {
     getSession(r.sessionID);
-    r.contest.contestID = contestsList.size();
-    contestsList.put(r.contest.contestID, r.contest);
+    r.contest.contestID = contests.size();
+    contests.put(r.contest.contestID, r.contest);
     return new AcceptedResponse();
   }
 
   @Override
   public AcceptedResponse doRequest(CreateUserRequest r) throws Exception {
     getSession(r.sessionID);
-    usersList.put(r.user.login, r.user);
+    users.put(r.user.login, r.user);
     return new AcceptedResponse();
   }
 
@@ -107,11 +107,11 @@ public class MockServer implements ServerFacade {
   public GetContestDataResponse doRequest(GetContestDataRequest r)
       throws Exception {
     GetContestDataResponse res = new GetContestDataResponse();
-    SessionData sd = getSession(r.sessionID);
-    res.contest = contestsList.get(sd.contestID);
+    SessionServer sd = getSession(r.sessionID);
+    res.contest = contests.get(sd.contestID);
     // Получаем задачи с данным contestID
     ArrayList<ProblemDescription> pList = new ArrayList<ProblemDescription>();
-    for (Entry<Integer, ProblemDescription> e : problemsList.entrySet())
+    for (Entry<Integer, ProblemDescription> e : problems.entrySet())
       if (e.getValue().contestID == sd.contestID)
         pList.add(e.getValue());
     Collections.sort(pList);
@@ -122,15 +122,15 @@ public class MockServer implements ServerFacade {
   /** Получение списка всех пользователей, которые в том же контесте */
   @Override
   public GetUsersResponse doRequest(GetUsersRequest gur) throws Exception {
-    SessionData session = getSession(gur.sessionID);
+    SessionServer session = getSession(gur.sessionID);
     // if (!session.isAdmin)
     // throw new RequestFailedResponse("Требуются права администратора");
 
     GetUsersResponse getUsersResponse = new GetUsersResponse();
     ArrayList<UserDescription> uList = new ArrayList<UserDescription>();
-    for (Entry<String, SessionData> s : sessions.entrySet())
+    for (Entry<String, SessionServer> s : sessions.entrySet())
       if (s.getValue().contestID == session.contestID)
-        uList.add(usersList.get(s.getValue().login));
+        uList.add(users.get(s.getValue().login));
 
     getUsersResponse.users = uList.toArray(new UserDescription[0]);
     return getUsersResponse;
@@ -184,8 +184,8 @@ public class MockServer implements ServerFacade {
     doRequest(new CreateContestRequest("Contest #3"));
   }
 
-  private SessionData getSession(String sessionID) throws RequestFailedResponse {
-    SessionData sessionData = sessions.get(sessionID);
+  private SessionServer getSession(String sessionID) throws RequestFailedResponse {
+    SessionServer sessionData = sessions.get(sessionID);
     if (sessionData == null)
       throw new RequestFailedResponse("Неверный sessionID");
     return sessionData;
