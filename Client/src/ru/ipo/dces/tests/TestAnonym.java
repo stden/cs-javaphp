@@ -19,7 +19,7 @@ public class TestAnonym {
     server = new MockServer();
   }
 
-  /** Отправляем все виды сообщений и смотрим реакцию сервера */
+  /** Отправляем все виды сообщений и проверяем реакцию сервера */
   @Test
   public void testAnonymUser() throws Exception, RequestFailedResponse {
     server = new MockServer();
@@ -89,12 +89,8 @@ public class TestAnonym {
       assertEquals("Неверный sessionID", e.message);
     }
 
-    try {
-      server.doRequest(new RestorePasswordRequest());
-      fail(msg_Expected_wrong_SessionID);
-    } catch (RequestFailedResponse e) {
-      assertEquals("Неверный sessionID", e.message);
-    }
+    // Делать запрос на восстановление пароля можно всем
+    assertNotNull(server.doRequest(new RestorePasswordRequest()));
 
     try {
       server.doRequest(new SubmitSolutionRequest());
