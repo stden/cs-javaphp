@@ -16,6 +16,7 @@ public class MockServer implements ServerFacade {
   /** Начальное заполнение БД */
   public MockServer() {
     UserDescription admin = new UserDescription();
+    // Добавляем первого администратора
     admin.isAdmin = true;
     admin.login = "admin";
     admin.password = "adminpass";
@@ -163,7 +164,9 @@ public class MockServer implements ServerFacade {
     return new AcceptedResponse();
   }
 
-  public SubmitSolutionResponse doRequest(SubmitSolutionRequest r) {
+  public SubmitSolutionResponse doRequest(SubmitSolutionRequest r)
+      throws Exception {
+    getSession(r.sessionID);
     SubmitSolutionResponse res = new SubmitSolutionResponse();
     return res;
   }
