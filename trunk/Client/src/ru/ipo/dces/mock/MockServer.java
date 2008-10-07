@@ -11,7 +11,7 @@ public class MockServer implements ServerFacade {
   private final HashMap<Integer, ContestDescription> contests = new HashMap<Integer, ContestDescription>();
   private final HashMap<Integer, ProblemDescription> problems = new HashMap<Integer, ProblemDescription>();
   private final HashMap<String, UserDescription>     users    = new HashMap<String, UserDescription>();
-  HashMap<String, SessionServer>                       sessions = new HashMap<String, SessionServer>();
+  HashMap<String, SessionServer>                     sessions = new HashMap<String, SessionServer>();
 
   /** Начальное заполнение БД */
   public MockServer() {
@@ -184,7 +184,8 @@ public class MockServer implements ServerFacade {
     doRequest(new CreateContestRequest("Contest #3"));
   }
 
-  private SessionServer getSession(String sessionID) throws RequestFailedResponse {
+  private SessionServer getSession(String sessionID)
+      throws RequestFailedResponse {
     SessionServer sessionData = sessions.get(sessionID);
     if (sessionData == null)
       throw new RequestFailedResponse("Неверный sessionID");
