@@ -18,6 +18,7 @@ public class RequestFailedResponse extends Exception implements Response {
   public String message;
 
   public RequestFailedResponse(String message) {
+    super(message);
     this.message = message;
   }
 }
