@@ -13,8 +13,10 @@ public class Main extends Plugin {
 
   private static final long serialVersionUID = -8533952562620075503L;
 
-  public Main(final Client client) {
+  public Main(final PluginEnvironment client) {
     super(client);
+
+    client.setTitle("Тестовый Plugin");
 
     setLayout(new FormLayout(new ColumnSpec[] { FormFactory.DEFAULT_COLSPEC,
         FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("49dlu:grow(2.0)"),
