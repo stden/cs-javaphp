@@ -10,7 +10,7 @@ import org.jdesktop.application.Application;
 import ru.ipo.dces.mock.MockServer;
 import ru.ipo.dces.pluginapi.Plugin;
 
-public class ClientDialog extends JDialog {
+public class ClientDialog extends JFrame {
 
   public class OpenPanelAction implements ActionListener {
     private final JPanel panel;
@@ -32,30 +32,27 @@ public class ClientDialog extends JDialog {
    * @param args
    */
   public static void main(String[] args) {
-    SwingUtilities.invokeLater(new Runnable() {
-      public void run() {
-        MockServer ms = new MockServer();
-        try {
-          ms.genData();
-        } catch (Exception e) {
-          JOptionPane.showMessageDialog(null, e.getMessage(), "Ошибка",
-              JOptionPane.ERROR_MESSAGE);
-        }
-        ClientData.server = ms;
-        JFrame frame = new JFrame();
-        ClientDialog inst = new ClientDialog(frame);
-        inst.setVisible(true);
-      }
-    });
+    MockServer ms = new MockServer();
+    try {
+      ms.genMockData();
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, e.getMessage(), "Ошибка",
+          JOptionPane.ERROR_MESSAGE);
+    }
+    ClientData.server = ms;
+    JFrame frame = new ClientDialog();
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setVisible(true);
+    // inst.setVisible(true);
   }
 
   private JSplitPane splitPane;
   public AdminPanel  adminPanel;
   private JPanel     leftPanel;
-  private JButton    userPanelButton;
+  private JButton    adminPluginButton;
 
-  public ClientDialog(JFrame frame) {
-    super(frame);
+  public ClientDialog() {
+    super();
     initGUI();
   }
 
@@ -67,8 +64,6 @@ public class ClientDialog extends JDialog {
       {
         splitPane = new JSplitPane();
         getContentPane().add(splitPane);
-        adminPanel = new AdminPanel(ClientImpl.getInstance());
-        splitPane.add(adminPanel, JSplitPane.RIGHT);
         {
           leftPanel = new JPanel();
           leftPanel.setName("Left panel");
@@ -79,35 +74,29 @@ public class ClientDialog extends JDialog {
           leftPanel.setLayout(bLayout);
           splitPane.add(leftPanel, JSplitPane.LEFT);
           {
-            userPanelButton = new JButton();
-            userPanelButton.setText("User Panel");
-            userPanelButton.setName("User Panel");
-            userPanelButton.addActionListener(new OpenPanelAction(adminPanel));
-            leftPanel.add(userPanelButton, BorderLayout.NORTH);
+            PluginEnvironmentImpl adminEnv = new PluginEnvironmentImpl();
+            adminEnv.setButton(adminPluginButton);
+            adminPanel = new AdminPanel(adminEnv);
+            splitPane.add(adminPanel, JSplitPane.RIGHT);
+            adminPluginButton = new JButton();
 
-            for (int i = 2; i < 7; i++) {
-              JButton panelButton = new JButton();
-              JPanel panel = new JPanel();
-              String pluginName = "Plugin " + i;
-              panelButton.setText(pluginName);
-              panel.setName(pluginName);
-              panelButton.addActionListener(new OpenPanelAction(panel));
-              leftPanel.add(panelButton, BorderLayout.NORTH);
-            }
+            adminPluginButton.setText("User Panel");
+            adminPluginButton
+                .addActionListener(new OpenPanelAction(adminPanel));
+            leftPanel.add(adminPluginButton, BorderLayout.NORTH);
 
-            PluginLoader pl = PluginLoader.getInstance();
-            Plugin p = pl.loadPlugin("SamplePlugin");
-            PluginInfo pinf = new PluginInfo();
-            ClientData.plugin2info.put(p, pinf);
             JButton panelButton = new JButton();
-            panelButton.setText("Попытка плагина");
+            PluginEnvironmentImpl pe = new PluginEnvironmentImpl();
+            pe.setButton(panelButton);
+            Plugin p = PluginLoader.load("SamplePlugin", pe);
             panelButton.addActionListener(new OpenPanelAction(p));
             leftPanel.add(panelButton, BorderLayout.NORTH);
-            pinf.setPluginButton(panelButton);
           }
         }
       }
-      setSize(400, 300);
+      setSize(800, 300);
+      // Разместить окно по центру экрана
+      setLocationRelativeTo(null);
       setTitle("DCES Client");
 
       Application.getInstance().getContext().getResourceMap(getClass())

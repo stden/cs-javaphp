@@ -5,6 +5,10 @@ package ru.ipo.dces.clientservercommunication;
  */
 public class UserDescription {
 
+  public enum UserType {
+    User, ContestAdmin, SuperAdmin
+  }
+
   public String   login;
   public String   password;
 
@@ -15,7 +19,7 @@ public class UserDescription {
    */
   public String[] dataValue;
 
-  /** явл€етс€ ли администратором */
-  public boolean  isAdmin = false;
+  /** “ип пользовател€ */
+  public UserType userType = UserType.User;
 
 }
