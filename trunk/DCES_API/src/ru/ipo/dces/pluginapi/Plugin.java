@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 
 /**
  * Интерфейс, который должны реализовывать все Plugin'ы: системные и задачи
+ * Каждый Plugin соответствует панели.
  */
 public abstract class Plugin extends JPanel {
 
