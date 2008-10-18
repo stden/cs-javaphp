@@ -8,15 +8,15 @@ import javax.swing.JPanel;
  */
 public abstract class Plugin extends JPanel {
 
-  private PluginEnvironment client = null;
+  private PluginEnvironment env = null;
 
   /** Инициализация plugin'а */
-  public Plugin(PluginEnvironment client) {
-    this.client = client;
+  public Plugin(PluginEnvironment env) {
+    this.env = env;
   }
 
   protected PluginEnvironment getClient() {
-    return client;
+    return env;
   }
 
   /**
