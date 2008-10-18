@@ -54,12 +54,12 @@ public class TestClientDialog {
     assertEquals("Contest #1", contestList[0].name);
     assertEquals("Contest #2", contestList[1].name);
     // Запрос происходит по кнопке
-    cd.adminPanel.reloadButton.getActionListeners()[0].actionPerformed(null);
+    // cd.adminPanel.reloadButton.getActionListeners()[0].actionPerformed(null);
     // Проверяем, что вывелось в интерфейс
-    cd.adminPanel.contestList.setSelectedIndex(0);
-    ContestDescription cc = (ContestDescription) cd.adminPanel.contestList
-        .getSelectedValue();
-    assertEquals("Contest #1", cc.name);
+    // cd.adminPanel.contestList.setSelectedIndex(0);
+    // ContestDescription cc = (ContestDescription) cd.adminPanel.contestList
+    // .getSelectedValue();
+    // assertEquals("Contest #1", cc.name);
   }
 
   /** Анонимный пользователь хочет посмотреть контест. */

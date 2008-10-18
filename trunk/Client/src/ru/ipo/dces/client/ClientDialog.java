@@ -20,6 +20,7 @@ public class ClientDialog extends JFrame {
     }
 
     public void actionPerformed(ActionEvent evt) {
+      rightPanel = panel;
       splitPane.add(panel, JSplitPane.RIGHT);
     }
   }
@@ -43,17 +44,40 @@ public class ClientDialog extends JFrame {
     JFrame frame = new ClientDialog();
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setVisible(true);
-    // inst.setVisible(true);
   }
 
   private JSplitPane splitPane;
-  public AdminPanel  adminPanel;
-  private JPanel     leftPanel;
-  private JButton    adminPluginButton;
+  public LoginPlugin adminPanel;
+  private JPanel     leftPanel  = null;
+  private JPanel     rightPanel = null;
 
   public ClientDialog() {
     super();
     initGUI();
+  }
+
+  /** Добавление Plugin'а в клиент */
+  void addPlugin(String plugin_id) {
+    PluginEnvironmentImpl pe = createPluginEnv();
+
+    Plugin p = PluginLoader.load(plugin_id, pe);
+
+    addPluginToForm(pe, p);
+  }
+
+  void addPluginToForm(PluginEnvironmentImpl pe, Plugin p) {
+    pe.getButton().addActionListener(new OpenPanelAction(p));
+    leftPanel.add(pe.getButton(), BorderLayout.NORTH);
+    // Показываем сразу первый Plugin
+    if (rightPanel == null)
+      setRightPanel(p);
+  }
+
+  PluginEnvironmentImpl createPluginEnv() {
+    JButton panelButton = new JButton();
+    PluginEnvironmentImpl pe = new PluginEnvironmentImpl();
+    pe.setButton(panelButton);
+    return pe;
   }
 
   private void initGUI() {
@@ -73,25 +97,8 @@ public class ClientDialog extends JFrame {
           bLayout.setVgap(2);
           leftPanel.setLayout(bLayout);
           splitPane.add(leftPanel, JSplitPane.LEFT);
-          {
-            PluginEnvironmentImpl adminEnv = new PluginEnvironmentImpl();
-            adminEnv.setButton(adminPluginButton);
-            adminPanel = new AdminPanel(adminEnv);
-            splitPane.add(adminPanel, JSplitPane.RIGHT);
-            adminPluginButton = new JButton();
 
-            adminPluginButton.setText("User Panel");
-            adminPluginButton
-                .addActionListener(new OpenPanelAction(adminPanel));
-            leftPanel.add(adminPluginButton, BorderLayout.NORTH);
-
-            JButton panelButton = new JButton();
-            PluginEnvironmentImpl pe = new PluginEnvironmentImpl();
-            pe.setButton(panelButton);
-            Plugin p = PluginLoader.load("SamplePlugin", pe);
-            panelButton.addActionListener(new OpenPanelAction(p));
-            leftPanel.add(panelButton, BorderLayout.NORTH);
-          }
+          initialState();
         }
       }
       setSize(800, 300);
@@ -105,5 +112,27 @@ public class ClientDialog extends JFrame {
       e.printStackTrace();
     }
 
+  }
+
+  /** Начальное состояние клиента до присоединения контеста */
+  public void initialState() {
+    removeAllPlugins();
+
+    PluginEnvironmentImpl pe = createPluginEnv();
+    addPluginToForm(pe, new LoginPlugin(pe, this));
+
+    addPlugin("SamplePlugin");
+  }
+
+  /** Удалить все Plugin'ы */
+  public void removeAllPlugins() {
+    leftPanel.removeAll();
+    setRightPanel(new JPanel());
+    rightPanel = null;
+  }
+
+  private void setRightPanel(JPanel panel) {
+    rightPanel = panel;
+    splitPane.add(panel, JSplitPane.RIGHT);
   }
 }

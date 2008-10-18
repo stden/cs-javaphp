@@ -71,7 +71,7 @@ public class MockServer implements ServerFacade {
   public ConnectToContestResponse doRequest(ConnectToContestRequest r)
       throws Exception {
     UserDescription user = users.get(r.login);
-    if (user == null || user.password != r.password)
+    if (user == null || !user.password.equals(r.password))
       throw new RequestFailedResponse("Неверный логин или пароль");
 
     String sessionID = getSessionID();
