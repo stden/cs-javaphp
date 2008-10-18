@@ -7,11 +7,10 @@ import javax.swing.*;
 
 import org.jdesktop.application.Application;
 
-import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.mock.MockServer;
-import ru.ipo.dces.pluginapi.Client;
+import ru.ipo.dces.pluginapi.Plugin;
 
-public class ClientDialog extends JDialog implements Client {
+public class ClientDialog extends JDialog {
 
   public class OpenPanelAction implements ActionListener {
     private final JPanel panel;
@@ -68,7 +67,7 @@ public class ClientDialog extends JDialog implements Client {
       {
         splitPane = new JSplitPane();
         getContentPane().add(splitPane);
-        adminPanel = new AdminPanel(this);
+        adminPanel = new AdminPanel(ClientImpl.getInstance());
         splitPane.add(adminPanel, JSplitPane.RIGHT);
         {
           leftPanel = new JPanel();
@@ -95,6 +94,16 @@ public class ClientDialog extends JDialog implements Client {
               panelButton.addActionListener(new OpenPanelAction(panel));
               leftPanel.add(panelButton, BorderLayout.NORTH);
             }
+
+            PluginLoader pl = PluginLoader.getInstance();
+            Plugin p = pl.loadPlugin("SamplePlugin");
+            PluginInfo pinf = new PluginInfo();
+            ClientData.plugin2info.put(p, pinf);
+            JButton panelButton = new JButton();
+            panelButton.setText("Попытка плагина");
+            panelButton.addActionListener(new OpenPanelAction(p));
+            leftPanel.add(panelButton, BorderLayout.NORTH);
+            pinf.setPluginButton(panelButton);
           }
         }
       }
@@ -108,11 +117,4 @@ public class ClientDialog extends JDialog implements Client {
     }
 
   }
-
-  @Override
-  public SubmitSolutionResponse submitSolution(SubmitSolutionRequest solution) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
 }
