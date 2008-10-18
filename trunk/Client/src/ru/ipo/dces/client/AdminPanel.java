@@ -28,26 +28,20 @@ public class AdminPanel extends Plugin {
             FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC,
             FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("default") }));
 
-    final JLabel contestsLabel = new JLabel();
-    contestsLabel.setText("Contests:");
-    add(contestsLabel, new CellConstraints(1, 1));
+    add(new JLabel("Contests:"), new CellConstraints(1, 1));
 
     contestList = new JList();
     add(contestList, new CellConstraints(3, 1));
     reloadContest();
 
-    final JLabel loginLabel = new JLabel();
-    loginLabel.setText("Login:");
-    add(loginLabel, new CellConstraints(1, 3));
-
-    final JLabel passwordLabel = new JLabel();
-    passwordLabel.setText("Password:");
-    add(passwordLabel, new CellConstraints(1, 5));
-
+    // Поле для ввода Login'а
+    add(new JLabel("Login:"), new CellConstraints(1, 3));
     final JTextField login = new JTextField();
     add(login, new CellConstraints(3, 3));
 
-    final JTextField password = new JTextField();
+    // Поле для ввода пароля
+    add(new JLabel("Password:"), new CellConstraints(1, 5));
+    final JPasswordField password = new JPasswordField();
     add(password, new CellConstraints(3, 5));
 
     reloadButton = new JButton();
@@ -75,7 +69,6 @@ public class AdminPanel extends Plugin {
     });
     button.setText("Присоединиться к контесту!");
     add(button, new CellConstraints(3, 7));
-    //
   }
 
   private void reloadContest() {
