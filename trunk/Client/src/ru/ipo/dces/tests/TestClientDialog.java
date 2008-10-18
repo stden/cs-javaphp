@@ -26,7 +26,7 @@ public class TestClientDialog {
   @Before
   public void setUp() throws Exception {
     ClientData.server = new MockServer();
-    cd = new ClientDialog(new JFrame());
+    cd = new ClientDialog();
 
     // Логинимся как администратор
     ConnectToContestRequest cc = new ConnectToContestRequest();

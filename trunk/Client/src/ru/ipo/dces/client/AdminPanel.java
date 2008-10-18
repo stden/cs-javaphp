@@ -12,13 +12,15 @@ import com.jgoodies.forms.layout.*;
 
 public class AdminPanel extends Plugin {
 
-  public final JButton reloadButton;
-  public JList         contestList;
+  private static final long serialVersionUID = 5381795243066178246L;
+
+  public final JButton      reloadButton;
+  public JList              contestList;
 
   /**
    * Create the panel
    */
-  public AdminPanel(Client client) {
+  public AdminPanel(PluginEnvironment client) {
     super(client);
     setLayout(new FormLayout(new ColumnSpec[] { FormFactory.DEFAULT_COLSPEC,
         FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("49dlu:grow(2.0)"),
@@ -63,7 +65,6 @@ public class AdminPanel extends Plugin {
         } catch (Exception e) {
           JOptionPane.showMessageDialog(null, e.getMessage(), "Ошибка",
               JOptionPane.ERROR_MESSAGE);
-          e.printStackTrace();
         }
       }
     });

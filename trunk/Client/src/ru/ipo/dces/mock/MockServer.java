@@ -3,23 +3,27 @@ package ru.ipo.dces.mock;
 import java.util.*;
 import java.util.Map.Entry;
 
-import ru.ipo.dces.client.ServerFacade;
+import ru.ipo.dces.client.*;
 import ru.ipo.dces.clientservercommunication.*;
+import ru.ipo.dces.clientservercommunication.UserDescription.UserType;
 
 public class MockServer implements ServerFacade {
 
-  private final HashMap<Integer, ContestDescription> contests = new HashMap<Integer, ContestDescription>();
-  private final HashMap<Integer, ProblemDescription> problems = new HashMap<Integer, ProblemDescription>();
-  private final HashMap<String, UserDescription>     users    = new HashMap<String, UserDescription>();
-  HashMap<String, SessionServer>                     sessions = new HashMap<String, SessionServer>();
+  private static final String                        rootLogin    = "admin";
+  private static final String                        rootPassword = "adminpass";
+
+  private final HashMap<Integer, ContestDescription> contests     = new HashMap<Integer, ContestDescription>();
+  private final HashMap<Integer, ProblemDescription> problems     = new HashMap<Integer, ProblemDescription>();
+  private final HashMap<String, UserDescription>     users        = new HashMap<String, UserDescription>();
+  HashMap<String, SessionServer>                     sessions     = new HashMap<String, SessionServer>();
 
   /** Начальное заполнение БД */
   public MockServer() {
     UserDescription admin = new UserDescription();
     // Добавляем первого администратора
-    admin.isAdmin = true;
-    admin.login = "admin";
-    admin.password = "adminpass";
+    admin.userType = UserType.SuperAdmin;
+    admin.login = rootLogin;
+    admin.password = rootPassword;
     users.put(admin.login, admin);
   }
 
@@ -178,7 +182,13 @@ public class MockServer implements ServerFacade {
     return new AcceptedResponse();
   }
 
-  public void genData() throws Exception {
+  /** Наполняем базу данных тестовыми данными */
+  public void genMockData() throws Exception {
+    ConnectToContestRequest c = new ConnectToContestRequest();
+    c.login = rootLogin;
+    c.password = rootPassword;
+    ConnectToContestResponse r = doRequest(c);
+    ClientData.sessionID = r.sessionID;
     doRequest(new CreateContestRequest("Contest #1"));
     doRequest(new CreateContestRequest("Contest #2"));
     doRequest(new CreateContestRequest("Contest #3"));
