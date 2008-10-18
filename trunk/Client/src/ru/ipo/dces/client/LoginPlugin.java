@@ -56,6 +56,7 @@ public class LoginPlugin extends Plugin {
     add(reloadButton, new CellConstraints(5, 1));
 
     setName("Admin panel");
+
     env.setTitle("Login panel");
 
     final JButton button = new JButton();
@@ -68,13 +69,19 @@ public class LoginPlugin extends Plugin {
           request.password = new String(password.getPassword());
           ConnectToContestResponse res = ClientData.server.doRequest(request);
           ClientData.sessionID = res.sessionID;
+
+          // Удаляем все запущенные Plugin'ы
+          clientDialog.removeAllPlugins();
+
+          // Если пользователь администратор или администратор сервера
+
           // Получаем данные о задачах
           GetContestDataRequest rq = new GetContestDataRequest();
           GetContestDataResponse rs = ClientData.server.doRequest(rq);
           for (ProblemDescription pd : rs.problems)
             clientDialog.addPlugin(pd.clientPluginID);
-          clientDialog.removeAllPlugins();
 
+          // Добавляем Plugin выхода из контеста в самый конец
           PluginEnvironmentImpl pe = clientDialog.createPluginEnv();
           clientDialog.addPluginToForm(pe, new LogoutPlugin(pe, clientDialog));
 
