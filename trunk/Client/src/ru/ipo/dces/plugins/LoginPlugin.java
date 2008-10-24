@@ -1,10 +1,10 @@
-package ru.ipo.dces.client;
+package ru.ipo.dces.plugins;
 
 import java.awt.event.*;
 
 import javax.swing.*;
 
-import ru.ipo.dces.clientservercommunication.*;
+import ru.ipo.dces.client.Controller;
 import ru.ipo.dces.pluginapi.*;
 
 import com.jgoodies.forms.factories.FormFactory;
@@ -20,7 +20,7 @@ public class LoginPlugin extends Plugin {
   /**
    * Create the panel
    */
-  public LoginPlugin(PluginEnvironment env, final ClientDialog clientDialog) {
+  public LoginPlugin(PluginEnvironment env) {
     super(env);
     setLayout(new FormLayout(new ColumnSpec[] { FormFactory.DEFAULT_COLSPEC,
         FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("49dlu:grow(2.0)"),
@@ -34,7 +34,7 @@ public class LoginPlugin extends Plugin {
 
     contestList = new JList();
     add(contestList, new CellConstraints(3, 1));
-    reloadContest();
+    contestList.setListData(Controller.reloadContest());
 
     // Поле для ввода Login'а
     add(new JLabel("Login:"), new CellConstraints(1, 3));
@@ -49,7 +49,7 @@ public class LoginPlugin extends Plugin {
     reloadButton = new JButton();
     reloadButton.addActionListener(new ActionListener() {
       public void actionPerformed(final ActionEvent arg0) {
-        reloadContest();
+        contestList.setListData(Controller.reloadContest());
       }
     });
     reloadButton.setText("Reload");
@@ -62,53 +62,11 @@ public class LoginPlugin extends Plugin {
     final JButton button = new JButton();
     button.addActionListener(new ActionListener() {
       public void actionPerformed(final ActionEvent ae) {
-        try {
-          ConnectToContestRequest request = new ConnectToContestRequest();
-          request.login = login.getText();
-          // TODO improve the security here
-          request.password = new String(password.getPassword());
-          ConnectToContestResponse res = ClientData.server.doRequest(request);
-          ClientData.sessionID = res.sessionID;
-
-          // Удаляем все запущенные Plugin'ы
-          clientDialog.removeAllPlugins();
-
-          // Если пользователь администратор или администратор сервера
-
-          // Получаем данные о задачах
-          GetContestDataRequest rq = new GetContestDataRequest();
-          GetContestDataResponse rs = ClientData.server.doRequest(rq);
-          for (ProblemDescription pd : rs.problems)
-            clientDialog.addPlugin(pd.clientPluginID);
-
-          // Добавляем Plugin выхода из контеста в самый конец
-          PluginEnvironmentImpl pe = clientDialog.createPluginEnv();
-          clientDialog.addPluginToForm(pe, new LogoutPlugin(pe, clientDialog));
-
-        } catch (Exception e) {
-          JOptionPane.showMessageDialog(null, e.getMessage(), "Ошибка",
-              JOptionPane.ERROR_MESSAGE);
-        }
+        Controller.login(login.getText(), password.getPassword());
       }
     });
     button.setText("Присоединиться к контесту!");
     add(button, new CellConstraints(3, 7));
-  }
-
-  // Вставить фичу в интерфейс
-  // Вставить фичу в AdminPlugin
-  // Сделать еще один плагин -
-
-  private void reloadContest() {
-    try {
-      AvailableContestsResponse res = ClientData.server
-          .doRequest(new AvailableContestsRequest());
-      contestList.setListData(res.contests);
-    } catch (Exception e) {
-      JOptionPane.showMessageDialog(null, e.getMessage(), "Ошибка",
-          JOptionPane.ERROR_MESSAGE);
-      e.printStackTrace();
-    }
   }
 
 }

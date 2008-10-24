@@ -1,13 +1,19 @@
 package ru.ipo.dces.client;
 
-import javax.swing.*;
+import javax.swing.JButton;
 
 import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
 
 public class PluginEnvironmentImpl implements PluginEnvironment {
 
-  private JButton button;
+  private JButton                  button;
+  private final ProblemDescription pd;
+
+  public PluginEnvironmentImpl(ProblemDescription pd) {
+    this.pd = pd;
+    button = new JButton();
+  }
 
   public JButton getButton() {
     return button;
@@ -23,10 +29,12 @@ public class PluginEnvironmentImpl implements PluginEnvironment {
   }
 
   @Override
-  public Response submitSolution(Request solution) {
-    JOptionPane.showMessageDialog(null, solution.toString(), "Сообщение",
-        JOptionPane.INFORMATION_MESSAGE);
-    return null;
+  public Response submitSolution(Request solution) throws RequestFailedResponse {
+    SubmitSolutionRequest ssr = new SubmitSolutionRequest();
+    ssr.problemID = pd.id;
+    ssr.problemResult = solution;
+    ssr.sessionID = Controller.sessionID;
+    SubmitSolutionResponse res = Controller.server.doRequest(ssr);
+    return res;
   }
-
 }

@@ -1,6 +1,6 @@
 package ru.ipo.dces.clientservercommunication;
 
-import ru.ipo.dces.client.ClientData;
+import ru.ipo.dces.client.Controller;
 
 /**
  * Запрос: закачать клиент на сервер
@@ -11,6 +11,6 @@ public class UploadClientPluginRequest implements Request {
   public byte[] pluginInstaller;
 
   public UploadClientPluginRequest() {
-    sessionID = ClientData.sessionID;
+    sessionID = Controller.sessionID;
   }
 }

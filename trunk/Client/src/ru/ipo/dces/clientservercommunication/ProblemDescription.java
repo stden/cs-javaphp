@@ -23,9 +23,6 @@ public class ProblemDescription implements Comparable<ProblemDescription> {
    */
   public byte[] problemData;
 
-  /** ID контеста */
-  public int    contestID;
-
   @Override
   public int compareTo(ProblemDescription o) {
     return name.compareTo(o.name);

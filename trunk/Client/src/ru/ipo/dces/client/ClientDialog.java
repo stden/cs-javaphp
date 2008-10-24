@@ -7,8 +7,8 @@ import javax.swing.*;
 
 import org.jdesktop.application.Application;
 
-import ru.ipo.dces.mock.MockServer;
 import ru.ipo.dces.pluginapi.Plugin;
+import ru.ipo.dces.plugins.LoginPlugin;
 
 public class ClientDialog extends JFrame {
 
@@ -27,42 +27,14 @@ public class ClientDialog extends JFrame {
 
   private static final long serialVersionUID = -5765060013197859310L;
 
-  /**
-   * Запуск диалога в тестовом режиме
-   * 
-   * @param args
-   */
-  public static void main(String[] args) {
-    MockServer ms = new MockServer();
-    try {
-      ms.genMockData();
-    } catch (Exception e) {
-      JOptionPane.showMessageDialog(null, e.getMessage(), "Ошибка",
-          JOptionPane.ERROR_MESSAGE);
-    }
-    ClientData.server = ms;
-    JFrame frame = new ClientDialog();
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setVisible(true);
-  }
-
-  private JSplitPane splitPane;
-  public LoginPlugin adminPanel;
-  private JPanel     leftPanel  = null;
-  private JPanel     rightPanel = null;
+  private JSplitPane        splitPane;
+  public LoginPlugin        adminPanel;
+  private JPanel            leftPanel        = null;
+  private JPanel            rightPanel       = null;
 
   public ClientDialog() {
     super();
     initGUI();
-  }
-
-  /** Добавление Plugin'а в клиент */
-  void addPlugin(String plugin_id) {
-    PluginEnvironmentImpl pe = createPluginEnv();
-
-    Plugin p = PluginLoader.load(plugin_id, pe);
-
-    addPluginToForm(pe, p);
   }
 
   void addPluginToForm(PluginEnvironmentImpl pe, Plugin p) {
@@ -73,11 +45,11 @@ public class ClientDialog extends JFrame {
       setRightPanel(p);
   }
 
-  PluginEnvironmentImpl createPluginEnv() {
-    JButton panelButton = new JButton();
-    PluginEnvironmentImpl pe = new PluginEnvironmentImpl();
-    pe.setButton(panelButton);
-    return pe;
+  /** Удалить все Plugin'ы */
+  public void clearLeftPanel() {
+    leftPanel.removeAll();
+    setRightPanel(new JPanel());
+    rightPanel = null;
   }
 
   private void initGUI() {
@@ -116,19 +88,12 @@ public class ClientDialog extends JFrame {
 
   /** Начальное состояние клиента до присоединения контеста */
   public void initialState() {
-    removeAllPlugins();
+    clearLeftPanel();
 
-    PluginEnvironmentImpl pe = createPluginEnv();
-    addPluginToForm(pe, new LoginPlugin(pe, this));
+    PluginEnvironmentImpl pe = new PluginEnvironmentImpl(null);
+    addPluginToForm(pe, new LoginPlugin(pe));
 
-    addPlugin("SamplePlugin");
-  }
-
-  /** Удалить все Plugin'ы */
-  public void removeAllPlugins() {
-    leftPanel.removeAll();
-    setRightPanel(new JPanel());
-    rightPanel = null;
+    // addPlugin("SamplePlugin");
   }
 
   private void setRightPanel(JPanel panel) {

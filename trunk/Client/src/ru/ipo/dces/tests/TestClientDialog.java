@@ -25,7 +25,7 @@ public class TestClientDialog {
    */
   @Before
   public void setUp() throws Exception {
-    ClientData.server = new MockServer();
+    Controller.server = new MockServer();
     cd = new ClientDialog();
 
     // Логинимся как администратор
@@ -33,12 +33,12 @@ public class TestClientDialog {
     cc.contestID = -1;
     cc.login = "admin";
     cc.password = "adminpass";
-    ClientData.sessionID = ClientData.server.doRequest(cc).sessionID;
+    Controller.sessionID = Controller.server.doRequest(cc).sessionID;
 
     // Добавляем 2 контеста
-    assertNotNull(ClientData.server.doRequest(new CreateContestRequest(
+    assertNotNull(Controller.server.doRequest(new CreateContestRequest(
         "Contest #1")));
-    assertNotNull(ClientData.server.doRequest(new CreateContestRequest(
+    assertNotNull(Controller.server.doRequest(new CreateContestRequest(
         "Contest #2")));
   }
 
@@ -49,7 +49,7 @@ public class TestClientDialog {
    */
   @Test
   public void test1() throws Exception, RequestFailedResponse {
-    ContestDescription[] contestList = ClientData.server
+    ContestDescription[] contestList = Controller.server
         .doRequest(new AvailableContestsRequest()).contests;
     assertEquals("Contest #1", contestList[0].name);
     assertEquals("Contest #2", contestList[1].name);
@@ -65,7 +65,7 @@ public class TestClientDialog {
   /** Анонимный пользователь хочет посмотреть контест. */
   @Test
   public void test2() throws Exception, RequestFailedResponse {
-    AvailableContestsResponse acr = ClientData.server
+    AvailableContestsResponse acr = Controller.server
         .doRequest(new AvailableContestsRequest());
     ContestDescription contest = acr.contests[0];
     assertEquals("Contest #1", contest.name);

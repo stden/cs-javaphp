@@ -6,6 +6,6 @@ package ru.ipo.dces.clientservercommunication;
 public class SubmitSolutionRequest implements Request {
   public String  sessionID;
   /** ID задачи, по которой посылается решение */
-  public String  problemID;
+  public int     problemID;
   public Request problemResult;
 }
