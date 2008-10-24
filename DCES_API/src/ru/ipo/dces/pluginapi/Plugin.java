@@ -8,7 +8,9 @@ import javax.swing.JPanel;
  */
 public abstract class Plugin extends JPanel {
 
-  private PluginEnvironment env = null;
+  private static final long serialVersionUID = -4016036993122910146L;
+
+  private PluginEnvironment env              = null;
 
   /** Инициализация plugin'а */
   public Plugin(PluginEnvironment env) {
