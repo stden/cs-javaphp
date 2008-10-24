@@ -21,7 +21,8 @@ public interface PluginEnvironment {
    * @param solution
    *          information to send
    * @return recieved information. May return RequestFailedResponse
+   * @throws RequestFailedResponse
    */
-  public Response submitSolution(Request solution);
+  public Response submitSolution(Request solution) throws RequestFailedResponse;
 
 }
