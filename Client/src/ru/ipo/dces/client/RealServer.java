@@ -54,91 +54,113 @@ public class RealServer implements ServerFacade {
   }
 
   @Override
-  public AcceptedResponse doRequest(AdjustContestRequest r) throws Exception {
+  public AcceptedResponse doRequest(AdjustContestRequest r)
+      throws RequestFailedResponse {
     return doRequest(AcceptedResponse.class, r);
   }
 
   @Override
   public AvailableContestsResponse doRequest(AvailableContestsRequest r)
-      throws Exception {
+      throws RequestFailedResponse {
     return doRequest(AvailableContestsResponse.class, r);
   }
 
   @Override
-  public AcceptedResponse doRequest(ChangePasswordRequest r) throws Exception {
+  public AcceptedResponse doRequest(ChangePasswordRequest r)
+      throws RequestFailedResponse {
     return doRequest(AcceptedResponse.class, r);
   }
 
-  public <T> T doRequest(Class<T> cls, Request obj) throws Exception {
-    String answer = doPost("x=" + PHP.serialize(obj));
+  public <T> T doRequest(Class<T> cls, Request obj)
+      throws RequestFailedResponse {
+    String answer = null;
+    try {
+      answer = doPost("x=" + PHP.serialize(obj));
+    } catch (Exception e) {
+      throw new RequestFailedResponse("Ошибка соединения с сервером");
+    }
     try {
       return PHP.unserialize(cls, answer);
     } catch (IllegalClassException e) {
-      if (e.actual == RequestFailedResponse.class.getSimpleName())
+      try {
         throw PHP.unserialize(RequestFailedResponse.class, answer);
-      else
-        throw e;
+      } catch (Exception e1) {
+        throw new RequestFailedResponse("Неправильный формат ответа сервера");
+      }
+    } catch (Exception e) {
+      throw new RequestFailedResponse("Неправильный формат ответа сервера");
     }
   }
 
   @Override
   public ConnectToContestResponse doRequest(ConnectToContestRequest r)
-      throws Exception {
+      throws RequestFailedResponse {
     return doRequest(ConnectToContestResponse.class, r);
   }
 
   @Override
-  public AcceptedResponse doRequest(CreateContestRequest r) throws Exception {
+  public AcceptedResponse doRequest(CreateContestRequest r)
+      throws RequestFailedResponse {
     return doRequest(AcceptedResponse.class, r);
   }
 
   @Override
-  public AcceptedResponse doRequest(CreateUserRequest r) throws Exception {
+  public AcceptedResponse doRequest(CreateUserRequest r)
+      throws RequestFailedResponse {
     return doRequest(AcceptedResponse.class, r);
   }
 
   @Override
-  public AcceptedResponse doRequest(DisconnectRequest r) throws Exception {
+  public AcceptedResponse doRequest(DisconnectRequest r)
+      throws RequestFailedResponse {
     return doRequest(AcceptedResponse.class, r);
   }
 
   @Override
   public GetContestDataResponse doRequest(GetContestDataRequest r)
-      throws Exception {
+      throws RequestFailedResponse {
     return doRequest(GetContestDataResponse.class, r);
   }
 
   @Override
-  public GetUsersResponse doRequest(GetUsersRequest r) throws Exception {
+  public GetUsersResponse doRequest(GetUsersRequest r)
+      throws RequestFailedResponse {
     return doRequest(GetUsersResponse.class, r);
   }
 
   @Override
   public InstallClientPluginResponse doRequest(InstallClientPluginRequest r)
-      throws Exception {
+      throws RequestFailedResponse {
     return doRequest(InstallClientPluginResponse.class, r);
   }
 
   @Override
   public AcceptedResponse doRequest(RegisterToContestRequest r)
-      throws Exception {
+      throws RequestFailedResponse {
     return doRequest(AcceptedResponse.class, r);
   }
 
   @Override
   public AcceptedResponse doRequest(RemoveClientPluginRequest r)
-      throws Exception {
+      throws RequestFailedResponse {
     return doRequest(AcceptedResponse.class, r);
   }
 
   @Override
-  public AcceptedResponse doRequest(RestorePasswordRequest r) throws Exception {
+  public AcceptedResponse doRequest(RestorePasswordRequest r)
+      throws RequestFailedResponse {
     return doRequest(AcceptedResponse.class, r);
+  }
+
+  @Override
+  public SubmitSolutionResponse doRequest(SubmitSolutionRequest r)
+      throws RequestFailedResponse {
+    return doRequest(SubmitSolutionResponse.class, r);
   }
 
   @Override
   public AcceptedResponse doRequest(UploadClientPluginRequest r)
-      throws Exception {
+      throws RequestFailedResponse {
     return doRequest(AcceptedResponse.class, r);
   }
 

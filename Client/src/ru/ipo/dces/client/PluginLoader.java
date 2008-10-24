@@ -15,12 +15,13 @@ public class PluginLoader {
       URL pluginURL = new File(PLUGIN_DIR + "/" + plugin_id + ".jar").toURI()
           .toURL();
       URLClassLoader classLoader = new URLClassLoader(new URL[] { pluginURL });
-      Class<Plugin> mainClass = (Class<Plugin>) classLoader
-          .loadClass("ru.ipo.dces.plugin.Main");
-      Constructor<Plugin> constructor = mainClass
+      Class<?> mainClass = classLoader.loadClass("ru.ipo.dces.plugin.Main");
+      Constructor<?> constructor = mainClass
           .getConstructor(PluginEnvironment.class);
-      return constructor.newInstance(pe);
+      return (Plugin) constructor.newInstance(pe);
     } catch (Exception e) {
+      // TODO Load plugin from server
+      // TODO разобрать cases
       return null;
     }
   }

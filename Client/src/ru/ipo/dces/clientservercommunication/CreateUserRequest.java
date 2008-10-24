@@ -1,6 +1,6 @@
 package ru.ipo.dces.clientservercommunication;
 
-import ru.ipo.dces.client.ClientData;
+import ru.ipo.dces.client.Controller;
 
 /**
  * Создание пользователя
@@ -13,6 +13,6 @@ public class CreateUserRequest implements Request {
     user = new UserDescription();
     user.login = login;
     user.password = password;
-    sessionID = ClientData.sessionID;
+    sessionID = Controller.sessionID;
   }
 }

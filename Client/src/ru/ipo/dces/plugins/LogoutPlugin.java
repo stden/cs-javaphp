@@ -1,9 +1,10 @@
-package ru.ipo.dces.client;
+package ru.ipo.dces.plugins;
 
 import java.awt.event.*;
 
 import javax.swing.*;
 
+import ru.ipo.dces.client.Controller;
 import ru.ipo.dces.pluginapi.*;
 
 import com.jgoodies.forms.factories.FormFactory;
@@ -12,7 +13,9 @@ import com.jgoodies.forms.layout.*;
 /** Отключиться от контеста */
 public class LogoutPlugin extends Plugin {
 
-  public LogoutPlugin(PluginEnvironment env, final ClientDialog clientDialog) {
+  private static final long serialVersionUID = -2845204085851858411L;
+
+  public LogoutPlugin(PluginEnvironment env) {
     super(env);
 
     setLayout(new FormLayout(new ColumnSpec[] { FormFactory.DEFAULT_COLSPEC,
@@ -32,8 +35,7 @@ public class LogoutPlugin extends Plugin {
       public void actionPerformed(final ActionEvent arg0) {
         if (JOptionPane.showConfirmDialog(null, "Действительно выйти?",
             "Подтверждение", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
-          ClientData.sessionID = null;
-        clientDialog.initialState();
+          Controller.logout();
       }
     });
     reloadButton.setText("Выйти");

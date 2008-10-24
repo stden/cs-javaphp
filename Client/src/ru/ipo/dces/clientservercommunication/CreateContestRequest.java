@@ -1,6 +1,6 @@
 package ru.ipo.dces.clientservercommunication;
 
-import ru.ipo.dces.client.ClientData;
+import ru.ipo.dces.client.Controller;
 
 /**
  * Создание нового контеста
@@ -11,7 +11,7 @@ public class CreateContestRequest implements Request {
   public ContestDescription contest;
 
   public CreateContestRequest(String contestName) {
-    sessionID = ClientData.sessionID;
+    sessionID = Controller.sessionID;
     contest = new ContestDescription(contestName);
   }
 

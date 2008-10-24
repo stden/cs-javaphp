@@ -2,7 +2,7 @@ package ru.ipo.dces.tests;
 
 import org.junit.Test;
 
-import ru.ipo.dces.client.ClientData;
+import ru.ipo.dces.client.Controller;
 import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.mock.MockServer;
 
@@ -66,7 +66,7 @@ public class TestServer {
     cc.contestID = -1;
     cc.login = "admin";
     cc.password = "adminpass";
-    ClientData.sessionID = server.doRequest(cc).sessionID;
+    Controller.sessionID = server.doRequest(cc).sessionID;
 
     // Добавляем 2 контеста
     assertNotNull(server.doRequest(new CreateContestRequest("Contest #1")));
