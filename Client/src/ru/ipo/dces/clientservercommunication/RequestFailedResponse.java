@@ -4,7 +4,7 @@ package ru.ipo.dces.clientservercommunication;
  * Ответ: запрос окончился неудачей
  */
 @SuppressWarnings("serial")
-public class RequestFailedResponse extends Exception implements Response {
+public class RequestFailedResponse implements Response {
 
   enum FailReason {
     Default
@@ -19,7 +19,6 @@ public class RequestFailedResponse extends Exception implements Response {
   public String     message;
 
   public RequestFailedResponse(String message) {
-    super(message);
     this.message = message;
   }
 }

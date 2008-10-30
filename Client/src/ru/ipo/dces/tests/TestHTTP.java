@@ -58,7 +58,7 @@ public class TestHTTP {
   // Сумма с применением сериализации
   public void testSum_serialize() throws IOException, IllegalArgumentException,
       IllegalAccessException, Exception, InstantiationException,
-      NoSuchFieldException, RequestFailedResponse {
+      NoSuchFieldException {
     // Скрипт, который суммирует числа с использованием сериализации /
     // десериализации
     final Sum s = new Sum();

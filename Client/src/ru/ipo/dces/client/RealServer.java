@@ -25,7 +25,7 @@ public class RealServer implements ServerFacade {
     this.URL_string = URL_string;
   }
 
-  public String doPost(String sendToServer) throws MalformedURLException,
+  public String doPost(String sendToServer) throws
       IOException {
     HttpURLConnection con = (HttpURLConnection) new URL(URL_string)
         .openConnection();
@@ -55,112 +55,113 @@ public class RealServer implements ServerFacade {
 
   @Override
   public AcceptedResponse doRequest(AdjustContestRequest r)
-      throws RequestFailedResponse {
+      throws ServerReturnedError, ServerReturnedNoAnswer {
     return doRequest(AcceptedResponse.class, r);
   }
 
   @Override
   public AvailableContestsResponse doRequest(AvailableContestsRequest r)
-      throws RequestFailedResponse {
+      throws ServerReturnedError, ServerReturnedNoAnswer {
     return doRequest(AvailableContestsResponse.class, r);
   }
 
   @Override
   public AcceptedResponse doRequest(ChangePasswordRequest r)
-      throws RequestFailedResponse {
+      throws ServerReturnedError, ServerReturnedNoAnswer {
     return doRequest(AcceptedResponse.class, r);
   }
 
   public <T> T doRequest(Class<T> cls, Request obj)
-      throws RequestFailedResponse {
-    String answer = null;
+      throws ServerReturnedError, ServerReturnedNoAnswer {
+    String answer;
     try {
       answer = doPost("x=" + PHP.serialize(obj));
     } catch (Exception e) {
-      throw new RequestFailedResponse("Ошибка соединения с сервером");
+      throw new ServerReturnedNoAnswer("Ошибка соединения с сервером");
     }
     try {
       return PHP.unserialize(cls, answer);
     } catch (IllegalClassException e) {
       try {
-        throw PHP.unserialize(RequestFailedResponse.class, answer);
+          RequestFailedResponse response = PHP.unserialize(RequestFailedResponse.class, answer);
+          throw new ServerReturnedError(response.message);
       } catch (Exception e1) {
-        throw new RequestFailedResponse("Неправильный формат ответа сервера");
+          throw new ServerReturnedNoAnswer("Неправильный формат ответа сервера");
       }
     } catch (Exception e) {
-      throw new RequestFailedResponse("Неправильный формат ответа сервера");
+      throw new ServerReturnedNoAnswer("Неправильный формат ответа сервера");
     }
   }
 
   @Override
   public ConnectToContestResponse doRequest(ConnectToContestRequest r)
-      throws RequestFailedResponse {
+      throws ServerReturnedError, ServerReturnedNoAnswer {
     return doRequest(ConnectToContestResponse.class, r);
   }
 
   @Override
   public AcceptedResponse doRequest(CreateContestRequest r)
-      throws RequestFailedResponse {
+      throws ServerReturnedError, ServerReturnedNoAnswer {
     return doRequest(AcceptedResponse.class, r);
   }
 
   @Override
   public AcceptedResponse doRequest(CreateUserRequest r)
-      throws RequestFailedResponse {
+      throws ServerReturnedError, ServerReturnedNoAnswer {
     return doRequest(AcceptedResponse.class, r);
   }
 
   @Override
   public AcceptedResponse doRequest(DisconnectRequest r)
-      throws RequestFailedResponse {
+      throws ServerReturnedError, ServerReturnedNoAnswer {
     return doRequest(AcceptedResponse.class, r);
   }
 
   @Override
   public GetContestDataResponse doRequest(GetContestDataRequest r)
-      throws RequestFailedResponse {
+      throws ServerReturnedError, ServerReturnedNoAnswer {
     return doRequest(GetContestDataResponse.class, r);
   }
 
   @Override
   public GetUsersResponse doRequest(GetUsersRequest r)
-      throws RequestFailedResponse {
+      throws ServerReturnedError, ServerReturnedNoAnswer {
     return doRequest(GetUsersResponse.class, r);
   }
 
   @Override
   public InstallClientPluginResponse doRequest(InstallClientPluginRequest r)
-      throws RequestFailedResponse {
+      throws ServerReturnedError, ServerReturnedNoAnswer {
     return doRequest(InstallClientPluginResponse.class, r);
   }
 
   @Override
   public AcceptedResponse doRequest(RegisterToContestRequest r)
-      throws RequestFailedResponse {
+      throws ServerReturnedError, ServerReturnedNoAnswer {
     return doRequest(AcceptedResponse.class, r);
   }
 
   @Override
   public AcceptedResponse doRequest(RemoveClientPluginRequest r)
-      throws RequestFailedResponse {
+      throws ServerReturnedError, ServerReturnedNoAnswer {
     return doRequest(AcceptedResponse.class, r);
   }
 
   @Override
   public AcceptedResponse doRequest(RestorePasswordRequest r)
-      throws RequestFailedResponse {
+      throws ServerReturnedError, ServerReturnedNoAnswer {
     return doRequest(AcceptedResponse.class, r);
   }
 
   @Override
   public SubmitSolutionResponse doRequest(SubmitSolutionRequest r)
-      throws RequestFailedResponse {
+      throws ServerReturnedError, ServerReturnedNoAnswer {
     return doRequest(SubmitSolutionResponse.class, r);
   }
 
   @Override
   public AcceptedResponse doRequest(UploadClientPluginRequest r)
-      throws RequestFailedResponse {
+      throws ServerReturnedError, ServerReturnedNoAnswer {
     return doRequest(AcceptedResponse.class, r);
   }
 

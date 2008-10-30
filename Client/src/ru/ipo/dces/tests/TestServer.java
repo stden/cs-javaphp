@@ -21,14 +21,13 @@ public class TestServer {
    * @throws RequestFailedResponse
    * @throws Exception
    */
-  private void disconnect(String sessionID) throws RequestFailedResponse,
-      Exception {
+  private void disconnect(String sessionID) throws Exception {
     // Пробуем отключиться с явно неправильным sessionID
     try {
       server.doRequest(new DisconnectRequest("wrong sessionID"));
       fail(msg_Expected_wrong_SessionID);
-    } catch (RequestFailedResponse e) {
-      assertEquals("Неверный sessionID", e.message);
+    } catch (Exception e) {
+      assertEquals("Неверный sessionID", e.getMessage());
     }
     // Теперь реально отключаемся - передаём верный sessionID
     assertNotNull(server.doRequest(new DisconnectRequest(sessionID)));
@@ -37,8 +36,8 @@ public class TestServer {
     try {
       server.doRequest(new DisconnectRequest(sessionID));
       fail(msg_Expected_wrong_SessionID);
-    } catch (RequestFailedResponse e) {
-      assertEquals("Неверный sessionID", e.message);
+    } catch (Exception e) {
+      assertEquals("Неверный sessionID", e.getMessage());
     }
   }
 
@@ -57,7 +56,7 @@ public class TestServer {
   }
 
   @Test
-  public void testContests() throws Exception, RequestFailedResponse {
+  public void testContests() throws Exception {
     // Создаём новый сервер-подделку
     server = new MockServer();
 
@@ -98,7 +97,7 @@ public class TestServer {
     // Делаем запрос на сервер
     ConnectToContestResponse curUser = server.doRequest(con);
     // Подключаемся и получаем какой-то sessionID
-    assertTrue(curUser.sessionID != "");
+    assertTrue(!curUser.sessionID.equals(""));
 
     // А теперь вводим неправильные логин или пароль
     con.login = "несуществующий пользователь";
@@ -108,8 +107,8 @@ public class TestServer {
     try {
       server.doRequest(con);
       fail("Должно быть исключение: \"" + "Неверный логин или пароль" + "\"");
-    } catch (RequestFailedResponse e) {
-      assertEquals("Неверный логин или пароль", e.message);
+    } catch (Exception e) {
+      assertEquals("Неверный логин или пароль", e.getMessage());
     }
     // Но при этом нас не отсоединяет от контеста
 
@@ -144,8 +143,8 @@ public class TestServer {
     try {
       server.doRequest(cpr);
       fail("Должно быть исключение: \"" + "Неверный пароль" + "\"");
-    } catch (RequestFailedResponse e) {
-      assertEquals("Неверный пароль", e.message);
+    } catch (Exception e) {
+      assertEquals("Неверный пароль", e.getMessage());
     }
 
     // Настроим текущий контест
