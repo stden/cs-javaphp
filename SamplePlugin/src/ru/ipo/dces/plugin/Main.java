@@ -39,7 +39,11 @@ public class Main extends Plugin {
 
       @Override
       public void actionPerformed(ActionEvent arg0) {
-        client.submitSolution(new Answer(answer.getText()));
+          try {
+              client.submitSolution(new Answer(answer.getText()));
+          } catch (Exception e) {
+              e.printStackTrace();          
+          }
       }
 
     });
