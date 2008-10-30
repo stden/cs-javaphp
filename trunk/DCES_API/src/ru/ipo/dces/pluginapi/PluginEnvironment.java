@@ -12,7 +12,8 @@ public interface PluginEnvironment {
   // третьей стороне. ≈сли треть€ сторона захочет писать системные плагины, в
   // api надо будет добавить методы
 
-  /** ”становить текст на кнопке определенного Plugin'а */
+  /** ”становить текст на кнопке определенного Plugin'а
+   * @param title the title to set*/
   public void setTitle(String title);
 
   /**
@@ -21,8 +22,10 @@ public interface PluginEnvironment {
    * @param solution
    *          information to send
    * @return recieved information. May return RequestFailedResponse
-   * @throws RequestFailedResponse
+   * @throws ru.ipo.dces.clientservercommunication.ServerReturnedError if server failed to process the problem solution,
+   *          e.g. the contest is over or its problemset has changed and there is no more such problem 
+   * @throws ru.ipo.dces.clientservercommunication.ServerReturnedNoAnswer if the serever is inaccessible
    */
-  public Response submitSolution(Request solution) throws RequestFailedResponse;
+  public Response submitSolution(Request solution) throws ServerReturnedError, ServerReturnedNoAnswer;
 
 }
