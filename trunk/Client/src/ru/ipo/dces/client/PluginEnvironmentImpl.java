@@ -29,7 +29,7 @@ public class PluginEnvironmentImpl implements PluginEnvironment {
   }
 
   @Override
-  public Response submitSolution(Request solution) throws RequestFailedResponse {
+  public Response submitSolution(Request solution) throws ServerReturnedError, ServerReturnedNoAnswer {
     SubmitSolutionRequest ssr = new SubmitSolutionRequest();
     ssr.problemID = pd.id;
     ssr.problemResult = solution;

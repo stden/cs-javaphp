@@ -18,7 +18,8 @@ public class Controller {
   public static ContestDescription curContest;
   private static ClientDialog      clientDialog;
 
-  /** Добавление Plugin'а в клиент */
+  /** Добавление Plugin'а в клиент
+   * @param pd the description of the problem for which the plugin is added*/
   public static void addPlugin(ProblemDescription pd) {
     PluginEnvironmentImpl pe = new PluginEnvironmentImpl(pd);
 
@@ -61,6 +62,11 @@ public class Controller {
             case 0:
               PluginEnvironmentImpl ms = new PluginEnvironmentImpl(null);
               clientDialog.addPluginToForm(ms, new ManageServerPlugin(ms));
+
+              //test sample plugin
+              PluginEnvironmentImpl spe = new PluginEnvironmentImpl(new ProblemDescription());
+              Plugin sp = PluginLoader.load("SamplePlugin", spe);
+              clientDialog.addPluginToForm(spe, sp);
               break;
             case 1:
               PluginEnvironmentImpl aec = new PluginEnvironmentImpl(null);
@@ -89,20 +95,21 @@ public class Controller {
   /** Завершение сессии пользователя */
   public static void logout() {
     DisconnectRequest dr = new DisconnectRequest(sessionID);
-    try {
-      server.doRequest(dr);
-    } catch (RequestFailedResponse e) {
-      // do nothing
-      // TODO подумать, что делать на самом деле
-    }
-    Controller.sessionID = null;
+
+      try {
+          server.doRequest(dr);
+      } catch (Exception serverReturnedError) {
+          // TODO to think what to do
+      }
+
+      Controller.sessionID = null;
     clientDialog.initialState();
   }
 
   /**
    * Запуск клиента
    * 
-   * @param args
+   * @param args the command line input
    */
   public static void main(String[] args) {
     MockServer ms = new MockServer();

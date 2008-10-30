@@ -31,16 +31,16 @@ public class MockServer implements ServerFacade {
   }
 
   private void CheckPassword(String sessionID, String password)
-      throws RequestFailedResponse {
+      throws ServerReturnedNoAnswer, ServerReturnedError {
     if (sessions.get(sessionID) == null
-        || users.get(sessions.get(sessionID).login).password != password)
-      throw new RequestFailedResponse("Неверный пароль");
+        || !users.get(sessions.get(sessionID).login).password.equals(password))
+      throw new ServerReturnedError("Неверный пароль");
   }
 
   /** Настройка контеста */
   @Override
   public AcceptedResponse doRequest(AdjustContestRequest r)
-      throws RequestFailedResponse {
+      throws ServerReturnedNoAnswer, ServerReturnedError {
     MockSessionServer session = getSession(r.sessionID);
     // Если заданы новые параметры контеста => сначала меняем параметры контеста
     if (r.contest != null)
@@ -60,13 +60,13 @@ public class MockServer implements ServerFacade {
         continue;
       l.add(entry.getValue());
     }
-    res.contests = l.toArray(new ContestDescription[0]);
+    res.contests = l.toArray(new ContestDescription[l.size()]);
     return res;
   }
 
   @Override
   public AcceptedResponse doRequest(ChangePasswordRequest r)
-      throws RequestFailedResponse {
+      throws ServerReturnedNoAnswer, ServerReturnedError {
     getSession(r.sessionID);
     CheckPassword(r.sessionID, r.oldPassword);
     return new AcceptedResponse();
@@ -75,13 +75,13 @@ public class MockServer implements ServerFacade {
   /** Присоединиться к контесту или к просто к серверу для создания контестов */
   @Override
   public ConnectToContestResponse doRequest(ConnectToContestRequest r)
-      throws RequestFailedResponse {
+      throws ServerReturnedNoAnswer, ServerReturnedError {
     // Проверяем логин и пароль пользователя
     // Для этого получаем пользователя по login'у
     UserDescription user = users.get(r.login);
     // и проверяем его пароль
     if (user == null || !user.password.equals(r.password))
-      throw new RequestFailedResponse("Неверный логин или пароль");
+      throw new ServerReturnedError("Неверный логин или пароль");
 
     // Если пароль и логин правильные - открываем сессию
     String sessionID = generateSessionID();
@@ -100,7 +100,7 @@ public class MockServer implements ServerFacade {
   /** Создание нового контеста */
   @Override
   public AcceptedResponse doRequest(CreateContestRequest r)
-      throws RequestFailedResponse {
+      throws ServerReturnedNoAnswer, ServerReturnedError {
     getSession(r.sessionID);
     r.contest.contestID = contests.size();
     contests.put(r.contest.contestID, r.contest);
@@ -110,7 +110,7 @@ public class MockServer implements ServerFacade {
   /** Создание нового пользователя */
   @Override
   public AcceptedResponse doRequest(CreateUserRequest r)
-      throws RequestFailedResponse {
+      throws ServerReturnedNoAnswer, ServerReturnedError {
     getSession(r.sessionID);
     users.put(r.user.login, r.user);
     return new AcceptedResponse();
@@ -118,7 +118,7 @@ public class MockServer implements ServerFacade {
 
   @Override
   public AcceptedResponse doRequest(DisconnectRequest r)
-      throws RequestFailedResponse {
+      throws ServerReturnedNoAnswer, ServerReturnedError {
     getSession(r.sessionID);
     sessions.remove(r.sessionID);
     return new AcceptedResponse();
@@ -127,7 +127,7 @@ public class MockServer implements ServerFacade {
   /** Получение подробных данных о контесте */
   @Override
   public GetContestDataResponse doRequest(GetContestDataRequest r)
-      throws RequestFailedResponse {
+      throws ServerReturnedNoAnswer, ServerReturnedError {
     GetContestDataResponse res = new GetContestDataResponse();
     MockSessionServer sd = getSession(r.sessionID);
     res.contest = contests.get(sd.contestID);
@@ -138,14 +138,14 @@ public class MockServer implements ServerFacade {
       if (p.getValue() == sd.contestID) // Если у задачи заданный контест
         pList.add(problems.get(p.getKey())); // то добавляем эту задачу в список
     Collections.sort(pList);
-    res.problems = pList.toArray(new ProblemDescription[0]);
+    res.problems = pList.toArray(new ProblemDescription[pList.size()]);
     return res;
   }
 
   /** Получение списка всех пользователей, которые в том же контесте */
   @Override
   public GetUsersResponse doRequest(GetUsersRequest gur)
-      throws RequestFailedResponse {
+      throws ServerReturnedNoAnswer, ServerReturnedError {
     MockSessionServer session = getSession(gur.sessionID);
     // if (!session.isAdmin)
     // throw new RequestFailedResponse("Требуются права администратора");
@@ -156,13 +156,13 @@ public class MockServer implements ServerFacade {
       if (s.getValue().contestID == session.contestID)
         uList.add(users.get(s.getValue().login));
 
-    getUsersResponse.users = uList.toArray(new UserDescription[0]);
+    getUsersResponse.users = uList.toArray(new UserDescription[uList.size()]);
     return getUsersResponse;
   }
 
   @Override
   public InstallClientPluginResponse doRequest(InstallClientPluginRequest r)
-      throws RequestFailedResponse {
+      throws ServerReturnedNoAnswer, ServerReturnedError {
     getSession(r.sessionID);
 
     return new InstallClientPluginResponse();
@@ -176,7 +176,7 @@ public class MockServer implements ServerFacade {
 
   @Override
   public AcceptedResponse doRequest(RemoveClientPluginRequest r)
-      throws RequestFailedResponse {
+      throws ServerReturnedNoAnswer, ServerReturnedError {
     getSession(r.sessionID);
 
     return new AcceptedResponse();
@@ -184,13 +184,13 @@ public class MockServer implements ServerFacade {
 
   @Override
   public AcceptedResponse doRequest(RestorePasswordRequest r)
-      throws RequestFailedResponse {
+      throws ServerReturnedNoAnswer, ServerReturnedError {
 
     return new AcceptedResponse();
   }
 
   public SubmitSolutionResponse doRequest(SubmitSolutionRequest r)
-      throws RequestFailedResponse {
+      throws ServerReturnedNoAnswer, ServerReturnedError {
     getSession(r.sessionID);
     JOptionPane.showMessageDialog(null, r.problemResult.toString(),
         "Сообщение", JOptionPane.INFORMATION_MESSAGE);
@@ -200,19 +200,22 @@ public class MockServer implements ServerFacade {
   }
 
   public AcceptedResponse doRequest(UploadClientPluginRequest r)
-      throws RequestFailedResponse {
+      throws ServerReturnedNoAnswer, ServerReturnedError {
     getSession(r.sessionID);
 
     return new AcceptedResponse();
   }
 
-  /** Создаем новый идентификатор сессии */
+  /** Создаем новый идентификатор сессии
+   * @return new session id*/
   private String generateSessionID() {
     return UUID.randomUUID().toString();
   }
 
-  /** Наполняем базу данных тестовыми данными */
-  public void genMockData() throws RequestFailedResponse {
+  /** Наполняем базу данных тестовыми данными
+   * @throws ru.ipo.dces.clientservercommunication.ServerReturnedError is probably not thrown
+   * @throws ru.ipo.dces.clientservercommunication.ServerReturnedNoAnswer is probably not thrown*/
+  public void genMockData() throws ServerReturnedNoAnswer, ServerReturnedError {
     ConnectToContestRequest c = new ConnectToContestRequest();
     c.login = rootLogin;
     c.password = rootPassword;
@@ -224,10 +227,10 @@ public class MockServer implements ServerFacade {
   }
 
   private MockSessionServer getSession(String sessionID)
-      throws RequestFailedResponse {
+      throws ServerReturnedNoAnswer, ServerReturnedError {
     MockSessionServer sessionData = sessions.get(sessionID);
     if (sessionData == null)
-      throw new RequestFailedResponse("Неверный sessionID");
+      throw new ServerReturnedError("Неверный sessionID");
     return sessionData;
   }
 }

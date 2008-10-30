@@ -48,7 +48,7 @@ public class TestClientDialog {
    * список.
    */
   @Test
-  public void test1() throws Exception, RequestFailedResponse {
+  public void test1() throws Exception {
     ContestDescription[] contestList = Controller.server
         .doRequest(new AvailableContestsRequest()).contests;
     assertEquals("Contest #1", contestList[0].name);
@@ -64,7 +64,7 @@ public class TestClientDialog {
 
   /** Анонимный пользователь хочет посмотреть контест. */
   @Test
-  public void test2() throws Exception, RequestFailedResponse {
+  public void test2() throws Exception {
     AvailableContestsResponse acr = Controller.server
         .doRequest(new AvailableContestsRequest());
     ContestDescription contest = acr.contests[0];
