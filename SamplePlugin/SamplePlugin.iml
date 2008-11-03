@@ -24,7 +24,7 @@
           <root url="jar://$MODULE_DIR$/../Client/lib/forms.jar!/" />
         </CLASSES>
         <JAVADOC>
-          <root url="jar://E:/java_workspace1/JavaClient/lib/forms-javadoc.zip!/" />
+          <root url="jar://$MODULE_DIR$/../../../../../../java_workspace1/JavaClient/lib/forms-javadoc.zip!/" />
         </JAVADOC>
         <SOURCES>
           <root url="jar://$MODULE_DIR$/../Client/lib/forms-src.zip!/" />
@@ -40,6 +40,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module" module-name="DCES_API" />
     <orderEntryProperties />
   </component>
 </module>
