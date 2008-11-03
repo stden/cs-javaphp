@@ -15,9 +15,13 @@
 <node CREATED="1211622479422" ID="Freemind_Link_1734838910" MODIFIED="1217931907864" TEXT="&#x432;&#x438;&#x434;&#x438;&#x43c;&#x43e;&#x441;&#x442;&#x44c;">
 <icon BUILTIN="help"/>
 </node>
-<node COLOR="#ff0066" CREATED="1220543826094" ID="Freemind_Link_1627696343" MODIFIED="1220555776131" TEXT="&#x441;&#x442;&#x43e;&#x43b;&#x431;&#x446;&#x44b; (&#x434;&#x430;&#x43d;&#x43d;&#x44b;&#x435; &#x43e;&#x431; &#x443;&#x447;&#x430;&#x441;&#x442;&#x43d;&#x438;&#x43a;&#x430;&#x445;)">
+<node COLOR="#000000" CREATED="1220543826094" ID="Freemind_Link_1627696343" MODIFIED="1225740548930" TEXT="&#x441;&#x442;&#x43e;&#x43b;&#x431;&#x446;&#x44b; (&#x434;&#x430;&#x43d;&#x43d;&#x44b;&#x435; &#x43e;&#x431; &#x443;&#x447;&#x430;&#x441;&#x442;&#x43d;&#x438;&#x43a;&#x430;&#x445;)">
+<font NAME="SansSerif" SIZE="12"/>
 <node CREATED="1220543919640" ID="Freemind_Link_110463831" MODIFIED="1220544090969" TEXT="String[]">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1225740463896" ID="Freemind_Link_108680493" MODIFIED="1225740490997" TEXT="boolean[]">
+<node CREATED="1225740493212" ID="Freemind_Link_1700839765" MODIFIED="1225740503134" TEXT="&#x43e;&#x431;&#x44f;&#x437;&#x430;&#x442;&#x435;&#x43b;&#x44c;&#x43d;&#x44b; &#x43b;&#x438; &#x434;&#x430;&#x43d;&#x43d;&#x44b;&#x435;"/>
 </node>
 </node>
 </node>
@@ -40,7 +44,7 @@
 <node COLOR="#cccccc" CREATED="1211707720610" ID="Freemind_Link_1631084185" MODIFIED="1220544116078" TEXT="e-mail">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
-<node COLOR="#ff3333" CREATED="1220544040863" ID="Freemind_Link_1342286671" MODIFIED="1220555790044" TEXT="&#x414;&#x430;&#x43d;&#x43d;&#x44b;&#x435; &#x43e;&#x431; &#x443;&#x447;&#x430;&#x441;&#x442;&#x43d;&#x438;&#x43a;&#x435;">
+<node COLOR="#000000" CREATED="1220544040863" ID="Freemind_Link_1342286671" MODIFIED="1225740562850" TEXT="&#x414;&#x430;&#x43d;&#x43d;&#x44b;&#x435; &#x43e;&#x431; &#x443;&#x447;&#x430;&#x441;&#x442;&#x43d;&#x438;&#x43a;&#x435;">
 <node CREATED="1220544057833" ID="Freemind_Link_1035508944" MODIFIED="1220544088594" TEXT="String[]">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
@@ -191,6 +195,7 @@
 </node>
 <node CREATED="1211578916906" ID="Freemind_Link_127364534" MODIFIED="1211619602388" TEXT="ConnectToContestResponse ">
 <node CREATED="1211578973480" ID="Freemind_Link_1373557941" MODIFIED="1211579045346" TEXT="sessionID"/>
+<node CREATED="1224353127707" ID="Freemind_Link_271769172" MODIFIED="1224353137479" TEXT="[&#x43f;&#x43e;&#x43b;&#x44c;&#x437;&#x43e;&#x432;&#x430;&#x442;&#x435;&#x43b;&#x44c;]"/>
 </node>
 </node>
 <node COLOR="#cc3300" CREATED="1211572836033" ID="Freemind_Link_1705128137" MODIFIED="1213020254126" TEXT="&#x417;&#x430;&#x440;&#x435;&#x433;&#x438;&#x441;&#x442;&#x440;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c;&#x441;&#x44f; &#x434;&#x43b;&#x44f; &#x443;&#x447;&#x430;&#x441;&#x442;&#x438;&#x44f; &#x432; &#x43a;&#x43e;&#x43d;&#x442;&#x435;&#x441;&#x442;&#x435;">
