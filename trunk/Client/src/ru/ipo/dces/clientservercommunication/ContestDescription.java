@@ -46,8 +46,13 @@ public class ContestDescription {
    */
   public String[]         data;
 
+  /**
+   * обязательность поля из массива data 
+   * */
+  public boolean[]        compulsory;
+
   public ContestDescription() {
-  };
+  }
 
   public ContestDescription(String name) {
     this.name = name;

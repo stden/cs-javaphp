@@ -61,8 +61,8 @@ public class Controller {
               break;
             case 0:
               PluginEnvironmentImpl ms = new PluginEnvironmentImpl(null);
-              ms.setButton(new JButton("Manage"));
-              ms.setTitle("Manage");
+              ms.setButton(new JButton("Создать контест"));
+              ms.setTitle("Создать контест");
               clientDialog.addPluginToForm(ms, new ManageServerPlugin(ms));
 
               //test sample plugin
