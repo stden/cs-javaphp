@@ -1,17 +1,19 @@
 package ru.ipo.dces.plugins;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import ru.ipo.dces.client.Controller;
 import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
+import ru.ipo.dces.clientservercommunication.ContestDescription;
 
 import javax.swing.*;
-
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.CellConstraints;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.awt.event.*;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
+import java.awt.event.*;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 
 public class ManageServerPlugin extends Plugin {
     private JTextField contestName;
@@ -32,6 +34,8 @@ public class ManageServerPlugin extends Plugin {
 
     private static final long serialVersionUID = -4584214565491150823L;
 
+    //TODO Create stretching form instead of fixed one
+
     /**
      * Инициализация plugin'а
      */
@@ -39,62 +43,22 @@ public class ManageServerPlugin extends Plugin {
         super(env);
 
         $$$setupUI$$$();
-        beginDate = new JFormattedTextField(new SimpleDateFormat("dd.MM.yy"));
-        beginTime = new JFormattedTextField(new Date());
-        endDate = new JFormattedTextField(new Date());
-        endTime = new JFormattedTextField(new Date());
 
-        /*beginDate.addFocusListener(new FocusAdapter() {
-            public void focusLost(FocusEvent e) {
-                super.focusLost(e);
-                if (!beginDate.isEditValid()) {
-                    setErrorMessage(beginDate, "Пожалуйста, введите дату в формате \"дд.мм.гг\"");
-                }
-            }
-        }); */
+        env.setTitle("Создать контест");
 
-        setUpListener(beginDate);
-        setUpEditFieldBehaviour(beginDate);
-    }
+        OK.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ContestDescription cd = new ContestDescription();
 
-    private void setUpListener(final JFormattedTextField field) {
+                //TODO fill data in cd
+                //TODO create "change field" button
+                //TODO create cool InputVerifier
 
-        field.addFocusListener(new FocusAdapter() {
-            public void focusLost(FocusEvent e) {
-                super.focusLost(e);
-                
-                if (!field.isEditValid()) {
-                    setErrorMessage(field, "Пожалуйста, введите дату в формате \"дд.мм.гг\"");
-                }
+                Controller.addContest(cd);
             }
         });
     }
 
-    private void setErrorMessage(JFormattedTextField field, String msg) {
-        field.setFont(field.getFont().deriveFont(Font.BOLD));
-        field.setForeground(Color.red);
-        field.setText(msg);
-    }
-
-    private void resetErrorMessage(JFormattedTextField field) {
-        field.setFont(field.getFont().deriveFont(Font.PLAIN));
-        field.setForeground(Color.black);
-        field.setText("");
-    }
-
-
-    private void setUpEditFieldBehaviour(final JFormattedTextField field) {
-        field.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-
-                if (field.getFont().isBold()) { // check if it's an error message
-                    field.setText("");
-                }
-
-            }
-        });
-    }
 
     public void setData(ManageServerPluginBean data) {
         contestName.setText(data.getContestNameField());
@@ -138,6 +102,42 @@ public class ManageServerPlugin extends Plugin {
 
     private void createUIComponents() {
         drawPanel = this;
+
+        setDateVerifier(beginDate);
+        setDateVerifier(endDate);
+        setTimeVerifier(beginTime);
+        setTimeVerifier(endTime);
+    }
+
+    private void setTimeVerifier(JTextComponent field) {
+        field.setInputVerifier(new InputVerifier(){
+
+            public boolean verify(JComponent input) {
+
+                try {
+                    new SimpleDateFormat("H:mm").parse(((JTextField) input).getText());
+                } catch (ParseException e) {
+                    return false;
+                }
+
+                return true;
+            }
+        });
+    }
+
+    private void setDateVerifier(JTextField field) {
+        field.setInputVerifier(new InputVerifier() {
+            public boolean verify(JComponent input) {
+
+                try {
+                    new SimpleDateFormat("dd.MM.yy").parse(((JTextField) (input)).getText());
+                } catch (ParseException e) {
+                    return false;
+                }
+
+                return true;
+            }
+        });
     }
 
     /**
@@ -159,8 +159,6 @@ public class ManageServerPlugin extends Plugin {
         final JLabel label2 = new JLabel();
         label2.setText("Дата и время начала");
         drawPanel.add(label2, cc.xy(3, 5));
-        beginDate = new JFormattedTextField();
-        drawPanel.add(beginDate, cc.xy(5, 5, CellConstraints.FILL, CellConstraints.DEFAULT));
         beginTime = new JFormattedTextField();
         drawPanel.add(beginTime, cc.xy(7, 5, CellConstraints.FILL, CellConstraints.DEFAULT));
         final JLabel label3 = new JLabel();
@@ -228,6 +226,8 @@ public class ManageServerPlugin extends Plugin {
         drawPanel.add(separator5, cc.xyw(3, 17, 5, CellConstraints.FILL, CellConstraints.FILL));
         final JSeparator separator6 = new JSeparator();
         drawPanel.add(separator6, cc.xyw(3, 21, 5, CellConstraints.FILL, CellConstraints.FILL));
+        beginDate = new JFormattedTextField();
+        drawPanel.add(beginDate, cc.xy(5, 5, CellConstraints.FILL, CellConstraints.DEFAULT));
         ButtonGroup buttonGroup;
         buttonGroup = new ButtonGroup();
         buttonGroup.add(ownRegistrationRB);

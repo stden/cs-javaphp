@@ -15,4 +15,6 @@ public class CreateContestRequest implements Request {
     contest = new ContestDescription(contestName);
   }
 
+  public CreateContestRequest() {
+  }
 }
