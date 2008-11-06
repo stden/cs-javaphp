@@ -5,7 +5,7 @@ package ru.ipo.dces.clientservercommunication;
  */
 public class ProblemDescription implements Comparable<ProblemDescription> {
 
-  /** идентификатор задачи */
+  /** идентификатор задачи, номер задачи в контесте*/
   public int    id;
 
   /** ID плагина, который будет обрабатывать задачу */

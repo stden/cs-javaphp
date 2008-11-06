@@ -40,8 +40,7 @@ public class LogoutPlugin extends Plugin {
     });
     reloadButton.setText("Выйти");
     add(hintLabel, new CellConstraints(3, 1));
-    add(reloadButton, new CellConstraints(5, 1));
-
+    add(reloadButton, new CellConstraints(5, 1));    
   }
 
 }

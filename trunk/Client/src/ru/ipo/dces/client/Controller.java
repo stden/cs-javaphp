@@ -61,9 +61,8 @@ public class Controller {
               break;
             case 0:
               PluginEnvironmentImpl ms = new PluginEnvironmentImpl(null);
-              ms.setButton(new JButton("Создать контест"));
-              ms.setTitle("Создать контест");
-              clientDialog.addPluginToForm(ms, new ManageServerPlugin(ms));
+              ManageServerPlugin serverPlugin = new ManageServerPlugin(ms);
+              clientDialog.addPluginToForm(ms, serverPlugin);
 
               //test sample plugin
               PluginEnvironmentImpl spe = new PluginEnvironmentImpl(new ProblemDescription());
@@ -138,6 +137,19 @@ public class Controller {
           JOptionPane.ERROR_MESSAGE);
       return null;
     }
+  }
+
+  public static void addContest(ContestDescription cd) {
+      try {
+          CreateContestRequest contestRequest = new CreateContestRequest();
+          contestRequest.sessionID = sessionID;
+          contestRequest.contest = cd;
+          server.doRequest(contestRequest);
+      } catch (ServerReturnedError serverReturnedError) {
+          JOptionPane.showMessageDialog(null, "failed to create a contest");
+      } catch (ServerReturnedNoAnswer serverReturnedNoAnswer) {
+          JOptionPane.showMessageDialog(null, "failed to connect to the server");
+      }
   }
 
 }
