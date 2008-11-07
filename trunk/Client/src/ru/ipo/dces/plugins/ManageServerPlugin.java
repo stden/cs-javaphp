@@ -8,10 +8,8 @@ import ru.ipo.dces.pluginapi.PluginEnvironment;
 import ru.ipo.dces.clientservercommunication.ContestDescription;
 
 import javax.swing.*;
-import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 
@@ -46,13 +44,17 @@ public class ManageServerPlugin extends Plugin {
 
         env.setTitle("—оздать контест");
 
+        setVerifier(beginDate, "dd.MM.yy");
+        setVerifier(endDate, "dd.MM.yy");
+        setVerifier(beginTime, "H:mm");
+        setVerifier(endTime, "H:mm");
+
         OK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 ContestDescription cd = new ContestDescription();
 
                 //TODO fill data in cd
                 //TODO create "change field" button
-                //TODO create cool InputVerifier
 
                 Controller.addContest(cd);
             }
@@ -102,42 +104,39 @@ public class ManageServerPlugin extends Plugin {
 
     private void createUIComponents() {
         drawPanel = this;
-
-        setDateVerifier(beginDate);
-        setDateVerifier(endDate);
-        setTimeVerifier(beginTime);
-        setTimeVerifier(endTime);
     }
 
-    private void setTimeVerifier(JTextComponent field) {
-        field.setInputVerifier(new InputVerifier(){
+    private void setVerifier(JTextField field, String pattern) {
 
-            public boolean verify(JComponent input) {
+        final JTextField f = field;
+        final String pat = pattern;
 
-                try {
-                    new SimpleDateFormat("H:mm").parse(((JTextField) input).getText());
-                } catch (ParseException e) {
-                    return false;
-                }
+        if (!pattern.equals("dd.MM.yy") && !pattern.equals("H:mm"))
+            throw new IllegalArgumentException();
 
-                return true;
-            }
-        });
-    }
-
-    private void setDateVerifier(JTextField field) {
         field.setInputVerifier(new InputVerifier() {
+
             public boolean verify(JComponent input) {
 
                 try {
-                    new SimpleDateFormat("dd.MM.yy").parse(((JTextField) (input)).getText());
+                    new SimpleDateFormat(pat).parse(((JTextField) (input)).getText());
                 } catch (ParseException e) {
+
+                    f.setForeground(Color.red);
+                    f.setFont(f.getFont().deriveFont(Font.BOLD));
+                    f.setText(/*"¬ведите дату в формате" + */ (pat.equals("dd.MM.yy") ? "дд.мм.гг" : "чч:мм"));
+
+                    f.setForeground(Color.black);
+
                     return false;
                 }
 
                 return true;
             }
         });
+
+        field.setForeground(Color.black);
+
     }
 
     /**
