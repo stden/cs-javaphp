@@ -6,6 +6,7 @@ import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.mock.MockServer;
 import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.plugins.*;
+import ru.ipo.dces.plugins.admin.CreateContestPlugin;
 
 /**
  * Контроллер, который хранит данные о соединении с сервером и позволяет
@@ -61,7 +62,7 @@ public class Controller {
               break;
             case 0:
               PluginEnvironmentImpl ms = new PluginEnvironmentImpl(null);
-              ManageServerPlugin serverPlugin = new ManageServerPlugin(ms);
+              CreateContestPlugin serverPlugin = new CreateContestPlugin(ms);
               clientDialog.addPluginToForm(ms, serverPlugin);
 
               //test sample plugin

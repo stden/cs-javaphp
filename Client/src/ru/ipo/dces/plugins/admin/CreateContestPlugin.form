@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="ru.ipo.dces.plugins.ManageServerPlugin">
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="ru.ipo.dces.plugins.admin.CreateContestPlugin">
   <grid id="27dc6" binding="drawPanel" custom-create="true" layout-manager="FormLayout">
-    <rowspec value="center:16dlu:noGrow"/>
-    <rowspec value="top:5dlu:noGrow"/>
-    <rowspec value="center:d:noGrow"/>
+    <rowspec value="center:max(d;4px):noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:16dlu:noGrow"/>
+    <rowspec value="top:4dlu:noGrow"/>
+    <rowspec value="center:d:noGrow"/>
+    <rowspec value="top:4dlu:noGrow"/>
+    <rowspec value="center:18dlu:noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:d:noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
@@ -15,7 +17,6 @@
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:95px:grow"/>
     <rowspec value="top:0dlu:noGrow"/>
-    <rowspec value="center:d:grow"/>
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:d:grow"/>
     <rowspec value="top:4dlu:noGrow"/>
@@ -31,18 +32,15 @@
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:16dlu:noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
-    <rowspec value="center:19dlu:noGrow"/>
-    <rowspec value="top:0dlu:noGrow"/>
-    <rowspec value="center:d:grow"/>
+    <rowspec value="center:23dlu:noGrow"/>
+    <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:d:grow"/>
-    <rowspec value="top:4dlu:noGrow"/>
-    <rowspec value="center:18dlu:noGrow"/>
-    <rowspec value="top:4dlu:noGrow"/>
-    <rowspec value="center:d:grow"/>
+    <rowspec value="center:26px:noGrow"/>
+    <rowspec value="center:max(d;4px):noGrow"/>
     <colspec value="fill:max(d;4px):noGrow"/>
-    <colspec value="left:4dlu:noGrow"/>
-    <colspec value="fill:90dlu:noGrow"/>
+    <colspec value="fill:4dlu:noGrow"/>
+    <colspec value="fill:92dlu:noGrow"/>
     <colspec value="left:4dlu:noGrow"/>
     <colspec value="fill:80dlu:noGrow"/>
     <colspec value="left:4dlu:noGrow"/>
@@ -50,14 +48,14 @@
     <colspec value="left:4dlu:noGrow"/>
     <colspec value="fill:max(d;4px):noGrow"/>
     <constraints>
-      <xy x="19" y="20" width="409" height="454"/>
+      <xy x="19" y="20" width="412" height="485"/>
     </constraints>
     <properties/>
     <border type="none"/>
     <children>
       <component id="76d64" class="javax.swing.JTextField" binding="contestName">
         <constraints>
-          <grid row="0" column="4" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="2" column="4" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
           <forms defaultalign-horz="false"/>
@@ -66,7 +64,7 @@
       </component>
       <component id="fcd7f" class="javax.swing.JLabel">
         <constraints>
-          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <forms/>
         </constraints>
         <properties>
@@ -75,7 +73,7 @@
       </component>
       <component id="dd66e" class="javax.swing.JLabel">
         <constraints>
-          <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <forms/>
         </constraints>
         <properties>
@@ -84,7 +82,7 @@
       </component>
       <component id="517ab" class="javax.swing.JFormattedTextField" binding="beginTime">
         <constraints>
-          <grid row="4" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="6" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
           <forms defaultalign-horz="false"/>
@@ -93,7 +91,7 @@
       </component>
       <component id="c1117" class="javax.swing.JLabel">
         <constraints>
-          <grid row="8" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="10" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <forms/>
         </constraints>
         <properties>
@@ -102,7 +100,7 @@
       </component>
       <component id="74aa5" class="javax.swing.JFormattedTextField" binding="endDate">
         <constraints>
-          <grid row="8" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="10" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
           <forms defaultalign-horz="false"/>
@@ -111,16 +109,16 @@
       </component>
       <component id="3a8c4" class="javax.swing.JLabel">
         <constraints>
-          <grid row="12" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="14" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <forms/>
         </constraints>
         <properties>
           <text value="Описание контеста"/>
         </properties>
       </component>
-      <component id="c8ec" class="javax.swing.JTextArea" binding="contestDescriptionField">
+      <component id="c8ec" class="javax.swing.JTextArea" binding="contestDescription">
         <constraints>
-          <grid row="12" column="4" row-span="1" col-span="3" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+          <grid row="14" column="4" row-span="1" col-span="3" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="50"/>
           </grid>
           <forms defaultalign-horz="false" defaultalign-vert="false"/>
@@ -133,7 +131,7 @@
       </component>
       <component id="ee76c" class="javax.swing.JLabel">
         <constraints>
-          <grid row="18" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="19" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <forms/>
         </constraints>
         <properties>
@@ -142,7 +140,7 @@
       </component>
       <component id="b70f5" class="javax.swing.JFormattedTextField" binding="endTime">
         <constraints>
-          <grid row="8" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="10" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
           <forms defaultalign-horz="false"/>
@@ -151,7 +149,7 @@
       </component>
       <component id="acfa2" class="javax.swing.JRadioButton" binding="ownRegistrationRB">
         <constraints>
-          <grid row="18" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="19" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
           <forms/>
         </constraints>
         <properties>
@@ -160,7 +158,7 @@
       </component>
       <component id="bd53b" class="javax.swing.JRadioButton" binding="administratorRegistrationRB">
         <constraints>
-          <grid row="18" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="19" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <forms/>
         </constraints>
         <properties>
@@ -170,7 +168,7 @@
       </component>
       <component id="bc5ee" class="javax.swing.JLabel">
         <constraints>
-          <grid row="22" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="2" indent="0" use-parent-layout="false"/>
+          <grid row="23" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="2" indent="0" use-parent-layout="false"/>
           <forms defaultalign-vert="false"/>
         </constraints>
         <properties>
@@ -183,7 +181,7 @@
       </component>
       <component id="7c46b" class="javax.swing.JTextField" binding="fieldTypeName">
         <constraints>
-          <grid row="22" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="23" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
           <forms defaultalign-horz="false"/>
@@ -192,55 +190,37 @@
       </component>
       <component id="74d73" class="javax.swing.JCheckBox" binding="compulsoryFieldCheckBox">
         <constraints>
-          <grid row="22" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="23" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <forms/>
         </constraints>
         <properties>
           <text value="обязательное"/>
         </properties>
       </component>
-      <component id="57753" class="javax.swing.JButton" binding="addButton">
-        <constraints>
-          <grid row="24" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="Добавить"/>
-        </properties>
-      </component>
-      <component id="2611a" class="javax.swing.JButton" binding="deleteButton">
-        <constraints>
-          <grid row="26" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="Удалить"/>
-        </properties>
-      </component>
       <component id="9cac8" class="javax.swing.JSeparator">
         <constraints>
-          <grid row="2" column="2" row-span="1" col-span="5" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="4" column="2" row-span="1" col-span="5" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
           <forms defaultalign-horz="false" defaultalign-vert="false"/>
         </constraints>
         <properties/>
       </component>
       <component id="80bb8" class="javax.swing.JSeparator">
         <constraints>
-          <grid row="6" column="2" row-span="2" col-span="5" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="8" column="2" row-span="2" col-span="5" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
           <forms defaultalign-horz="false" defaultalign-vert="false"/>
         </constraints>
         <properties/>
       </component>
       <component id="c572e" class="javax.swing.JSeparator">
         <constraints>
-          <grid row="10" column="2" row-span="1" col-span="5" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="12" column="2" row-span="1" col-span="5" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
           <forms defaultalign-horz="false" defaultalign-vert="false"/>
         </constraints>
         <properties/>
       </component>
-      <component id="7b153" class="javax.swing.JList" binding="contestantsList">
+      <component id="7b153" class="javax.swing.JList" binding="typeFieldList">
         <constraints>
-          <grid row="24" column="4" row-span="7" col-span="1" vsize-policy="6" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false">
+          <grid row="25" column="4" row-span="7" col-span="1" vsize-policy="6" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="50"/>
           </grid>
           <forms defaultalign-vert="false"/>
@@ -255,42 +235,73 @@
           <selectionMode value="0"/>
         </properties>
       </component>
-      <component id="728f0" class="javax.swing.JButton" binding="OK">
-        <constraints>
-          <grid row="36" column="2" row-span="1" col-span="5" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="Создать контест"/>
-        </properties>
-      </component>
-      <component id="10d50" class="javax.swing.JSeparator">
-        <constraints>
-          <grid row="34" column="2" row-span="1" col-span="5" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-          <forms defaultalign-horz="false" defaultalign-vert="false"/>
-        </constraints>
-        <properties/>
-      </component>
       <component id="90f6" class="javax.swing.JSeparator">
         <constraints>
-          <grid row="16" column="2" row-span="1" col-span="5" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="17" column="2" row-span="1" col-span="5" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
           <forms defaultalign-horz="false" defaultalign-vert="false"/>
         </constraints>
         <properties/>
       </component>
       <component id="489de" class="javax.swing.JSeparator">
         <constraints>
-          <grid row="20" column="2" row-span="1" col-span="5" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="21" column="2" row-span="1" col-span="5" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
           <forms defaultalign-horz="false" defaultalign-vert="false"/>
         </constraints>
         <properties/>
       </component>
       <component id="cab83" class="javax.swing.JFormattedTextField" binding="beginDate">
         <constraints>
-          <grid row="4" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="6" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
           <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="57753" class="javax.swing.JButton" binding="addButton">
+        <constraints>
+          <grid row="27" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <enabled value="false"/>
+          <text value="Добавить"/>
+        </properties>
+      </component>
+      <component id="2611a" class="javax.swing.JButton" binding="deleteButton">
+        <constraints>
+          <grid row="29" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <enabled value="false"/>
+          <text value="Удалить"/>
+        </properties>
+      </component>
+      <component id="6a505" class="javax.swing.JButton" binding="changeButton">
+        <constraints>
+          <grid row="25" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <enabled value="false"/>
+          <text value="Изменить"/>
+        </properties>
+      </component>
+      <component id="728f0" class="javax.swing.JButton" binding="createContest">
+        <constraints>
+          <grid row="35" column="2" row-span="1" col-span="5" vsize-policy="0" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false" defaultalign-vert="false"/>
+        </constraints>
+        <properties>
+          <enabled value="false"/>
+          <text value="Создать"/>
+        </properties>
+      </component>
+      <component id="aac03" class="javax.swing.JSeparator">
+        <constraints>
+          <grid row="33" column="2" row-span="2" col-span="5" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false" defaultalign-vert="false"/>
         </constraints>
         <properties/>
       </component>
