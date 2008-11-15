@@ -1,6 +1,7 @@
-package ru.ipo.dces.plugins;
+package ru.ipo.dces.plugins.admin.beans;
 
-public class ManageServerPluginBean {
+/*
+public class CreateContestPluginBean {
     private String contestNameField;
     private String beginDateField;
     private String beginTimeField;
@@ -8,8 +9,9 @@ public class ManageServerPluginBean {
     private String endTimeField;
     private String contestDescriptionField;
     private String contestantNameField;
+    private boolean compulsoryFieldCheckbox;
 
-    public ManageServerPluginBean() {
+    public CreateContestPluginBean() {
     }
 
     public String getContestNameField() {
@@ -67,4 +69,12 @@ public class ManageServerPluginBean {
     public void setContestantNameField(final String contestantNameField) {
         this.contestantNameField = contestantNameField;
     }
-}
+
+    public boolean isCompulsoryFieldCheckbox() {
+        return compulsoryFieldCheckbox;
+    }
+
+    public void setCompulsoryFieldCheckbox(final boolean compulsoryFieldCheckbox) {
+        this.compulsoryFieldCheckbox = compulsoryFieldCheckbox;
+    }
+}*/
