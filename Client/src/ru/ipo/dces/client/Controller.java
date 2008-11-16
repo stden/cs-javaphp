@@ -18,8 +18,17 @@ public class Controller {
   public static UserDescription    curUser;
   public static ContestDescription curContest;
   private static ClientDialog      clientDialog;
+  public final static IPluginNotificator ClientNotificator;
 
-  /** Добавление Plugin'а в клиент
+    static {
+        ClientNotificator = new IPluginNotificator() {
+            public void fireNotificationMessage(String s) {
+                
+            }
+        };
+  }
+
+    /** Добавление Plugin'а в клиент
    * @param pd the description of the problem for which the plugin is added*/
   public static void addPlugin(ProblemDescription pd) {
     PluginEnvironmentImpl pe = new PluginEnvironmentImpl(pd);

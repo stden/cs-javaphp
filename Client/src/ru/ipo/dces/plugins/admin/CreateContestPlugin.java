@@ -40,41 +40,16 @@ public class CreateContestPlugin extends Plugin {
 
     private static final long serialVersionUID = -4584214565491150823L;
 
-    private boolean canCreateContest = false;
-
-    private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
-
-    private int checkSum = -2; //-1 to discount one edit which is not compulsory
+    private int checkSum = -2; //TODO -1 to discount one edit which is not compulsory, and -1 to JList field
 
     public int getCheckSum() {
         return checkSum;
     }
 
     public void setCheckSum(int checkSum) {
-        //pcs.firePropertyChange("checkSum", this.checkSum, checkSum);
         this.checkSum = checkSum;
     }
 
-    /*public void addPropertyChangeListener(PropertyChangeListener listener) {
-        super.addPropertyChangeListener(listener);    //To change body of overridden methods use File | Settings | File Templates.
-        pcs.addPropertyChangeListener(listener);
-    }
-
-    public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-        super.addPropertyChangeListener(propertyName, listener);    //To change body of overridden methods use File | Settings | File Templates.
-        pcs.addPropertyChangeListener(propertyName, listener);
-    }
-
-    public synchronized void removePropertyChangeListener(PropertyChangeListener listener) {
-        super.removePropertyChangeListener(listener);    //To change body of overridden methods use File | Settings | File Templates.
-        pcs.removePropertyChangeListener(listener);
-    }
-
-    public synchronized void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-        super.removePropertyChangeListener(propertyName, listener);    //To change body of overridden methods use File | Settings | File Templates.
-        pcs.removePropertyChangeListener(propertyName, listener);
-    }
-*/
     /**
      * Инициализация plugin'а
      */
@@ -147,14 +122,6 @@ public class CreateContestPlugin extends Plugin {
                 super.keyReleased(e);    //To change body of overridden methods use File | Settings | File Templates.
             }
         });
-
-        /*addPropertyChangeListener("checkSum", new PropertyChangeListener() {
-
-            public void propertyChange(PropertyChangeEvent evt) {
-                System.out.println("evt.getOldValue() = " + evt.getOldValue());
-                System.out.println("evt.getNewValue() = " + evt.getNewValue());
-            }
-        });*/
     }
 
     private void checkCreateContestButton() {
@@ -184,11 +151,15 @@ public class CreateContestPlugin extends Plugin {
 
                 if (e.getDocument().getLength() == 1)
                     checkSum--;
+
+                checkCreateContestButton();
             }
 
             public void removeUpdate(DocumentEvent e) {
                 if (e.getDocument().getLength() == 0)
                     checkSum++;
+
+                checkCreateContestButton();
             }
         });
     }
@@ -209,6 +180,7 @@ public class CreateContestPlugin extends Plugin {
 
             public boolean verify(JComponent input) {
 
+                Controller.ClientNotificator.fireNotificationMessage("Поле должно быть в формате: "+ (pat.equals("dd.MM.yy") ? "дд.мм.гг" : "чч:мм"));
                 /*try {
                     new SimpleDateFormat(pat).parse(((JTextField) (input)).getText());
                 } catch (ParseException e) {
