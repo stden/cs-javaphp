@@ -3,22 +3,26 @@ package ru.ipo.dces.plugins.admin;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import ru.ipo.dces.client.Controller;
+import ru.ipo.dces.clientservercommunication.ContestDescription;
 import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
-import ru.ipo.dces.clientservercommunication.ContestDescription;
 
 import javax.swing.*;
-import javax.swing.text.Document;
-import javax.swing.text.Element;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.text.Document;
 import java.awt.*;
-import java.awt.event.*;
-import java.beans.PropertyChangeListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeSupport;
+import java.beans.PropertyChangeListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class CreateContestPlugin extends Plugin {
     private JTextField contestName;
@@ -37,10 +41,13 @@ public class CreateContestPlugin extends Plugin {
     private JCheckBox compulsoryFieldCheckBox;
     private JButton createContest;
     private JButton changeButton;
+    private JLabel infoMessageLabel;
 
     private static final long serialVersionUID = -4584214565491150823L;
 
     private int checkSum = -2; //TODO -1 to discount one edit which is not compulsory, and -1 to JList field
+    private Color infoMsgLabelBackgroundColor;
+
 
     public int getCheckSum() {
         return checkSum;
@@ -59,6 +66,8 @@ public class CreateContestPlugin extends Plugin {
         $$$setupUI$$$();
 
         env.setTitle("Создать контест");
+
+        infoMsgLabelBackgroundColor = infoMessageLabel.getBackground();
 
         //set verifiers
         setVerifier(beginDate, "dd.MM.yy");
@@ -168,7 +177,7 @@ public class CreateContestPlugin extends Plugin {
         drawPanel = this;
     }
 
-    private void setVerifier(JTextField field, String pattern) {
+    private void setVerifier(final JTextField field, String pattern) {
 
         final JTextField f = field;
         final String pat = pattern;
@@ -180,26 +189,56 @@ public class CreateContestPlugin extends Plugin {
 
             public boolean verify(JComponent input) {
 
-                Controller.ClientNotificator.fireNotificationMessage("Поле должно быть в формате: " + (pat.equals("dd.MM.yy") ? "дд.мм.гг" : "чч:мм"));
-                /*try {
-                    new SimpleDateFormat(pat).parse(((JTextField) (input)).getText());
+                String inputText = ((JTextField) (input)).getText();
+                ;
+
+                try {
+                    new SimpleDateFormat(pat).parse(inputText);
                 } catch (ParseException e) {
 
-                    f.setForeground(Color.red);
-                    f.setFont(f.getFont().deriveFont(Font.BOLD));
-                    f.setText(*//*"Введите дату в формате" + *//* (pat.equals("dd.MM.yy") ? "дд.мм.гг" : "чч:мм"));
+                    if (!inputText.equals("")) {
+                        fireNotificationMessage("Поле должно быть в формате: " + (pat.equals("dd.MM.yy") ? "дд.мм.гг" : "чч:мм"), NotificationType.Error);
 
-                    f.setForeground(Color.black);
+                        field.setBackground(new Color(255, 240, 240));
+                    }
 
-                    return false;
-                }*/
+                    return true;
+                }
 
+                fireNotificationMessage("", NotificationType.Info);
+                field.setBackground(Color.WHITE);
                 return true;
             }
         });
 
-        field.setForeground(Color.black);
+        //field.setForeground(Color.black);
+    }
 
+    private void fireNotificationMessage(String s, NotificationType type) {
+
+        infoMessageLabel.setText(s);
+
+        switch (type) {
+            case Error:
+                infoMessageLabel.setForeground(new Color(255, 100, 100));
+                break;
+            case Info:
+                infoMessageLabel.setForeground(infoMsgLabelBackgroundColor);
+                break;
+            case Warning:
+                infoMessageLabel.setForeground(new Color(100, 255, 255));
+                break;
+        }
+        //input.getParent().add(l);
+
+        /*l.setVisible(true);
+
+        if (l.getFocusListeners().length == 0)
+            l.addFocusListener(new FocusAdapter() {
+                public void focusGained(FocusEvent e) {
+                    l.setVisible(false);
+                }
+            });*/
     }
 
     /*public void setData(CreateContestPluginBean data) {
@@ -252,59 +291,59 @@ public class CreateContestPlugin extends Plugin {
      */
     private void $$$setupUI$$$() {
         createUIComponents();
-        drawPanel.setLayout(new FormLayout("fill:max(d;4px):noGrow,fill:4dlu:noGrow,fill:92dlu:noGrow,left:4dlu:noGrow,fill:80dlu:noGrow,left:4dlu:noGrow,fill:81dlu:noGrow,left:4dlu:noGrow,fill:max(d;4px):noGrow", "center:max(d;4px):noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:noGrow,top:4dlu:noGrow,center:18dlu:noGrow,top:4dlu:noGrow,center:d:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:noGrow,top:4dlu:noGrow,center:95px:grow,top:0dlu:noGrow,top:4dlu:noGrow,center:d:grow,top:4dlu:noGrow,center:17dlu:noGrow,top:4dlu:noGrow,center:d:grow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:23dlu:noGrow,top:4dlu:noGrow,top:4dlu:noGrow,center:d:grow,center:26px:noGrow,center:max(d;4px):noGrow"));
+        drawPanel.setLayout(new FormLayout("fill:max(d;4px):noGrow,fill:4dlu:noGrow,fill:92dlu:noGrow,left:4dlu:noGrow,fill:80dlu:noGrow,left:4dlu:noGrow,fill:81dlu:noGrow,left:4dlu:noGrow,fill:max(d;4px):noGrow", "center:max(d;4px):noGrow,top:12dlu:noGrow,center:max(d;4px):noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:noGrow,top:4dlu:noGrow,center:18dlu:noGrow,top:4dlu:noGrow,center:d:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:noGrow,top:4dlu:noGrow,center:95px:grow,top:0dlu:noGrow,top:4dlu:noGrow,center:d:grow,top:4dlu:noGrow,center:17dlu:noGrow,top:4dlu:noGrow,center:d:grow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:23dlu:noGrow,top:4dlu:noGrow,top:4dlu:noGrow,center:d:grow,center:26px:noGrow,center:max(d;4px):noGrow"));
         contestName = new JTextField();
         CellConstraints cc = new CellConstraints();
-        drawPanel.add(contestName, cc.xyw(5, 3, 3, CellConstraints.FILL, CellConstraints.DEFAULT));
+        drawPanel.add(contestName, cc.xyw(5, 5, 3, CellConstraints.FILL, CellConstraints.DEFAULT));
         final JLabel label1 = new JLabel();
         label1.setText("Название контеста");
-        drawPanel.add(label1, cc.xy(3, 3));
+        drawPanel.add(label1, cc.xy(3, 5));
         final JLabel label2 = new JLabel();
         label2.setText("Дата и время начала");
-        drawPanel.add(label2, cc.xy(3, 7));
+        drawPanel.add(label2, cc.xy(3, 9));
         beginTime = new JFormattedTextField();
-        drawPanel.add(beginTime, cc.xy(7, 7, CellConstraints.FILL, CellConstraints.DEFAULT));
+        drawPanel.add(beginTime, cc.xy(7, 9, CellConstraints.FILL, CellConstraints.DEFAULT));
         final JLabel label3 = new JLabel();
         label3.setText("Дата и время окончания");
-        drawPanel.add(label3, cc.xy(3, 11));
+        drawPanel.add(label3, cc.xy(3, 13));
         endDate = new JFormattedTextField();
-        drawPanel.add(endDate, cc.xy(5, 11, CellConstraints.FILL, CellConstraints.DEFAULT));
+        drawPanel.add(endDate, cc.xy(5, 13, CellConstraints.FILL, CellConstraints.DEFAULT));
         final JLabel label4 = new JLabel();
         label4.setText("Описание контеста");
-        drawPanel.add(label4, cc.xy(3, 15));
+        drawPanel.add(label4, cc.xy(3, 17));
         contestDescription = new JTextArea();
         contestDescription.setLineWrap(true);
         contestDescription.setText("");
         contestDescription.setWrapStyleWord(true);
-        drawPanel.add(contestDescription, cc.xyw(5, 15, 3, CellConstraints.FILL, CellConstraints.FILL));
+        drawPanel.add(contestDescription, cc.xyw(5, 17, 3, CellConstraints.FILL, CellConstraints.FILL));
         final JLabel label5 = new JLabel();
         label5.setText("Тип регистрации");
-        drawPanel.add(label5, cc.xy(3, 20));
+        drawPanel.add(label5, cc.xy(3, 22));
         endTime = new JFormattedTextField();
-        drawPanel.add(endTime, cc.xy(7, 11, CellConstraints.FILL, CellConstraints.DEFAULT));
+        drawPanel.add(endTime, cc.xy(7, 13, CellConstraints.FILL, CellConstraints.DEFAULT));
         ownRegistrationRB = new JRadioButton();
         ownRegistrationRB.setText("Самостоятельно");
-        drawPanel.add(ownRegistrationRB, cc.xy(5, 20));
+        drawPanel.add(ownRegistrationRB, cc.xy(5, 22));
         administratorRegistrationRB = new JRadioButton();
         administratorRegistrationRB.setSelected(true);
         administratorRegistrationRB.setText("Администратором");
-        drawPanel.add(administratorRegistrationRB, cc.xy(7, 20));
+        drawPanel.add(administratorRegistrationRB, cc.xy(7, 22));
         final JLabel label6 = new JLabel();
         label6.setText("Имя поля");
         label6.setVerticalAlignment(0);
         label6.putClientProperty("html.disable", Boolean.FALSE);
-        drawPanel.add(label6, cc.xy(3, 24, CellConstraints.DEFAULT, CellConstraints.FILL));
+        drawPanel.add(label6, cc.xy(3, 26, CellConstraints.DEFAULT, CellConstraints.FILL));
         fieldTypeName = new JTextField();
-        drawPanel.add(fieldTypeName, cc.xy(5, 24, CellConstraints.FILL, CellConstraints.DEFAULT));
+        drawPanel.add(fieldTypeName, cc.xy(5, 26, CellConstraints.FILL, CellConstraints.DEFAULT));
         compulsoryFieldCheckBox = new JCheckBox();
         compulsoryFieldCheckBox.setText("обязательное");
-        drawPanel.add(compulsoryFieldCheckBox, cc.xy(7, 24));
+        drawPanel.add(compulsoryFieldCheckBox, cc.xy(7, 26));
         final JSeparator separator1 = new JSeparator();
-        drawPanel.add(separator1, cc.xyw(3, 5, 5, CellConstraints.FILL, CellConstraints.FILL));
+        drawPanel.add(separator1, cc.xyw(3, 7, 5, CellConstraints.FILL, CellConstraints.FILL));
         final JSeparator separator2 = new JSeparator();
-        drawPanel.add(separator2, cc.xywh(3, 9, 5, 2, CellConstraints.FILL, CellConstraints.FILL));
+        drawPanel.add(separator2, cc.xywh(3, 11, 5, 2, CellConstraints.FILL, CellConstraints.FILL));
         final JSeparator separator3 = new JSeparator();
-        drawPanel.add(separator3, cc.xyw(3, 13, 5, CellConstraints.FILL, CellConstraints.FILL));
+        drawPanel.add(separator3, cc.xyw(3, 15, 5, CellConstraints.FILL, CellConstraints.FILL));
         typeFieldList = new JList();
         final DefaultListModel defaultListModel1 = new DefaultListModel();
         defaultListModel1.addElement("Имя");
@@ -313,31 +352,35 @@ public class CreateContestPlugin extends Plugin {
         defaultListModel1.addElement("Класс");
         typeFieldList.setModel(defaultListModel1);
         typeFieldList.setSelectionMode(0);
-        drawPanel.add(typeFieldList, cc.xywh(5, 26, 1, 7, CellConstraints.DEFAULT, CellConstraints.FILL));
+        drawPanel.add(typeFieldList, cc.xywh(5, 28, 1, 7, CellConstraints.DEFAULT, CellConstraints.FILL));
         final JSeparator separator4 = new JSeparator();
-        drawPanel.add(separator4, cc.xyw(3, 18, 5, CellConstraints.FILL, CellConstraints.FILL));
+        drawPanel.add(separator4, cc.xyw(3, 20, 5, CellConstraints.FILL, CellConstraints.FILL));
         final JSeparator separator5 = new JSeparator();
-        drawPanel.add(separator5, cc.xyw(3, 22, 5, CellConstraints.FILL, CellConstraints.FILL));
+        drawPanel.add(separator5, cc.xyw(3, 24, 5, CellConstraints.FILL, CellConstraints.FILL));
         beginDate = new JFormattedTextField();
-        drawPanel.add(beginDate, cc.xy(5, 7, CellConstraints.FILL, CellConstraints.DEFAULT));
+        drawPanel.add(beginDate, cc.xy(5, 9, CellConstraints.FILL, CellConstraints.DEFAULT));
         addButton = new JButton();
         addButton.setEnabled(false);
         addButton.setText("Добавить");
-        drawPanel.add(addButton, cc.xy(7, 28));
+        drawPanel.add(addButton, cc.xy(7, 30));
         deleteButton = new JButton();
         deleteButton.setEnabled(false);
         deleteButton.setText("Удалить");
-        drawPanel.add(deleteButton, cc.xy(7, 30));
+        drawPanel.add(deleteButton, cc.xy(7, 32));
         changeButton = new JButton();
         changeButton.setEnabled(false);
         changeButton.setText("Изменить");
-        drawPanel.add(changeButton, cc.xy(7, 26));
+        drawPanel.add(changeButton, cc.xy(7, 28));
         createContest = new JButton();
         createContest.setEnabled(false);
         createContest.setText("Создать");
-        drawPanel.add(createContest, cc.xyw(3, 36, 5, CellConstraints.FILL, CellConstraints.FILL));
+        drawPanel.add(createContest, cc.xyw(3, 38, 5, CellConstraints.FILL, CellConstraints.FILL));
         final JSeparator separator6 = new JSeparator();
-        drawPanel.add(separator6, cc.xywh(3, 34, 5, 2, CellConstraints.FILL, CellConstraints.FILL));
+        drawPanel.add(separator6, cc.xywh(3, 36, 5, 2, CellConstraints.FILL, CellConstraints.FILL));
+        infoMessageLabel = new JLabel();
+        infoMessageLabel.setBackground(new Color(-986896));
+        infoMessageLabel.setText("Пожалуйста, введите информацию о контесте");
+        drawPanel.add(infoMessageLabel, cc.xyw(3, 2, 5, CellConstraints.DEFAULT, CellConstraints.FILL));
         ButtonGroup buttonGroup;
         buttonGroup = new ButtonGroup();
         buttonGroup.add(ownRegistrationRB);
