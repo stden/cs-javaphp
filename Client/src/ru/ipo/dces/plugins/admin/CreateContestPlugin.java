@@ -180,7 +180,7 @@ public class CreateContestPlugin extends Plugin {
 
             public boolean verify(JComponent input) {
 
-                Controller.ClientNotificator.fireNotificationMessage("Ïמכו המכזםמ בûעü ג פמנלאעו: "+ (pat.equals("dd.MM.yy") ? "הה.לל.דד" : "קק:לל"));
+                Controller.ClientNotificator.fireNotificationMessage("Ïמכו המכזםמ בûעü ג פמנלאעו: " + (pat.equals("dd.MM.yy") ? "הה.לל.דד" : "קק:לל"));
                 /*try {
                     new SimpleDateFormat(pat).parse(((JTextField) (input)).getText());
                 } catch (ParseException e) {
