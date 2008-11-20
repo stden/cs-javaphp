@@ -9,7 +9,7 @@
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:d:noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
-    <rowspec value="center:18dlu:noGrow"/>
+    <rowspec value="center:16dlu:noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:d:noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
@@ -17,12 +17,12 @@
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:d:noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
-    <rowspec value="center:95px:grow"/>
+    <rowspec value="center:60dlu:grow"/>
     <rowspec value="top:0dlu:noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:d:grow"/>
     <rowspec value="top:4dlu:noGrow"/>
-    <rowspec value="center:17dlu:noGrow"/>
+    <rowspec value="center:16dlu:noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:d:grow"/>
     <rowspec value="top:4dlu:noGrow"/>
@@ -38,7 +38,7 @@
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:d:grow"/>
-    <rowspec value="center:26px:noGrow"/>
+    <rowspec value="center:16dlu:noGrow"/>
     <rowspec value="center:max(d;4px):noGrow"/>
     <colspec value="fill:max(d;4px):noGrow"/>
     <colspec value="fill:4dlu:noGrow"/>
@@ -46,11 +46,11 @@
     <colspec value="left:4dlu:noGrow"/>
     <colspec value="fill:80dlu:noGrow"/>
     <colspec value="left:4dlu:noGrow"/>
-    <colspec value="fill:81dlu:noGrow"/>
+    <colspec value="fill:80dlu:noGrow"/>
     <colspec value="left:4dlu:noGrow"/>
     <colspec value="fill:max(d;4px):noGrow"/>
     <constraints>
-      <xy x="19" y="20" width="412" height="489"/>
+      <xy x="19" y="20" width="412" height="477"/>
     </constraints>
     <properties/>
     <border type="none"/>
