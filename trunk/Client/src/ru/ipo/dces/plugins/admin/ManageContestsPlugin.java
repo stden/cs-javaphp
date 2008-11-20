@@ -18,6 +18,19 @@ import com.jgoodies.forms.layout.CellConstraints;
 public class ManageContestsPlugin extends Plugin {
     private JPanel panel1;
     private JList list1;
+    private JTextField contestName;
+    private JFormattedTextField beginTime;
+    private JFormattedTextField beginDate;
+    private JFormattedTextField endDate;
+    private JFormattedTextField endTime;
+    private JTextArea contestDescription;
+    private JRadioButton ownRegistrationRB;
+    private JRadioButton administratorRegistrationRB;
+    private JTable table1;
+    private JTextField имяЗадачиTextField;
+    private JTextField условиеTextField;
+    private JTextField клиентскийПлагинTextField;
+    private JButton изменитьПутьButton;
 
     /**
      * Инициализация plugin'а
@@ -42,13 +55,84 @@ public class ManageContestsPlugin extends Plugin {
      */
     private void $$$setupUI$$$() {
         panel1 = new JPanel();
-        panel1.setLayout(new FormLayout("fill:max(d;4px):noGrow,left:4dlu:noGrow,fill:122px:noGrow,left:4dlu:noGrow,fill:max(d;4px):noGrow", "center:max(d;4px):noGrow,top:4dlu:noGrow,center:16px:noGrow,top:4dlu:noGrow,center:428px:noGrow,top:4dlu:noGrow,center:max(d;4px):noGrow"));
+        panel1.setLayout(new FormLayout("fill:max(d;4px):noGrow,left:4dlu:noGrow,fill:122px:noGrow,left:4dlu:noGrow,fill:92dlu:noGrow,left:4dlu:noGrow,fill:80dlu:noGrow,left:4dlu:noGrow,fill:80dlu:noGrow,left:6dlu:noGrow,fill:max(d;4px):noGrow", "center:max(d;4px):noGrow,top:4dlu:noGrow,center:16px:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:60dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:33px:noGrow,top:6dlu:noGrow,center:28px:noGrow,top:4dlu:noGrow,center:52px:noGrow,top:4dlu:noGrow,center:max(d;4px):noGrow"));
         list1 = new JList();
+        final DefaultListModel defaultListModel1 = new DefaultListModel();
+        defaultListModel1.addElement("У администратора контеста не должно быть этой штуки, потому что он редактирует только свой(!!!) контест");
+        list1.setModel(defaultListModel1);
         CellConstraints cc = new CellConstraints();
-        panel1.add(list1, cc.xy(3, 5, CellConstraints.DEFAULT, CellConstraints.FILL));
+        panel1.add(list1, cc.xywh(3, 5, 1, 21, CellConstraints.DEFAULT, CellConstraints.FILL));
         final JLabel label1 = new JLabel();
         label1.setText("Доступные контесты");
         panel1.add(label1, cc.xy(3, 3));
+        contestName = new JTextField();
+        panel1.add(contestName, cc.xyw(7, 5, 3, CellConstraints.FILL, CellConstraints.DEFAULT));
+        final JLabel label2 = new JLabel();
+        label2.setText("Название контеста");
+        panel1.add(label2, cc.xy(5, 5));
+        final JLabel label3 = new JLabel();
+        label3.setText("Дата и время начала");
+        panel1.add(label3, cc.xy(5, 7));
+        beginTime = new JFormattedTextField();
+        panel1.add(beginTime, cc.xy(9, 7, CellConstraints.FILL, CellConstraints.DEFAULT));
+        beginDate = new JFormattedTextField();
+        panel1.add(beginDate, cc.xy(7, 7, CellConstraints.FILL, CellConstraints.DEFAULT));
+        final JLabel label4 = new JLabel();
+        label4.setText("Дата и время окончания");
+        panel1.add(label4, cc.xy(5, 9));
+        endDate = new JFormattedTextField();
+        panel1.add(endDate, cc.xy(7, 9, CellConstraints.FILL, CellConstraints.DEFAULT));
+        endTime = new JFormattedTextField();
+        panel1.add(endTime, cc.xy(9, 9, CellConstraints.FILL, CellConstraints.DEFAULT));
+        final JLabel label5 = new JLabel();
+        label5.setText("Описание контеста");
+        panel1.add(label5, cc.xy(5, 11));
+        contestDescription = new JTextArea();
+        contestDescription.setLineWrap(true);
+        contestDescription.setText("");
+        contestDescription.setWrapStyleWord(true);
+        panel1.add(contestDescription, cc.xyw(7, 11, 3, CellConstraints.FILL, CellConstraints.FILL));
+        final JLabel label6 = new JLabel();
+        label6.setText("Тип регистрации");
+        panel1.add(label6, cc.xy(5, 13));
+        ownRegistrationRB = new JRadioButton();
+        ownRegistrationRB.setText("Самостоятельно");
+        panel1.add(ownRegistrationRB, cc.xy(7, 13));
+        administratorRegistrationRB = new JRadioButton();
+        administratorRegistrationRB.setSelected(true);
+        administratorRegistrationRB.setText("Администратором");
+        panel1.add(administratorRegistrationRB, cc.xy(9, 13));
+        final JLabel label7 = new JLabel();
+        label7.setText("Кто видит контест");
+        panel1.add(label7, cc.xy(5, 15));
+        final JRadioButton radioButton1 = new JRadioButton();
+        radioButton1.setText("Администраторы");
+        panel1.add(radioButton1, cc.xy(7, 15));
+        final JRadioButton radioButton2 = new JRadioButton();
+        radioButton2.setSelected(true);
+        radioButton2.setText("Все");
+        panel1.add(radioButton2, cc.xy(9, 15));
+        table1 = new JTable();
+        panel1.add(table1, cc.xywh(5, 23, 5, 2, CellConstraints.FILL, CellConstraints.FILL));
+        имяЗадачиTextField = new JTextField();
+        имяЗадачиTextField.setText("Имя задачи");
+        panel1.add(имяЗадачиTextField, cc.xy(5, 17, CellConstraints.FILL, CellConstraints.DEFAULT));
+        условиеTextField = new JTextField();
+        условиеTextField.setText("Условие");
+        panel1.add(условиеTextField, cc.xy(7, 17, CellConstraints.FILL, CellConstraints.DEFAULT));
+        клиентскийПлагинTextField = new JTextField();
+        клиентскийПлагинTextField.setText("клиентский плагин");
+        panel1.add(клиентскийПлагинTextField, cc.xy(5, 19, CellConstraints.FILL, CellConstraints.DEFAULT));
+        изменитьПутьButton = new JButton();
+        изменитьПутьButton.setText("Изменить путь");
+        panel1.add(изменитьПутьButton, cc.xy(7, 19));
+        ButtonGroup buttonGroup;
+        buttonGroup = new ButtonGroup();
+        buttonGroup.add(ownRegistrationRB);
+        buttonGroup.add(administratorRegistrationRB);
+        buttonGroup = new ButtonGroup();
+        buttonGroup.add(radioButton1);
+        buttonGroup.add(radioButton2);
     }
 
     /**
