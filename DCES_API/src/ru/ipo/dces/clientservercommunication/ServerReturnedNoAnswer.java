@@ -8,6 +8,8 @@ package ru.ipo.dces.clientservercommunication;
  */
 public class ServerReturnedNoAnswer extends Exception {
 
+    private String actualAnswer = null;
+
     public ServerReturnedNoAnswer() {
     }
 
@@ -21,5 +23,14 @@ public class ServerReturnedNoAnswer extends Exception {
 
     public ServerReturnedNoAnswer(Throwable cause) {
         super(cause);
+    }
+
+    public ServerReturnedNoAnswer(String message, String actualAnswer) {
+        super(message);
+        this.actualAnswer = actualAnswer;
+    }
+
+    public String getActualAnswer() {
+        return actualAnswer;
     }
 }
