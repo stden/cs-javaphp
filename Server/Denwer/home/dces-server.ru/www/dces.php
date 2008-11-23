@@ -1,6 +1,14 @@
 <?php
 
+require("Debug.php");
+
+require("DataBase.php");
 require("Messages.php");
+require("Sessions.php");
+
+require("AvailableContests.php");
+require("CreateContest.php");
+require("ConnectToContest.php");
 
 function prepare( $a ){
   $a = str_replace('\0',chr(0),$a);
@@ -9,34 +17,48 @@ function prepare( $a ){
   $a = str_replace("\\\\","\\",$a);  	
   return $a;
 }
-  
 
 if(!isset($_REQUEST['x'])){
-  echo "Должен быть параметр!";
-  die();
+/*
+  echo "DCES версии 0.1, добро пожаловать\n";
+  echo "Веб интерфейс к DCES-серверу пока не предусмотрен";
+  exit();
+*/
+
+//test requests
+
+jsalert("Testing available contests request");
+echo serialize(processAvailableContestsRequest(""));
+exit();
 }
 
-$req = prepare($_REQUEST['x']);
+$s_request = prepare($_REQUEST['x']);
 
-$log = fopen("requests.log", "a");
-fwrite($log, "request = $req\n");
+//open log file
+$log = fopen("messages.log", "a");
+fwrite($log, "request = $s_request\n");
 
-$s = unserialize($req);	
-switch(get_class($s)){
+$request = unserialize($s_request);
+
+switch(get_class($request)){
   case 'AvailableContestsRequest': 
-    $res = processAvailableContestRequest($s);
-	break;
+    $result = processAvailableContestsRequest($request);
+	  break;
 
-  case 'CreateContestRequest':
-	$res = new AcceptedResponse(); 
-	break;  
+	case 'CreateContestRequest': 
+    $result = processCreateContestRequest($request);
+	  break;
+
+	case 'ConnectToContestRequest':
+    $result = processConnectToContestRequest($request);
+	  break;
 
   default:
-	$res = 'Unknown message type "'.get_class($s).'"';
+	  $result = 'Unknown message type "'.get_class($s).'"';
 };
-$ans = serialize($res);
-echo $ans;
+$s_result = serialize($result);
+echo $s_result;
 
-fwrite($log, "answer = $ans\n");
+fwrite($log, "answer = $s_result\n\n");
 fclose($log);
 ?>

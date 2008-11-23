@@ -1,3 +1,4 @@
+<?php
 // Registered message types
 class AcceptedResponse{};
 class AdjustContestRequest{};
@@ -27,3 +28,4 @@ class SubmitSolutionRequest{};
 class SubmitSolutionResponse{};
 class UploadClientPluginRequest{};
 class UserDescription{};
+?>

@@ -1,0 +1,81 @@
+request = O:24:"AvailableContestsRequest":1:{s:20:"getInvisibleContests";b:0;}
+answer = O:25:"AvailableContestsResponse":1:{s:8:"contests";a:0:{}}
+
+request = O:24:"AvailableContestsRequest":1:{s:20:"getInvisibleContests";b:0;}
+answer = O:25:"AvailableContestsResponse":1:{s:8:"contests";a:0:{}}
+
+request = O:24:"AvailableContestsRequest":1:{s:20:"getInvisibleContests";b:0;}
+answer = O:25:"AvailableContestsResponse":1:{s:8:"contests";a:0:{}}
+
+request = O:24:"AvailableContestsRequest":1:{s:20:"getInvisibleContests";b:0;}
+answer = O:25:"AvailableContestsResponse":1:{s:8:"contests";a:0:{}}
+
+request = O:24:"AvailableContestsRequest":1:{s:20:"getInvisibleContests";b:0;}
+answer = O:25:"AvailableContestsResponse":1:{s:8:"contests";a:0:{}}
+
+request = O:24:"AvailableContestsRequest":1:{s:20:"getInvisibleContests";b:0;}
+answer = O:25:"AvailableContestsResponse":1:{s:8:"contests";a:0:{}}
+
+request = O:24:"AvailableContestsRequest":1:{s:20:"getInvisibleContests";b:0;}
+answer = O:25:"AvailableContestsResponse":1:{s:8:"contests";a:0:{}}
+
+request = O:24:"AvailableContestsRequest":1:{s:20:"getInvisibleContests";b:0;}
+answer = O:25:"AvailableContestsResponse":1:{s:8:"contests";a:0:{}}
+
+request = O:24:"AvailableContestsRequest":1:{s:20:"getInvisibleContests";b:0;}
+answer = O:25:"AvailableContestsResponse":1:{s:8:"contests";a:0:{}}
+
+request = O:24:"AvailableContestsRequest":1:{s:20:"getInvisibleContests";b:0;}
+answer = O:25:"AvailableContestsResponse":1:{s:8:"contests";a:0:{}}
+
+request = O:24:"AvailableContestsRequest":1:{s:20:"getInvisibleContests";b:0;}
+answer = O:25:"AvailableContestsResponse":1:{s:8:"contests";a:0:{}}
+
+request = 
+answer = s:23:"Unknown message type """;
+
+request = O:24:"AvailableContestsRequest":1:{s:20:"getInvisibleContests";b:0;}
+answer = O:25:"AvailableContestsResponse":1:{s:8:"contests";a:0:{}}
+
+request = O:24:"AvailableContestsRequest":1:{s:20:"getInvisibleContests";b:0;}
+answer = O:25:"AvailableContestsResponse":1:{s:8:"contests";a:1:{i:0;O:18:"ContestDescription":6:{s:9:"contestID";s:1:"1";s:4:"name";s:12:"Test contest";s:11:"description";s:0:"";s:16:"registrationType";s:5:"admin";s:4:"data";b:0;s:10:"compulsory";b:0;}}}
+
+request = O:24:"AvailableContestsRequest":1:{s:20:"getInvisibleContests";b:0;}
+answer = O:25:"AvailableContestsResponse":1:{s:8:"contests";a:1:{i:0;O:18:"ContestDescription":6:{s:9:"contestID";s:1:"1";s:4:"name";s:12:"Test contest";s:11:"description";s:0:"";s:16:"registrationType";s:5:"admin";s:4:"data";a:2:{i:0;s:6:"school";i:1;s:4:"name";}s:10:"compulsory";a:2:{i:0;b:1;i:1;b:0;}}}}
+
+request = O:24:"AvailableContestsRequest":1:{s:20:"getInvisibleContests";b:0;}
+answer = O:25:"AvailableContestsResponse":1:{s:8:"contests";a:1:{i:0;O:18:"ContestDescription":6:{s:9:"contestID";s:1:"1";s:4:"name";s:12:"Test contest";s:11:"description";s:0:"";s:16:"registrationType";s:5:"admin";s:4:"data";a:2:{i:0;s:6:"school";i:1;s:4:"name";}s:10:"compulsory";a:2:{i:0;b:1;i:1;b:0;}}}}
+
+request = O:24:"AvailableContestsRequest":1:{s:20:"getInvisibleContests";b:0;}
+answer = O:25:"AvailableContestsResponse":1:{s:8:"contests";a:1:{i:0;O:18:"ContestDescription":6:{s:9:"contestID";i:1;s:4:"name";s:12:"Test contest";s:11:"description";s:0:"";s:16:"registrationType";s:5:"admin";s:4:"data";a:2:{i:0;s:6:"school";i:1;s:4:"name";}s:10:"compulsory";a:2:{i:0;b:1;i:1;b:0;}}}}
+
+request = O:24:"AvailableContestsRequest":1:{s:20:"getInvisibleContests";b:0;}
+answer = O:25:"AvailableContestsResponse":1:{s:8:"contests";a:1:{i:0;O:18:"ContestDescription":6:{s:9:"contestID";i:1;s:4:"name";s:12:"Test contest";s:11:"description";s:0:"";s:16:"registrationType";s:5:"admin";s:4:"data";a:2:{i:0;s:6:"school";i:1;s:4:"name";}s:10:"compulsory";a:2:{i:0;b:1;i:1;b:0;}}}}
+
+request = O:24:"AvailableContestsRequest":1:{s:20:"getInvisibleContests";b:0;}
+answer = O:25:"AvailableContestsResponse":1:{s:8:"contests";a:1:{i:0;O:18:"ContestDescription":6:{s:9:"contestID";i:1;s:4:"name";s:12:"Test contest";s:11:"description";s:0:"";s:16:"registrationType";s:5:"admin";s:4:"data";a:2:{i:0;s:6:"school";i:1;s:4:"name";}s:10:"compulsory";a:2:{i:0;b:1;i:1;b:0;}}}}
+
+request = O:24:"AvailableContestsRequest":1:{s:20:"getInvisibleContests";b:0;}
+answer = O:25:"AvailableContestsResponse":1:{s:8:"contests";a:1:{i:0;O:18:"ContestDescription":6:{s:9:"contestID";i:1;s:4:"name";s:12:"Test contest";s:11:"description";s:0:"";s:16:"registrationType";s:5:"admin";s:4:"data";a:2:{i:0;s:6:"school";i:1;s:4:"name";}s:10:"compulsory";a:2:{i:0;b:1;i:1;b:0;}}}}
+
+request = O:24:"AvailableContestsRequest":1:{s:20:"getInvisibleContests";b:0;}
+answer = O:25:"AvailableContestsResponse":1:{s:8:"contests";a:1:{i:0;O:18:"ContestDescription":6:{s:9:"contestID";i:1;s:4:"name";s:12:"Test contest";s:11:"description";s:0:"";s:16:"registrationType";s:5:"admin";s:4:"data";a:2:{i:0;s:6:"school";i:1;s:4:"name";}s:10:"compulsory";a:2:{i:0;b:1;i:1;b:0;}}}}
+
+request = O:24:"AvailableContestsRequest":1:{s:20:"getInvisibleContests";b:0;}
+answer = O:25:"AvailableContestsResponse":1:{s:8:"contests";a:1:{i:0;O:18:"ContestDescription":6:{s:9:"contestID";i:1;s:4:"name";s:12:"Test contest";s:11:"description";s:0:"";s:16:"registrationType";s:5:"admin";s:4:"data";a:2:{i:0;s:6:"school";i:1;s:4:"name";}s:10:"compulsory";a:2:{i:0;b:1;i:1;b:0;}}}}
+
+request = O:24:"AvailableContestsRequest":1:{s:20:"getInvisibleContests";b:0;}
+answer = O:25:"AvailableContestsResponse":1:{s:8:"contests";a:1:{i:0;O:18:"ContestDescription":6:{s:9:"contestID";i:1;s:4:"name";s:12:"Test contest";s:11:"description";s:0:"";s:16:"registrationType";s:5:"admin";s:4:"data";a:2:{i:0;s:6:"school";i:1;s:4:"name";}s:10:"compulsory";a:2:{i:0;b:1;i:1;b:0;}}}}
+
+request = O:24:"AvailableContestsRequest":1:{s:20:"getInvisibleContests";b:0;}
+answer = O:25:"AvailableContestsResponse":1:{s:8:"contests";a:1:{i:0;O:18:"ContestDescription":6:{s:9:"contestID";i:1;s:4:"name";s:12:"Test contest";s:11:"description";s:0:"";s:16:"registrationType";s:0:"";s:4:"data";a:2:{i:0;s:6:"school";i:1;s:4:"name";}s:10:"compulsory";a:2:{i:0;b:1;i:1;b:0;}}}}
+
+request = O:24:"AvailableContestsRequest":1:{s:20:"getInvisibleContests";b:0;}
+answer = O:25:"AvailableContestsResponse":1:{s:8:"contests";a:1:{i:0;O:18:"ContestDescription":6:{s:9:"contestID";i:1;s:4:"name";s:12:"Test contest";s:11:"description";s:0:"";s:16:"registrationType";s:0:"";s:4:"data";a:2:{i:0;s:6:"school";i:1;s:4:"name";}s:10:"compulsory";a:2:{i:0;b:1;i:1;b:0;}}}}
+
+request = O:24:"AvailableContestsRequest":1:{s:20:"getInvisibleContests";b:0;}
+answer = O:25:"AvailableContestsResponse":1:{s:8:"contests";a:1:{i:0;O:18:"ContestDescription":6:{s:9:"contestID";i:1;s:4:"name";s:12:"Test contest";s:11:"description";s:0:"";s:16:"registrationType";s:0:"";s:4:"data";a:2:{i:0;s:6:"school";i:1;s:4:"name";}s:10:"compulsory";a:2:{i:0;b:1;i:1;b:0;}}}}
+
+request = O:24:"AvailableContestsRequest":1:{s:20:"getInvisibleContests";b:0;}
+answer = O:25:"AvailableContestsResponse":1:{s:8:"contests";a:1:{i:0;O:18:"ContestDescription":6:{s:9:"contestID";i:1;s:4:"name";s:12:"Test contest";s:11:"description";s:0:"";s:16:"registrationType";s:8:"ByAdmins";s:4:"data";a:2:{i:0;s:6:"school";i:1;s:4:"name";}s:10:"compulsory";a:2:{i:0;b:1;i:1;b:0;}}}}
+

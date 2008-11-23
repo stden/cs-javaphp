@@ -1,17 +1,31 @@
 ﻿<?php
 
-require("Messages.php");
+function processAvailableContestsRequest($request) {
+  $con = connectToDB();
 
-function processAvailableContestRequest($request) {
+  $res = new AvailableContestsResponse();
   $res->contests = array();
 
-	$c1 = new ContestDescription();
-	$c1->name = "Example contest #1";
-	$res->contests[] = $c1;
+  $contest_rows = mysql_query("SELECT * FROM contest");  
 
-	$c2 = new ContestDescription();
-	$c2->name = "Example contest #2";
-	$res->contests[] = $c2;
+  while($row = mysql_fetch_array($contest_rows))
+  {
+    //echo $row['FirstName'] . " " . $row['LastName'];
+    $c = new ContestDescription();
+
+    $c->contestID = (int)$row['id'];
+    $c->name = $row['name'];
+    $c->description = $row['description'];
+    //$c->start = $row['start_time'];
+    //$c->finish = $row['finish_time'];
+    $c->registrationType = $row['reg_type'];
+    //$c->data = unserialize($row['user_data']);
+    //$c->compulsory = unserialize($row['user_data_compulsory']);
+    $c->data = array("school", "name");
+    $c->compulsory = array(true, false);
+
+    $res->contests[] = $c;
+  }
 
   return $res;
 }

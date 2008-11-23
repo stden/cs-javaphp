@@ -6,7 +6,7 @@ package ru.ipo.dces.clientservercommunication;
 public class UserDescription {
 
   public enum UserType {
-    User, ContestAdmin, SuperAdmin
+    Participant, ContestAdmin, SuperAdmin
   }
 
   public String   login;
@@ -20,6 +20,6 @@ public class UserDescription {
   public String[] dataValue;
 
   /** Тип пользователя */
-  public UserType userType = UserType.User;
+  public UserType userType = UserType.Participant;
 
 }

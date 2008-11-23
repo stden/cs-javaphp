@@ -2,11 +2,15 @@ package ru.ipo.dces.client;
 
 import java.lang.reflect.*;
 import java.util.HashMap;
+import java.util.Date;
 import java.util.Map.Entry;
+import java.nio.charset.Charset;
+import java.io.PrintWriter;
 
 public class PHP {
 
   static HashMap<Class<?>, Class<?>> types = new HashMap<Class<?>, Class<?>>();
+  public static final Charset SERVER_CHARSET = Charset.forName("UTF-8");
 
   static {
     // Целые типы
@@ -31,53 +35,85 @@ public class PHP {
     return s;
   }
 
-  public static String serialize(Object obj) throws IllegalArgumentException,
-      IllegalAccessException {
+  public static void serialize(Object obj, PrintWriter out) throws IllegalArgumentException, IllegalAccessException {
     if (obj == null)
-      return "N;";
+      out.print("N;");
     // Обработка примитивных типов
-    if (obj instanceof Integer || obj instanceof Long || obj instanceof Byte
-        || obj instanceof Short)
-      return "i:" + obj + ";";
-    if (obj instanceof Double || obj instanceof Float)
-      return "d:" + obj + ";";
-    if (obj instanceof String || obj instanceof Character)
-      return "s:" + serStr(obj.toString()) + ";";
-    if (obj instanceof Boolean)
-      return "b:" + ((Boolean) obj ? "1" : "0") + ";";
+    else if (obj instanceof Integer || obj instanceof Long || obj instanceof Byte || obj instanceof Short) {
+      out.print("i:");
+      out.print(obj);
+      out.print(";");
+    }
+    else if (obj instanceof Double || obj instanceof Float) {
+      out.print("d:");
+      out.print(obj);
+      out.print(";");
+    }
+    else if (obj instanceof String || obj instanceof Character) {
+      out.print("d:");
+      serStr(obj.toString(), out);
+      out.print(";");
+    }
+    else if (obj instanceof Boolean) {
+      out.print("b:");
+      out.print(((Boolean) obj ? "1" : "0"));
+      out.print(";");
+    }
     // Массивы
-    if (obj.getClass().isArray()) {
+    else if (obj.getClass().isArray()) {
       int arrayLen = Array.getLength(obj);
-      String s = "a:" + arrayLen + ":{";
-      for (int index = 0; index < arrayLen; index++)
-        s += serialize(index) + serialize(Array.get(obj, index));
-      return s + "}";
+      out.print("a:");
+      out.print(arrayLen);
+      out.print(":{");
+      for (int index = 0; index < arrayLen; index++) {
+        serialize(index, out);
+        serialize(Array.get(obj, index), out);
+      }
+      out.print("}");
     }
     // Ассоциативные массивы
-    if (obj instanceof HashMap<?, ?>) {
+    else if (obj instanceof HashMap<?, ?>) {
       HashMap<?, ?> hm = (HashMap<?, ?>) obj;
-      String s = "a:" + hm.size() + ":{";
-      for (Entry<?, ?> entry : hm.entrySet())
-        s += serialize(entry.getKey()) + serialize(entry.getValue());
-      return s + "}";
+      out.print("a:");
+      out.print(hm.size());
+      out.print(":{");
+      for (Entry<?, ?> entry : hm.entrySet()) {
+        serialize(entry.getKey(), out);
+        serialize(entry.getValue(), out);
+      }
+      out.print("}");
     }
     // Enum
-    if (obj instanceof Enum)
-      return "s:" + serStr(obj.toString()) + ";";
+    else if (obj instanceof Enum) {
+      out.print("s:");
+      serStr(obj.toString(), out);
+      out.print(";");
+    }
     // Классы
-    if (!obj.getClass().isPrimitive()) {
+    else if (!obj.getClass().isPrimitive()) {
       Class<?> c = obj.getClass();
       Field[] ff = c.getFields();
-      String s = "O:" + serStr(c.getSimpleName()) + ":" + ff.length + ":{";
-      for (Field f : ff)
-        s += "s:" + serStr(f.getName()) + ";" + serialize(f.get(obj));
-      return s + "}";
+      out.print("O:");
+      serStr(c.getSimpleName(), out);
+      out.print(":");
+      out.print(ff.length);
+      out.print(":{");
+      for (Field f : ff) {
+        out.print("s:");
+        serStr(f.getName(), out);
+        out.print(";");
+        serialize(f.get(obj), out);
+      }
+      out.print("}");
     }
-    throw new IllegalArgumentException("Unknown type " + obj.getClass());
-  };
+    else throw new IllegalArgumentException("Unknown type " + obj.getClass());
+  }
 
-  private static String serStr(String s) {
-    return s.length() + ":\"" + s + "\"";
+  private static void serStr(String s, PrintWriter out) {
+    out.print(s.getBytes(SERVER_CHARSET).length);
+    out.print(":\"");
+    out.print(s);
+    out.print("\"");            
   }
 
   public static Class<?> type2Class(Class<?> type) {
@@ -96,7 +132,8 @@ public class PHP {
   static <T> T unserialize(Class<T> cls, StrTokenizer st)
       throws InstantiationException, IllegalAccessException, SecurityException,
       NoSuchFieldException, IllegalClassException {
-    switch (st.nextToken(':').charAt(0)) {
+    String nextToken = st.nextToken(':');
+    switch (nextToken.charAt(0)) {
       case 'N':
         return null;
       case 'i':
@@ -109,6 +146,8 @@ public class PHP {
           return cls.cast(Integer.parseInt(intNum));
         if (cls == Long.class)
           return cls.cast(Long.parseLong(intNum));
+        if (cls == Date.class)
+          return cls.cast(new Date(Long.parseLong(intNum) / 1000));
         throw new IllegalArgumentException("Expected integer type, found: "
             + cls.getCanonicalName());
       case 'd':
