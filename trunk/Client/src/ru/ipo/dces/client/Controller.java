@@ -76,7 +76,7 @@ public class Controller {
               break;
           }
           break;
-        case User:
+        case Participant:
           // Получаем данные о задачах
           GetContestDataRequest rq = new GetContestDataRequest();
           GetContestDataResponse rs = Controller.server.doRequest(rq);

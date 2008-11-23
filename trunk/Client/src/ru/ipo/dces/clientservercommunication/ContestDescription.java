@@ -7,7 +7,7 @@ import java.util.Date;
  */
 public class ContestDescription {
 
-  public static enum RegistartionType {
+  public static enum RegistrationType {
     /** можно регистрироваться самому с помощью Клиента */
     Self,
     /** регистриуют только администраторы */
@@ -32,7 +32,7 @@ public class ContestDescription {
   public Date             finish;
 
   /** способ регистрации на контест */
-  public RegistartionType registrationType;
+  public RegistrationType registrationType;
 
   /**
    * контесты во время настройки не должны быть видимы, видимость можно

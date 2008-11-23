@@ -31,11 +31,19 @@ public class StrTokenizer {
     return result;
   }
 
-  public String nextToken(int charsNum) {
-    int beginIndex = pos;
-    int endIndex = pos + charsNum;
-    pos = endIndex;
-    return str.substring(beginIndex, endIndex);
+  public String nextToken(int bytesCount) {
+    StringBuilder sb = new StringBuilder();
+    int bytesProcessed = 0;
+    while (bytesProcessed < bytesCount) {
+      final char c = str.charAt(pos++);
+      sb.append(c);
+      //TODO think of an optimization
+      bytesProcessed = sb.toString().getBytes(PHP.SERVER_CHARSET).length;
+    }
+
+    if (bytesProcessed > bytesCount) throw new IllegalArgumentException("Number of bytes to read means noninteger number of String symbols");
+
+    return sb.toString();
   }
 
   @Override
