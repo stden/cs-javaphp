@@ -8,23 +8,12 @@ import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.event.*;
 import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Calendar;
-import java.util.Locale;
+import java.util.regex.Pattern;
 
 public class CreateContestPlugin extends Plugin {
     private JTextField contestName;
@@ -46,22 +35,51 @@ public class CreateContestPlugin extends Plugin {
     private JLabel infoMessageLabel;
 
     private static final long serialVersionUID = -4584214565491150823L;
+    private static Pattern dateValidator = Pattern.compile("(0?[1-9]|[1-2][0-9]|3[01])[\\./](0?[1-9]|1[012])[\\./](19[0-9]{2}|20[0-9]{2}|[0-9]{2})");
+    private static Pattern timeValidator = Pattern.compile("([01][0-9]|2[0-3]):[0-5][0-9]");
 
     private int checkSum = -2; //TODO -1 to discount one edit which is not compulsory, and -1 to JList field
-    private Color infoMsgLabelBackgroundColor;
+    private boolean hasErrors = false;
 
+    private final DocumentListener validatorListener = new DocumentListener() {
+        public void changedUpdate(DocumentEvent e) {
+        }
 
-    public int getCheckSum() {
-        return checkSum;
-    }
+        public void insertUpdate(DocumentEvent e) {
 
-    public void setCheckSum(int checkSum) {
-        this.checkSum = checkSum;
-    }
+            if (e.getDocument().getLength() == 1)
+                checkSum--;
 
-    /**
-     * Инициализация plugin'а
-     */
+            checkCreateContestButton();
+        }
+
+        public void removeUpdate(DocumentEvent e) {
+            if (e.getDocument().getLength() == 0)
+                checkSum++;
+
+            checkCreateContestButton();
+        }
+    };
+
+    private final DocumentListener fieldTypeListener = new DocumentListener() {
+        public void insertUpdate(DocumentEvent e) {
+
+           /* for(typeFieldList.ge)
+            if(.e.getDocument().getText(0, e.getDocument().getLength()))*/
+        }
+
+        public void removeUpdate(DocumentEvent e) {
+            if (e.getDocument().getLength() == 0) {
+                addButton.setEnabled(false);
+                deleteButton.setEnabled(false);
+                changeButton.setEnabled(false);
+            }
+        }
+
+        public void changedUpdate(DocumentEvent e) {
+        }
+    };
+
     public CreateContestPlugin(PluginEnvironment env) {
         super(env);
 
@@ -69,13 +87,11 @@ public class CreateContestPlugin extends Plugin {
 
         env.setTitle("Создать контест");
 
-        infoMsgLabelBackgroundColor = infoMessageLabel.getBackground();
-
         //set verifiers
-        setVerifier(beginDate, "dd.MM.yy");
-        setVerifier(endDate, "dd.MM.yy");
-        setVerifier(beginTime, "H:mm");
-        setVerifier(endTime, "H:mm");
+        setVerifier(beginDate, FieldType.Date);
+        setVerifier(endDate, FieldType.Date);
+        setVerifier(beginTime, FieldType.Time);
+        setVerifier(endTime, FieldType.Time);
 
         //set create contest confirmation button listener
         createContest.addActionListener(new ActionListener() {
@@ -86,7 +102,7 @@ public class CreateContestPlugin extends Plugin {
                 //TODO fill data in cd (???)
                 Controller.addContest(cd);
 
-                
+
             }
         });
 
@@ -95,44 +111,30 @@ public class CreateContestPlugin extends Plugin {
             if (c instanceof JTextField || c instanceof JTextArea || c instanceof JList)
                 checkSum++;
 
-        contestName.addPropertyChangeListener("text", new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent evt) {
-                System.out.println("evt = " + evt);
+        addValidatorListeners(contestName.getDocument());
+        addValidatorListeners(beginDate.getDocument());
+        addValidatorListeners(beginTime.getDocument());
+        addValidatorListeners(endDate.getDocument());
+        addValidatorListeners(endTime.getDocument());
+        addValidatorListeners(contestDescription.getDocument());
+
+        typeFieldList.getModel().addListDataListener(new ListDataListener() {
+            public void intervalAdded(ListDataEvent e) {
+                checkSum++;
             }
-        }
-        );
 
-        addDocumentListeners(contestName.getDocument());
-        addDocumentListeners(beginDate.getDocument());
-        addDocumentListeners(beginTime.getDocument());
-        addDocumentListeners(endDate.getDocument());
-        addDocumentListeners(endTime.getDocument());
-        addDocumentListeners(contestDescription.getDocument());
+            public void intervalRemoved(ListDataEvent e) {
+                checkSum--;
+            }
 
-        typeFieldList.addPropertyChangeListener("model", new PropertyChangeListener() {
-
-            public void propertyChange(PropertyChangeEvent evt) {
-                if (((ListModel) evt.getNewValue()).getSize() == 0 && ((ListModel) evt.getOldValue()).getSize() != 0)
-                    checkSum--;
-                else if (((ListModel) evt.getNewValue()).getSize() != 0 && ((ListModel) evt.getOldValue()).getSize() == 0)
-                    checkSum++;
-
-                checkCreateContestButton();
+            public void contentsChanged(ListDataEvent e) {
             }
         });
-
 
         typeFieldList.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e) {
                 fieldTypeName.setText(((String) typeFieldList.getSelectedValue()));
-                ListModel lm = typeFieldList.getModel();
-            }
-        });
-
-
-        fieldTypeName.addKeyListener(new KeyAdapter() {
-            public void keyReleased(KeyEvent e) {
-                super.keyReleased(e);    //To change body of overridden methods use File | Settings | File Templates.
+                //ListModel lm = typeFieldList.getModel();
             }
         });
     }
@@ -146,48 +148,15 @@ public class CreateContestPlugin extends Plugin {
             throw new NumberFormatException();
     }
 
-    private void addDocumentListeners(final Document d) {
-        d.addDocumentListener(new DocumentListener() {
-            public void changedUpdate(DocumentEvent e) {
-
-                int i = e.getLength();
-
-                if (i == 0)
-                    checkSum--;
-                else if (i == 1)
-                    checkSum++;
-
-                checkCreateContestButton();
-            }
-
-            public void insertUpdate(DocumentEvent e) {
-
-                if (e.getDocument().getLength() == 1)
-                    checkSum--;
-
-                checkCreateContestButton();
-            }
-
-            public void removeUpdate(DocumentEvent e) {
-                if (e.getDocument().getLength() == 0)
-                    checkSum++;
-
-                checkCreateContestButton();
-            }
-        });
+    private void addValidatorListeners(final Document d) {
+        d.addDocumentListener(validatorListener);
     }
 
     private void createUIComponents() {
         drawPanel = this;
     }
 
-    private void setVerifier(final JTextField field, String pattern) {
-
-        final JTextField f = field;
-        final String pat = pattern;
-
-        if (!pattern.equals("dd.MM.yy") && !pattern.equals("H:mm"))
-            throw new IllegalArgumentException();
+    private void setVerifier(final JTextField field, final FieldType type) {
 
         field.setInputVerifier(new InputVerifier() {
 
@@ -196,27 +165,24 @@ public class CreateContestPlugin extends Plugin {
 
                 String inputText = ((JTextField) (input)).getText();
 
-                try {
-                    //TODO Find out how to use SimpleDateFormat
-                    new SimpleDateFormat(pat).parse(inputText);
-                } catch (ParseException e) {
+                if (inputText.equals("") && hasErrors) {
+                    //fireNotificationMessage("", NotificationType.Info);
+                    field.setBackground(Color.WHITE);
+                } else if (type.equals(FieldType.Date) && !dateValidator.matcher(inputText).matches() ||
+                        type.equals(FieldType.Time) && !timeValidator.matcher(inputText).matches()) {
 
-                    if (!inputText.equals("")) {
-                        fireNotificationMessage("Поле должно быть в формате: " + (pat.equals("dd.MM.yy") ? "дд.мм.гг" : "чч:мм"), NotificationType.Error);
+                    field.setBackground(new Color(255, 240, 240));
+                    fireNotificationMessage("Введите корректную дату (дд.мм.гг) и время (чч:мм)", NotificationType.Error);
+                    hasErrors = true;
 
-                        field.setBackground(new Color(255, 240, 240));
-                    }
-
-                    return true;
+                } else {
+                    fireNotificationMessage("", NotificationType.Info);
+                    field.setBackground(Color.WHITE);
+                    hasErrors = false;
                 }
-
-                fireNotificationMessage("", NotificationType.Info);
-                field.setBackground(Color.WHITE);
                 return true;
             }
         });
-
-        //field.setForeground(Color.black);
     }
 
     private void fireNotificationMessage(String s, NotificationType type) {
@@ -228,64 +194,14 @@ public class CreateContestPlugin extends Plugin {
                 infoMessageLabel.setForeground(new Color(255, 100, 100));
                 break;
             case Info:
-                infoMessageLabel.setForeground(infoMsgLabelBackgroundColor);
+                infoMessageLabel.setForeground(Color.BLACK);
                 break;
             case Warning:
                 infoMessageLabel.setForeground(new Color(100, 255, 255));
                 break;
         }
-        //input.getParent().add(l);
 
-        /*l.setVisible(true);
-
-        if (l.getFocusListeners().length == 0)
-            l.addFocusListener(new FocusAdapter() {
-                public void focusGained(FocusEvent e) {
-                    l.setVisible(false);
-                }
-            });*/
     }
-
-    /*public void setData(CreateContestPluginBean data) {
-        contestName.setText(data.getContestNameField());
-        beginTime.setText(data.getBeginTimeField());
-        endDate.setText(data.getEndDateField());
-        contestDescription.setText(data.getContestDescriptionField());
-        endTime.setText(data.getEndTimeField());
-        fieldTypeName.setText(data.getContestantNameField());
-        compulsoryFieldCheckBox.setSelected(data.isCompulsoryFieldCheckbox());
-        beginDate.setText(data.getBeginDateField());
-    }
-
-    public void getData(CreateContestPluginBean data) {
-        data.setContestNameField(contestName.getText());
-        data.setBeginTimeField(beginTime.getText());
-        data.setEndDateField(endDate.getText());
-        data.setContestDescriptionField(contestDescription.getText());
-        data.setEndTimeField(endTime.getText());
-        data.setContestantNameField(fieldTypeName.getText());
-        data.setCompulsoryFieldCheckbox(compulsoryFieldCheckBox.isSelected());
-        data.setBeginDateField(beginDate.getText());
-    }
-
-    public boolean isModified(CreateContestPluginBean data) {
-        if (contestName.getText() != null ? !contestName.getText().equals(data.getContestNameField()) : data.getContestNameField() != null)
-            return true;
-        if (beginTime.getText() != null ? !beginTime.getText().equals(data.getBeginTimeField()) : data.getBeginTimeField() != null)
-            return true;
-        if (endDate.getText() != null ? !endDate.getText().equals(data.getEndDateField()) : data.getEndDateField() != null)
-            return true;
-        if (contestDescription.getText() != null ? !contestDescription.getText().equals(data.getContestDescriptionField()) : data.getContestDescriptionField() != null)
-            return true;
-        if (endTime.getText() != null ? !endTime.getText().equals(data.getEndTimeField()) : data.getEndTimeField() != null)
-            return true;
-        if (fieldTypeName.getText() != null ? !fieldTypeName.getText().equals(data.getContestantNameField()) : data.getContestantNameField() != null)
-            return true;
-        if (compulsoryFieldCheckBox.isSelected() != data.isCompulsoryFieldCheckbox()) return true;
-        if (beginDate.getText() != null ? !beginDate.getText().equals(data.getBeginDateField()) : data.getBeginDateField() != null)
-            return true;
-        return false;
-    }*/
 
     /**
      * Method generated by IntelliJ IDEA GUI Designer
@@ -398,4 +314,50 @@ public class CreateContestPlugin extends Plugin {
     public JComponent $$$getRootComponent$$$() {
         return drawPanel;
     }
+
+    private enum FieldType {
+        Date, Time
+    }
+
+    /*public void setData(CreateContestPluginBean data) {
+        contestName.setText(data.getContestNameField());
+        beginTime.setText(data.getBeginTimeField());
+        endDate.setText(data.getEndDateField());
+        contestDescription.setText(data.getContestDescriptionField());
+        endTime.setText(data.getEndTimeField());
+        fieldTypeName.setText(data.getContestantNameField());
+        compulsoryFieldCheckBox.setSelected(data.isCompulsoryFieldCheckbox());
+        beginDate.setText(data.getBeginDateField());
+    }
+
+    public void getData(CreateContestPluginBean data) {
+        data.setContestNameField(contestName.getText());
+        data.setBeginTimeField(beginTime.getText());
+        data.setEndDateField(endDate.getText());
+        data.setContestDescriptionField(contestDescription.getText());
+        data.setEndTimeField(endTime.getText());
+        data.setContestantNameField(fieldTypeName.getText());
+        data.setCompulsoryFieldCheckbox(compulsoryFieldCheckBox.isSelected());
+        data.setBeginDateField(beginDate.getText());
+    }
+
+    public boolean isModified(CreateContestPluginBean data) {
+        if (contestName.getText() != null ? !contestName.getText().equals(data.getContestNameField()) : data.getContestNameField() != null)
+            return true;
+        if (beginTime.getText() != null ? !beginTime.getText().equals(data.getBeginTimeField()) : data.getBeginTimeField() != null)
+            return true;
+        if (endDate.getText() != null ? !endDate.getText().equals(data.getEndDateField()) : data.getEndDateField() != null)
+            return true;
+        if (contestDescription.getText() != null ? !contestDescription.getText().equals(data.getContestDescriptionField()) : data.getContestDescriptionField() != null)
+            return true;
+        if (endTime.getText() != null ? !endTime.getText().equals(data.getEndTimeField()) : data.getEndTimeField() != null)
+            return true;
+        if (fieldTypeName.getText() != null ? !fieldTypeName.getText().equals(data.getContestantNameField()) : data.getContestantNameField() != null)
+            return true;
+        if (compulsoryFieldCheckBox.isSelected() != data.isCompulsoryFieldCheckbox()) return true;
+        if (beginDate.getText() != null ? !beginDate.getText().equals(data.getBeginDateField()) : data.getBeginDateField() != null)
+            return true;
+        return false;
+    }*/
+
 }
