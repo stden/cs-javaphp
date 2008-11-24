@@ -26,11 +26,13 @@ public class ServerReturnedNoAnswer extends Exception {
     }
 
     public ServerReturnedNoAnswer(String message, String actualAnswer) {
-        super(message);
-        this.actualAnswer = actualAnswer;
+      super(message);
+      this.actualAnswer = actualAnswer;
+      //TODO make somehow the next line to come out only if defined DEBUG
+      System.out.println("actual server answer = " + actualAnswer);
     }
 
     public String getActualAnswer() {
-        return actualAnswer;
+      return actualAnswer;
     }
 }

@@ -1,4 +1,4 @@
-﻿﻿<?php
+﻿﻿﻿<?php
 
 function processConnectToContestRequest($request) {  
   $con = connectToDB();
@@ -15,6 +15,8 @@ function processConnectToContestRequest($request) {
   //test password
   if ($row['password'] != $request->password)
       throwError("User, password or contest not found");
+
+  //TODO implement the test: if user $row['id'] is a participant, then connection is allowed only duing the contest time
 
   //start new session
   $session_id = createSession($con, $row['id']);

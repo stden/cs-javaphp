@@ -5,7 +5,7 @@ require("Debug.php");
 require("dces-settings.php");
 require("DataBase.php");
 require("Messages.php");
-require("Sessions.php");
+require("Authorization.php");
 require("SQLDateTime.php");
 
 require("ReturnError.php");
@@ -13,6 +13,7 @@ require("ReturnError.php");
 require("AvailableContests.php");
 require("CreateContest.php");
 require("ConnectToContest.php");
+require("Disconnect.php");
 
 function prepare( $a ){
   $a = str_replace('\0',chr(0),$a);
@@ -31,8 +32,11 @@ if(!isset($_REQUEST['x'])){
 
 //test requests
 
-$con = connectToDB();
-echo createSession($con, 1);
+//$con = connectToDB();
+//echo createSession($con, 1);
+$r = new DisconnectRequest();
+$r->sessionID = "RehH0lAw3eaQzHXSK08FwAvW";
+processDisconnectRequest($r);
 exit();
 }
 
@@ -55,6 +59,10 @@ switch(get_class($request)){
 
 	case 'ConnectToContestRequest':
     $result = processConnectToContestRequest($request);
+	  break;
+
+	case 'DisconnectRequest':
+	  $result = processDisconnectRequest($request);
 	  break;
 
   default:
