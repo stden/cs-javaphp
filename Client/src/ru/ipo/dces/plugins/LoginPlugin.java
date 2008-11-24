@@ -46,6 +46,9 @@ public class LoginPlugin extends Plugin {
     final JPasswordField password = new JPasswordField();
     add(password, new CellConstraints(3, 5));
 
+    login.setText("admin");
+    password.setText("pass");
+
     reloadButton = new JButton();
     reloadButton.addActionListener(new ActionListener() {
       public void actionPerformed(final ActionEvent arg0) {
