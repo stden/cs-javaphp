@@ -3,7 +3,6 @@ package ru.ipo.dces.client;
 import javax.swing.*;
 
 import ru.ipo.dces.clientservercommunication.*;
-import ru.ipo.dces.mock.MockServer;
 import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.plugins.*;
 import ru.ipo.dces.plugins.admin.CreateContestPlugin;
@@ -112,7 +111,7 @@ public class Controller {
 
   /**
    * Запуск клиента
-   * 
+   *
    * @param args the command line input
    */
   public static void main(String[] args) {
@@ -124,7 +123,7 @@ public class Controller {
           JOptionPane.ERROR_MESSAGE);
     }*/
 
-    server = new RealServer("http://localhost/dces-server.ru/www/dces.php");
+    server = new RealServer("http://dces-server.ru:423/dces.php");
     clientDialog = new ClientDialog();
     clientDialog.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     clientDialog.setVisible(true);
