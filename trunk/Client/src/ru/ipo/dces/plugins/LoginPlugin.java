@@ -19,6 +19,7 @@ public class LoginPlugin extends Plugin {
 
   /**
    * Create the panel
+   * @param env the environment for thr plugin
    */
   public LoginPlugin(PluginEnvironment env) {
     super(env);

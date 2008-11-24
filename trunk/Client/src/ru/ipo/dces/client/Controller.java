@@ -115,15 +115,7 @@ public class Controller {
    * @param args the command line input
    */
   public static void main(String[] args) {
-    /*MockServer ms = new MockServer();
-    try {
-      ms.genMockData();
-    } catch (Exception e) {
-      JOptionPane.showMessageDialog(null, e.getMessage(), "Ошибка",
-          JOptionPane.ERROR_MESSAGE);
-    }*/
-
-    server = new RealServer("http://dces-server.ru:423/dces.php");
+    server = new RealServer(Settings.getInstance().getHost());
     clientDialog = new ClientDialog();
     clientDialog.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     clientDialog.setVisible(true);
@@ -137,7 +129,7 @@ public class Controller {
     } catch (Exception e) {
       JOptionPane.showMessageDialog(null, e.getMessage(), "Ошибка",
           JOptionPane.ERROR_MESSAGE);
-      return null;
+      return new ContestDescription[]{};
     }
   }
 
