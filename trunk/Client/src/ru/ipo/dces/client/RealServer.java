@@ -1,15 +1,19 @@
 package ru.ipo.dces.client;
 
-import java.io.*;
+import java.io.OutputStream;
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.net.*;
 import java.util.HashMap;
+import java.util.Arrays;
 
 import ru.ipo.dces.clientservercommunication.*;
 
 public class RealServer implements ServerFacade {
 
   private final String              URL_string; 
-  private final String REQUEST_VAR = "x=";
+  private final byte[] REQUEST_VAR = "x=".getBytes(PHP.SERVER_CHARSET);
 
   static HashMap<Character, String> rep = new HashMap<Character, String>();
 
@@ -26,7 +30,7 @@ public class RealServer implements ServerFacade {
     this.URL_string = URL_string;
   }
 
-  public String doPost(Object sendToServer) throws Exception {
+  public InputStream doPost(Object sendToServer) throws Exception {
     HttpURLConnection con = (HttpURLConnection) new URL(URL_string)
         .openConnection();
     con.setDoInput(true);
@@ -35,38 +39,18 @@ public class RealServer implements ServerFacade {
     con.setRequestMethod("POST");
     con.setDoOutput(true);
 
-    OutputStreamWriter osw = new OutputStreamWriter(con.getOutputStream(), PHP.SERVER_CHARSET);
-    PrintWriter out = new PrintWriter(osw, true);
-
-    out.print(REQUEST_VAR);
+    final OutputStream out = con.getOutputStream();
+    //print request
+    out.write(REQUEST_VAR);
     PHP.serialize(sendToServer, out);
     out.close();
 
     // Read answer
-    BufferedReader in = new BufferedReader(new InputStreamReader(con
-        .getInputStream(), PHP.SERVER_CHARSET));
+    InputStream in = con.getInputStream();
     if (con.getResponseCode() != HttpURLConnection.HTTP_OK)
       throw new ConnectException("Соединение с " + URL_string + " не удалось!");
-    StringBuffer pageContents = new StringBuffer();
-    String curLine = in.readLine();
-    while (curLine != null) {
-      pageContents.append(curLine);
-      curLine = in.readLine();
-    }
 
-    //if Unicode: remove the first symbol (BOM byte order marker)
-    do {
-      if (pageContents.length() > 0) {
-        char firstChar = pageContents.charAt(0);
-        if (firstChar == '\uFEFF' || firstChar == '\uFFFE')
-          pageContents.delete(0, 1);
-        else
-          break;
-      }
-      else break;      
-    } while (true);
-
-    return pageContents.toString();
+    return in;
   }
 
   @Override
@@ -89,24 +73,47 @@ public class RealServer implements ServerFacade {
 
   public <T> T doRequest(Class<T> cls, Request obj)
       throws ServerReturnedError, ServerReturnedNoAnswer {
-    String answer;
+    InputStream input;
+
+    final byte[] buf;
     try {
-      answer = doPost(obj);
+      input = doPost(obj);
+      buf = inputStreamToByteArray(input);
+      //DEBUGING PURPOSES
+//      System.out.println("RESPONSE : " + new String(buf));
     } catch (Exception e) {
       throw new ServerReturnedNoAnswer("Ошибка соединения с сервером");
     }
     try {
-      return PHP.unserialize(cls, answer);
+      return PHP.unserialize(cls, new ByteArrayInputStream(buf));
     } catch (IllegalClassException e) {
+      
+      RequestFailedResponse response;
       try {
-          RequestFailedResponse response = PHP.unserialize(RequestFailedResponse.class, answer);
-          throw new ServerReturnedError(response.message);
+          response = PHP.unserialize(RequestFailedResponse.class, new ByteArrayInputStream(buf));
       } catch (Exception e1) {
           throw new ServerReturnedNoAnswer("Неправильный формат ответа сервера");
       }
+      throw new ServerReturnedError(response.message);
+
     } catch (Exception e) {
       throw new ServerReturnedNoAnswer("Неправильный формат ответа сервера");
     }
+  }
+
+  private byte[] inputStreamToByteArray(InputStream input) throws IOException {
+    byte[] buf = new byte[4096];
+    int n;
+    for (int i = 0; (n = input.read()) != -1 ; i++ )
+    {
+      if (i >= buf.length) {
+        //copy array
+        buf = Arrays.copyOf(buf, buf.length << 1);
+        if (buf.length > 4 * 1024 * 1024) throw new IOException("Too long input stream");
+      }
+      buf[i] = (byte)n;
+    }
+    return buf;
   }
 
   @Override

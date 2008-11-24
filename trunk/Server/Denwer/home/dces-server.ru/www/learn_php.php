@@ -1,10 +1,10 @@
-ï»¿<?php
+<?php
   $c = array(true, false, true);
   $c[] = false;
 
   echo serialize($c) . "\n";
 
-  $cc = array("First Name", "Second Name", "School", "ÐšÐ»Ð°ÑÑ");
+  $cc = array("First Name", "Second Name", "School", "Êëàññ");
 
   echo serialize($cc) . "\n";
 
