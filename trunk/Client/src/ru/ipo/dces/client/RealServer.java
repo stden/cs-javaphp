@@ -92,12 +92,12 @@ public class RealServer implements ServerFacade {
       try {
           response = PHP.unserialize(RequestFailedResponse.class, new ByteArrayInputStream(buf));
       } catch (Exception e1) {
-          throw new ServerReturnedNoAnswer("Ќеправильный формат ответа сервера");
+          throw new ServerReturnedNoAnswer("Ќеправильный формат ответа сервера", new String(buf, PHP.SERVER_CHARSET));
       }
       throw new ServerReturnedError(response.message);
 
     } catch (Exception e) {
-      throw new ServerReturnedNoAnswer("Ќеправильный формат ответа сервера");
+      throw new ServerReturnedNoAnswer("Ќеправильный формат ответа сервера", new String(buf, PHP.SERVER_CHARSET));
     }
   }
 

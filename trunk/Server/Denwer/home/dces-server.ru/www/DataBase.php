@@ -1,6 +1,7 @@
 <?php
 
 function createDataBase() {
+//TODO implement database creation
 }
 
 function connectToDB() {

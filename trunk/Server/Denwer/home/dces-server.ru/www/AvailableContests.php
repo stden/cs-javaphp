@@ -1,4 +1,4 @@
-﻿﻿<?php
+﻿<?php
 
 function processAvailableContestsRequest($request) {
   $con = connectToDB();

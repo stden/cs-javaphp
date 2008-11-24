@@ -42,7 +42,8 @@ public class Main extends Plugin {
           try {
               client.submitSolution(new Answer(answer.getText()));
           } catch (Exception e) {
-              e.printStackTrace();          
+              //TODO show message instead of the stack trace
+              e.printStackTrace();
           }
       }
 
