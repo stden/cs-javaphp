@@ -1,9 +1,13 @@
 <?php
 
+function createDataBase() {
+}
+
 function connectToDB() {
-  $con = mysql_connect("localhost:3306","root","");
+  $con = mysql_connect($GLOBALS["dces_mysql_host"], $GLOBALS["dces_mysql_user"], $GLOBALS["dces_mysql_password"]);
   if (!$con) die('Could not connect: ' . mysql_error());
-  mysql_select_db("dces", $con);
+  if (!mysql_select_db($GLOBALS["dces_mysql_db"], $con))
+     createDataBase();
   
   return $con;
 }

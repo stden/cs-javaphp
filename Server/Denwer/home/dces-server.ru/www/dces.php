@@ -2,6 +2,7 @@
 
 require("Debug.php");
 
+require("dces-settings.php");
 require("DataBase.php");
 require("Messages.php");
 require("Sessions.php");
