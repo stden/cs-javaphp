@@ -21,4 +21,7 @@ public class RequestFailedResponse implements Response {
   public RequestFailedResponse(String message) {
     this.message = message;
   }
+
+  public RequestFailedResponse() {    
+  }
 }

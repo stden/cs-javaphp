@@ -5,6 +5,9 @@ require("Debug.php");
 require("DataBase.php");
 require("Messages.php");
 require("Sessions.php");
+require("SQLDateTime.php");
+
+require("ReturnError.php");
 
 require("AvailableContests.php");
 require("CreateContest.php");
@@ -20,15 +23,15 @@ function prepare( $a ){
 
 if(!isset($_REQUEST['x'])){
 /*
-  echo "DCES РІРµСЂСЃРёРё 0.1, РґРѕР±СЂРѕ РїРѕР¶Р°Р»РѕРІР°С‚СЊ\n";
-  echo "Р’РµР± РёРЅС‚РµСЂС„РµР№СЃ Рє DCES-СЃРµСЂРІРµСЂСѓ РїРѕРєР° РЅРµ РїСЂРµРґСѓСЃРјРѕС‚СЂРµРЅ";
+  echo "DCES версии 0.1, добро пожаловать\n";
+  echo "Веб интерфейс к DCES-серверу пока не предусмотрен";
   exit();
 */
 
 //test requests
 
-jsalert("Testing available contests request");
-echo serialize(processAvailableContestsRequest(""));
+$con = connectToDB();
+echo createSession($con, 1);
 exit();
 }
 
@@ -56,6 +59,7 @@ switch(get_class($request)){
   default:
 	  $result = 'Unknown message type "'.get_class($s).'"';
 };
+
 $s_result = serialize($result);
 echo $s_result;
 
