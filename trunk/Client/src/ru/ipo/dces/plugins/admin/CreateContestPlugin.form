@@ -181,7 +181,7 @@
           <html.disable class="java.lang.Boolean" value="false"/>
         </clientProperties>
       </component>
-      <component id="7c46b" class="javax.swing.JTextField" binding="fieldTypeName">
+      <component id="7c46b" class="javax.swing.JTextField" binding="typeNameField">
         <constraints>
           <grid row="25" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
@@ -220,7 +220,7 @@
         </constraints>
         <properties/>
       </component>
-      <component id="7b153" class="javax.swing.JList" binding="typeFieldList">
+      <component id="7b153" class="javax.swing.JList" binding="typeNameList">
         <constraints>
           <grid row="27" column="4" row-span="7" col-span="1" vsize-policy="6" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="50"/>
@@ -228,12 +228,7 @@
           <forms defaultalign-vert="false"/>
         </constraints>
         <properties>
-          <model>
-            <item value="Имя"/>
-            <item value="Фамилия"/>
-            <item value="Школа"/>
-            <item value="Класс"/>
-          </model>
+          <model/>
           <selectionMode value="0"/>
         </properties>
       </component>

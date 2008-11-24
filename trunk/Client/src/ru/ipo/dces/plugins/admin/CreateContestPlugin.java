@@ -8,11 +8,16 @@ import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
 
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 import java.util.regex.Pattern;
 
 public class CreateContestPlugin extends Plugin {
@@ -24,8 +29,8 @@ public class CreateContestPlugin extends Plugin {
     private JTextArea contestDescription;
     private JRadioButton administratorRegistrationRB;
     private JRadioButton ownRegistrationRB;
-    private JList typeFieldList;
-    private JTextField fieldTypeName;
+    private JList typeNameList;
+    private JTextField typeNameField;
     private JButton addButton;
     private JButton deleteButton;
     private JPanel drawPanel;
@@ -35,48 +40,25 @@ public class CreateContestPlugin extends Plugin {
     private JLabel infoMessageLabel;
 
     private static final long serialVersionUID = -4584214565491150823L;
+
+    //TODO Verify for startDateTime > endDateTime
     private static Pattern dateValidator = Pattern.compile("(0?[1-9]|[1-2][0-9]|3[01])[\\./](0?[1-9]|1[012])[\\./](19[0-9]{2}|20[0-9]{2}|[0-9]{2})");
     private static Pattern timeValidator = Pattern.compile("([01][0-9]|2[0-3]):[0-5][0-9]");
 
-    private int checkSum = -2; //TODO -1 to discount one edit which is not compulsory, and -1 to JList field
     private boolean hasErrors = false;
+
+    private DefaultListModel typeNameModel = new DefaultListModel();
 
     private final DocumentListener validatorListener = new DocumentListener() {
         public void changedUpdate(DocumentEvent e) {
         }
 
         public void insertUpdate(DocumentEvent e) {
-
-            if (e.getDocument().getLength() == 1)
-                checkSum--;
-
-            checkCreateContestButton();
+            setEnabledForAll();
         }
 
         public void removeUpdate(DocumentEvent e) {
-            if (e.getDocument().getLength() == 0)
-                checkSum++;
-
-            checkCreateContestButton();
-        }
-    };
-
-    private final DocumentListener fieldTypeListener = new DocumentListener() {
-        public void insertUpdate(DocumentEvent e) {
-
-           /* for(typeFieldList.ge)
-            if(.e.getDocument().getText(0, e.getDocument().getLength()))*/
-        }
-
-        public void removeUpdate(DocumentEvent e) {
-            if (e.getDocument().getLength() == 0) {
-                addButton.setEnabled(false);
-                deleteButton.setEnabled(false);
-                changeButton.setEnabled(false);
-            }
-        }
-
-        public void changedUpdate(DocumentEvent e) {
+            setEnabledForAll();
         }
     };
 
@@ -86,6 +68,65 @@ public class CreateContestPlugin extends Plugin {
         $$$setupUI$$$();
 
         env.setTitle("Создать контест");
+
+        setEnabledForAll();
+
+        typeNameList.setModel(typeNameModel);
+        typeNameList.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        addButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+                typeNameModel.insertElementAt(new TypeNameBean(typeNameField.getText(), compulsoryFieldCheckBox.getModel().isSelected()), 0);
+
+                typeNameList.getSelectionModel().setSelectionInterval(0, 0);
+
+                setEnabledForAll();
+            }
+        });
+
+        changeButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int selectionIndex = typeNameList.getSelectionModel().getMaxSelectionIndex();
+
+                if (selectionIndex == -1)
+                    throw new IndexOutOfBoundsException();
+
+                typeNameModel.set(selectionIndex, new TypeNameBean(typeNameField.getText(), compulsoryFieldCheckBox.getModel().isSelected()));
+
+                setEnabledForAll();
+            }
+        });
+
+        deleteButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int selectionIndex = typeNameList.getSelectionModel().getMaxSelectionIndex();
+
+                if (selectionIndex == -1)
+                    throw new IndexOutOfBoundsException();
+
+                typeNameModel.remove(selectionIndex);
+
+                typeNameList.getSelectionModel().setSelectionInterval(0, 0);
+
+                setEnabledForAll();
+            }
+        });
+
+        typeNameList.addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent e) {
+
+                if (!e.getValueIsAdjusting()) return;
+
+                TypeNameBean value = (TypeNameBean) typeNameList.getSelectedValue();
+                if (value == null) return;
+
+                typeNameField.setText(value.toString());
+                compulsoryFieldCheckBox.getModel().setSelected(value.isCompulsory());
+
+                setEnabledForAll();
+            }
+        });
 
         //set verifiers
         setVerifier(beginDate, FieldType.Date);
@@ -99,17 +140,29 @@ public class CreateContestPlugin extends Plugin {
 
                 ContestDescription cd = new ContestDescription();
 
-                //TODO fill data in cd (???)
-                Controller.addContest(cd);
+                cd.description = contestDescription.getText();
+                cd.name = contestName.getText();
+                cd.registrationType = ownRegistrationRB.isSelected() ? ContestDescription.RegistrationType.Self : ContestDescription.RegistrationType.ByAdmins;
 
+                try {
+                    cd.start = new SimpleDateFormat().parse(beginDate.getText() + " " + beginTime.getText());
+                    cd.finish = new SimpleDateFormat().parse(endDate.getText() + " " + endTime.getText());
+                } catch (ParseException e1) {
+                    throw new IllegalArgumentException();
+                }
 
+                cd.data = new String[typeNameModel.getSize()];
+                cd.compulsory = new boolean[typeNameModel.getSize()];
+
+                for (int i = 0; i < typeNameModel.getSize(); i++) {
+                    cd.data[i] = ((TypeNameBean) typeNameModel.get(i)).getName();
+                    cd.compulsory[i] = ((TypeNameBean) typeNameModel.get(i)).isCompulsory();
+                }
+
+                boolean status = Controller.addContest(cd);
+                //TODO clear all interface if status is OK
             }
         });
-
-        //calculate a number of validated components
-        for (Component c : this.getComponents())
-            if (c instanceof JTextField || c instanceof JTextArea || c instanceof JList)
-                checkSum++;
 
         addValidatorListeners(contestName.getDocument());
         addValidatorListeners(beginDate.getDocument());
@@ -118,49 +171,44 @@ public class CreateContestPlugin extends Plugin {
         addValidatorListeners(endTime.getDocument());
         addValidatorListeners(contestDescription.getDocument());
 
-        typeFieldList.getModel().addListDataListener(new ListDataListener() {
-            public void intervalAdded(ListDataEvent e) {
-                checkSum++;
+        typeNameField.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {
+                setEnabledForAll();
             }
 
-            public void intervalRemoved(ListDataEvent e) {
-                checkSum--;
+            public void removeUpdate(DocumentEvent e) {
+                setEnabledForAll();
             }
 
-            public void contentsChanged(ListDataEvent e) {
+            public void changedUpdate(DocumentEvent e) {
             }
         });
 
-        typeFieldList.addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-                fieldTypeName.setText(((String) typeFieldList.getSelectedValue()));
-                //ListModel lm = typeFieldList.getModel();
+        compulsoryFieldCheckBox.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                setEnabledForAll();
             }
         });
     }
 
-    private void checkCreateContestButton() {
-        if (checkSum == 0)
-            createContest.setEnabled(true);
-        else if (checkSum > 0)
-            createContest.setEnabled(false);
-        else
-            throw new NumberFormatException();
+    boolean validateForCreateContestButton() {
+        return typeNameModel.getSize() > 0 &&
+                contestName.getDocument().getLength() > 0 &&
+                beginDate.getDocument().getLength() > 0 &&
+                beginTime.getDocument().getLength() > 0 &&
+                endTime.getDocument().getLength() > 0 &&
+                endDate.getDocument().getLength() > 0 &&
+                contestDescription.getDocument().getLength() > 0;
     }
 
     private void addValidatorListeners(final Document d) {
         d.addDocumentListener(validatorListener);
     }
 
-    private void createUIComponents() {
-        drawPanel = this;
-    }
-
     private void setVerifier(final JTextField field, final FieldType type) {
 
         field.setInputVerifier(new InputVerifier() {
 
-            //TODO fix a bug with coplex interaction with fields
             public boolean verify(JComponent input) {
 
                 String inputText = ((JTextField) (input)).getText();
@@ -171,18 +219,105 @@ public class CreateContestPlugin extends Plugin {
                 } else if (type.equals(FieldType.Date) && !dateValidator.matcher(inputText).matches() ||
                         type.equals(FieldType.Time) && !timeValidator.matcher(inputText).matches()) {
 
-                    field.setBackground(new Color(255, 240, 240));
+                    renderField(field, NotificationType.Error);
                     fireNotificationMessage("Введите корректную дату (дд.мм.гг) и время (чч:мм)", NotificationType.Error);
                     hasErrors = true;
 
                 } else {
                     fireNotificationMessage("", NotificationType.Info);
-                    field.setBackground(Color.WHITE);
+                    renderField(field, NotificationType.Info);
                     hasErrors = false;
                 }
                 return true;
             }
         });
+    }
+
+    private void renderField(JTextField field, NotificationType type) {
+        switch (type) {
+            case Error:
+                field.setBackground(new Color(255, 220, 220));
+            case Confirm:
+                field.setBackground(Color.WHITE);
+            case Info:
+                field.setBackground(Color.WHITE);
+                break;
+            case Warning:
+                field.setBackground(new Color(220, 255, 255));
+                break;
+        }
+    }
+
+    private void setEnabledForAll() {
+        createContest.setEnabled(validateForCreateContestButton());
+
+        addButton.setEnabled(validateForAddButton());
+        changeButton.setEnabled(validateForChangeButton());
+        deleteButton.setEnabled(validateForDeleteButton());
+    }
+
+    private boolean validateForDeleteButton() {
+        int selectionIndex = typeNameList.getSelectionModel().getMinSelectionIndex();
+        boolean isSelected = selectionIndex != -1;
+
+        //1
+        if (!isSelected)
+            return false;
+
+        if (selectionIndex >= typeNameModel.getSize()) return false;
+        TypeNameBean selected = (TypeNameBean) typeNameModel.get(selectionIndex);
+        if (selected == null) return false;
+
+        //2
+        return selected.getName().equals(typeNameField.getText()) && selected.isCompulsory() == compulsoryFieldCheckBox.getModel().isSelected();
+
+    }
+
+    private boolean validateForChangeButton() {
+        int selectionIndex = typeNameList.getSelectionModel().getMinSelectionIndex();
+
+        boolean isSelected = selectionIndex != -1;
+
+        //1
+        if (!isSelected)
+            return false;
+
+        String text = typeNameField.getText();
+
+        //2
+        if (text.equals(""))
+            return false;
+
+        if (selectionIndex >= typeNameModel.getSize()) return false;
+        TypeNameBean selected = (TypeNameBean) typeNameModel.get(selectionIndex);
+        if (selected == null) return false;
+        boolean isDifferent = !(selected.getName().equals(text) && selected.isCompulsory() == compulsoryFieldCheckBox.getModel().isSelected());
+
+        //3
+        if (!isDifferent)
+            return false;
+
+        //4
+
+        boolean noRepeat = true;
+        for (int i = 0; i < typeNameModel.getSize(); i++)
+            if (i != selectionIndex)
+                noRepeat = noRepeat && !((TypeNameBean) typeNameModel.get(i)).getName().equals(text);
+
+        return noRepeat;
+    }
+
+    private boolean validateForAddButton() {
+        String fieldText = typeNameField.getText();
+
+        boolean res = !fieldText.equals("");
+
+        boolean noRepeat = true;
+
+        for (int i = 0; i < typeNameModel.getSize(); i++)
+            noRepeat = noRepeat && !((TypeNameBean) typeNameModel.getElementAt(i)).getName().equals(fieldText);
+
+        return res && noRepeat;
     }
 
     private void fireNotificationMessage(String s, NotificationType type) {
@@ -200,7 +335,6 @@ public class CreateContestPlugin extends Plugin {
                 infoMessageLabel.setForeground(new Color(100, 255, 255));
                 break;
         }
-
     }
 
     /**
@@ -254,8 +388,8 @@ public class CreateContestPlugin extends Plugin {
         label6.setVerticalAlignment(0);
         label6.putClientProperty("html.disable", Boolean.FALSE);
         drawPanel.add(label6, cc.xy(3, 26, CellConstraints.DEFAULT, CellConstraints.FILL));
-        fieldTypeName = new JTextField();
-        drawPanel.add(fieldTypeName, cc.xy(5, 26, CellConstraints.FILL, CellConstraints.DEFAULT));
+        typeNameField = new JTextField();
+        drawPanel.add(typeNameField, cc.xy(5, 26, CellConstraints.FILL, CellConstraints.DEFAULT));
         compulsoryFieldCheckBox = new JCheckBox();
         compulsoryFieldCheckBox.setText("обязательное");
         drawPanel.add(compulsoryFieldCheckBox, cc.xy(7, 26));
@@ -265,15 +399,11 @@ public class CreateContestPlugin extends Plugin {
         drawPanel.add(separator2, cc.xywh(3, 11, 5, 2, CellConstraints.FILL, CellConstraints.FILL));
         final JSeparator separator3 = new JSeparator();
         drawPanel.add(separator3, cc.xyw(3, 15, 5, CellConstraints.FILL, CellConstraints.FILL));
-        typeFieldList = new JList();
+        typeNameList = new JList();
         final DefaultListModel defaultListModel1 = new DefaultListModel();
-        defaultListModel1.addElement("Имя");
-        defaultListModel1.addElement("Фамилия");
-        defaultListModel1.addElement("Школа");
-        defaultListModel1.addElement("Класс");
-        typeFieldList.setModel(defaultListModel1);
-        typeFieldList.setSelectionMode(0);
-        drawPanel.add(typeFieldList, cc.xywh(5, 28, 1, 7, CellConstraints.DEFAULT, CellConstraints.FILL));
+        typeNameList.setModel(defaultListModel1);
+        typeNameList.setSelectionMode(0);
+        drawPanel.add(typeNameList, cc.xywh(5, 28, 1, 7, CellConstraints.DEFAULT, CellConstraints.FILL));
         final JSeparator separator4 = new JSeparator();
         drawPanel.add(separator4, cc.xyw(3, 20, 5, CellConstraints.FILL, CellConstraints.FILL));
         final JSeparator separator5 = new JSeparator();
@@ -319,45 +449,37 @@ public class CreateContestPlugin extends Plugin {
         Date, Time
     }
 
-    /*public void setData(CreateContestPluginBean data) {
-        contestName.setText(data.getContestNameField());
-        beginTime.setText(data.getBeginTimeField());
-        endDate.setText(data.getEndDateField());
-        contestDescription.setText(data.getContestDescriptionField());
-        endTime.setText(data.getEndTimeField());
-        fieldTypeName.setText(data.getContestantNameField());
-        compulsoryFieldCheckBox.setSelected(data.isCompulsoryFieldCheckbox());
-        beginDate.setText(data.getBeginDateField());
+    private void createUIComponents() {
+        drawPanel = this;
     }
 
-    public void getData(CreateContestPluginBean data) {
-        data.setContestNameField(contestName.getText());
-        data.setBeginTimeField(beginTime.getText());
-        data.setEndDateField(endDate.getText());
-        data.setContestDescriptionField(contestDescription.getText());
-        data.setEndTimeField(endTime.getText());
-        data.setContestantNameField(fieldTypeName.getText());
-        data.setCompulsoryFieldCheckbox(compulsoryFieldCheckBox.isSelected());
-        data.setBeginDateField(beginDate.getText());
+    private class TypeNameBean {
+        private String name;
+        private boolean isCompulsory;
+
+        private TypeNameBean(String name, boolean compulsory) {
+            this.name = name;
+            isCompulsory = compulsory;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public boolean isCompulsory() {
+            return isCompulsory;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public void setCompulsory(boolean compulsory) {
+            isCompulsory = compulsory;
+        }
+
+        public String toString() {
+            return name + (isCompulsory ? " (*)" : "");
+        }
     }
-
-    public boolean isModified(CreateContestPluginBean data) {
-        if (contestName.getText() != null ? !contestName.getText().equals(data.getContestNameField()) : data.getContestNameField() != null)
-            return true;
-        if (beginTime.getText() != null ? !beginTime.getText().equals(data.getBeginTimeField()) : data.getBeginTimeField() != null)
-            return true;
-        if (endDate.getText() != null ? !endDate.getText().equals(data.getEndDateField()) : data.getEndDateField() != null)
-            return true;
-        if (contestDescription.getText() != null ? !contestDescription.getText().equals(data.getContestDescriptionField()) : data.getContestDescriptionField() != null)
-            return true;
-        if (endTime.getText() != null ? !endTime.getText().equals(data.getEndTimeField()) : data.getEndTimeField() != null)
-            return true;
-        if (fieldTypeName.getText() != null ? !fieldTypeName.getText().equals(data.getContestantNameField()) : data.getContestantNameField() != null)
-            return true;
-        if (compulsoryFieldCheckBox.isSelected() != data.isCompulsoryFieldCheckbox()) return true;
-        if (beginDate.getText() != null ? !beginDate.getText().equals(data.getBeginDateField()) : data.getBeginDateField() != null)
-            return true;
-        return false;
-    }*/
-
 }

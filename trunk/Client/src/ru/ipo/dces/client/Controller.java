@@ -32,6 +32,8 @@ public class Controller {
   public static void login(String login, char[] password) {
     try {
       ConnectToContestRequest request = new ConnectToContestRequest();
+      //TODO get real contest ID
+      request.contestID = 0;
       request.login = login;
       // TODO improve the security here
       request.password = new String(password);
@@ -114,15 +116,15 @@ public class Controller {
    * @param args the command line input
    */
   public static void main(String[] args) {
-    MockServer ms = new MockServer();
+    /*MockServer ms = new MockServer();
     try {
       ms.genMockData();
     } catch (Exception e) {
       JOptionPane.showMessageDialog(null, e.getMessage(), "Ошибка",
           JOptionPane.ERROR_MESSAGE);
-    }
+    }*/
 
-    server = ms;
+    server = new RealServer("http://localhost/dces-server.ru/www/dces.php");
     clientDialog = new ClientDialog();
     clientDialog.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     clientDialog.setVisible(true);
@@ -140,7 +142,7 @@ public class Controller {
     }
   }
 
-  public static void addContest(ContestDescription cd) {
+  public static boolean addContest(ContestDescription cd) {
       try {
           CreateContestRequest contestRequest = new CreateContestRequest();
           contestRequest.sessionID = sessionID;
@@ -148,9 +150,13 @@ public class Controller {
           server.doRequest(contestRequest);
       } catch (ServerReturnedError serverReturnedError) {
           JOptionPane.showMessageDialog(null, "failed to create a contest");
+          return false;
       } catch (ServerReturnedNoAnswer serverReturnedNoAnswer) {
           JOptionPane.showMessageDialog(null, "failed to connect to the server");
+          return false;
       }
+
+      return true;
   }
 
 }
