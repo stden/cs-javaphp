@@ -68,6 +68,11 @@ switch(get_class($request)){
 	  $result = processDisconnectRequest($request);
 	  break;
 
+	case 'AdjustContestRequest':
+	  require("AdjustContest.php");
+	  $result = processAdjstContestRequest($request);
+	  break;
+
   default:
 	  $result = 'Unknown message type "'.get_class($s).'"';
 };

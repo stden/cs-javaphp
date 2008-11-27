@@ -1,16 +1,21 @@
 <?php
 
 function createDataBase($con) {
- //$sql_file_name = "dces2.sql";
- $sql_file_name = "create-db.sql";
- $fsql = fopen($sql_file_name, "r") or die("failed to find SQL file to create db");
- $sql = fread($fsql, filesize($sql_file_name));
- fclose($fsql);
+ $lines = file("dces-create-db.sql") or die("failed to read sql file");
 
  $dbname = $GLOBALS['dces_mysql_db'];
- $sql = str_replace("\$db", "$dbname", $sql);
-
- mysql_query($sql, $con) or die ("failed to execute SQL query to create db:".mysql_error());
+ $sql = "";
+ foreach ($lines as $line)
+ {   
+   $line = str_replace("\$db", "$dbname", $line);
+   $sql .= $line;
+   $pos = strpos("$line", ";");
+   if ($pos) {
+     $sql = str_replace(";", "", $sql);
+     mysql_query($sql, $con) or die("failed to create DB, last query: ".$sql." error: ".mysql_error());
+     $sql = "";
+   }   
+ }
 
  //echo $sql;
 }
@@ -23,6 +28,26 @@ function connectToDB() {
      mysql_select_db($GLOBALS["dces_mysql_db"], $con) or die("failed to select db: ".mysql_error());
   }
   return $con;
+
+}
+
+function transaction($con, $queries) {
+  $retval = 1;
+
+  mysql_query("START TRANSACTION", $con);  
+
+  foreach($queries as $qa){
+    mysql_query($qa, $con);
+    if (mysql_affected_rows() == 0){ $retval = 0; }
+  }
+
+  if($retval == 0){
+    mysql_query("ROLLBACK", $con);
+    return false;
+  }else{
+    mysql_query("COMMIT", $con);
+    return true;
+  }
 
 }
 

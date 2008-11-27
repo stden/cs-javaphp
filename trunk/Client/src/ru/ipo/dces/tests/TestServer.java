@@ -18,8 +18,8 @@ public class TestServer {
   /**
    * Отключаемся от контеста
    * 
-   * @throws RequestFailedResponse
-   * @throws Exception
+   * @param sessionID is a id of a session
+   * @throws Exception if error occurs
    */
   private void disconnect(String sessionID) throws Exception {
     // Пробуем отключиться с явно неправильным sessionID
@@ -44,7 +44,7 @@ public class TestServer {
   /**
    * Удаляем Plugin клиента
    * 
-   * @throws Exception
+   * @throws Exception if err
    */
   private void removePlugin() throws Exception {
     AcceptedResponse ar12 = server.doRequest(new RemoveClientPluginRequest());
@@ -72,15 +72,14 @@ public class TestServer {
     assertNotNull(server.doRequest(new CreateContestRequest("Contest #2")));
     // И один невидимый
     CreateContestRequest invCont = new CreateContestRequest("Contest Invisible");
-    invCont.contest.visible = false;
+    //invCont.contest.visible = false;
     assertNotNull(server.doRequest(invCont));
     // Добавляем пользователя
     CreateUserRequest cur = new CreateUserRequest("denis", "denispass");
     assertNotNull(server.doRequest(cur));
 
     // Запрашиваем доступные видимые контесты
-    AvailableContestsRequest acr = new AvailableContestsRequest();
-    acr.getInvisibleContests = false;
+    AvailableContestsRequest acr = new AvailableContestsRequest();    
     AvailableContestsResponse r = server.doRequest(acr);
     // Получам 2 доступных контеста
     assertEquals(2, r.contests.length);
