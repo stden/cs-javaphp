@@ -21,7 +21,17 @@ public class ProblemDescription implements Comparable<ProblemDescription> {
    * Условие задачи. Вероятнее всего, это архив, который будет автоматически
    * раскрываться в каталог, соответствующий задаче
    */
-  public byte[] problemData;
+  public FileFolder statement;
+
+  /**
+   * Условие задачи. Это данные, которые используются для создания условия
+   */
+  public FileFolder statementData;
+
+  /**
+   * Ответ к задаче. Это данные, которые используются для создания ответа
+   */
+  public FileFolder answerData;
 
   @Override
   public int compareTo(ProblemDescription o) {

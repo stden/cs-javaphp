@@ -8,6 +8,16 @@ import ru.ipo.dces.client.Controller;
 public class GetContestDataRequest implements Request {
   public String sessionID;
 
+  /**
+   * ID контеста, естественно, содержится в sessionID, но Super Admin должен быть способен узнать данные по любому контесту
+   */
+  public String contestID;
+
+  /**
+   * Для задач с этими id требуется прислать расширенные данные - только для администраторов
+   */
+  public int[] extendedData;
+
   public GetContestDataRequest() {
     sessionID = Controller.sessionID;
   }
