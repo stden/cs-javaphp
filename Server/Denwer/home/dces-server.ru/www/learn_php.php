@@ -1,7 +1,7 @@
 <?php
-  echo <<<__START___
-ewr;tjwert welrtjwerljt
-wwer tkwlerjt
- jjjj999999999999
-___START___
+$c = array(1=>1,2=>2,3=>3);
+$c += array(4=>4,5=>5,6=>6);
+
+
+var_dump(count($c));
 ?>

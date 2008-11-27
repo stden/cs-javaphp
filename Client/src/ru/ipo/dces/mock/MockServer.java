@@ -56,8 +56,6 @@ public class MockServer implements ServerFacade {
     AvailableContestsResponse res = new AvailableContestsResponse();
     ArrayList<ContestDescription> l = new ArrayList<ContestDescription>();
     for (Entry<Integer, ContestDescription> entry : contests.entrySet()) {
-      if (!r.getInvisibleContests && !entry.getValue().visible)
-        continue;
       l.add(entry.getValue());
     }
     res.contests = l.toArray(new ContestDescription[l.size()]);
