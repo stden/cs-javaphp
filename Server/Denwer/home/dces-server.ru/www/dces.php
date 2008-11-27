@@ -10,11 +10,6 @@ require("SQLDateTime.php");
 
 require("ReturnError.php");
 
-require("AvailableContests.php");
-require("CreateContest.php");
-require("ConnectToContest.php");
-require("Disconnect.php");
-
 function prepare( $a ){
   $a = str_replace('\0',chr(0),$a);
   $a = str_replace('\"','"',$a);
@@ -34,9 +29,13 @@ if(!isset($_REQUEST['x'])){
 
 //$con = connectToDB();
 //echo createSession($con, 1);
+/*
 $r = new DisconnectRequest();
 $r->sessionID = "RehH0lAw3eaQzHXSK08FwAvW";
+require("Disconnect.php");
 processDisconnectRequest($r);
+*/
+$con = connectToDB();
 exit();
 }
 
@@ -49,19 +48,23 @@ fwrite($log, "request = $s_request\n");
 $request = unserialize($s_request);
 
 switch(get_class($request)){
-  case 'AvailableContestsRequest': 
+  case 'AvailableContestsRequest':
+    require("AvailableContests.php");
     $result = processAvailableContestsRequest($request);
 	  break;
 
-	case 'CreateContestRequest': 
+	case 'CreateContestRequest':
+	  require("CreateContest.php");
     $result = processCreateContestRequest($request);
 	  break;
 
 	case 'ConnectToContestRequest':
+	  require("ConnectToContest.php");
     $result = processConnectToContestRequest($request);
 	  break;
 
 	case 'DisconnectRequest':
+	  require("Disconnect.php");
 	  $result = processDisconnectRequest($request);
 	  break;
 

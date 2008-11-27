@@ -1,4 +1,4 @@
-﻿﻿<?php
+<?php
 
 function processCreateContestRequest($request) {
   //open db connection

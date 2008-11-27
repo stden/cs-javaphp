@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 function random_str($length)
 {
