@@ -11,6 +11,7 @@ class ContestDescription{};
 class CreateContestRequest{};
 class CreateUserRequest{};
 class DisconnectRequest{};
+class FileFolder{};
 class GetContestDataRequest{};
 class GetContestDataResponse{};
 class GetUsersRequest{};
