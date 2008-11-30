@@ -1,7 +1,23 @@
 <?php
-$c = array(1=>1,2=>2,3=>3);
-$c += array(4=>4,5=>5,6=>6);
 
+  class A {
 
-var_dump(count($c));
+    function __construct() {
+       echo "A called\n";
+    }
+
+  }
+
+  class B extends A {
+///*
+    function __construct() {
+//       parent::__construct();
+       echo "B called\n";
+    }
+//*/
+  }
+
+  $a = "B";
+  $b = new $a();
+
 ?>
