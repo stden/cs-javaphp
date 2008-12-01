@@ -33,14 +33,16 @@
     return composeUpdateQuery("contest", $col_value, "id=$contest_id");
   }
 
-  function queriesToAdjustProblems($con, $problems, $contest_id) {
+  function queriesToAdjustProblems($con, $problems, $contest_id, &$temp_dirs) {
     $changed_probs = array();
     $queries = array();
 
-    mysql_query("SELECT * FROM problem WHERE contest_id = $contest_id");
     foreach ($problems as $p) {
       $col_value = array(); 
       $all_set = true;
+
+      //set contest id
+      $col_value['contest_id'] = $contest_id;
 
       //set client plugin
       if (!is_null($p->clientPluginID)) {
@@ -69,7 +71,7 @@
 
       //skip statement value
 
-      //get current server plugin
+      //get current server plugin alias
       if (! is_null($p->serverPluginID) ) {
         $plugin_alias = $p->serverPluginID;
       }
@@ -81,29 +83,61 @@
       }
       elseif ($p->id == -1 && is_null(server_plugin_row)) throwError("Server plugin not specified in new creating task");
 
-      require_once("server_plugings/$plugin_alias.php");
-      $plugin = new $plugin_alias($con, "problems/$??????????");
+      //get current server plugin
+      require_once("server_plugins/$plugin_alias.php");
+      if ($p->id == -1) {
+        $temp = random_str(10);
+        $temp_dirs[] = $temp;
+        $plugin = new $plugin_alias($con, "problems/$temp");
+      }
+      else
+        $plugin = new $plugin_alias($con, "problems/$p->id");
 
       //set statementData
       if (!is_null($p->statementData)) {
+        $handle = null;
+        $zip = openZip($p->statementData, $handle);
+        //if (!$zip) throwError("Statement data seems to be not a zip compressed set of files");
+        //$col_value['statement'] = $plugin->updateStatementData($zip);
+        $col_value['statement'] = 'this is a statement';
+        closeZip($handle);
+        //if (!$col_value['statement']) throwError('Server plugin did not accept statement data');
+      } else $all_set = false;
 
-        $plugin->updateStatementData
-        
-
-        $col_value['statement'] = $plugin_ans;
+      //set answerData
+      if (!is_null($p->answerData)) {
+        $handle = null;
+        $zip = openZip($p->answer, $handle);
+        //if (!$zip) throwError("Answer data seems to be not a zip compressed set of files");
+        //$col_value['answer'] = $plugin->updateStatementData($zip);
+        $col_value['statement'] = 'this is an answer';
+        closeZip($handle);
+        //if (!$col_value['answer']) throwError('Server plugin did not accept answer data');
       } else $all_set = false;
 
       if ($p->id == -1)
       {
         //create new task
+        if (!all_set) throwError("An attempt to insert a new Problem with not all parameters set");
 
+        $queries[] = composeInsertQuery('problem', $col_value);
       }
       else
       {
         //adjust a task
-
+        $queries[] = composeUpdateQuery('problem', $col_value, "id='$p->id'");
+        $changed_probs[$p->id] = 1;
       }
+
     }
+
+    //removing queries
+    $res = mysql_query("SELECT id FROM problem WHERE contest_id=$contest_id", $con) or die("DB error 13: ".mysql_error());
+    while ($row = mysql_fetch_array)
+      if ($changed_probs[$row['id']] != 1) {
+        $pid = $row['id']; 
+        $queries[] = "DELETE FROM problem WHERE id='$pid'";
+      }
 
     return $queries;
   }
@@ -144,12 +178,24 @@
         $queries[] = $query_1;
 
     //now adjust problems
+    $temp_dirs = array();
     if (!is_null($request->problems))
-      $queries += queriesToAdjustProblems($con, $request->problems, $contest_id);
+      $queries += queriesToAdjustProblems($con, $request->problems, $contest_id, $temp_dirs);
 
     //run transaction
-    if (count($queries) != 0)
-      transaction($con, $queries) or die("Failed to make update, db error or incorrect data");
+    if (count($queries) != 0) {
+      $inserted_ids = array();
+      transaction($con, $queries, $inserted_ids) or die("Failed to make update, db error or incorrect data");
+
+      //rename temporary dirs
+      if (count($temp_dirs) != count($inserted_ids)) die("Assertion failed, call developers");
+
+      for ($i = 0; $i < count($temp_dirs); $i++) {
+        $temp_dir = $temp_dirs[$i];
+        $inserted_id = $inserted_ids[$i];
+        rename("problems/$temp_dir", "problems/$inserted_id") /*or do nothing*/;
+      }
+    }
     else
       throwError("Nothing updated by request");
 
