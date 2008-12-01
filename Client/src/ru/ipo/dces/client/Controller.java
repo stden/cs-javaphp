@@ -1,11 +1,14 @@
 package ru.ipo.dces.client;
 
-import javax.swing.*;
-
 import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.pluginapi.Plugin;
-import ru.ipo.dces.plugins.*;
+import ru.ipo.dces.plugins.EditContestPlugin;
+import ru.ipo.dces.plugins.LogoutPlugin;
+import ru.ipo.dces.plugins.admin.AdjustContestsPlugin;
 import ru.ipo.dces.plugins.admin.CreateContestPlugin;
+
+import javax.swing.*;
+import java.util.Date;
 
 /**
  *  онтроллер, который хранит данные о соединении с сервером и позвол€ет
@@ -14,8 +17,6 @@ import ru.ipo.dces.plugins.admin.CreateContestPlugin;
 public class Controller {
   public static ServerFacade       server;
   public static String             sessionID;
-  public static UserDescription    curUser;
-  public static ContestDescription curContest;
   private static ClientDialog      clientDialog;
 
     /** ƒобавление Plugin'а в клиент
@@ -62,9 +63,14 @@ public class Controller {
               Controller.logout();
               break;
             case 0:
-              PluginEnvironmentImpl ms = new PluginEnvironmentImpl(null);
-              CreateContestPlugin serverPlugin = new CreateContestPlugin(ms);
-              clientDialog.addPluginToForm(ms, serverPlugin);
+              PluginEnvironmentImpl ms1 = new PluginEnvironmentImpl(null);
+              CreateContestPlugin ccp = new CreateContestPlugin(ms1);
+              clientDialog.addPluginToForm(ms1, ccp);
+
+
+              PluginEnvironmentImpl ms2 = new PluginEnvironmentImpl(null);
+              AdjustContestsPlugin mcp = new AdjustContestsPlugin(ms2);
+              clientDialog.addPluginToForm(ms2, mcp);
 
               //test sample plugin
               PluginEnvironmentImpl spe = new PluginEnvironmentImpl(new ProblemDescription());
@@ -121,7 +127,7 @@ public class Controller {
     clientDialog.setVisible(true);
   }
 
-  public static ContestDescription[] reloadContest() {
+  public static ContestDescription[] reloadContests() {
     try {
       AvailableContestsResponse res = Controller.server
           .doRequest(new AvailableContestsRequest());
@@ -150,4 +156,14 @@ public class Controller {
       return true;
   }
 
+    public static ContestDescription getContestData(int contestID) {
+        ContestDescription contestDescription = new ContestDescription();
+
+        contestDescription.name = "Fake contest";
+        contestDescription.description = "Fake contest description";
+        contestDescription.start = new Date();
+        contestDescription.finish = new Date(new Date().getTime() + 1000 * 60 * 60);
+
+        return contestDescription;
+    }
 }

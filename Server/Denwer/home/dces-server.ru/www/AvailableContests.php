@@ -6,7 +6,7 @@ function processAvailableContestsRequest($request) {
   $res = new AvailableContestsResponse();
   $res->contests = array();
 
-  $contest_rows = mysql_query("SELECT * FROM contest");  
+  $contest_rows = mysql_query("SELECT * FROM contest") or die("DBERROR 42 in AvailableContests.php: ".mysql_error());
 
   while($row = mysql_fetch_array($contest_rows))
   {
