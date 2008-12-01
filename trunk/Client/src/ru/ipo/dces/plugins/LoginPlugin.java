@@ -35,7 +35,7 @@ public class LoginPlugin extends Plugin {
 
     contestList = new JList();
     add(contestList, new CellConstraints(3, 1));
-    contestList.setListData(Controller.reloadContest());
+    contestList.setListData(Controller.reloadContests());
 
     // Поле для ввода Login'а
     add(new JLabel("Login:"), new CellConstraints(1, 3));
@@ -53,7 +53,7 @@ public class LoginPlugin extends Plugin {
     reloadButton = new JButton();
     reloadButton.addActionListener(new ActionListener() {
       public void actionPerformed(final ActionEvent arg0) {
-        contestList.setListData(Controller.reloadContest());
+        contestList.setListData(Controller.reloadContests());
       }
     });
     reloadButton.setText("Reload");
