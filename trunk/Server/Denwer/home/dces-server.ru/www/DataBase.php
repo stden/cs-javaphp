@@ -1,6 +1,6 @@
 <?php
 
-function transaction($con, $queries) {
+function transaction($con, $queries, &$inserted_ids = null) {  
   $retval = 1;
 
   mysql_query("START TRANSACTION", $con);
@@ -9,6 +9,12 @@ function transaction($con, $queries) {
     $res = mysql_query($qa, $con);
     if ( ! $res ) {
       $retval = 0;
+      break;
+    }
+    if (!is_null($inserted_ids)) {
+      $ins = mysql_insert_id();
+      if ($ins)
+       $inserted_ids[] = $ins;
     }
   }
 
@@ -29,8 +35,8 @@ function composeInsertQuery($table, $col_value) {
   $cols = "";
   $vals = "";
   foreach ($col_value as $col => $val) {
-    $cols += "$col,";
-    $vals += "'$val',";
+    $cols .= "$col,";
+    $vals .= "'$val',";
   }
   $cols = rtrim($cols,',');
   $vals = rtrim($vals,',');
@@ -41,17 +47,15 @@ function composeInsertQuery($table, $col_value) {
 
 //returns query string
 function composeUpdateQuery($table, $col_value, $where) {
-
   if (count($col_value) == 0) return "";
 
   $values = "";
   foreach ($col_value as $col => $val) {
-    $values += "$col='$val',";
-  }
+    $values .= "$col='$val',";
+  }  
   $values = rtrim($values,',');
 
   return "UPDATE $table SET $values WHERE $where";
-
 }
 
 function createDataBase($con) {
@@ -72,7 +76,7 @@ function createDataBase($con) {
    }   
  }
 
- transaction($con, $queries); //Try to create a db. If fail, error will be noticed some time later
+ transaction($con, $queries); //Try to create a db. If fail, error will be noticed later
 }
 
 function connectToDB() {

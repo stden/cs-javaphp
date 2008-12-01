@@ -19,11 +19,10 @@ function prepare( $a ){
 }
 
 if(!isset($_REQUEST['x'])){
-/*
+
   echo "DCES версии 0.1, добро пожаловать\n";
   echo "Веб интерфейс к DCES-серверу пока не предусмотрен";
   exit();
-*/
 
 //test requests
 
@@ -35,8 +34,8 @@ $r->sessionID = "RehH0lAw3eaQzHXSK08FwAvW";
 require("Disconnect.php");
 processDisconnectRequest($r);
 */
-$con = connectToDB();
-exit();
+//$con = connectToDB();
+//exit();
 }
 
 $s_request = prepare($_REQUEST['x']);
