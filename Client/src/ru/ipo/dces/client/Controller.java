@@ -24,7 +24,7 @@ public class Controller {
   public static void addPlugin(ProblemDescription pd) {
     PluginEnvironmentImpl pe = new PluginEnvironmentImpl(pd);
 
-    Plugin p = PluginLoader.load(pd.clientPluginID, pe);
+    Plugin p = PluginLoader.load(pd.clientPluginAlias, pe);
 
     clientDialog.addPluginToForm(pe, p);
   }

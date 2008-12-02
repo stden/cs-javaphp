@@ -3,64 +3,60 @@
   /*abstract*/ class ServerPlugin {
 
     //sql connection, is to be set before calls to plugin
-    public $con;
+    protected $con;
 
     //plugin folder
-    public $folder;
+    protected $folder;
 
     public function __construct($con, $folder) {
+      //may be overriden, but must call parent constructor
       $this->con = $con;
       $this->folder = $folder;
     }
 
     //returns cheking result
     public function checkSolution($solution, $user_id, $answer_data) {
-      //Needs overriding
+      //Needs to be overriden
+    }
+
+    public function getStatement($user_id, $statement_data) {
+      //May be overriden
+      return $this->getAnswerData(basename($this->folder));
     }
 
     //returns string to configure db statement settings
     //params:
     // $statement_folder - already open zip file
-    public function updateStatementData($statement_folder) {
-      //Needs overriding
+    public function updateStatementData($statement_zip) {
+      //Needs to be overriden
     }
 
     //returns string to configure db answer settings
     //params:
     // $folder - FileFolder object
-    public function updateAnswerData($answer_folder) {
-      //Needs overriding    
+    public function updateAnswerData($answer_zip) {
+      //Needs to be overriden
+    }
+
+    public function getStatementData($problem_id) {
+      //May be overriden
+      return file_get_contents($GLOBALS['dces_dir_problems'] . '/' . $problem_id . "_statement.zip");
+    }
+
+    public function getAnswerData($problem_id) {
+      //May be overriden
+      return file_get_contents($GLOBALS['dces_dir_problems'] . '/' . $problem_id . "_answer.zip");
     }
 
   }
 
   //gets contents of $s, treats it as a zip, opens zip and returns it.
   //remove_handle is a value to be passed to closeZip() function
-  function openZip($s, &$remove_handle) {
-    $remove_handle = random_str(10);
-    if (!file_put_contents("temp/$remove_handle.zip", $s))
+  function openZip($s, $zip_file) {    
+    if (!file_put_contents($zip_file, $s))
       return false;
     $zip = new ZipArchive;
-    $res = $zip->open('temp/$remove_handle.zip');
-          /*
-    echo "O:";
-    var_dump($res);
-    var_dump(ZIPARCHIVE::ER_EXISTS);
-    var_dump(ZIPARCHIVE::ER_INCONS);
-    var_dump(ZIPARCHIVE::ER_INVAL);
-    var_dump(ZIPARCHIVE::ER_MEMORY);
-    var_dump(ZIPARCHIVE::ER_NOENT);
-    var_dump(ZIPARCHIVE::ER_NOZIP);
-    var_dump(ZIPARCHIVE::ER_OPEN);
-    var_dump(ZIPARCHIVE::ER_READ);
-    var_dump(ZIPARCHIVE::ER_SEEK);
-    if ($res !== true) return false;
-    */
+    $res = $zip->open($zip_file);
     return $zip;
   }
-
-  function closeZip($handle) {
-    //if (! is_null($handle)) unlink("temp/$handle");
-  }
-
 ?>

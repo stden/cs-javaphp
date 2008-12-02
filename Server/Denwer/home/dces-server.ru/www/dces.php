@@ -3,6 +3,7 @@
 require("Debug.php");
 
 require("dces-settings.php");
+require("Directories.php");
 require("DataBase.php");
 require("Messages.php");
 require("Authorization.php");
@@ -18,27 +19,17 @@ function prepare( $a ){
   return $a;
 }
 
-if(!isset($_REQUEST['x'])){
-
+$x = @file_get_contents('php://input');
+if (strpos($x, 'x=') === 0)
+ $s_request = substr($x, 2);
+else
+{
   echo "DCES версии 0.1, добро пожаловать\n";
   echo "Веб интерфейс к DCES-серверу пока не предусмотрен";
   exit();
-
-//test requests
-
-//$con = connectToDB();
-//echo createSession($con, 1);
-/*
-$r = new DisconnectRequest();
-$r->sessionID = "RehH0lAw3eaQzHXSK08FwAvW";
-require("Disconnect.php");
-processDisconnectRequest($r);
-*/
-//$con = connectToDB();
-//exit();
 }
 
-$s_request = prepare($_REQUEST['x']);
+//$s_request = prepare($_REQUEST['x']);
 
 //open log file
 $log = fopen("messages.log", "a");
@@ -70,6 +61,16 @@ switch(get_class($request)){
 	case 'AdjustContestRequest':
 	  require("AdjustContest.php");
 	  $result = processAdjstContestRequest($request);
+	  break;
+
+	case 'GetContestDataRequest':
+	  require("GetContestData.php");
+	  $result = processGetContestDataRequest($request);
+	  break;
+
+	case 'SubmitSolutionRequest':
+	  require("GetContestData.php");
+	  $result = processGetContestDataRequest($request);
 	  break;
 
   default:

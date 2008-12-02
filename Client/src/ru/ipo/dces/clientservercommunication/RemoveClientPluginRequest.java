@@ -7,7 +7,7 @@ import ru.ipo.dces.client.Controller;
  */
 public class RemoveClientPluginRequest implements Request {
   public String sessionID;
-  public String pluginID;
+  public String pluginAlias;
 
   public RemoveClientPluginRequest() {
     sessionID = Controller.sessionID;

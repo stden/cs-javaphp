@@ -37,7 +37,7 @@ public class RealServer implements ServerFacade {
     con.setUseCaches(false);
 
     con.setRequestMethod("POST");
-    con.setDoOutput(true);
+    con.setDoOutput(true);    
 
     final OutputStream out = con.getOutputStream();
     //print request
@@ -97,6 +97,7 @@ public class RealServer implements ServerFacade {
       throw new ServerReturnedError(response.message);
 
     } catch (Exception e) {
+      e.printStackTrace();
       throw new ServerReturnedNoAnswer("Ќеправильный формат ответа сервера", new String(buf, PHP.SERVER_CHARSET));
     }
   }

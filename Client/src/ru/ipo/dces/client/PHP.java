@@ -267,7 +267,8 @@ public class PHP {
           st.moveTo('}');
           return cls.cast(array);
         }
-        if (cls.asSubclass(HashMap.class) != null) {
+        //if (cls.asSubclass(HashMap.class) != null) {
+        if (cls == HashMap.class) {
           ParameterizedType t = (ParameterizedType) cls.getGenericSuperclass();
           Type[] params = t.getActualTypeArguments();
           Class K = (Class) params[0];
@@ -297,7 +298,6 @@ public class PHP {
       default:
         break;
     }
-    throw new IllegalArgumentException(cls.getCanonicalName() + " "
-        + st.toString());
+    throw new IllegalArgumentException(cls.getCanonicalName() + " " + st.toString());
   }
 }
