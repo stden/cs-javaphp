@@ -1,9 +1,16 @@
 <?php
+unserialize("asdf") or die("aaaaa");
+exit;
+
+$a = array("asdf");
+echo "$_GLOBALS[0]";
+
+exit;
   $zip = new ZipArchive;
-  $res = $zip->open('test.zip');
+  $res = $zip->open('.\temp/statement.zip');
   if ($res === TRUE) {
     echo 'ok';
-    $zip->extractTo('test');
+    //$zip->extractTo('test');
     $zip->close();
   } else {
     echo 'failed, code:' . $res;
@@ -44,4 +51,19 @@
 
   var_dump(mysql_insert_id());
 */
+
+/*
+    echo "O:";
+    var_dump($res);
+    var_dump(ZIPARCHIVE::ER_EXISTS);
+    var_dump(ZIPARCHIVE::ER_INCONS);
+    var_dump(ZIPARCHIVE::ER_INVAL);
+    var_dump(ZIPARCHIVE::ER_MEMORY);
+    var_dump(ZIPARCHIVE::ER_NOENT);
+    var_dump(ZIPARCHIVE::ER_NOZIP);
+    var_dump(ZIPARCHIVE::ER_OPEN);
+    var_dump(ZIPARCHIVE::ER_READ);
+    var_dump(ZIPARCHIVE::ER_SEEK);
+    if ($res !== true) return false;
+    */
 ?>

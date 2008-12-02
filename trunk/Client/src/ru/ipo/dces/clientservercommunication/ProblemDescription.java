@@ -9,10 +9,10 @@ public class ProblemDescription implements Comparable<ProblemDescription> {
   public int    id;
 
   /** ID плагина, который будет обрабатывать задачу */
-  public String clientPluginID;
+  public String clientPluginAlias;
 
   /** ID плагина, который стороны сервера, получает результаты по задаче */
-  public String serverPluginID;
+  public String serverPluginAlias;
 
   /** название */
   public String name;

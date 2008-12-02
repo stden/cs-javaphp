@@ -1,4 +1,4 @@
-# HeidiSQL Dump 
+# HeidiSQL Dump
 #
 # --------------------------------------------------------
 # Host:                 127.0.0.1
@@ -9,9 +9,10 @@
 # HeidiSQL version:     3.2 Revision: 1129
 # --------------------------------------------------------
 
-/*!40100 SET CHARACTER SET utf8;*/
+/*!40100 SET CHARACTER SET cp1251;*/
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ANSI';*/
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;*/
+
 
 #
 # Database structure for database 'dces'
@@ -27,12 +28,9 @@ USE "$db";
 #
 
 CREATE TABLE /*!32312 IF NOT EXISTS*/ "client_plugin" (
-  "id" int(10) unsigned NOT NULL auto_increment,
-  "alias" varchar(64) NOT NULL COMMENT 'User friendly plugin name',
-  PRIMARY KEY  ("id"),
-  UNIQUE KEY "id" ("id"),
-  UNIQUE KEY "SECONDARY" ("alias"),
-  KEY "id_2" ("id")
+  "alias" varchar(48) NOT NULL COMMENT 'User friendly plugin name',
+  "description" text NOT NULL,
+  PRIMARY KEY  ("alias")
 ) /*!40100 DEFAULT CHARSET=utf8*/;
 
 
@@ -43,8 +41,6 @@ CREATE TABLE /*!32312 IF NOT EXISTS*/ "client_plugin" (
 
 TRUNCATE TABLE "client_plugin";
 # (No data found.)
-
-
 
 #
 # Table structure for table 'contest'
@@ -82,13 +78,14 @@ CREATE TABLE /*!32312 IF NOT EXISTS*/ "problem" (
   "name" text NOT NULL COMMENT 'User friendly task name',
   "statement" text COMMENT 'Problem statement data, controlled by plugin',
   "answer" text COMMENT 'Problem answer data, controlled by plugin',
-  "client_plugin_id" int(10) unsigned NOT NULL,
-  "server_plugin_id" int(10) unsigned NOT NULL,
+  "client_plugin_alias" varchar(48) NOT NULL,
+  "server_plugin_alias" varchar(48) NOT NULL,
   "contest_id" int(10) unsigned NOT NULL,
+  "contest_pos" int(10) unsigned NOT NULL,
   PRIMARY KEY  ("id"),
   UNIQUE KEY "id" ("id"),
   KEY "id_2" ("id")
-) /*!40100 DEFAULT CHARSET=utf8 COMMENT='Задача'*/;
+) AUTO_INCREMENT=129 /*!40100 DEFAULT CHARSET=utf8 COMMENT='Задача'*/;
 
 
 
@@ -99,19 +96,14 @@ CREATE TABLE /*!32312 IF NOT EXISTS*/ "problem" (
 TRUNCATE TABLE "problem";
 # (No data found.)
 
-
-
 #
 # Table structure for table 'server_plugin'
 #
 
 CREATE TABLE /*!32312 IF NOT EXISTS*/ "server_plugin" (
-  "id" int(10) unsigned NOT NULL auto_increment,
-  "alias" varchar(64) NOT NULL COMMENT 'User friendly plugin name',
-  PRIMARY KEY  ("id"),
-  UNIQUE KEY "id" ("id"),
-  UNIQUE KEY "SECONDARY" ("alias"),
-  KEY "id_2" ("id")
+  "alias" varchar(48) NOT NULL COMMENT 'User friendly plugin name',
+  "description" text NOT NULL,
+  PRIMARY KEY  ("alias")
 ) /*!40100 DEFAULT CHARSET=utf8*/;
 
 
@@ -122,8 +114,6 @@ CREATE TABLE /*!32312 IF NOT EXISTS*/ "server_plugin" (
 
 TRUNCATE TABLE "server_plugin";
 # (No data found.)
-
-
 
 #
 # Table structure for table 'session'
