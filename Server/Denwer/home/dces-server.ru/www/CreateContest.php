@@ -8,8 +8,9 @@ function processCreateContestRequest($request) {
   $user_id = testSession($con, $request->sessionID);
 
   //authorize user for this operation
-  $user_type = getUserType($con, $user_id);
-  if ($user_type != 'SuperAdmin')
+  $user_row = getUserRow($con, $user_id);
+  $user_type = $user_row['user_type'];
+  if ($user_type !== 'SuperAdmin')
     throwError("The user has no rights to the operation");
 
   //get contest

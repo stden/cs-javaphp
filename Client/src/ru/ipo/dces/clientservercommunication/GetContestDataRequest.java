@@ -26,7 +26,7 @@ public class GetContestDataRequest implements Request {
    * ƒл€ задач с этими id требуетс€ прислать расширенные данные. null - значит данные дл€ всех задач
    * ≈сли данные не нужны, information type требуетс€ выбрать как NoInfo
    */
-  public int[] extendedData;
+   public int[] extendedData;
                                                                                              
   public GetContestDataRequest() {
     sessionID = Controller.sessionID;

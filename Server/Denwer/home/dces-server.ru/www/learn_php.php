@@ -1,9 +1,11 @@
 <?php
-unserialize("asdf") or die("aaaaa");
-exit;
 
-$a = array("asdf");
-echo "$_GLOBALS[0]";
+function f($a) {
+ return array("asdf"=>$a);
+}
+
+$a = f("42");
+echo $a["asdf"];
 
 exit;
   $zip = new ZipArchive;

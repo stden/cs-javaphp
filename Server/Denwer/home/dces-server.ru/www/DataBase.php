@@ -1,11 +1,12 @@
 <?php
 
-function transaction($con, $queries, &$inserted_ids = null) {  
+function transaction($con, $queries, &$inserted_ids = null) {
   $retval = 1;
 
   mysql_query("START TRANSACTION", $con);
 
   foreach($queries as $qa){
+    //echo "query = $qa\n";
     $res = mysql_query($qa, $con);
     if ( ! $res ) {
       $retval = 0;
