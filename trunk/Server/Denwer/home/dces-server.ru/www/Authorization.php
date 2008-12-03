@@ -61,12 +61,6 @@ function removeSession($con, $session_id) {
   mysql_query("DELETE FROM session WHERE session_id='$session_id'", $con) or die("DB error 8: ".mysql_error());
 }
 
-function getUserType($con, $user_id) {
-  $user_rights = mysql_query("SELECT user_type FROM user WHERE id=$user_id", $con) or die('DB error 3: '.mysql_error());
-  $user_rights_row = mysql_fetch_array($user_rights) or die ("DB error 4 invalid session for user");
-  return $user_rights_row['user_type'];
-}
-
 function getUserRow($con, $user_id) {
   $user_rights = mysql_query("SELECT * FROM user WHERE id=$user_id", $con) or die('DB error 3: '.mysql_error());
   $user_rights_row = mysql_fetch_array($user_rights) or die ("DB error 4 invalid session for user");

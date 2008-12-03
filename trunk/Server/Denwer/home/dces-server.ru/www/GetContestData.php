@@ -1,6 +1,7 @@
 <?php
 
   require_once("ServerPlugin.php");
+  require_once("Utils.php");
 
   function processGetContestDataRequest($request) {
     //get db connection
@@ -16,16 +17,7 @@
 
     //compare requested contest and user contest
     //TODO by the way this is a code duplication with AdjustContest.php
-    $requested_contest_id = $request->contestID;
-    $user_contest_id = $userRow['contest_id'];
-
-    $contest_id = -1;
-    if ($requested_contest_id < 0 && $user_contest_id != 0)
-      $contest_id = $user_contest_id;
-    elseif ($requested_contest_id == $user_contest_id && $user_contest_id != 0)
-      $contest_id = $user_contest_id;
-    elseif ($requested_contest_id != $user_contest_id && $user_type === "SuperAdmin")
-      $contest_id = $requested_contest_id;
+    $contest_id = getRequestedContest($request->contest->contestID, $userRow['contest_id'], $user_type);
 
     if ($contest_id < 0) throwError("You don't have permissions to get data from this contest");
 

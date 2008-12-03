@@ -190,7 +190,7 @@ public class RealServer implements ServerFacade {
   }
 
   // Подготовка строки к передаче в GET/POST запросе
-  public String StringPrepare(String string) {
+  /*public String StringPrepare(String string) {
     StringBuilder sb = new StringBuilder();
     for (int i = 0; i < string.length(); i++)
       if (rep.containsKey(string.charAt(i)))
@@ -198,5 +198,5 @@ public class RealServer implements ServerFacade {
       else
         sb.append(string.charAt(i));
     return sb.toString();
-  }
+  }*/
 }

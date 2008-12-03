@@ -15,7 +15,7 @@
     }
 
     //returns cheking result
-    public function checkSolution($solution, $user_id, $answer_data) {
+    public function checkSolution($solution, $user_id, $answer_data, $previous_result) {
       //Needs to be overriden
     }
 
