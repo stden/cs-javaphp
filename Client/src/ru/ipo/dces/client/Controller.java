@@ -156,14 +156,43 @@ public class Controller {
       return true;
   }
 
-    public static ContestDescription getContestData(int contestID) {
-        ContestDescription contestDescription = new ContestDescription();
+    public static GetContestDataResponse getContestData(int contestID) {
+        ProblemDescription pd1 = new ProblemDescription();
+        pd1.answerData = null;
+        pd1.clientPluginAlias = "SamplePlugin";
+        pd1.id = 1;
+        pd1.name = "ÇÀ ÓÄÀ×Ó!";
+        pd1.serverPluginAlias = "ComparePlugin";
+        pd1.statement = null;
+        pd1.statementData = null;
 
-        contestDescription.name = "Fake contest";
-        contestDescription.description = "Fake contest description";
-        contestDescription.start = new Date();
-        contestDescription.finish = new Date(new Date().getTime() + 1000 * 60 * 60);
+        ProblemDescription pd2 = new ProblemDescription();
+        pd2.answerData = null;
+        pd2.clientPluginAlias = "SamplePlugin2";
+        pd2.id = 2;
+        pd2.name = "ÇÀ ÓÄÀ×Ó! 2";
+        pd2.serverPluginAlias = "ComparePlugin2";
+        pd2.statement = null;
+        pd2.statementData = null;
 
-        return contestDescription;
+        ProblemDescription[] pds = new ProblemDescription[]{pd1, pd2};
+
+        ContestDescription cd = new ContestDescription();
+        cd.contestID = contestID;
+        cd.name = "Fake contest";
+        cd.description = "Fake contest description";
+        cd.start = new Date();
+        cd.finish = new Date(new Date().getTime() + 1000 * 60 * 60);
+
+        GetContestDataResponse response = new GetContestDataResponse();
+        response.contest = cd;
+        response.problems = pds;
+
+        return response;
+    }
+
+    public static boolean adjustContestData(AdjustContestRequest acr) {
+        //TODO: implement this method
+        return false;
     }
 }

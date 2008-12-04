@@ -4,7 +4,6 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import ru.ipo.dces.client.Controller;
 import ru.ipo.dces.clientservercommunication.ContestDescription;
-import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
 
 import javax.swing.*;
@@ -20,7 +19,7 @@ import java.text.SimpleDateFormat;
 import java.text.ParseException;
 import java.util.regex.Pattern;
 
-public class CreateContestPlugin extends Plugin {
+public class CreateContestPlugin extends NotificationPlugin {
     private JTextField contestName;
     private JFormattedTextField beginDate;
     private JFormattedTextField beginTime;
@@ -205,22 +204,19 @@ public class CreateContestPlugin extends Plugin {
                 //if input is empty and we previously had errors then clear error field rendering and do not change any other status
                 //if input is correct and we previously didn't have any errors then do nothing
 
-                
 
                 if (inputText.equals("") && hasErrors) {
                     renderField(field, NotificationType.Info);
-                }
-                else if(isInputCorrect(inputText, type) && hasErrors){
+                } else if (isInputCorrect(inputText, type) && hasErrors) {
 
-                }
-                else if (isInputCorrect(inputText, type)) {
+                } else if (isInputCorrect(inputText, type)) {
 
                     renderField(field, NotificationType.Error);
-                    fireNotificationMessage("Введите корректную дату (дд.мм.гг) и время (чч:мм)", NotificationType.Error);
+                    fireNotificationMessage(infoMessageLabel, "Введите корректную дату (дд.мм.гг) и время (чч:мм)", NotificationType.Error);
                     hasErrors = true;
 
                 } else {
-                    fireNotificationMessage("", NotificationType.Info);
+                    fireNotificationMessage(infoMessageLabel, "", NotificationType.Info);
                     renderField(field, NotificationType.Info);
                     hasErrors = false;
                 }
@@ -261,14 +257,14 @@ public class CreateContestPlugin extends Plugin {
     }
 
     boolean validateForCreateContestButton() {
-            return  typeNameModel.getSize() > 0 &&
-                    contestName.getDocument().getLength() > 0 &&
-                    beginDate.getDocument().getLength() > 0 &&
-                    beginTime.getDocument().getLength() > 0 &&
-                    endTime.getDocument().getLength() > 0 &&
-                    endDate.getDocument().getLength() > 0 &&
-                    contestDescription.getDocument().getLength() > 0 &&
-                    !hasErrors;
+        return typeNameModel.getSize() > 0 &&
+                contestName.getDocument().getLength() > 0 &&
+                beginDate.getDocument().getLength() > 0 &&
+                beginTime.getDocument().getLength() > 0 &&
+                endTime.getDocument().getLength() > 0 &&
+                endDate.getDocument().getLength() > 0 &&
+                contestDescription.getDocument().getLength() > 0 &&
+                !hasErrors;
     }
 
     private boolean validateForDeleteButton() {
@@ -333,23 +329,6 @@ public class CreateContestPlugin extends Plugin {
             noRepeat = noRepeat && !((TypeNameBean) typeNameModel.getElementAt(i)).getName().equals(fieldText);
 
         return res && noRepeat;
-    }
-
-    private void fireNotificationMessage(String s, NotificationType type) {
-
-        infoMessageLabel.setText(s);
-
-        switch (type) {
-            case Error:
-                infoMessageLabel.setForeground(new Color(255, 100, 100));
-                break;
-            case Info:
-                infoMessageLabel.setForeground(Color.BLACK);
-                break;
-            case Warning:
-                infoMessageLabel.setForeground(new Color(100, 255, 255));
-                break;
-        }
     }
 
     /**
