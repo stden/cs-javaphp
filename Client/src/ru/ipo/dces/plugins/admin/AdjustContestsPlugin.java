@@ -40,8 +40,11 @@ public class AdjustContestsPlugin extends Plugin {
     private JButton previewButton;
     private JButton applyButton;
 
+    private AdjustContestsPluginBean beanToSubmit = new AdjustContestsPluginBean();
+
     /**
      * Инициализация plugin'а
+     * @param env plugin environment
      */
     public AdjustContestsPlugin(PluginEnvironment env) {
         super(env);
@@ -50,6 +53,7 @@ public class AdjustContestsPlugin extends Plugin {
         env.setTitle("Настроить контест");
         contestsList.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e) {
+                //TODO: Refactor
                 fillDaFormWithData(42);
             }
         });
@@ -206,5 +210,9 @@ public class AdjustContestsPlugin extends Plugin {
      */
     public JComponent $$$getRootComponent$$$() {
         return drawPanel;
+    }
+
+    private class AdjustContestsPluginBean {
+        private String contestName;
     }
 }
