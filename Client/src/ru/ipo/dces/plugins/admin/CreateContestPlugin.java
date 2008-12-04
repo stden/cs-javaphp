@@ -191,16 +191,6 @@ public class CreateContestPlugin extends Plugin {
         });
     }
 
-    boolean validateForCreateContestButton() {
-        return typeNameModel.getSize() > 0 &&
-                contestName.getDocument().getLength() > 0 &&
-                beginDate.getDocument().getLength() > 0 &&
-                beginTime.getDocument().getLength() > 0 &&
-                endTime.getDocument().getLength() > 0 &&
-                endDate.getDocument().getLength() > 0 &&
-                contestDescription.getDocument().getLength() > 0;
-    }
-
     private void addValidatorListeners(final Document d) {
         d.addDocumentListener(validatorListener);
     }
@@ -212,12 +202,18 @@ public class CreateContestPlugin extends Plugin {
             public boolean verify(JComponent input) {
 
                 String inputText = ((JTextField) (input)).getText();
+                //if input is empty and we previously had errors then clear error field rendering and do not change any other status
+                //if input is correct and we previously didn't have any errors then do nothing
+
+                
 
                 if (inputText.equals("") && hasErrors) {
-                    //fireNotificationMessage("", NotificationType.Info);
-                    field.setBackground(Color.WHITE);
-                } else if (type.equals(FieldType.Date) && !dateValidator.matcher(inputText).matches() ||
-                        type.equals(FieldType.Time) && !timeValidator.matcher(inputText).matches()) {
+                    renderField(field, NotificationType.Info);
+                }
+                else if(isInputCorrect(inputText, type) && hasErrors){
+
+                }
+                else if (isInputCorrect(inputText, type)) {
 
                     renderField(field, NotificationType.Error);
                     fireNotificationMessage("Введите корректную дату (дд.мм.гг) и время (чч:мм)", NotificationType.Error);
@@ -228,9 +224,17 @@ public class CreateContestPlugin extends Plugin {
                     renderField(field, NotificationType.Info);
                     hasErrors = false;
                 }
+
+                setEnabledForAll();
+
                 return true;
             }
         });
+    }
+
+    private boolean isInputCorrect(String inputText, FieldType type) {
+        return type.equals(FieldType.Date) && !dateValidator.matcher(inputText).matches() ||
+                type.equals(FieldType.Time) && !timeValidator.matcher(inputText).matches();
     }
 
     private void renderField(JTextField field, NotificationType type) {
@@ -254,6 +258,17 @@ public class CreateContestPlugin extends Plugin {
         addButton.setEnabled(validateForAddButton());
         changeButton.setEnabled(validateForChangeButton());
         deleteButton.setEnabled(validateForDeleteButton());
+    }
+
+    boolean validateForCreateContestButton() {
+            return  typeNameModel.getSize() > 0 &&
+                    contestName.getDocument().getLength() > 0 &&
+                    beginDate.getDocument().getLength() > 0 &&
+                    beginTime.getDocument().getLength() > 0 &&
+                    endTime.getDocument().getLength() > 0 &&
+                    endDate.getDocument().getLength() > 0 &&
+                    contestDescription.getDocument().getLength() > 0 &&
+                    !hasErrors;
     }
 
     private boolean validateForDeleteButton() {

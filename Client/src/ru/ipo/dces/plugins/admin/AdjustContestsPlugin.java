@@ -68,6 +68,9 @@ public class AdjustContestsPlugin extends Plugin {
         contestName.setText(cd.name);
         beginDate.setText(new SimpleDateFormat("dd.MM.yy").format(cd.start.getTime()));
         beginTime.setText(new SimpleDateFormat("HH:mm").format(cd.start.getTime()));
+        endDate.setText(new SimpleDateFormat("dd.MM.yy").format(cd.finish.getTime()));
+        endTime.setText(new SimpleDateFormat("HH:mm").format(cd.finish.getTime()));
+
     }
 
     /**
