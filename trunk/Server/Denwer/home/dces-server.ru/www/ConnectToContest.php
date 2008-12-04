@@ -4,9 +4,12 @@ function processConnectToContestRequest($request) {
   $con = connectToDB();
 
   //find user in table
-  //TODO prevent SQL injection
-  $contest_rows = mysql_query("SELECT * FROM user WHERE login='$request->login' AND contest_id = $request->contestID");
-  if ( ! $contest_rows ) die("db error");
+  $contest_rows = mysql_query(
+                    sprintf("SELECT * FROM user WHERE login=%s AND contest_id=%s",
+                            quote_smart($request->login),
+                            quote_smart($request->contestID)
+                           )
+                  ) or die("db error 26:". mysql_error());
 
   //test if there is at least one user
   if ( !($row = mysql_fetch_array($contest_rows)) )
@@ -25,8 +28,7 @@ function processConnectToContestRequest($request) {
   $res->sessionID = $session_id;
   $res->user = new UserDescription();
   $res->user->login = $request->login;
-  //TODO 'uncomment user data'
-  //$res->user->dataValue = unserialize($row['user_data']);
+  $res->user->dataValue = unserialize($row['user_data']) or $res->user->dataValue = array();
   $res->user->userType = $row['user_type'];
 
   return $res;

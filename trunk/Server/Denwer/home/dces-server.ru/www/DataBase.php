@@ -37,7 +37,7 @@ function composeInsertQuery($table, $col_value) {
   $vals = "";
   foreach ($col_value as $col => $val) {
     $cols .= "$col,";
-    $vals .= "'$val',";
+    $vals .= quote_smart($val) . ',';
   }
   $cols = rtrim($cols,',');
   $vals = rtrim($vals,',');

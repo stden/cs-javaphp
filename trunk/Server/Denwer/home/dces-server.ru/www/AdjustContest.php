@@ -1,9 +1,8 @@
 <?php
 
-  require_once("ServerPlugin.php");
+  require_once("ServerPlugin.php");  
 
   function queryForContestDescription($c, $contest_id) {
-    //TODO prevent sql injection    
     $col_value = array();
 
     //adjust name
@@ -33,10 +32,11 @@
     return composeUpdateQuery("contest", $col_value, "id=$contest_id");
   }
 
-  function queriesToAdjustProblems($con, $problems, $contest_id, &$temp_dirs) {
-    $changed_probs = array();
+  function queriesToAdjustProblems($con, $problems, $contest_id, &$temp_dirs, &$temp_statement_zips, &$temp_answer_zips) {
+    $changed_probs = array(); //problems that will be changed by request
     $queries = array();
 
+    $contest_pos = 1;
     foreach ($problems as $p) {
       $col_value = array(); 
       $all_set = true;
@@ -45,23 +45,13 @@
       $col_value['contest_id'] = $contest_id;
 
       //set client plugin
-      if (!is_null($p->clientPluginID)) {
-        //lookup client plugin
-        $rows = mysql_query("SELECT id FROM client_plugin WHERE alias='$p->clientPluginID'", $con)
-                or die("DB error 10".mysql_error());
-        $client_plugin_row = mysql_fetch_array($rows) or throwError("Client plugin id not found");
-
-        $col_value['client_plugin'] = $client_plugin_row['id']; 
+      if (!is_null($p->clientPluginAlias)) {
+        $col_value['client_plugin_alias'] = $p->clientPluginAlias;
       } else $all_set = false;
 
       //set server plugin
-      if (!is_null($p->serverPluginID)) {
-        //lookup server plugin
-        $rows = mysql_query("SELECT id FROM server_plugin WHERE alias='$p->serverPluginID'", $con)
-                or die("DB error 11".mysql_error());
-        $server_plugin_row = mysql_fetch_array($rows) or throwError("Server plugin id not found");
-
-        $col_value['server_plugin'] = $server_plugin_row['id'];
+      if (!is_null($p->serverPluginAlias)) {
+        $col_value['server_plugin_alias'] = $p->serverPluginAlias;
       } else $all_set = false;
 
       //set name
@@ -72,48 +62,61 @@
       //skip statement value
 
       //get current server plugin alias
-      if (! is_null($p->serverPluginID) ) {
-        $plugin_alias = $p->serverPluginID;
+      if ( !is_null($p->serverPluginAlias) )
+        $plugin_alias = $p->serverPluginAlias;
+      if ($p->id != -1 && is_null($p->serverPluginAlias) ) {
+        $rows = mysql_query(
+                  sprintf("SELECT server_plugin_alias FROM problem WHERE id=%s", quote_smart($p->id))
+                , $con) or die("DB error 12".mysql_error());
+        $row = mysql_fetch_array($rows, $con) or throwError("Problem with specified ID not found");        
+        $plugin_alias = $row['server_plugin_alias'];
       }
-      elseif ($p->id != -1 && is_null($server_plugin_row)) {
-        $row = mysql_fetch_array($rows, $con) or throwError("Problem with specified ID not found");
-        $rows = mysql_query("SELECT alias FROM problem INNER JOIN server_plugin ON problem.server_plugin_id=server_plugin.id WHERE problem.id=$p->id", $con)
-                or die("DB error 12".mysql_error());
-        $plugin_alias = $row['alias'];
-      }
-      elseif ($p->id == -1 && is_null(server_plugin_row)) throwError("Server plugin not specified in new creating task");
+      elseif ($p->id == -1 && is_null($p->serverPluginAlias)) throwError("Server plugin not specified in new creating task");
 
       //get current server plugin
-      require_once("server_plugins/$plugin_alias.php");
+      require_once($GLOBALS['dces_dir_server_plugins'] . '/' . $plugin_alias . '.php');
       if ($p->id == -1) {
-        $temp = random_str(10);
-        $temp_dirs[] = $temp;
-        $plugin = new $plugin_alias($con, "problems/$temp");
+        //We are to create a directory for new problem
+        //New dir is temporary because we don't know problem id 
+        $temp = $GLOBALS['dces_dir_temp'] . '/' . random_str(10);
+        $temp_dirs[] =  $temp;
+        mkdir($temp);
+        $plugin = new $plugin_alias($con, $temp);
       }
-      else
-        $plugin = new $plugin_alias($con, "problems/$p->id");
+      else //here plugin dir is made from the known problem id
+        $plugin = new $plugin_alias($con, $GLOBALS['dces_dir_problems'] . "/$p->id");
 
       //set statementData
       if (!is_null($p->statementData)) {
-        $handle = null;
-        $zip = openZip($p->statementData, $handle);
-        //if (!$zip) throwError("Statement data seems to be not a zip compressed set of files");
-        //$col_value['statement'] = $plugin->updateStatementData($zip);
-        $col_value['statement'] = 'this is a statement';
-        closeZip($handle);
-        //if (!$col_value['statement']) throwError('Server plugin did not accept statement data');
+        if ($p->id == -1)
+          $zip_file = $GLOBALS['dces_dir_temp'] . '/' . random_str(10) . '.zip';
+        else
+          $zip_file = $GLOBALS['dces_dir_problems'] . "/$p->{id}_statement.zip"; 
+        $zip = openZip($p->statementData, $zip_file);
+        if (!$zip) throwError("Statement data seems to be not a zip compressed set of files");
+        $col_value['statement'] = serialize($plugin->updateStatementData($zip));        
+        if (!$col_value['statement']) throwError('Server plugin did not accept statement data');
+        if ($p->id == -1)
+          $temp_statement_zips[] = $zip_file;
       } else $all_set = false;
 
       //set answerData
+      //TODO think abount code duplication. May be there is no need in two concepts: statement and answer 
       if (!is_null($p->answerData)) {
-        $handle = null;
-        $zip = openZip($p->answer, $handle);
-        //if (!$zip) throwError("Answer data seems to be not a zip compressed set of files");
-        //$col_value['answer'] = $plugin->updateStatementData($zip);
-        $col_value['statement'] = 'this is an answer';
-        closeZip($handle);
-        //if (!$col_value['answer']) throwError('Server plugin did not accept answer data');
+        if ($p->id == -1)
+          $zip_file = $GLOBALS['dces_dir_temp'] . '/' . random_str(10) . '.zip';
+        else
+          $zip_file = $GLOBALS['dces_dir_problems'] . "/$p->{id}_answer.zip"; 
+        $zip = openZip($p->answerData, $zip_file);
+        if (!$zip) throwError("Answer data seems to be not a zip compressed set of files");
+        $col_value['answer'] = serialize($plugin->updateAnswerData($zip));
+        if (!$col_value['answer']) throwError('Server plugin did not accept answer data');
+        if ($p->id == -1)
+          $temp_answer_zips[] = $zip_file;
       } else $all_set = false;
+
+      //set contest position
+      $col_value['contest_pos'] = $contest_pos ++;
 
       if ($p->id == -1)
       {
@@ -124,16 +127,18 @@
       }
       else
       {
-        //adjust a task
+        //update a task
         $queries[] = composeUpdateQuery('problem', $col_value, "id='$p->id'");
         $changed_probs[$p->id] = 1;
       }
 
     }
 
-    //removing queries
-    $res = mysql_query("SELECT id FROM problem WHERE contest_id=$contest_id", $con) or die("DB error 13: ".mysql_error());
-    while ($row = mysql_fetch_array)
+    //queries to remove problems
+    $res = mysql_query(
+             sprintf("SELECT id FROM problem WHERE contest_id=%s", quote_smart($contest_id))
+           , $con) or die("DB error 13: ".mysql_error());
+    while ($row = mysql_fetch_array($res))
       if ($changed_probs[$row['id']] != 1) {
         $pid = $row['id']; 
         $queries[] = "DELETE FROM problem WHERE id='$pid'";
@@ -154,18 +159,8 @@
     $userRow = getUserRow($con, $user_id);
     $user_type = $userRow['user_type'];
         
-    $requested_contest_id = $request->contest->contestID;
-    $user_contest_id = $userRow['contest_id'];
-
-    $contest_id = -1;
-    if ($requested_contest_id < 0 && $user_contest_id != 0)
-      $contest_id = $user_contest_id;
-    elseif ($requested_contest_id == $user_contest_id && $user_contest_id != 0)
-      $contest_id = $user_contest_id;
-    elseif ($requested_contest_id != $user_contest_id && $user_type == "SuperAdmin")
-      $contest_id = $requested_contest_id;
-
-    if ($user_type == "Participant") $contest_id = -1;            
+    $contest_id = getRequestedContest($request->contest->contestID, $userRow['contest_id'], $user_type);
+    if ($user_type === "Participant") $contest_id = -1;
 
     if ($contest_id < 0) throwError("You don't have permissions to adjust this contest");
 
@@ -178,9 +173,13 @@
         $queries[] = $query_1;
 
     //now adjust problems
-    $temp_dirs = array();
+    $temp_dirs = array(); // will contain set of created temporary plugin directories
+    $queries_2 = array();
     if (!is_null($request->problems))
-      $queries += queriesToAdjustProblems($con, $request->problems, $contest_id, $temp_dirs);
+      $queries_2 = queriesToAdjustProblems($con, $request->problems, $contest_id, $temp_dirs, $temp_statement_zips, $temp_answer_zips);
+
+    foreach ($queries_2 as $q)
+      $queries[] = $q;
 
     //run transaction
     if (count($queries) != 0) {
@@ -188,12 +187,23 @@
       transaction($con, $queries, $inserted_ids) or die("Failed to make update, db error or incorrect data");
 
       //rename temporary dirs
-      if (count($temp_dirs) != count($inserted_ids)) die("Assertion failed, call developers");
+      //var_dump(count($temp_dirs));
+      //var_dump(count($inserted_ids));
+      //var_dump(count($temp_statement_zips));
+      //var_dump(count($temp_answer_zips));
+      //die();
+      if ( count($temp_dirs) != count($inserted_ids) ||
+           count($temp_dirs) != count($temp_statement_zips) ||
+           count($temp_dirs) != count($temp_answer_zips) ) die("Assertion failed, call developers");
 
       for ($i = 0; $i < count($temp_dirs); $i++) {
         $temp_dir = $temp_dirs[$i];
         $inserted_id = $inserted_ids[$i];
-        rename("problems/$temp_dir", "problems/$inserted_id") /*or do nothing*/;
+        $stat_zip = $temp_statement_zips[$i];
+        $ans_zip = $temp_answer_zips[$i];
+        @rename($temp_dir, $GLOBALS['dces_dir_problems'] . "/${inserted_id}") /*or do nothing*/;
+        @rename($stat_zip, $GLOBALS['dces_dir_problems'] . "/${inserted_id}_statement.zip") /*or do nothing*/;
+        @rename($ans_zip,  $GLOBALS['dces_dir_problems'] . "/${inserted_id}_answer.zip") /*or do nothing*/;
       }
     }
     else

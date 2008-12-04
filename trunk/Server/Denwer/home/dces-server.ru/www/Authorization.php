@@ -25,12 +25,12 @@ function createSession($con, $user_id) { //returns session string
   $session_id = random_str(24);
   if ( ! $open_session_rows ) {
     //session for the user is NOT YET created
-    if ( ! mysql_query("INSERT INTO session (session_id, user_id) VALUES ('$session_id', $user_id)", $con) )
-      die("DB problem 1 ".mysql_error());
+    mysql_query("INSERT INTO session (session_id, user_id) VALUES ('$session_id', $user_id)", $con)
+      or die("DB problem 1 ".mysql_error());
   } else {
     //session for the user is ALREADY created
-    if ( ! mysql_query("UPDATE session SET session_id='$session_id' WHERE user_id=$user_id", $con) )
-      die("DB problem 2 ".mysql_error());
+    mysql_query("UPDATE session SET session_id='$session_id' WHERE user_id=$user_id", $con)
+      or die("DB problem 2 ".mysql_error());
   }
 
   return $session_id;
@@ -58,11 +58,15 @@ function testSession($con, $session_id) { //returns user id, dies absolutely if 
 
 function removeSession($con, $session_id) {
   //test if session for user_id is already set
+  $session_regexp = "^[a-zA-Z0-9_]+$";
+  if ( !ereg($session_regexp, $session_id) ) throwError("invalid session");
   mysql_query("DELETE FROM session WHERE session_id='$session_id'", $con) or die("DB error 8: ".mysql_error());
 }
 
 function getUserRow($con, $user_id) {
-  $user_rights = mysql_query("SELECT * FROM user WHERE id=$user_id", $con) or die('DB error 3: '.mysql_error());
+  $user_rights = mysql_query(
+                   sprintf("SELECT * FROM user WHERE id=%s", quote_smart($user_id))
+                 , $con) or die('DB error 3: '.mysql_error());
   $user_rights_row = mysql_fetch_array($user_rights) or die ("DB error 4 invalid session for user");
   return $user_rights_row;
 }

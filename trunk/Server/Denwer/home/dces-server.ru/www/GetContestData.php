@@ -1,7 +1,6 @@
 <?php
 
   require_once("ServerPlugin.php");
-  require_once("Utils.php");
 
   function processGetContestDataRequest($request) {
     //get db connection
@@ -16,8 +15,7 @@
     $user_type = $userRow['user_type'];
 
     //compare requested contest and user contest
-    //TODO by the way this is a code duplication with AdjustContest.php
-    $contest_id = getRequestedContest($request->contest->contestID, $userRow['contest_id'], $user_type);
+    $contest_id = getRequestedContest($request->contestID, $userRow['contest_id'], $user_type);
 
     if ($contest_id < 0) throwError("You don't have permissions to get data from this contest");
 
@@ -29,8 +27,9 @@
 
     //fill contest description with data
     //query db
-    //TODO prevent SQL injection
-    $contest_rows = mysql_query("SELECT * FROM contest WHERE id=$contest_id", $con) or die("DB error 15: ".mysql_error());
+    $contest_rows = mysql_query(
+                      sprintf("SELECT * FROM contest WHERE id=%s", quote_smart($contest_id))
+                    , $con) or die("DB error 15: ".mysql_error());
     $row = mysql_fetch_array($contest_rows) or throwError("Found no contest with specified id");
 
     //TODO remove this code duplication, the code is simular to AvailableContests.php
@@ -51,8 +50,9 @@
     $info_type = $request->infoType;
     $extended_data = $request->extendedData;
     //query db to find out problems
-    $problems_rows = mysql_query("SELECT * FROM problem WHERE contest_id=$contest_id ORDER BY contest_pos ASC", $con)
-                     or die("DB error 16: ".mysql_error());
+    $problems_rows = mysql_query(
+                       sprintf("SELECT * FROM problem WHERE contest_id=%s ORDER BY contest_pos ASC", quote_smart($contest_id))
+                     , $con) or die("DB error 16: ".mysql_error());
 
     while ($row = mysql_fetch_array($problems_rows)) {
       $p = new ProblemDescription();

@@ -16,17 +16,16 @@ function processCreateContestRequest($request) {
   //get contest
   $c = $request->contest;
 
-  //name
-  $columns = "name, start_time, finish_time, description, reg_type, user_data, user_data_compulsory";
-  $values = "'$c->name', ";
-  $values .= "'". DatePHPToMySQL($c->start) . "', ";
-  $values .= "'". DatePHPToMySQL($c->finish) . "', ";
-  $values .= "'$c->description', ";
-  $values .= "'$c->registrationType', ";
-  $values .= "'". serialize($c->data) . "', ";
-  $values .= "'". serialize($c->compulsory) . "'"; //the only line without ,
+  $col_value = array();
+  $col_value['name'] = $c->name;
+  $col_value['start_time'] = DatePHPToMySQL($c->start);
+  $col_value['finish_time'] = DatePHPToMySQL($c->finish);
+  $col_value['description'] = $c->description;
+  $col_value['reg_type'] = $c->registrationType;
+  $col_value['user_data'] = serialize($c->data);
+  $col_value['name'] = serialize($c->compulsory);
 
-  mysql_query("INSERT INTO contest ($columns) VALUES ($values)") or die("DB error 5: ".mysql_error());
+  mysql_query(composeInsertQuery('contest', $col_value)) or die("DB error 5: ".mysql_error());
 
   return new AcceptedResponse();
 }
