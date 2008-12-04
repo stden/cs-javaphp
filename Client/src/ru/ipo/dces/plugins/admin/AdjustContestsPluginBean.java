@@ -99,8 +99,6 @@ public class AdjustContestsPluginBean {
         return beginDateTime;
     }
 
-    //TODO: new SimpleDateFormat("dd.MM.yy").format(cd.begin.getTime())
-    //TODO: new SimpleDateFormat("HH:mm").format(cd.begin.getTime())
     public void setBeginDateTime(Date begin) {
         beginDateTime = begin;
     }
