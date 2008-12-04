@@ -5,6 +5,8 @@ import javax.swing.JButton;
 import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
 
+import java.util.HashMap;
+
 public class PluginEnvironmentImpl implements PluginEnvironment {
 
   private JButton                  button;
@@ -32,9 +34,9 @@ public class PluginEnvironmentImpl implements PluginEnvironment {
   public Response submitSolution(Request solution) throws ServerReturnedError, ServerReturnedNoAnswer {
     SubmitSolutionRequest ssr = new SubmitSolutionRequest();
     ssr.problemID = pd.id;
-    ssr.problemResult = solution;
+    ssr.problemResult = new HashMap<String, String>();
+    ssr.problemResult.put("asdf", "qwerty");
     ssr.sessionID = Controller.sessionID;
-    SubmitSolutionResponse res = Controller.server.doRequest(ssr);
-    return res;
+    return Controller.server.doRequest(ssr);
   }
 }

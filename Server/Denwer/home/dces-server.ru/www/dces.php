@@ -3,6 +3,7 @@
 require("Debug.php");
 
 require("dces-settings.php");
+require("Utils.php");
 require("Directories.php");
 require("DataBase.php");
 require("Messages.php");
@@ -35,7 +36,7 @@ else
 $log = fopen("messages.log", "a");
 fwrite($log, "request = $s_request\n");
 
-$request = unserialize($s_request);
+$request = unserialize($s_request) or throwError('Failed to understand the request');
 
 switch(get_class($request)){
   case 'AvailableContestsRequest':
@@ -69,8 +70,8 @@ switch(get_class($request)){
 	  break;
 
 	case 'SubmitSolutionRequest':
-	  require("GetContestData.php");
-	  $result = processGetContestDataRequest($request);
+	  require("SubmitSolution.php");
+	  $result = processSubmitSolutionRequest($request);
 	  break;
 
   default:

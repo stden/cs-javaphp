@@ -3,8 +3,11 @@
   //this plugin doesn't use a plugin folder to store any info
 
   class ComparePlugin extends ServerPlugin {
-    public function checkSolution($solution, $user_id, $answer_data) {
-      return $solution === $answer_data;
+
+    public function checkSolution($solution, $user_id, $answer_data, $previous_result) {
+      $res = array();
+      $res['result'] = $solution === $answer_data ? "yes" : "no";
+      return $res;
     }
 
     public function updateStatementData($statement_zip) {      
