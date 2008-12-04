@@ -9,9 +9,16 @@ import ru.ipo.dces.clientservercommunication.GetContestDataResponse;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.text.Document;
 import java.awt.*;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
+import java.util.Calendar;
+import java.util.Date;
 
 public class AdjustContestsPlugin extends NotificationPlugin {
     private JPanel drawPanel;
@@ -80,6 +87,9 @@ public class AdjustContestsPlugin extends NotificationPlugin {
         initialBean.setContestID(cd.contestID);
 
         initialBean.setProblemDescriptions(gcdr.problems);
+
+        //TODO fill updated bean with the same data (as in initial bean)
+        //TODO fill form controls with the values
     }
 
     //private void sendDaChangedContestToServaCauseMyConnectIsGettin...() {
@@ -111,42 +121,70 @@ public class AdjustContestsPlugin extends NotificationPlugin {
         fillDaFormWithData(cd.contestID);
     }
 
-    public void setData(AdjustContestsPluginBean data) {
-        contestName.setText(data.getContestName());
-        contestDescription.setText(data.getContestDescription());
-        problemAnswer.setText(data.getProblemAnswer());
-        problemStatement.setText(data.getProblemStatement());
-        serverPlugin.setText(data.getServerPlugin());
-        clientPlugin.setText(data.getClientPlugin());
-        problemName.setText(data.getProblemName());
-    }
+    private void AddDocumentListener(Document d)
+    {
+        d.addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {
+                doSmth(e);
+            }
 
-    public void getData(AdjustContestsPluginBean data) {
-        data.setContestName(contestName.getText());
-        data.setContestDescription(contestDescription.getText());
-        data.setProblemAnswer(problemAnswer.getText());
-        data.setProblemStatement(problemStatement.getText());
-        data.setServerPlugin(serverPlugin.getText());
-        data.setClientPlugin(clientPlugin.getText());
-        data.setProblemName(problemName.getText());
-    }
+            public void removeUpdate(DocumentEvent e) {
+                doSmth(e);
+            }
 
-    public boolean isModified(AdjustContestsPluginBean data) {
-        if (contestName.getText() != null ? !contestName.getText().equals(data.getContestName()) : data.getContestName() != null)
-            return true;
-        if (contestDescription.getText() != null ? !contestDescription.getText().equals(data.getContestDescription()) : data.getContestDescription() != null)
-            return true;
-        if (problemAnswer.getText() != null ? !problemAnswer.getText().equals(data.getProblemAnswer()) : data.getProblemAnswer() != null)
-            return true;
-        if (problemStatement.getText() != null ? !problemStatement.getText().equals(data.getProblemStatement()) : data.getProblemStatement() != null)
-            return true;
-        if (serverPlugin.getText() != null ? !serverPlugin.getText().equals(data.getServerPlugin()) : data.getServerPlugin() != null)
-            return true;
-        if (clientPlugin.getText() != null ? !clientPlugin.getText().equals(data.getClientPlugin()) : data.getClientPlugin() != null)
-            return true;
-        if (problemName.getText() != null ? !problemName.getText().equals(data.getProblemName()) : data.getProblemName() != null)
-            return true;
-        return false;
+            public void changedUpdate(DocumentEvent e) {
+            }
+
+            private void doSmth(DocumentEvent e)
+            {
+                if (e.getDocument() == contestDescription.getDocument()) {
+                    updatedBean.setContestDescription(contestDescription.getText());
+                }
+                else if(e.getDocument() == contestName.getDocument()) {
+                    updatedBean.setContestName(contestName.getText());
+                }
+                else if(e.getDocument() == beginDate.getDocument()) {
+
+                    //TODO: new SimpleDateFormat("dd.MM.yy").format(cd.begin.getTime())
+                    //TODO: new SimpleDateFormat("HH:mm").format(cd.begin.getTime())
+                    try {
+                        Date bd = new SimpleDateFormat("dd.MM.yy").parse(beginDate.getText());
+                        //TODO implenemt lol (all)
+                        //int yy = bd.
+                    } catch (ParseException e1) {
+                        return;  //TODO:handle validation here
+                    }
+                    updatedBean.setBeginDateTime(updatedBean.getBeginDateTime());
+                }
+                else if(e.getDocument() == beginTime.getDocument()) {
+
+                }
+                else if(e.getDocument() == endDate.getDocument()) {
+
+                }
+                else if(e.getDocument() == endTime.getDocument()) {
+
+                }
+                else if(e.getDocument() == beginTime.getDocument()) {
+
+                }
+                else if(e.getDocument() == problemStatement.getDocument()) {
+
+                }
+                else if(e.getDocument() == problemAnswer.getDocument()) {
+
+                }
+                else if(e.getDocument() == problemName.getDocument()) {
+
+                }
+                else if(e.getDocument() == clientPlugin.getDocument()) {
+
+                }
+                else if(e.getDocument() == serverPlugin.getDocument()) {
+
+                }
+            }
+        });
     }
 
     /**
