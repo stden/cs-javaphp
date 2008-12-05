@@ -6,7 +6,7 @@
 
     public function checkSolution($solution, $user_id, $answer_data, $previous_result) {
       $res = array();
-      $res['result'] = $solution === $answer_data ? "yes" : "no";
+      $res['result'] = $solution['answer'] === $answer_data ? "yes" : "no";
       return $res;
     }
 

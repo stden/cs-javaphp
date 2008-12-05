@@ -10,6 +10,6 @@ public class SubmitSolutionResponse implements Response {
    * Вид ответа может быть произвольный. Каждый плагин клииента знает, какой ответ он ожидает от системы
    * (от плагина стороны сервера), и приводит результат к нужному себе классу.
    */
-  HashMap<String, String> problemResult;
+  public HashMap<String, String> problemResult;
   // возможно, дополнительные данные о процессе проверки
 }

@@ -10,7 +10,7 @@ public class GenPHP {
       AvailableContestsResponse.class, ChangePasswordRequest.class,
       ConnectToContestRequest.class, ConnectToContestResponse.class,
       ContestDescription.class, CreateContestRequest.class,
-      CreateUserRequest.class, DisconnectRequest.class,
+      /*CreateUserRequest.class,*/ DisconnectRequest.class,
       GetContestDataRequest.class, GetContestDataResponse.class,
       GetUsersRequest.class, GetUsersResponse.class,
       InstallClientPluginRequest.class, InstallClientPluginResponse.class,
@@ -19,7 +19,7 @@ public class GenPHP {
       RemoveUserRequest.class, RequestFailedResponse.class,
       RestorePasswordRequest.class, SubmitSolutionRequest.class,
       SubmitSolutionResponse.class, UploadClientPluginRequest.class,
-      UserDescription.class, Sum.class };
+      UserDescription.class/*, Sum.class*/ };
 
   /**
    * @param args
