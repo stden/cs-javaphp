@@ -15,10 +15,12 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.Document;
 import java.awt.*;
-import java.text.SimpleDateFormat;
+import java.io.*;
 import java.text.ParseException;
-import java.util.Calendar;
-import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class AdjustContestsPlugin extends NotificationPlugin {
     private JPanel drawPanel;
@@ -50,6 +52,7 @@ public class AdjustContestsPlugin extends NotificationPlugin {
 
     private AdjustContestsPluginBean initialBean = new AdjustContestsPluginBean();
     private AdjustContestsPluginBean updatedBean = new AdjustContestsPluginBean();
+    private static final int BUFFER = 4096;
 
     /**
      * Инициализация plugin'а
@@ -144,35 +147,114 @@ public class AdjustContestsPlugin extends NotificationPlugin {
                     updatedBean.setContestName(contestName.getText());
                 }
                 else if(e.getDocument() == beginDate.getDocument()) {
-
-                    //TODO: new SimpleDateFormat("dd.MM.yy").format(cd.begin.getTime())
-                    //TODO: new SimpleDateFormat("HH:mm").format(cd.begin.getTime())
                     try {
-                        Date bd = new SimpleDateFormat("dd.MM.yy").parse(beginDate.getText());
-                        //TODO implenemt lol (all)
-                        //int yy = bd.
+                        GregorianCalendar c1 = new GregorianCalendar();
+                        GregorianCalendar c2 = new GregorianCalendar();
+
+                        c1.setTime(updatedBean.getBeginDateTime());
+                        c2.setTime(new SimpleDateFormat("dd.MM.yy").parse(beginDate.getText()));
+
+                        c1.set(
+                                c2.get(GregorianCalendar.YEAR),
+                                c2.get(GregorianCalendar.MONTH),
+                                c2.get(GregorianCalendar.DAY_OF_MONTH),
+                                c1.get(GregorianCalendar.HOUR_OF_DAY),
+                                c1.get(GregorianCalendar.MINUTE),
+                                c1.get(GregorianCalendar.SECOND)
+                                );
+                        updatedBean.setBeginDateTime(c1.getTime());        
+
                     } catch (ParseException e1) {
-                        return;  //TODO:handle validation here
+                        //TODO: Handle a better validation here
+                        fireNotificationMessage(infoMessageLabel, "Введите корректную дату (дд.мм.гг) и время (чч:мм)", NotificationType.Error);
                     }
-                    updatedBean.setBeginDateTime(updatedBean.getBeginDateTime());
                 }
                 else if(e.getDocument() == beginTime.getDocument()) {
+                    try {
+                        GregorianCalendar c1 = new GregorianCalendar();
+                        GregorianCalendar c2 = new GregorianCalendar();
+
+                        c1.setTime(updatedBean.getBeginDateTime());
+                        c2.setTime(new SimpleDateFormat("HH:mm").parse(beginTime.getText()));
+
+                        c1.set(
+                                c1.get(GregorianCalendar.YEAR),
+                                c1.get(GregorianCalendar.MONTH),
+                                c1.get(GregorianCalendar.DAY_OF_MONTH),
+                                c2.get(GregorianCalendar.HOUR_OF_DAY),
+                                c2.get(GregorianCalendar.MINUTE),
+                                c1.get(GregorianCalendar.SECOND)
+                                );
+                        updatedBean.setBeginDateTime(c1.getTime());
+
+                    } catch (ParseException e1) {
+                        //TODO: Handle a better validation here
+                        fireNotificationMessage(infoMessageLabel, "Введите корректную дату (дд.мм.гг) и время (чч:мм)", NotificationType.Error);
+                    }
 
                 }
                 else if(e.getDocument() == endDate.getDocument()) {
+                    try {
+                        GregorianCalendar c1 = new GregorianCalendar();
+                        GregorianCalendar c2 = new GregorianCalendar();
 
+                        c1.setTime(updatedBean.getEndDateTime());
+                        c2.setTime(new SimpleDateFormat("dd.MM.yy").parse(endDate.getText()));
+
+                        c1.set(
+                                c2.get(GregorianCalendar.YEAR),
+                                c2.get(GregorianCalendar.MONTH),
+                                c2.get(GregorianCalendar.DAY_OF_MONTH),
+                                c1.get(GregorianCalendar.HOUR_OF_DAY),
+                                c1.get(GregorianCalendar.MINUTE),
+                                c1.get(GregorianCalendar.SECOND)
+                                );
+                        updatedBean.setEndDateTime(c1.getTime());
+
+                    } catch (ParseException e1) {
+                        //TODO: Handle a better validation here
+                        fireNotificationMessage(infoMessageLabel, "Введите корректную дату (дд.мм.гг) и время (чч:мм)", NotificationType.Error);
+                    }
                 }
                 else if(e.getDocument() == endTime.getDocument()) {
+                    try {
+                        GregorianCalendar c1 = new GregorianCalendar();
+                        GregorianCalendar c2 = new GregorianCalendar();
 
+                        c1.setTime(updatedBean.getEndDateTime());
+                        c2.setTime(new SimpleDateFormat("HH:mm").parse(endTime.getText()));
+
+                        c1.set(
+                                c1.get(GregorianCalendar.YEAR),
+                                c1.get(GregorianCalendar.MONTH),
+                                c1.get(GregorianCalendar.DAY_OF_MONTH),
+                                c2.get(GregorianCalendar.HOUR_OF_DAY),
+                                c2.get(GregorianCalendar.MINUTE),
+                                c1.get(GregorianCalendar.SECOND)
+                                );
+                        updatedBean.setEndDateTime(c1.getTime());
+
+                    } catch (ParseException e1) {
+                        //TODO: Handle a better validation here
+                        fireNotificationMessage(infoMessageLabel, "Введите корректную дату (дд.мм.гг) и время (чч:мм)", NotificationType.Error);
+                    }
                 }
-                else if(e.getDocument() == beginTime.getDocument()) {
+                else if(e.getDocument() == problemStatement.getDocument() || e.getDocument() == problemAnswer.getDocument()) {
+                    File res = new File(e.getDocument() == problemAnswer ? problemAnswer.getText() : problemStatement.getText());
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    ZipOutputStream zipOS = new ZipOutputStream(baos);
 
-                }
-                else if(e.getDocument() == problemStatement.getDocument()) {
+                    try {
+                        if (res.isFile()) {
+                            doZipFile(zipOS, "", res);
+                        }
+                        else
+                            archiveCatalog(res, zipOS, "");
+                    } catch (IOException e1) {
+                        fireNotificationMessage(infoMessageLabel, "Не удалось запаковать условие задачи", NotificationType.Error);
+                    }
 
-                }
-                else if(e.getDocument() == problemAnswer.getDocument()) {
-
+                    updatedBean.setProblemStatement(baos.toByteArray());
                 }
                 else if(e.getDocument() == problemName.getDocument()) {
 
@@ -186,6 +268,41 @@ public class AdjustContestsPlugin extends NotificationPlugin {
             }
         });
     }
+
+    private void archiveCatalog(File dir, ZipOutputStream zipOS, String zipPath) throws IOException {
+        String[] files = dir.list();
+
+        for (String fileName : files) {
+
+            File file = new File(dir.getAbsolutePath() + "/" + fileName);
+
+            if (file.isDirectory()) {
+                archiveCatalog(file, zipOS, zipPath + fileName + "/");
+            }
+            else{
+                doZipFile(zipOS, zipPath, file);
+            }
+        }
+    }
+
+    private void doZipFile(ZipOutputStream zipOS, String zipPath, File file) throws IOException {
+        String fileName = file.getName();
+        byte[] data = new byte[BUFFER];
+
+        BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
+        zipOS.putNextEntry(new ZipEntry(zipPath + fileName));
+
+        int count;
+
+        while((count = bis.read(data,0,BUFFER)) != -1){
+            zipOS.write(data, 0, count);
+        }
+
+        zipOS.closeEntry();
+
+        bis.close();
+    }
+
 
     /**
      * Method generated by IntelliJ IDEA GUI Designer
