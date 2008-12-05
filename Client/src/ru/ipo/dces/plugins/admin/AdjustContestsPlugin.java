@@ -13,10 +13,14 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.Document;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.Arrays;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -40,7 +44,6 @@ public class AdjustContestsPlugin extends NotificationPlugin {
     private JButton changeAnswerButton;
     private JList problemsList;
     private JButton addButton;
-    private JButton changeButton;
     private JButton deleteButton;
     private JButton downButton;
     private JButton upButton;
@@ -52,6 +55,9 @@ public class AdjustContestsPlugin extends NotificationPlugin {
     private AdjustContestsPluginBean updatedBean = new AdjustContestsPluginBean();
     private static final int BUFFER = 4096;
 
+    private DefaultListModel problemsListModel = new DefaultListModel();
+    private DefaultListModel contestsListModel = new DefaultListModel();
+
     /**
      * Инициализация plugin'а
      *
@@ -60,20 +66,146 @@ public class AdjustContestsPlugin extends NotificationPlugin {
     public AdjustContestsPlugin(PluginEnvironment env) {
         super(env);
 
-      $$$setupUI$$$();
-      env.setTitle("Настроить контест");
-      contestsList.addListSelectionListener(new ListSelectionListener() {
-        public void valueChanged(ListSelectionEvent e) {
-          //TODO: Refactor
-          fillDaFormWithData(42);
-        }
-      });
+        $$$setupUI$$$();
+        env.setTitle("Настроить контест");
+        contestsList.setModel(contestsListModel);
+        //TODO fill model with appropriate data and do it in the right place
+        contestsListModel.addElement("contest 1");
+        contestsListModel.addElement("contest 2");
+        contestsList.addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent e) {
+                //TODO: Refactor
+                fillDaFormWithData(42); //it's not used now
 
-      ownRegistrationRB.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          updatedBean.setIsByAdmin(ownRegistrationRB.isSelected()? ContestDescription.RegistrationType.Self : ContestDescription.RegistrationType.ByAdmins);
-        }
-      });
+            }
+        });
+
+        ownRegistrationRB.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                updatedBean.setIsByAdmin(ownRegistrationRB.isSelected() ? ContestDescription.RegistrationType.Self : ContestDescription.RegistrationType.ByAdmins);
+            }
+        });
+
+        addDocumentListener(contestName.getDocument());
+        addDocumentListener(contestDescription.getDocument());
+        addDocumentListener(beginDate.getDocument());
+        addDocumentListener(beginTime.getDocument());
+        addDocumentListener(endDate.getDocument());
+        addDocumentListener(endTime.getDocument());
+        addDocumentListener(clientPlugin.getDocument());
+        addDocumentListener(serverPlugin.getDocument());
+        addDocumentListener(problemAnswer.getDocument());
+        addDocumentListener(problemStatement.getDocument());
+        addDocumentListener(problemName.getDocument());
+
+        problemsList.setModel(problemsListModel);
+        problemsList.addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent e) {
+                ProblemsBean pb = (ProblemsBean) problemsList.getSelectedValue();
+
+                if (pb == null) {
+                    clientPlugin.setText("");
+                    serverPlugin.setText("");
+                    problemAnswer.setText("");
+                    problemStatement.setText("");
+                    problemName.setText("");
+                } else {
+                    clientPlugin.setText(pb.description.clientPluginAlias);
+                    serverPlugin.setText(pb.description.serverPluginAlias);
+                    problemName.setText(pb.description.name);
+                    //TODO: save humane name or get files from server if name was not set
+                    problemAnswer.setText("Некоторые данные");
+                    problemStatement.setText("Некоторые данные");
+                }
+            }
+        });
+        upButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int i = problemsList.getSelectedIndex();
+
+                if (i == 0 || i == -1)
+                    return;
+
+                ProblemsBean pb1 = (ProblemsBean) problemsListModel.getElementAt(i - 1);
+                ProblemsBean pb2 = (ProblemsBean) problemsListModel.getElementAt(i);
+
+                problemsListModel.setElementAt(pb1, i);
+                problemsListModel.setElementAt(pb2, i - 1);
+
+                ProblemDescription[] problemDescriptions = updatedBean.getProblemDescriptions();
+                ProblemDescription temp = problemDescriptions[i];
+                problemDescriptions[i] = problemDescriptions[i - 1];
+                problemDescriptions[i - 1] = temp;
+            }
+        });
+
+        downButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int i = problemsList.getSelectedIndex();
+
+                if (i >= problemsListModel.size() - 1 || i == -1)
+                    return;
+
+                ProblemsBean pb1 = (ProblemsBean) problemsListModel.getElementAt(i);
+                ProblemsBean pb2 = (ProblemsBean) problemsListModel.getElementAt(i + 1);
+
+                problemsListModel.setElementAt(pb1, i + 1);
+                problemsListModel.setElementAt(pb2, i);
+
+                ProblemDescription[] problemDescriptions = updatedBean.getProblemDescriptions();
+                ProblemDescription temp = problemDescriptions[i];
+                problemDescriptions[i] = problemDescriptions[i + 1];
+                problemDescriptions[i + 1] = temp;
+            }
+        });
+        addButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ProblemDescription pb = new ProblemDescription();
+
+                pb.id = -1;
+                pb.name = "Новая задача";
+                pb.serverPluginAlias = "";
+                pb.clientPluginAlias = "";
+                pb.statementData = null;
+                pb.answerData = null;
+
+
+                ProblemDescription[] pds = updatedBean.getProblemDescriptions();
+
+                ArrayList<ProblemDescription> l = new ArrayList<ProblemDescription>();
+                l.addAll(Arrays.asList(pds));
+                l.add(pb);
+                updatedBean.setProblemDescriptions(l.toArray(new ProblemDescription[l.size()]));
+
+                problemsListModel.addElement(new ProblemsBean(pb));
+                problemsList.setSelectedIndex(problemsListModel.size() - 1);
+            }
+        });
+        deleteButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+                int i = problemsList.getSelectedIndex();
+
+                if (i == -1)
+                    return;
+
+                ProblemDescription[] pds = updatedBean.getProblemDescriptions();
+
+                ArrayList<ProblemDescription> l = new ArrayList<ProblemDescription>();
+                l.addAll(Arrays.asList(pds));
+                l.remove(i);
+
+                updatedBean.setProblemDescriptions(l.toArray(new ProblemDescription[l.size()]));
+
+                problemsListModel.remove(i);
+                problemsList.setSelectedIndex(-1);
+            }
+        });
+        applyButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                sendDaChangedContestToServa();
+            }
+        });
     }
 
     private void createUIComponents() {
@@ -95,8 +227,37 @@ public class AdjustContestsPlugin extends NotificationPlugin {
 
         initialBean.setProblemDescriptions(gcdr.problems);
 
-        //TODO fill updated bean with the same data (as in initial bean)
+        updatedBean.setContestDescription(cd.description);
+        updatedBean.setContestName(cd.name);
+        updatedBean.setBeginDateTime(cd.start);
+        updatedBean.setEndDateTime(cd.finish);
+        updatedBean.setIsByAdmin(cd.registrationType);
+        updatedBean.setContestID(cd.contestID);
+
+        ProblemDescription[] pdCopy = Arrays.copyOf(gcdr.problems, gcdr.problems.length);
+        updatedBean.setProblemDescriptions(pdCopy);
+
         //TODO fill form controls with the values
+        contestName.setText(cd.name);
+        contestDescription.setText(cd.description);
+        beginDate.setText(new SimpleDateFormat("dd.MM.yy").format(cd.start));
+        beginTime.setText(new SimpleDateFormat("HH:mm").format(cd.start));
+        endDate.setText(new SimpleDateFormat("dd.MM.yy").format(cd.finish));
+        endTime.setText(new SimpleDateFormat("HH:mm").format(cd.finish));
+
+        problemsListModel.clear();
+
+        for (ProblemDescription problem : gcdr.problems) {
+            problemsListModel.addElement(new ProblemsBean(problem));
+        }
+
+        problemsList.setSelectedIndex(-1);
+
+        clientPlugin.setText("");
+        serverPlugin.setText("");
+        problemAnswer.setText("");
+        problemStatement.setText("");
+        problemName.setText("");
     }
 
     //private void sendDaChangedContestToServaCauseMyConnectIsGettin...() {
@@ -128,8 +289,7 @@ public class AdjustContestsPlugin extends NotificationPlugin {
         fillDaFormWithData(cd.contestID);
     }
 
-    private void AddDocumentListener(Document d)
-    {
+    private void addDocumentListener(Document d) {
         d.addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) {
                 doSmth(e);
@@ -142,15 +302,12 @@ public class AdjustContestsPlugin extends NotificationPlugin {
             public void changedUpdate(DocumentEvent e) {
             }
 
-            private void doSmth(DocumentEvent e)
-            {
+            private void doSmth(DocumentEvent e) {
                 if (e.getDocument() == contestDescription.getDocument()) {
                     updatedBean.setContestDescription(contestDescription.getText());
-                }
-                else if(e.getDocument() == contestName.getDocument()) {
+                } else if (e.getDocument() == contestName.getDocument()) {
                     updatedBean.setContestName(contestName.getText());
-                }
-                else if(e.getDocument() == beginDate.getDocument()) {
+                } else if (e.getDocument() == beginDate.getDocument()) {
                     try {
                         GregorianCalendar c1 = new GregorianCalendar();
                         GregorianCalendar c2 = new GregorianCalendar();
@@ -165,15 +322,14 @@ public class AdjustContestsPlugin extends NotificationPlugin {
                                 c1.get(GregorianCalendar.HOUR_OF_DAY),
                                 c1.get(GregorianCalendar.MINUTE),
                                 c1.get(GregorianCalendar.SECOND)
-                                );
-                        updatedBean.setBeginDateTime(c1.getTime());        
+                        );
+                        updatedBean.setBeginDateTime(c1.getTime());
 
                     } catch (ParseException e1) {
                         //TODO: Handle a better validation here
                         fireNotificationMessage(infoMessageLabel, "Введите корректную дату (дд.мм.гг) и время (чч:мм)", NotificationType.Error);
                     }
-                }
-                else if(e.getDocument() == beginTime.getDocument()) {
+                } else if (e.getDocument() == beginTime.getDocument()) {
                     try {
                         GregorianCalendar c1 = new GregorianCalendar();
                         GregorianCalendar c2 = new GregorianCalendar();
@@ -188,7 +344,7 @@ public class AdjustContestsPlugin extends NotificationPlugin {
                                 c2.get(GregorianCalendar.HOUR_OF_DAY),
                                 c2.get(GregorianCalendar.MINUTE),
                                 c1.get(GregorianCalendar.SECOND)
-                                );
+                        );
                         updatedBean.setBeginDateTime(c1.getTime());
 
                     } catch (ParseException e1) {
@@ -196,8 +352,7 @@ public class AdjustContestsPlugin extends NotificationPlugin {
                         fireNotificationMessage(infoMessageLabel, "Введите корректную дату (дд.мм.гг) и время (чч:мм)", NotificationType.Error);
                     }
 
-                }
-                else if(e.getDocument() == endDate.getDocument()) {
+                } else if (e.getDocument() == endDate.getDocument()) {
                     try {
                         GregorianCalendar c1 = new GregorianCalendar();
                         GregorianCalendar c2 = new GregorianCalendar();
@@ -212,15 +367,14 @@ public class AdjustContestsPlugin extends NotificationPlugin {
                                 c1.get(GregorianCalendar.HOUR_OF_DAY),
                                 c1.get(GregorianCalendar.MINUTE),
                                 c1.get(GregorianCalendar.SECOND)
-                                );
+                        );
                         updatedBean.setEndDateTime(c1.getTime());
 
                     } catch (ParseException e1) {
                         //TODO: Handle a better validation here
                         fireNotificationMessage(infoMessageLabel, "Введите корректную дату (дд.мм.гг) и время (чч:мм)", NotificationType.Error);
                     }
-                }
-                else if(e.getDocument() == endTime.getDocument()) {
+                } else if (e.getDocument() == endTime.getDocument()) {
                     try {
                         GregorianCalendar c1 = new GregorianCalendar();
                         GregorianCalendar c2 = new GregorianCalendar();
@@ -235,15 +389,20 @@ public class AdjustContestsPlugin extends NotificationPlugin {
                                 c2.get(GregorianCalendar.HOUR_OF_DAY),
                                 c2.get(GregorianCalendar.MINUTE),
                                 c1.get(GregorianCalendar.SECOND)
-                                );
+                        );
                         updatedBean.setEndDateTime(c1.getTime());
 
                     } catch (ParseException e1) {
                         //TODO: Handle a better validation here
                         fireNotificationMessage(infoMessageLabel, "Введите корректную дату (дд.мм.гг) и время (чч:мм)", NotificationType.Error);
                     }
-                }
-                else if(e.getDocument() == problemStatement.getDocument() || e.getDocument() == problemAnswer.getDocument()) {
+                } else if (e.getDocument() == problemStatement.getDocument() || e.getDocument() == problemAnswer.getDocument()) {
+
+                    ProblemsBean pb = (ProblemsBean) problemsList.getSelectedValue();
+
+                    if (pb == null)
+                        return;
+
                     File res = new File(e.getDocument() == problemAnswer ? problemAnswer.getText() : problemStatement.getText());
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     ZipOutputStream zipOS = new ZipOutputStream(baos);
@@ -251,23 +410,33 @@ public class AdjustContestsPlugin extends NotificationPlugin {
                     try {
                         if (res.isFile()) {
                             doZipFile(zipOS, "", res);
-                        }
-                        else
+                        } else
                             archiveCatalog(res, zipOS, "");
                     } catch (IOException e1) {
                         fireNotificationMessage(infoMessageLabel, "Не удалось запаковать условие задачи", NotificationType.Error);
                     }
 
-                    updatedBean.setProblemStatement(baos.toByteArray());
-                }
-                else if(e.getDocument() == problemName.getDocument()) {
-                  updatedBean.setContestName(contestName.getText());
-                }
-                else if(e.getDocument() == clientPlugin.getDocument()) {
-                  updatedBean.setClientPlugin(clientPlugin.getText());
-                }
-                else if(e.getDocument() == serverPlugin.getDocument()) {
-                  updatedBean.setServerPlugin(serverPlugin.getText());
+                    if (e.getDocument() == problemAnswer)
+                        pb.description.statementData = baos.toByteArray();
+                    else
+                        pb.description.answerData = baos.toByteArray();
+                } else if (e.getDocument() == problemName.getDocument()) {
+                    int i = problemsList.getSelectedIndex();
+                    if (i == -1) return;
+                    //ProblemsBean pb = (ProblemsBean) problemsList.getSselectedValue();
+                    ProblemsBean pb = (ProblemsBean) problemsListModel.getElementAt(i);
+
+                    problemsListModel.setElementAt(pb, i);
+                } else if (e.getDocument() == clientPlugin.getDocument()) {
+                    ProblemsBean pb = (ProblemsBean) problemsList.getSelectedValue();
+
+                    if (pb != null)
+                        pb.description.clientPluginAlias = clientPlugin.getText();
+                } else if (e.getDocument() == serverPlugin.getDocument()) {
+                    ProblemsBean pb = (ProblemsBean) problemsList.getSelectedValue();
+
+                    if (pb != null)
+                        pb.description.serverPluginAlias = serverPlugin.getText();
                 }
             }
         });
@@ -282,8 +451,7 @@ public class AdjustContestsPlugin extends NotificationPlugin {
 
             if (file.isDirectory()) {
                 archiveCatalog(file, zipOS, zipPath + fileName + "/");
-            }
-            else{
+            } else {
                 doZipFile(zipOS, zipPath, file);
             }
         }
@@ -298,7 +466,7 @@ public class AdjustContestsPlugin extends NotificationPlugin {
 
         int count;
 
-        while((count = bis.read(data,0,BUFFER)) != -1){
+        while ((count = bis.read(data, 0, BUFFER)) != -1) {
             zipOS.write(data, 0, count);
         }
 
@@ -306,22 +474,6 @@ public class AdjustContestsPlugin extends NotificationPlugin {
 
         bis.close();
     }
-
-  private class ProblemsBean{
-    private ProblemDescription description;
-
-    public ProblemDescription getDescription() {
-      return description;
-    }
-
-    public void setDescription(ProblemDescription description) {
-      this.description = description;
-    }
-
-    public String toString() {
-      return description == null ? "DCES error" : description.name;
-    }
-  }
 
     /**
      * Method generated by IntelliJ IDEA GUI Designer
@@ -336,6 +488,7 @@ public class AdjustContestsPlugin extends NotificationPlugin {
         contestsList = new JList();
         final DefaultListModel defaultListModel1 = new DefaultListModel();
         contestsList.setModel(defaultListModel1);
+        contestsList.setSelectionMode(0);
         CellConstraints cc = new CellConstraints();
         drawPanel.add(contestsList, cc.xywh(3, 4, 1, 39, CellConstraints.DEFAULT, CellConstraints.FILL));
         contestName = new JTextField();
@@ -422,6 +575,7 @@ public class AdjustContestsPlugin extends NotificationPlugin {
         label11.setText("Задачи");
         drawPanel.add(label11, cc.xywh(7, 17, 1, 11));
         problemsList = new JList();
+        problemsList.setSelectionMode(0);
         drawPanel.add(problemsList, cc.xywh(9, 17, 5, 11, CellConstraints.DEFAULT, CellConstraints.FILL));
         upButton = new JButton();
         upButton.setText("Вверх");
@@ -433,15 +587,6 @@ public class AdjustContestsPlugin extends NotificationPlugin {
         addButton = new JButton();
         addButton.setText("Добавить");
         drawPanel.add(addButton, cc.xy(15, 21));
-        changeButton = new JButton();
-        changeButton.setText("Изменить");
-        drawPanel.add(changeButton, cc.xy(15, 23));
-        deleteButton = new JButton();
-        deleteButton.setText("Удалить");
-        drawPanel.add(deleteButton, cc.xy(15, 25));
-        previewButton = new JButton();
-        previewButton.setText("Посмотреть");
-        drawPanel.add(previewButton, cc.xy(15, 27));
         applyButton = new JButton();
         applyButton.setText("Применить");
         drawPanel.add(applyButton, cc.xyw(7, 42, 9));
@@ -450,9 +595,15 @@ public class AdjustContestsPlugin extends NotificationPlugin {
         label12.setVerticalAlignment(0);
         drawPanel.add(label12, cc.xy(3, 3, CellConstraints.DEFAULT, CellConstraints.FILL));
         infoMessageLabel = new JLabel();
-        infoMessageLabel.setForeground(new Color(-52225));
-        infoMessageLabel.setText("Внимание! Внимание!");
+        infoMessageLabel.setForeground(new Color(-16777216));
+        infoMessageLabel.setText("");
         drawPanel.add(infoMessageLabel, cc.xyw(7, 3, 9, CellConstraints.DEFAULT, CellConstraints.FILL));
+        deleteButton = new JButton();
+        deleteButton.setText("Удалить");
+        drawPanel.add(deleteButton, cc.xy(15, 23));
+        previewButton = new JButton();
+        previewButton.setText("Посмотреть");
+        drawPanel.add(previewButton, cc.xy(15, 27));
         ButtonGroup buttonGroup;
         buttonGroup = new ButtonGroup();
         buttonGroup.add(ownRegistrationRB);
@@ -465,4 +616,29 @@ public class AdjustContestsPlugin extends NotificationPlugin {
     public JComponent $$$getRootComponent$$$() {
         return drawPanel;
     }
+
+    private class ProblemsBean {
+        private ProblemDescription description;
+
+        private ProblemsBean(ProblemDescription description) {
+            this.description = description;
+        }
+
+        public ProblemDescription getDescription() {
+            return description;
+        }
+
+        public void setDescription(ProblemDescription description) {
+            this.description = description;
+        }
+
+        public String toString() {
+            return description == null ? "DCES error" : description.name;
+        }
+    }
+
 }
+//TODO add a button "refresh contests list"
+//TODO when one changes problem's name, it is not updated in the problems list
+//TODO make all listeners sensible to user- versus GUI-generated events
+//TODO Debug :)
