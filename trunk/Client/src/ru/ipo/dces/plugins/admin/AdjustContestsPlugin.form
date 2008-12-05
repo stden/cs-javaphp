@@ -433,8 +433,8 @@
           <forms defaultalign-vert="false"/>
         </constraints>
         <properties>
-          <foreground color="-52225"/>
-          <text value="Внимание! Внимание!"/>
+          <foreground color="-16777216"/>
+          <text value=""/>
         </properties>
       </component>
     </children>
