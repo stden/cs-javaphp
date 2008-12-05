@@ -62,7 +62,7 @@ public class TestServer {
 
     // Логинимся как администратор
     ConnectToContestRequest cc = new ConnectToContestRequest();
-    cc.contestID = -1;
+    cc.contestID = 0;
     cc.login = "admin";
     cc.password = "adminpass";
     Controller.sessionID = server.doRequest(cc).sessionID;
@@ -75,7 +75,13 @@ public class TestServer {
     //invCont.contest.visible = false;
     assertNotNull(server.doRequest(invCont));
     // Добавляем пользователя
-    CreateUserRequest cur = new CreateUserRequest("denis", "denispass");
+    RegisterToContestRequest cur = new RegisterToContestRequest();
+    cur.sessionID = Controller.sessionID;
+    cur.contestID = 1; //TODO here is to be the id of just created contest
+    cur.user = new UserDescription();
+    cur.user.userType = UserDescription.UserType.Participant;
+    cur.user.login = "denis";
+    cur.user.password = "denispass";
     assertNotNull(server.doRequest(cur));
 
     // Запрашиваем доступные видимые контесты

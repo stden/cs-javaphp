@@ -18,7 +18,7 @@
 
     //get plugin_alias
     $problem_rows = mysql_query(
-                      sprintf("SELECT plugin_alias FROM problem WHERE id=%s", quote_smart($requsest->problemID))
+                      sprintf("SELECT server_plugin_alias, answer FROM problem WHERE id=%s", quote_smart($request->problemID))
                     , $con) or die("DB error 21. ".mysql_error());
     if (! ($problem_row = mysql_fetch_array($problem_rows)) ) throwError("Problem with specified ID not found");
 
@@ -34,9 +34,12 @@
     $answer_data = unserialize($problem_row['answer']) or die("DB error 22.");
 
     //get previous result
-    $previous_result_query = mysql_query("SELECT result FROM task_result WHERE ORDER BY submission_time DESC")
-                               or die("DB error 23. ".mysql_error());
-    $previous_result_row = mysql_fetch_array($last_result_query);
+    $previous_result_query = mysql_query(
+                               sprintf("SELECT result FROM task_result WHERE problem_id=%s AND user_id=%s ORDER BY submission_time DESC",
+                                       quote_smart($request->problemID),
+                                       quote_smart($user_id)
+                               ), $con) or die("DB error 23. ".mysql_error());
+    $previous_result_row = mysql_fetch_array($previous_result_query);
     if (!$previous_result_row)
       $previous_result = null;
     else
@@ -49,7 +52,6 @@
     $cur_php_time = getdate();
 
     $col_value = array();
-    $col_value['contest_id'] = $contest_id;
     $col_value['problem_id'] = $request->problemID;
     $col_value['user_id'] = $user_id;
     $col_value['submission'] = serialize($request->problemResult);

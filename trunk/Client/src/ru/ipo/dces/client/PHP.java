@@ -271,8 +271,9 @@ public class PHP {
         if (cls == HashMap.class) {
           ParameterizedType t = (ParameterizedType) cls.getGenericSuperclass();
           Type[] params = t.getActualTypeArguments();
-          Class K = (Class) params[0];
-          Class V = (Class) params[1];
+          //TODO to think a lot. Generics are not saved in Runtime, and we can not get real values for K and V
+          Class K = String.class; //(Class) params[0];
+          Class V = String.class;  //(Class) params[1];
           HashMap hm = (HashMap) cls.newInstance();
           for (int i = 0; i < length; i++)
             hm.put(unserialize(K, st), unserialize(V, st));
