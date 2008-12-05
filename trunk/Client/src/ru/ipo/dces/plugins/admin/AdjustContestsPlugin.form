@@ -76,6 +76,7 @@
         </constraints>
         <properties>
           <model/>
+          <selectionMode value="0"/>
         </properties>
       </component>
       <component id="e58e6" class="javax.swing.JTextField" binding="contestName">
@@ -351,7 +352,9 @@
           </grid>
           <forms defaultalign-vert="false"/>
         </constraints>
-        <properties/>
+        <properties>
+          <selectionMode value="0"/>
+        </properties>
       </component>
       <component id="3be1e" class="javax.swing.JButton" binding="upButton">
         <constraints>
@@ -381,33 +384,6 @@
           <text value="Добавить"/>
         </properties>
       </component>
-      <component id="e05c7" class="javax.swing.JButton" binding="changeButton">
-        <constraints>
-          <grid row="22" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="Изменить"/>
-        </properties>
-      </component>
-      <component id="168a9" class="javax.swing.JButton" binding="deleteButton">
-        <constraints>
-          <grid row="24" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="Удалить"/>
-        </properties>
-      </component>
-      <component id="b305" class="javax.swing.JButton" binding="previewButton">
-        <constraints>
-          <grid row="26" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="Посмотреть"/>
-        </properties>
-      </component>
       <component id="c4426" class="javax.swing.JButton" binding="applyButton">
         <constraints>
           <grid row="41" column="6" row-span="1" col-span="9" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
@@ -435,6 +411,24 @@
         <properties>
           <foreground color="-16777216"/>
           <text value=""/>
+        </properties>
+      </component>
+      <component id="168a9" class="javax.swing.JButton" binding="deleteButton">
+        <constraints>
+          <grid row="22" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="Удалить"/>
+        </properties>
+      </component>
+      <component id="b305" class="javax.swing.JButton" binding="previewButton">
+        <constraints>
+          <grid row="26" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="Посмотреть"/>
         </properties>
       </component>
     </children>

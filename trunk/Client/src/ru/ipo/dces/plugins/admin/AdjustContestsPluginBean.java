@@ -6,17 +6,12 @@ import ru.ipo.dces.clientservercommunication.ProblemDescription;
 import java.util.Date;
 
 public class AdjustContestsPluginBean {
+
+    private int contestID;
     private String contestName;
     private Date beginDateTime;
     private Date endDateTime;
     private String contestDescription;
-    private byte[] problemAnswer;
-    private byte[] problemStatement;
-    private String serverPlugin;
-    private String clientPlugin;
-    private String problemName;
-
-    private int contestID;
     private ProblemDescription[] problems;
     private ContestDescription.RegistrationType isByAdmin;
 
@@ -49,46 +44,6 @@ public class AdjustContestsPluginBean {
 
     public void setContestDescription(final String contestDescription) {
         this.contestDescription = contestDescription;
-    }
-
-    public byte[] getProblemAnswer() {
-        return problemAnswer;
-    }
-
-    public void setProblemAnswer(final byte[] problemAnswer) {
-        this.problemAnswer = problemAnswer;
-    }
-
-    public byte[] getProblemStatement() {
-        return problemStatement;
-    }
-
-    public void setProblemStatement(final byte[] problemStatement) {
-        this.problemStatement = problemStatement;
-    }
-
-    public String getServerPlugin() {
-        return serverPlugin;
-    }
-
-    public void setServerPlugin(final String serverPlugin) {
-        this.serverPlugin = serverPlugin;
-    }
-
-    public String getClientPlugin() {
-        return clientPlugin;
-    }
-
-    public void setClientPlugin(final String clientPlugin) {
-        this.clientPlugin = clientPlugin;
-    }
-
-    public String getProblemName() {
-        return problemName;
-    }
-
-    public void setProblemName(final String problemName) {
-        this.problemName = problemName;
     }
 
     public String compareContestDescriptions(String newDescr) {
