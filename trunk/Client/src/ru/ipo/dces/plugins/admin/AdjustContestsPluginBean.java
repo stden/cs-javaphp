@@ -10,8 +10,8 @@ public class AdjustContestsPluginBean {
     private Date beginDateTime;
     private Date endDateTime;
     private String contestDescription;
-    private String problemAnswer;
-    private String problemStatement;
+    private byte[] problemAnswer;
+    private byte[] problemStatement;
     private String serverPlugin;
     private String clientPlugin;
     private String problemName;
@@ -51,19 +51,19 @@ public class AdjustContestsPluginBean {
         this.contestDescription = contestDescription;
     }
 
-    public String getProblemAnswer() {
+    public byte[] getProblemAnswer() {
         return problemAnswer;
     }
 
-    public void setProblemAnswer(final String problemAnswer) {
+    public void setProblemAnswer(final byte[] problemAnswer) {
         this.problemAnswer = problemAnswer;
     }
 
-    public String getProblemStatement() {
+    public byte[] getProblemStatement() {
         return problemStatement;
     }
 
-    public void setProblemStatement(final String problemStatement) {
+    public void setProblemStatement(final byte[] problemStatement) {
         this.problemStatement = problemStatement;
     }
 
