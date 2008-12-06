@@ -3,11 +3,10 @@
 require("Debug.php");
 
 require("dces-settings.php");
-require("Utils.php");
 require("Directories.php");
 require("DataBase.php");
-require("Messages.php");
 require("Authorization.php");
+require("Messages.php");
 require("SQLDateTime.php");
 
 require("ReturnError.php");
@@ -72,6 +71,11 @@ switch(get_class($request)){
 	case 'SubmitSolutionRequest':
 	  require("SubmitSolution.php");
 	  $result = processSubmitSolutionRequest($request);
+	  break;
+
+	case 'RegisterToContestRequest':
+	  require("RegisterToContest.php");
+	  $result = processRegisterToContestRequest($request);
 	  break;
 
   default:

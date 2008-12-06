@@ -64,11 +64,44 @@ function removeSession($con, $session_id) {
 }
 
 function getUserRow($con, $user_id) {
-  $user_rights = mysql_query(
+  $user_rows = mysql_query(
                    sprintf("SELECT * FROM user WHERE id=%s", quote_smart($user_id))
                  , $con) or die('DB error 3: '.mysql_error());
-  $user_rights_row = mysql_fetch_array($user_rights) or die ("DB error 4 invalid session for user");
-  return $user_rights_row;
+  $user_row = mysql_fetch_array($user_rows) or die ("DB error 4 no user with id $user_id");
+  return $user_row;
 }
+
+function getRequestedContest($requested_contest_id, $user_contest_id, $user_type) {
+
+    if (!is_numeric($requested_contest_id)) return -1;
+    $requested_contest_id = (int)$requested_contest_id;
+
+    $contest_id = -1;
+    if ($requested_contest_id < 0 && $user_contest_id != 0)
+      $contest_id = $user_contest_id;
+    elseif ($requested_contest_id == $user_contest_id && $user_contest_id != 0)
+      $contest_id = $user_contest_id;
+    elseif ($requested_contest_id != $user_contest_id && $user_type === "SuperAdmin")
+      $contest_id = $requested_contest_id;
+
+    return $contest_id;
+  }
+
+  // Функция экранирования переменных
+  function quote_smart($value)
+  {
+    /*
+    // если magic_quotes_gpc включена - используем stripslashes
+    if (get_magic_quotes_gpc()) {
+        $value = stripslashes($value);
+    }
+    */
+    // Если переменная - число, то экранировать её не нужно
+    // если нет - то окружем её кавычками, и экранируем
+    if (!is_numeric($value)) {
+        $value = "'" . mysql_real_escape_string($value) . "'";
+    }
+    return $value;
+  }
 
 ?>
