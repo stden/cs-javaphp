@@ -2,7 +2,6 @@ package ru.ipo.dces.client;
 
 import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.pluginapi.Plugin;
-import ru.ipo.dces.plugins.EditContestPlugin;
 import ru.ipo.dces.plugins.LogoutPlugin;
 import ru.ipo.dces.plugins.admin.AdjustContestsPlugin;
 import ru.ipo.dces.plugins.admin.CreateContestPlugin;
@@ -29,11 +28,10 @@ public class Controller {
     clientDialog.addPluginToForm(pe, p);
   }
 
-  public static void login(String login, char[] password) {
+  public static void login(String login, char[] password, int contestID) {
     try {
       ConnectToContestRequest request = new ConnectToContestRequest();
-      //TODO get real contest ID
-      request.contestID = 0;
+      request.contestID = contestID;
       request.login = login;
       // TODO improve the security here
       request.password = new String(password);
@@ -48,44 +46,31 @@ public class Controller {
       switch (res.user.userType) {
         case ContestAdmin:
           PluginEnvironmentImpl ec = new PluginEnvironmentImpl(null);
-          clientDialog.addPluginToForm(ec, new EditContestPlugin(ec));
+          clientDialog.addPluginToForm(ec, new AdjustContestsPlugin(ec));
           break;
         case SuperAdmin:
-          switch (JOptionPane
-              .showOptionDialog(
-                  null,
-                  "Вы заходите как администратор сервера, выберите действия, которые хотите совершать",
-                  "Администратор сервера", JOptionPane.DEFAULT_OPTION,
-                  JOptionPane.QUESTION_MESSAGE, null, new String[] {
-                      "Настроить сервер", "Настроить контест", "Отмена" }, null)) {
-            case JOptionPane.CLOSED_OPTION:
-            case 2:
-              Controller.logout();
-              break;
-            case 0:
-              PluginEnvironmentImpl ms1 = new PluginEnvironmentImpl(null);
-              CreateContestPlugin ccp = new CreateContestPlugin(ms1);
-              clientDialog.addPluginToForm(ms1, ccp);
+          //add plugin CreateContest
+          PluginEnvironmentImpl ms1 = new PluginEnvironmentImpl(null);
+          CreateContestPlugin ccp = new CreateContestPlugin(ms1);
+          clientDialog.addPluginToForm(ms1, ccp);
 
+          //add plugin AdjustContest
+          PluginEnvironmentImpl ms2 = new PluginEnvironmentImpl(null);
+          AdjustContestsPlugin mcp = new AdjustContestsPlugin(ms2);
+          clientDialog.addPluginToForm(ms2, mcp);
 
-              PluginEnvironmentImpl ms2 = new PluginEnvironmentImpl(null);
-              AdjustContestsPlugin mcp = new AdjustContestsPlugin(ms2);
-              clientDialog.addPluginToForm(ms2, mcp);
-
-              //test sample plugin
-              PluginEnvironmentImpl spe = new PluginEnvironmentImpl(new ProblemDescription());
-              Plugin sp = PluginLoader.load("SamplePlugin", spe);
-              clientDialog.addPluginToForm(spe, sp);
-              break;
-            case 1:
-              PluginEnvironmentImpl aec = new PluginEnvironmentImpl(null);
-              clientDialog.addPluginToForm(aec, new EditContestPlugin(aec));
-              break;
-          }
+          //test sample plugin
+          PluginEnvironmentImpl spe = new PluginEnvironmentImpl(new ProblemDescription());
+          Plugin sp = PluginLoader.load("SamplePlugin", spe);
+          clientDialog.addPluginToForm(spe, sp);
           break;
         case Participant:
           // Получаем данные о задачах
           GetContestDataRequest rq = new GetContestDataRequest();
+          rq.contestID = -1;
+          rq.infoType = GetContestDataRequest.InformationType.ParticipantInfo;
+          rq.extendedData = null;
+          rq.sessionID = sessionID;
           GetContestDataResponse rs = Controller.server.doRequest(rq);
           for (ProblemDescription pd : rs.problems)
             addPlugin(pd);
@@ -121,6 +106,14 @@ public class Controller {
    * @param args the command line input
    */
   public static void main(String[] args) {
+    try {
+      UIManager.setLookAndFeel(
+            UIManager.getSystemLookAndFeelClassName());
+    } catch (Exception e) {
+      System.out.println("Failed to set system look and feel");
+      System.exit(1);
+    }
+
     server = new RealServer(Settings.getInstance().getHost());
     clientDialog = new ClientDialog();
     clientDialog.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

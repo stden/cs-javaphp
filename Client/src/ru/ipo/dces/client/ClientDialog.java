@@ -8,7 +8,7 @@ import javax.swing.*;
 import org.jdesktop.application.Application;
 
 import ru.ipo.dces.pluginapi.Plugin;
-import ru.ipo.dces.plugins.LoginPlugin;
+import ru.ipo.dces.plugins.admin.LoginPluginV2;
 
 public class ClientDialog extends JFrame {
 
@@ -28,7 +28,7 @@ public class ClientDialog extends JFrame {
   private static final long serialVersionUID = -5765060013197859310L;
 
   private JSplitPane        splitPane;
-  public LoginPlugin        adminPanel;
+  public LoginPluginV2 adminPanel;
   private JPanel            leftPanel        = null;
   private JPanel            rightPanel       = null;
 
@@ -93,7 +93,7 @@ public class ClientDialog extends JFrame {
     clearLeftPanel();
 
     PluginEnvironmentImpl pe = new PluginEnvironmentImpl(null);
-    addPluginToForm(pe, new LoginPlugin(pe));
+    addPluginToForm(pe, new LoginPluginV2(pe));
 
     // addPlugin("SamplePlugin");
   }
