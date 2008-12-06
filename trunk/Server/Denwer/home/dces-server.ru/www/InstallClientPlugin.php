@@ -4,8 +4,9 @@
     //no connection even needed
 
     //test file name to be a pure file name
-    //TODO implement it
-    //if ($request->clientPluginAlias)
+    if (strpos($request->clientPluginAlias, '/') ||
+        strpos($request->clientPluginAlias, '\\')
+       ) throwError("ClientPluginAlias has unallowed characters");
 
     $res = new InstallClientPluginResponse();
     $res->pluginInstaller =
