@@ -23,7 +23,7 @@ function processCreateContestRequest($request) {
   $col_value['description'] = $c->description;
   $col_value['reg_type'] = $c->registrationType;
   $col_value['user_data'] = serialize($c->data);
-  $col_value['name'] = serialize($c->compulsory);
+  $col_value['user_data_compulsory'] = serialize($c->compulsory);
 
   mysql_query(composeInsertQuery('contest', $col_value)) or die("DB error 5: ".mysql_error());
 
