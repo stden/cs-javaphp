@@ -175,7 +175,7 @@ public class TestServer {
     assertEquals("problem A", cdd.problems[0].name);
 
     InstallClientPluginRequest r2 = new InstallClientPluginRequest();
-    r2.sessionID = curUser.sessionID;
+    //r2.sessionID = curUser.sessionID;
     InstallClientPluginResponse dd = server.doRequest(r2);
     assertNotNull(dd);
 

@@ -78,6 +78,11 @@ switch(get_class($request)){
 	  $result = processRegisterToContestRequest($request);
 	  break;
 
+	case 'InstallClientPluginRequest':
+	  require("InstallClientPlugin.php");
+	  $result = processInstallClientPluginRequest($request);
+	  break;
+
   default:
 	  $result = 'Unknown message type "'.get_class($s).'"';
 };

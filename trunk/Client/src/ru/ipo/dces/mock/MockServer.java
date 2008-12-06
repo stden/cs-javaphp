@@ -161,7 +161,7 @@ public class MockServer implements ServerFacade {
   @Override
   public InstallClientPluginResponse doRequest(InstallClientPluginRequest r)
       throws ServerReturnedNoAnswer, ServerReturnedError {
-    getSession(r.sessionID);
+    //getSession(r.sessionID);
 
     return new InstallClientPluginResponse();
   }
