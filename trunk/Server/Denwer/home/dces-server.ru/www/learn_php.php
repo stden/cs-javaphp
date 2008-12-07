@@ -1,5 +1,24 @@
 <?php
 
+$line = '/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;*/';
+$line .= "\n";
+$is_last_line = ereg(".*;[[:space:]]*$", $line) || ereg(".*;\*/[[:space:]]*$", $line);
+var_dump($is_last_line);
+
+var_dump(ereg(".*;$", ";asdf;"));
+var_dump(ereg(".*;$", ";asdf"));
+var_dump(ereg(".*;$", "asdf;"));
+var_dump(ereg(".*;$", "asdf"));
+
+var_dump(ereg(".*;\*/$", ";asdf;*/"));
+var_dump(ereg(".*;\*/$", ";asdf"));
+var_dump(ereg(".*;\*/$", "asdf;"));
+var_dump(ereg(".*;\*/$", "asdf"));
+
+//$is_last_line = ereg(".*;$", $line) || ereg(".*;\*/$", $line);
+
+die();
+
 function f($a) {
  return array("asdf"=>$a);
 }

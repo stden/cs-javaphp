@@ -1,27 +1,39 @@
 package ru.ipo.dces.client;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.lang.reflect.Constructor;
 import java.net.*;
 
 import ru.ipo.dces.pluginapi.*;
+import ru.ipo.dces.clientservercommunication.InstallClientPluginRequest;
+import ru.ipo.dces.clientservercommunication.InstallClientPluginResponse;
 
 public class PluginLoader {
 
-  private static final String PLUGIN_DIR = "..";
-
-  public static Plugin load(String plugin_id, PluginEnvironment pe) {
+  public static Plugin load(String plugin_alias, PluginEnvironment pe) {
     try {
-      URL pluginURL = new File(PLUGIN_DIR + "/" + plugin_id + ".jar").toURI()
-          .toURL();
+      final File pluginFile = new File(Settings.getInstance().getPluginsDirectory() + "/" + plugin_alias + ".jar");
+      //test if file exists
+      if (!pluginFile.exists()) {
+        //load file from server
+        final InstallClientPluginRequest installRequest = new InstallClientPluginRequest();
+        installRequest.clientPluginAlias = plugin_alias;
+        final InstallClientPluginResponse installResponse = Controller.server.doRequest(installRequest);
+        FileOutputStream fout = new FileOutputStream(pluginFile);
+        fout.write(installResponse.pluginInstaller);
+        fout.close();
+      }
+      URL pluginURL = pluginFile.toURI().toURL();
+
+      //try load plugin class
       URLClassLoader classLoader = new URLClassLoader(new URL[] { pluginURL });
       Class<?> mainClass = classLoader.loadClass("ru.ipo.dces.plugin.Main");
       Constructor<?> constructor = mainClass
           .getConstructor(PluginEnvironment.class);
       return (Plugin) constructor.newInstance(pe);
     } catch (Exception e) {
-      // TODO Load plugin from server
-      // TODO разобрать cases
+      //something wrong with plugin
       return null;
     }
   }

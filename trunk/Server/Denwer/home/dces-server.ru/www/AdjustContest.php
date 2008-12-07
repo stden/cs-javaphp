@@ -90,11 +90,13 @@
       if (!is_null($p->statementData)) {
         if ($p->id == -1)
           $zip_file = $GLOBALS['dces_dir_temp'] . '/' . random_str(10) . '.zip';
-        else
-          $zip_file = $GLOBALS['dces_dir_problems'] . "/$p->{id}_statement.zip"; 
+        else {
+          $problem_id = $p->id;
+          $zip_file = $GLOBALS['dces_dir_problems'] . "/${problem_id}_statement.zip";
+        }
         $zip = openZip($p->statementData, $zip_file);
         if (!$zip) throwError("Statement data seems to be not a zip compressed set of files");
-        $col_value['statement'] = serialize($plugin->updateStatementData($zip));        
+        $col_value['statement'] = serialize((string)($plugin->updateStatementData($zip)));        
         if (!$col_value['statement']) throwError('Server plugin did not accept statement data');
         if ($p->id == -1)
           $temp_statement_zips[] = $zip_file;
@@ -105,8 +107,10 @@
       if (!is_null($p->answerData)) {
         if ($p->id == -1)
           $zip_file = $GLOBALS['dces_dir_temp'] . '/' . random_str(10) . '.zip';
-        else
-          $zip_file = $GLOBALS['dces_dir_problems'] . "/$p->{id}_answer.zip"; 
+        else {
+          $problem_id = $p->id;
+          $zip_file = $GLOBALS['dces_dir_problems'] . "/${problem_id}_answer.zip";
+        }
         $zip = openZip($p->answerData, $zip_file);
         if (!$zip) throwError("Answer data seems to be not a zip compressed set of files");
         $col_value['answer'] = serialize($plugin->updateAnswerData($zip));

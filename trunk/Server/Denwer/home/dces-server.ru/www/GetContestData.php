@@ -73,7 +73,7 @@
       //fill extended data: statement or statementData and answerData
       if (is_null($extended_data) || in_array($p->id,$extended_data)) {
         if ($info_type === "ParticipantInfo") {
-          $statement = unserialize($row['statement']) or die("DB error 17: ".mysql_error());
+          $statement = unserialize($row['statement']);
           $p->statement = $plugin->getStatement($user_id, $statement);
         }
         elseif ($info_type === "AdminInfo") {

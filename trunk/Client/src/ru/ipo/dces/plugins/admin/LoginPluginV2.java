@@ -37,6 +37,9 @@ public class LoginPluginV2 extends Plugin {
 
   private DefaultListModel contestsListModel = new DefaultListModel();
 
+  private final DefaultTableModel noRegistrationTableModel;
+  private final DefaultTableModel defaultTableModel;
+
   /**
    * Инициализация plugin'а
    *
@@ -57,8 +60,13 @@ public class LoginPluginV2 extends Plugin {
     //show contests
     refreshContests();
 
-    //do smth with table
-    registerToContestTable.setModel(new DefaultTableModel());
+    //set table models
+    noRegistrationTableModel
+            = new DefaultTableModel(new Object[][]{}, new Object[]{"Самостоятельная регистрация невозможна"});
+
+    defaultTableModel = new DefaultTableModel();
+
+    registerToContestTable.setModel(noRegistrationTableModel);
   }
 
   private void setListeners() {
@@ -77,13 +85,22 @@ public class LoginPluginV2 extends Plugin {
           loginEdit.setText("");
           loginAsAdminCheckBox.setSelected(false);
           contestDescriptionTextArea.setText("");
-          //TODO do something with TABLE
+          registerToContestTable.setModel(noRegistrationTableModel);
         } else {
           passwordEdit.setText("");
           loginEdit.setText("");
           loginAsAdminCheckBox.setSelected(false);
           contestDescriptionTextArea.setText(bean.contestDescription.description);
-          //TODO do something with TABLE
+
+          if (bean.contestDescription.registrationType == ContestDescription.RegistrationType.Self) {
+            registerToContestTable.setModel(defaultTableModel);
+
+            defaultTableModel.setColumnCount(0);
+            for (String item : bean.contestDescription.data)
+              defaultTableModel.addColumn(item, new Object[]{""});
+          } else {
+            registerToContestTable.setModel(noRegistrationTableModel);
+          }
         }
       }
     });
@@ -95,15 +112,32 @@ public class LoginPluginV2 extends Plugin {
         //get contest id
         if (loginAsAdminCheckBox.isSelected()) {
           contestID = 0;
-        }
-        else
-        {
+        } else {
           ContestListBean bean = (ContestListBean) contestsList.getSelectedValue();
           if (bean == null) return;
           contestID = bean.contestDescription.contestID;
         }
 
         Controller.login(loginEdit.getText(), passwordEdit.getPassword(), contestID);
+      }
+    });
+
+    registerToContestButton.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        ContestListBean bean = (ContestListBean) contestsList.getSelectedValue();
+        if (bean == null) return;
+
+        //TODO confirm the operation
+
+        //get user data
+        if (registerToContestTable.getModel() == noRegistrationTableModel) return;
+        String[] userData = new String[bean.contestDescription.data.length];
+        for (int i = 0; i < bean.contestDescription.data.length; i++)
+          userData[i] = defaultTableModel.getValueAt(0, i).toString();
+
+        Controller.registerAnonymouslyToContest(loginEdit.getText(), passwordEdit.getPassword(), bean.contestDescription.contestID, userData);
+
+        //TODO if succeeded, remove all data from table
       }
     });
   }
@@ -156,6 +190,9 @@ public class LoginPluginV2 extends Plugin {
     final JScrollPane scrollPane2 = new JScrollPane();
     loginPanel.add(scrollPane2, cc.xyw(3, 21, 7, CellConstraints.FILL, CellConstraints.FILL));
     registerToContestTable = new JTable();
+    registerToContestTable.putClientProperty("JTable.autoStartsEdit", Boolean.TRUE);
+    registerToContestTable.putClientProperty("Table.isFileList", Boolean.FALSE);
+    registerToContestTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
     scrollPane2.setViewportView(registerToContestTable);
     final JLabel label3 = new JLabel();
     label3.setText("Список доступных контестов");

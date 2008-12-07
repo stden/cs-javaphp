@@ -2,11 +2,15 @@ package ru.ipo.dces.pluginapi;
 
 import ru.ipo.dces.clientservercommunication.*;
 
+import java.util.HashMap;
+import java.io.File;
+import java.io.IOException;
+
 /**
  * Интерфейс, через который Plugin'ы обращаются к основной части клиента.
  * Окружение Plguin'а, которое соответствует одному Plugin'у
  */
-public interface PluginEnvironment {
+public interface PluginEnvironment {   
 
   // Системные плагины (не задачи) можно реализовать самим и не отдавать
   // третьей стороне. Если третья сторона захочет писать системные плагины, в
@@ -26,6 +30,15 @@ public interface PluginEnvironment {
    *          e.g. the contest is over or its problemset has changed and there is no more such problem 
    * @throws ru.ipo.dces.clientservercommunication.ServerReturnedNoAnswer if the serever is inaccessible
    */
-  public Response submitSolution(Request solution) throws ServerReturnedError, ServerReturnedNoAnswer;
+  public HashMap<String, String> submitSolution(HashMap<String, String> solution) throws ServerReturnedError, ServerReturnedNoAnswer;
+
+
+  /**
+   * Get folder that contains data to create problem statement 
+   * @return file, representing a directory of a problem
+   */
+  public File getProblemFolder();
+
+  public String getProblemName();
 
 }
