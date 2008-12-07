@@ -8,6 +8,9 @@ import ru.ipo.dces.plugins.admin.CreateContestPlugin;
 
 import javax.swing.*;
 import java.util.Date;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipEntry;
+import java.io.*;
 
 /**
  * Контроллер, который хранит данные о соединении с сервером и позволяет
@@ -71,9 +74,17 @@ public class Controller {
           rq.infoType = GetContestDataRequest.InformationType.ParticipantInfo;
           rq.extendedData = null;
           rq.sessionID = sessionID;
+          //TODO don't download problem statements if they are already downloaded
+          //TODO if server has new statements, they are to be downloaded
           GetContestDataResponse rs = Controller.server.doRequest(rq);
-          for (ProblemDescription pd : rs.problems)
+          for (ProblemDescription pd : rs.problems) {
+            File problemFolder = getProblemFolder(pd.id);
+            if (!problemFolder.exists()) {
+              problemFolder.mkdir();
+              unzip(pd.statement, problemFolder);
+            }
             addPlugin(pd);
+          }
       }
 
       // Добавляем Plugin выхода из контеста в самый конец
@@ -81,9 +92,30 @@ public class Controller {
       clientDialog.addPluginToForm(pe, new LogoutPlugin(pe));
 
     } catch (Exception e) {
-      JOptionPane.showMessageDialog(null, e.getMessage(), "Ошибка",
+      JOptionPane.showMessageDialog(null, "При попытке подключения к контесту произошла ошибка: " + e.getMessage(), "Ошибка",
           JOptionPane.ERROR_MESSAGE);
+      clientDialog.initialState();
     }
+  }
+
+  private static void unzip(byte[] zip, File folder) throws IOException {
+    int BUFFER = 4096;
+    BufferedOutputStream dest;
+    ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(zip));
+    ZipEntry entry;
+    while ((entry = zis.getNextEntry()) != null) {
+      int count;
+      byte data[] = new byte[BUFFER];
+      // write the files to the disk
+      FileOutputStream fos = new FileOutputStream(folder.getCanonicalPath() + '/' + entry.getName());
+      dest = new BufferedOutputStream(fos, BUFFER);
+      while ((count = zis.read(data, 0, BUFFER)) != -1) {
+        dest.write(data, 0, count);
+      }
+      dest.flush();
+      dest.close();
+    }
+    zis.close();
   }
 
   /** Завершение сессии пользователя */
@@ -126,7 +158,7 @@ public class Controller {
           .doRequest(new AvailableContestsRequest());
       return res.contests;
     } catch (Exception e) {
-      JOptionPane.showMessageDialog(null, e.getMessage(), "Ошибка",
+      JOptionPane.showMessageDialog(null, "При попытке обночить список контестов произошла ошибка: " + e.getMessage(), "Ошибка",
           JOptionPane.ERROR_MESSAGE);
       return new ContestDescription[]{};
     }
@@ -188,4 +220,28 @@ public class Controller {
         //TODO: implement this method
         return false;
     }
+
+  public static void registerAnonymouslyToContest(String login, char[] password, int contestID, String[] userData) {
+    RegisterToContestRequest r = new RegisterToContestRequest();
+    r.sessionID = null;
+    r.contestID = contestID;
+    r.user = new UserDescription();
+    r.user.dataValue = userData;
+    r.user.login = login;
+    r.user.password = new String(password);
+    r.user.userType = UserDescription.UserType.Participant;
+
+    try {
+      server.doRequest(r);
+      JOptionPane.showMessageDialog(null, "Регистрация прошла успешно");
+    } catch (ServerReturnedError serverReturnedError) {
+      JOptionPane.showMessageDialog(null, "Регистрация не удалась. Ответ: " + serverReturnedError.getMessage());
+    } catch (ServerReturnedNoAnswer serverReturnedNoAnswer) {
+      JOptionPane.showMessageDialog(null, "Отсутствует соединение с сервером, попробуйте позже");
+    }
+  }
+
+  public static File getProblemFolder(int problemID) {
+    return new File(Settings.getInstance().getProblemsDirectory() + '/' + problemID);
+  }
 }

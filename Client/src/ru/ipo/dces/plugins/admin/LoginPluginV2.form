@@ -111,6 +111,11 @@
           <component id="cf0de" class="javax.swing.JTable" binding="registerToContestTable">
             <constraints/>
             <properties/>
+            <clientProperties>
+              <JTable.autoStartsEdit class="java.lang.Boolean" value="true"/>
+              <Table.isFileList class="java.lang.Boolean" value="false"/>
+              <terminateEditOnFocusLost class="java.lang.Boolean" value="true"/>
+            </clientProperties>
           </component>
         </children>
       </scrollpane>

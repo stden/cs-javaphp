@@ -12,7 +12,9 @@ public abstract class Plugin extends JPanel {
 
   private PluginEnvironment env              = null;
 
-  /** Инициализация plugin'а */
+  /** Инициализация plugin'а
+   * @param env environment for the plugin
+   */
   public Plugin(PluginEnvironment env) {
     this.env = env;
   }
@@ -22,11 +24,17 @@ public abstract class Plugin extends JPanel {
   }
 
   /**
-   * Returns version of the plugin
-   * 
-   * @return version of the plugin
+   * Is called when plugin is activated, i.e. when it is shown
    */
-  int getVersion() {
-    return 1;
+  public void activate() {
+    //do nothing
   }
+
+  /**
+   * is Called when plugin is deactivated, i.e. when it is hide 
+   */
+  public void deactivate() {
+    //do nothing
+  }
+
 }

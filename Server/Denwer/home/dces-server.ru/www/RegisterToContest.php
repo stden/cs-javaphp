@@ -64,5 +64,5 @@
 
     return new AcceptedResponse();
   }
-
+//TODO prevent creation of users with empty logins and "weak" passwords
 ?>
