@@ -145,7 +145,7 @@ public class LoginPluginV2 extends Plugin {
   private void refreshContests() {
     contestsListModel.clear();
 
-    final ContestDescription[] contestDescriptions = Controller.reloadContests();
+    final ContestDescription[] contestDescriptions = Controller.getAvailableContests();
     for (ContestDescription cd : contestDescriptions)
       contestsListModel.addElement(new ContestListBean(cd));
 

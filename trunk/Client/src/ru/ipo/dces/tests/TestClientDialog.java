@@ -7,7 +7,7 @@ import javax.swing.*;
 import org.junit.*;
 
 import ru.ipo.dces.client.*;
-import ru.ipo.dces.client.ClientDialog.OpenPanelAction;
+import ru.ipo.dces.client.ClientDialog.OpenPanelActionListener;
 import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.mock.MockServer;
 
@@ -122,7 +122,7 @@ public class TestClientDialog {
       JButton btn = (JButton) c;
       assertNotNull(btn);
       // Для каждой кнопки указан обработчик, который открывает панель
-      OpenPanelAction action = (OpenPanelAction) btn.getActionListeners()[0];
+      ClientDialog.OpenPanelActionListener action = (OpenPanelActionListener) btn.getActionListeners()[0];
       assertNotNull(action);
     }
   }
