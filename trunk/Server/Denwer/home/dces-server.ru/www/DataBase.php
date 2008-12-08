@@ -69,20 +69,16 @@ function createDataBase($con) {
  {   
    $line = str_replace("___DCES___INITIAL___DB___", "$dbname", $line);
    $sql .= $line;
-   $is_last_line = ereg(";[[:space:]]$", $line) || ereg(";\*/[[:space:]]$", $line);
-   echo $line;
-   var_dump($is_last_line);
+   $is_last_line = ereg(".*;[[:space:]]*$", $line) || ereg(".*;\*/[[:space:]]*$", $line);
    if ($is_last_line) {
-     $sql = ereg_replace(";[[:space:]]$", "", $sql);
-     $sql = ereg_replace(";\*/[[:space:]]$", "\*/", $sql);
+     $sql = ereg_replace(";\*/[[:space:]]*$", "*/", $sql);
+     $sql = ereg_replace(";[[:space:]]*$", "", $sql);
        
      $queries[] = $sql;
      $sql = "";
    }
  }
 
- var_dump($queries);
- die();
  transaction($con, $queries); //Try to create a db. If fail, error will be noticed later
 }
 
