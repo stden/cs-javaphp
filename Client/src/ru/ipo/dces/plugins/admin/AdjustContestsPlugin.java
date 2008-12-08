@@ -69,14 +69,15 @@ public class AdjustContestsPlugin extends NotificationPlugin {
         $$$setupUI$$$();
         env.setTitle("Настроить контест");
         contestsList.setModel(contestsListModel);
-        //TODO fill model with appropriate data and do it in the right place
-        contestsListModel.addElement("contest 1");
-        contestsListModel.addElement("contest 2");
+
         contestsList.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e) {
-                //TODO: Refactor
-                fillDaFormWithData(42); //it's not used now
+                ContestBean selected = (ContestBean) contestsList.getSelectedValue();
 
+                if (selected == null)
+                    return;
+
+                fillDaFormWithData(selected.description.contestID);
             }
         });
 
@@ -103,6 +104,7 @@ public class AdjustContestsPlugin extends NotificationPlugin {
             public void valueChanged(ListSelectionEvent e) {
                 ProblemsBean pb = (ProblemsBean) problemsList.getSelectedValue();
 
+                updatedBean.setUpdateAllowed(false);
                 if (pb == null) {
                     clientPlugin.setText("");
                     serverPlugin.setText("");
@@ -117,6 +119,7 @@ public class AdjustContestsPlugin extends NotificationPlugin {
                     problemAnswer.setText("Некоторые данные");
                     problemStatement.setText("Некоторые данные");
                 }
+                updatedBean.setUpdateAllowed(true);
             }
         });
         upButton.addActionListener(new ActionListener() {
@@ -208,6 +211,14 @@ public class AdjustContestsPlugin extends NotificationPlugin {
         });
     }
 
+    private void refreshContestsList() {
+        contestsListModel.clear();
+        ContestDescription[] contestDescriptions = Controller.getAvailableContests();
+
+        for (ContestDescription description : contestDescriptions)
+            contestsListModel.addElement(new ContestBean(description));
+    }
+
     private void createUIComponents() {
         drawPanel = this;
     }
@@ -237,7 +248,7 @@ public class AdjustContestsPlugin extends NotificationPlugin {
         ProblemDescription[] pdCopy = Arrays.copyOf(gcdr.problems, gcdr.problems.length);
         updatedBean.setProblemDescriptions(pdCopy);
 
-        //TODO fill form controls with the values
+        updatedBean.setUpdateAllowed(false);
         contestName.setText(cd.name);
         contestDescription.setText(cd.description);
         beginDate.setText(new SimpleDateFormat("dd.MM.yy").format(cd.start));
@@ -258,6 +269,8 @@ public class AdjustContestsPlugin extends NotificationPlugin {
         problemAnswer.setText("");
         problemStatement.setText("");
         problemName.setText("");
+
+        updatedBean.setUpdateAllowed(true);
     }
 
     //private void sendDaChangedContestToServaCauseMyConnectIsGettin...() {
@@ -303,6 +316,9 @@ public class AdjustContestsPlugin extends NotificationPlugin {
             }
 
             private void doSmth(DocumentEvent e) {
+                if (!updatedBean.isUpdateAllowed())
+                    return;
+
                 if (e.getDocument() == contestDescription.getDocument()) {
                     updatedBean.setContestDescription(contestDescription.getText());
                 } else if (e.getDocument() == contestName.getDocument()) {
@@ -426,6 +442,11 @@ public class AdjustContestsPlugin extends NotificationPlugin {
                     //ProblemsBean pb = (ProblemsBean) problemsList.getSselectedValue();
                     ProblemsBean pb = (ProblemsBean) problemsListModel.getElementAt(i);
 
+                    if (pb == null)
+                        return;
+
+                    pb.description.name = problemName.getText();
+                    //refresh list by hack
                     problemsListModel.setElementAt(pb, i);
                 } else if (e.getDocument() == clientPlugin.getDocument()) {
                     ProblemsBean pb = (ProblemsBean) problemsList.getSelectedValue();
@@ -442,8 +463,14 @@ public class AdjustContestsPlugin extends NotificationPlugin {
         });
     }
 
+    public void activate() {
+        refreshContestsList();
+    }
+
     private void archiveCatalog(File dir, ZipOutputStream zipOS, String zipPath) throws IOException {
         String[] files = dir.list();
+
+        if (files == null) return;
 
         for (String fileName : files) {
 
@@ -484,7 +511,7 @@ public class AdjustContestsPlugin extends NotificationPlugin {
      */
     private void $$$setupUI$$$() {
         createUIComponents();
-        drawPanel.setLayout(new FormLayout("fill:max(d;4px):noGrow,left:4dlu:noGrow,fill:122dlu:noGrow,left:4dlu:noGrow,fill:2dlu:noGrow,left:4dlu:noGrow,fill:92dlu:noGrow,left:4dlu:noGrow,fill:72dlu:noGrow,left:4dlu:noGrow,fill:30dlu:noGrow,left:4dlu:noGrow,left:30dlu:noGrow,fill:max(d;4px):noGrow,fill:62dlu:noGrow,left:4dlu:noGrow,fill:max(d;4px):noGrow", "center:max(d;4px):noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:60dlu:noGrow,top:4dlu:noGrow,center:17dlu:noGrow,top:4dlu:noGrow,center:1px:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:28px:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:noGrow,top:4dlu:noGrow,center:0dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:5dlu:noGrow,center:16dlu:noGrow,top:5dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow"));
+        drawPanel.setLayout(new FormLayout("fill:max(d;4px):noGrow,left:4dlu:noGrow,fill:122dlu:noGrow,left:4dlu:grow,fill:2dlu:noGrow,left:4dlu:grow,fill:92dlu:noGrow,left:4dlu:grow(4.0),fill:72dlu:noGrow,left:4dlu:noGrow,fill:30dlu:noGrow,left:4dlu:noGrow,left:30dlu:noGrow,fill:max(d;4px):noGrow,fill:62dlu:noGrow,left:4dlu:noGrow,fill:max(d;4px):noGrow", "center:max(d;4px):noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:60dlu:noGrow,top:4dlu:noGrow,center:17dlu:noGrow,top:4dlu:noGrow,center:1px:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:28px:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:noGrow,top:4dlu:noGrow,center:0dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:5dlu:noGrow,center:16dlu:noGrow,top:5dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow"));
         contestsList = new JList();
         final DefaultListModel defaultListModel1 = new DefaultListModel();
         contestsList.setModel(defaultListModel1);
@@ -629,6 +656,26 @@ public class AdjustContestsPlugin extends NotificationPlugin {
         }
 
         public void setDescription(ProblemDescription description) {
+            this.description = description;
+        }
+
+        public String toString() {
+            return description == null ? "DCES error" : description.name;
+        }
+    }
+
+    private class ContestBean {
+        private ContestDescription description;
+
+        private ContestBean(ContestDescription description) {
+            this.description = description;
+        }
+
+        public ContestDescription getDescription() {
+            return description;
+        }
+
+        public void setDescription(ContestDescription description) {
             this.description = description;
         }
 

@@ -152,7 +152,7 @@ public class Controller {
     clientDialog.setVisible(true);
   }
 
-  public static ContestDescription[] reloadContests() {
+  public static ContestDescription[] getAvailableContests() {
     try {
       AvailableContestsResponse res = Controller.server
           .doRequest(new AvailableContestsRequest());
@@ -208,6 +208,7 @@ public class Controller {
         cd.description = "Fake contest description";
         cd.start = new Date();
         cd.finish = new Date(new Date().getTime() + 1000 * 60 * 60);
+        cd.registrationType = ContestDescription.RegistrationType.ByAdmins;
 
         GetContestDataResponse response = new GetContestDataResponse();
         response.contest = cd;
@@ -217,8 +218,14 @@ public class Controller {
     }
 
     public static boolean adjustContestData(AdjustContestRequest acr) {
-        //TODO: implement this method
-        return false;
+        try {
+            server.doRequest(acr);
+        } catch (ServerReturnedError serverReturnedError) {
+            return false; //TODO create process of notifying a user of errors
+        } catch (ServerReturnedNoAnswer serverReturnedNoAnswer) {
+            return false;
+        }
+        return true;
     }
 
   public static void registerAnonymouslyToContest(String login, char[] password, int contestID, String[] userData) {

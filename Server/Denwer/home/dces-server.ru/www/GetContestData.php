@@ -74,10 +74,12 @@
       if (is_null($extended_data) || in_array($p->id,$extended_data)) {
         if ($info_type === "ParticipantInfo") {
           $statement = unserialize($row['statement']);
+          //TODO process error: statement not found and return correct error info
           $p->statement = $plugin->getStatement($user_id, $statement);
         }
         elseif ($info_type === "AdminInfo") {
           if ($user_type === "Participant") throwError("You don't have permissions to get admin info for a problem");
+          //TODO process error: statement not found and return correct error info
           $p->statementData = $plugin->getStatementData($p->id);
           $p->answerData = $plugin->getAnswerData($p->id);
         }

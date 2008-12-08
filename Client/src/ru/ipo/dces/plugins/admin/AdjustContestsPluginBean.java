@@ -15,6 +15,16 @@ public class AdjustContestsPluginBean {
     private ProblemDescription[] problems;
     private ContestDescription.RegistrationType isByAdmin;
 
+    private boolean updateAllowed = false;
+
+    public boolean isUpdateAllowed() {
+        return updateAllowed;
+    }
+
+    public void setUpdateAllowed(boolean updateAllowed) {
+        this.updateAllowed = updateAllowed;
+    }
+
     public int getContestID() {
         return contestID;
     }

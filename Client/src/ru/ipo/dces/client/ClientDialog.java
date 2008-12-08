@@ -12,16 +12,29 @@ import ru.ipo.dces.plugins.admin.LoginPluginV2;
 
 public class ClientDialog extends JFrame {
 
-  public class OpenPanelAction implements ActionListener {
+  public class OpenPanelActionListener implements ActionListener {
     private final JPanel panel;
 
-    public OpenPanelAction(JPanel panel) {
+    public OpenPanelActionListener(JPanel panel) {
       this.panel = panel;
     }
 
     public void actionPerformed(ActionEvent evt) {
-      rightPanel = panel;
-      splitPane.add(panel, JSplitPane.RIGHT);
+        rightPanel = panel;
+
+        //TODO: create a dialog of correct size
+        /*Dimension preferredPluginSize = panel.getPreferredSize();
+        Dimension preferredMenuSize = leftPanel.getPreferredSize();
+
+        int hDelta = ClientDialog.this.getHeight() - ClientDialog.this.getContentPane().getHeight();
+        int wDelta = ClientDialog.this.getWidth() - ClientDialog.this.getContentPane().getWidth();
+
+        ClientDialog.this.setSize(
+                (int)(preferredPluginSize.getWidth() + preferredMenuSize.getWidth() + wDelta + 30),
+                (int)Math.max(preferredPluginSize.getHeight(), preferredMenuSize.getHeight() + hDelta)
+        );*/
+
+        splitPane.add(panel, JSplitPane.RIGHT);
     }
   }
 
@@ -38,7 +51,7 @@ public class ClientDialog extends JFrame {
   }
 
   void addPluginToForm(PluginEnvironmentImpl pe, Plugin p) {
-    pe.getButton().addActionListener(new OpenPanelAction(p));
+    pe.getButton().addActionListener(new OpenPanelActionListener(p));
     leftPanel.add(pe.getButton(), BorderLayout.NORTH);
     // Показываем сразу первый Plugin
     if (rightPanel == null)
@@ -73,7 +86,7 @@ public class ClientDialog extends JFrame {
           initialState();
         }
       }
-      setSize(800, 300);
+      setSize(800, 600);
       // Разместить окно по центру экрана
       setLocationRelativeTo(null);
       setTitle("DCES Client");
