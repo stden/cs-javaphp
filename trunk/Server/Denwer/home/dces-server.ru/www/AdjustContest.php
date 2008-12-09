@@ -33,6 +33,8 @@
   }
 
   function queriesToAdjustProblems($con, $problems, $contest_id, &$temp_dirs, &$temp_statement_zips, &$temp_answer_zips) {
+    $prfx = $GLOBALS['dces_mysql_prefix'];
+
     $changed_probs = array(); //problems that will be changed by request
     $queries = array();
 
@@ -66,15 +68,19 @@
         $plugin_alias = $p->serverPluginAlias;
       if ($p->id != -1 && is_null($p->serverPluginAlias) ) {
         $rows = mysql_query(
-                  sprintf("SELECT server_plugin_alias FROM problem WHERE id=%s", quote_smart($p->id))
+                  sprintf("SELECT server_plugin_alias FROM ${prfx}problem WHERE id=%s", quote_smart($p->id))
                 , $con) or die("DB error 12".mysql_error());
         $row = mysql_fetch_array($rows, $con) or throwError("Problem with specified ID not found");        
         $plugin_alias = $row['server_plugin_alias'];
       }
-      elseif ($p->id == -1 && is_null($p->serverPluginAlias)) throwError("Server plugin not specified in new creating task");
+      elseif ($p->id == -1 && is_null($p->serverPluginAlias)) throwError("Server plugin not specified in the task being created");
 
       //get current server plugin
-      require_once($GLOBALS['dces_dir_server_plugins'] . '/' . $plugin_alias . '.php');
+      //TODO improve security here
+      $server_plugin_file = $GLOBALS['dces_dir_server_plugins'] . '/' . $plugin_alias . '.php';
+      if (!file_exists($server_plugin_file)) throwError("Server plugin '$plugin_alias' not found");
+      require_once($server_plugin_file);
+              
       if ($p->id == -1) {
         //We are to create a directory for new problem
         //New dir is temporary because we don't know problem id 
@@ -95,9 +101,10 @@
           $zip_file = $GLOBALS['dces_dir_problems'] . "/${problem_id}_statement.zip";
         }
         $zip = openZip($p->statementData, $zip_file);
-        if (!$zip) throwError("Statement data seems to be not a zip compressed set of files");
-        $col_value['statement'] = serialize((string)($plugin->updateStatementData($zip)));        
-        if (!$col_value['statement']) throwError('Server plugin did not accept statement data');
+        if ($zip === false) throwError("Statement data seems to be not a zip compressed set of files");
+        $data_updated = $plugin->updateStatementData($zip);
+        if ($data_updated === false) throwError('Server plugin did not accept statement data');
+        $col_value['statement'] = serialize((string)$data_updated);        
         if ($p->id == -1)
           $temp_statement_zips[] = $zip_file;
       } else $all_set = false;
@@ -112,9 +119,10 @@
           $zip_file = $GLOBALS['dces_dir_problems'] . "/${problem_id}_answer.zip";
         }
         $zip = openZip($p->answerData, $zip_file);
-        if (!$zip) throwError("Answer data seems to be not a zip compressed set of files");
-        $col_value['answer'] = serialize($plugin->updateAnswerData($zip));
-        if (!$col_value['answer']) throwError('Server plugin did not accept answer data');
+        if ($zip === false) throwError("Answer data seems to be not a zip compressed set of files");
+        $data_updated = $plugin->updateAnswerData($zip);
+        if ($data_updated === false) throwError('Server plugin did not accept answer data');
+        $col_value['answer'] = serialize((string)$data_updated);
         if ($p->id == -1)
           $temp_answer_zips[] = $zip_file;
       } else $all_set = false;
@@ -125,7 +133,7 @@
       if ($p->id == -1)
       {
         //create new task
-        if (!all_set) throwError("An attempt to insert a new Problem with not all parameters set");
+        if (!$all_set) throwError("An attempt to insert a new Problem with not all parameters set");
 
         $queries[] = composeInsertQuery('problem', $col_value);
       }
@@ -140,7 +148,7 @@
 
     //queries to remove problems
     $res = mysql_query(
-             sprintf("SELECT id FROM problem WHERE contest_id=%s", quote_smart($contest_id))
+             sprintf("SELECT id FROM ${prfx}problem WHERE contest_id=%s", quote_smart($contest_id))
            , $con) or die("DB error 13: ".mysql_error());
     while ($row = mysql_fetch_array($res))
       if ($changed_probs[$row['id']] != 1) {
@@ -190,15 +198,18 @@
       $inserted_ids = array();
       transaction($con, $queries, $inserted_ids) or die("Failed to make update, db error or incorrect data");
 
+      //server 2003 enterprise ru 32 SP2
+
       //rename temporary dirs
-      //var_dump(count($temp_dirs));
-      //var_dump(count($inserted_ids));
-      //var_dump(count($temp_statement_zips));
-      //var_dump(count($temp_answer_zips));
-      //die();
       if ( count($temp_dirs) != count($inserted_ids) ||
            count($temp_dirs) != count($temp_statement_zips) ||
-           count($temp_dirs) != count($temp_answer_zips) ) die("Assertion failed, call developers");
+           count($temp_dirs) != count($temp_answer_zips) ) {
+             var_dump($temp_dirs);
+             var_dump($inserted_ids);
+             var_dump($temp_statement_zips);
+             var_dump($temp_answer_zips);
+             die("Assertion failed, call developers");
+           }
 
       for ($i = 0; $i < count($temp_dirs); $i++) {
         $temp_dir = $temp_dirs[$i];

@@ -13,28 +13,28 @@ import ru.ipo.dces.plugins.admin.LoginPluginV2;
 public class ClientDialog extends JFrame {
 
   public class OpenPanelActionListener implements ActionListener {
-    private final JPanel panel;
+    private final Plugin panel;
 
-    public OpenPanelActionListener(JPanel panel) {
+    public OpenPanelActionListener(Plugin panel) {
       this.panel = panel;
     }
 
     public void actionPerformed(ActionEvent evt) {
-        rightPanel = panel;
+      //TODO: create a dialog of correct size
+      /*Dimension preferredPluginSize = panel.getPreferredSize();
+      Dimension preferredMenuSize = leftPanel.getPreferredSize();
 
-        //TODO: create a dialog of correct size
-        /*Dimension preferredPluginSize = panel.getPreferredSize();
-        Dimension preferredMenuSize = leftPanel.getPreferredSize();
+      int hDelta = ClientDialog.this.getHeight() - ClientDialog.this.getContentPane().getHeight();
+      int wDelta = ClientDialog.this.getWidth() - ClientDialog.this.getContentPane().getWidth();
 
-        int hDelta = ClientDialog.this.getHeight() - ClientDialog.this.getContentPane().getHeight();
-        int wDelta = ClientDialog.this.getWidth() - ClientDialog.this.getContentPane().getWidth();
+      ClientDialog.this.setSize(
+              (int)(preferredPluginSize.getWidth() + preferredMenuSize.getWidth() + wDelta + 30),
+              (int)Math.max(preferredPluginSize.getHeight(), preferredMenuSize.getHeight() + hDelta)
+      );*/
 
-        ClientDialog.this.setSize(
-                (int)(preferredPluginSize.getWidth() + preferredMenuSize.getWidth() + wDelta + 30),
-                (int)Math.max(preferredPluginSize.getHeight(), preferredMenuSize.getHeight() + hDelta)
-        );*/
-
-        splitPane.add(panel, JSplitPane.RIGHT);
+      if (rightPanel != null) rightPanel.deactivate();
+      setRightPanel(panel);
+      if (rightPanel != null) rightPanel.activate();
     }
   }
 
@@ -43,25 +43,27 @@ public class ClientDialog extends JFrame {
   private JSplitPane        splitPane;
   public LoginPluginV2 adminPanel;
   private JPanel            leftPanel        = null;
-  private JPanel            rightPanel       = null;
+  private Plugin            rightPanel       = null;
 
   public ClientDialog() {
     super();
     initGUI();
   }
 
-  void addPluginToForm(PluginEnvironmentImpl pe, Plugin p) {
+  public void addPluginToForm(PluginEnvironmentImpl pe, Plugin p) {
     pe.getButton().addActionListener(new OpenPanelActionListener(p));
     leftPanel.add(pe.getButton(), BorderLayout.NORTH);
     // Показываем сразу первый Plugin
-    if (rightPanel == null)
+    if (rightPanel == null) {
       setRightPanel(p);
+      p.activate();
+    }
   }
 
   /** Удалить все Plugin'ы */
   public void clearLeftPanel() {
     leftPanel.removeAll();
-    setRightPanel(new JPanel());
+    setRightPanel(new Plugin(null) {});
     rightPanel = null;
   }
 
@@ -111,7 +113,7 @@ public class ClientDialog extends JFrame {
     // addPlugin("SamplePlugin");
   }
 
-  private void setRightPanel(JPanel panel) {
+  private void setRightPanel(Plugin panel) {
     rightPanel = panel;
     splitPane.add(panel, JSplitPane.RIGHT);
   }

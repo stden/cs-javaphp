@@ -1,13 +1,13 @@
 package ru.ipo.dces.tests;
 
 import java.awt.Component;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
 import org.junit.*;
 
 import ru.ipo.dces.client.*;
-import ru.ipo.dces.client.ClientDialog.OpenPanelActionListener;
 import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.mock.MockServer;
 
@@ -21,7 +21,7 @@ public class TestClientDialog {
    * Перед запуском каждого теста создаём MockServer и главное окно клиента для
    * тестирования
    * 
-   * @throws Exception
+   * @throws Exception if err
    */
   @Before
   public void setUp() throws Exception {
@@ -122,7 +122,7 @@ public class TestClientDialog {
       JButton btn = (JButton) c;
       assertNotNull(btn);
       // Для каждой кнопки указан обработчик, который открывает панель
-      ClientDialog.OpenPanelActionListener action = (OpenPanelActionListener) btn.getActionListeners()[0];
+      ActionListener action = btn.getActionListeners()[0];
       assertNotNull(action);
     }
   }

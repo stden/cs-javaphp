@@ -266,7 +266,7 @@
         <properties>
           <editable value="false"/>
           <enabled value="true"/>
-          <text value="Условие"/>
+          <text value=""/>
         </properties>
       </component>
       <component id="f313" class="javax.swing.JButton" binding="changeStatementButton">

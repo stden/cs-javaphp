@@ -31,6 +31,8 @@ function transaction($con, $queries, &$inserted_ids = null) {
 //returns query string
 function composeInsertQuery($table, $col_value) {
 
+  $prfx = $GLOBALS['dces_mysql_prefix'];
+
   if (count($col_value) == 0) return "";
 
   $cols = "";
@@ -42,12 +44,15 @@ function composeInsertQuery($table, $col_value) {
   $cols = rtrim($cols,',');
   $vals = rtrim($vals,',');
 
-  return "INSERT INTO $table ($cols) VALUES ($vals)";
+  return "INSERT INTO $prfx$table ($cols) VALUES ($vals)";
 
 }
 
 //returns query string
 function composeUpdateQuery($table, $col_value, $where) {
+
+  $prfx = $GLOBALS['dces_mysql_prefix'];
+
   if (count($col_value) == 0) return "";
 
   $values = "";
@@ -56,7 +61,7 @@ function composeUpdateQuery($table, $col_value, $where) {
   }  
   $values = rtrim($values,',');
 
-  return "UPDATE $table SET $values WHERE $where";
+  return "UPDATE $prfx$table SET $values WHERE $where";
 }
 
 function createDataBase($con) {

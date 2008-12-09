@@ -1,5 +1,16 @@
 <?php
 
+    var_dump(ZIPARCHIVE::ER_EXISTS);
+    var_dump(ZIPARCHIVE::ER_INCONS);
+    var_dump(ZIPARCHIVE::ER_INVAL);
+    var_dump(ZIPARCHIVE::ER_MEMORY);
+    var_dump(ZIPARCHIVE::ER_NOENT);
+    var_dump(ZIPARCHIVE::ER_NOZIP);
+    var_dump(ZIPARCHIVE::ER_OPEN);
+    var_dump(ZIPARCHIVE::ER_READ);
+    var_dump(ZIPARCHIVE::ER_SEEK);
+die();
+
 $line = '/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;*/';
 $line .= "  \n";
 var_dump(ereg(".*;\*/[[:space:]]*$", $line));

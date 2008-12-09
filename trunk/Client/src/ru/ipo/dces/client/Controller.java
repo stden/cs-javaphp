@@ -61,11 +61,6 @@ public class Controller {
           PluginEnvironmentImpl ms2 = new PluginEnvironmentImpl(null);
           AdjustContestsPlugin mcp = new AdjustContestsPlugin(ms2);
           clientDialog.addPluginToForm(ms2, mcp);
-
-          //test sample plugin
-          PluginEnvironmentImpl spe = new PluginEnvironmentImpl(new ProblemDescription());
-          Plugin sp = PluginLoader.load("SamplePlugin", spe);
-          clientDialog.addPluginToForm(spe, sp);
           break;
         case Participant:
           // Получаем данные о задачах
@@ -182,44 +177,26 @@ public class Controller {
   }
 
     public static GetContestDataResponse getContestData(int contestID) {
-        ProblemDescription pd1 = new ProblemDescription();
-        pd1.answerData = null;
-        pd1.clientPluginAlias = "SamplePlugin";
-        pd1.id = 1;
-        pd1.name = "ЗА УДАЧУ!";
-        pd1.serverPluginAlias = "ComparePlugin";
-        pd1.statement = null;
-        pd1.statementData = null;
+      GetContestDataRequest gcdr = new GetContestDataRequest();
+      gcdr.contestID = contestID;
+      gcdr.extendedData = null;
+      gcdr.infoType = GetContestDataRequest.InformationType.NoInfo;
+      gcdr.sessionID = sessionID;
 
-        ProblemDescription pd2 = new ProblemDescription();
-        pd2.answerData = null;
-        pd2.clientPluginAlias = "SamplePlugin2";
-        pd2.id = 2;
-        pd2.name = "ЗА УДАЧУ! 2";
-        pd2.serverPluginAlias = "ComparePlugin2";
-        pd2.statement = null;
-        pd2.statementData = null;
-
-        ProblemDescription[] pds = new ProblemDescription[]{pd1, pd2};
-
-        ContestDescription cd = new ContestDescription();
-        cd.contestID = contestID;
-        cd.name = "Fake contest";
-        cd.description = "Fake contest description";
-        cd.start = new Date();
-        cd.finish = new Date(new Date().getTime() + 1000 * 60 * 60);
-        cd.registrationType = ContestDescription.RegistrationType.ByAdmins;
-
-        GetContestDataResponse response = new GetContestDataResponse();
-        response.contest = cd;
-        response.problems = pds;
-
-        return response;
+      try {
+        return server.doRequest(gcdr);
+      } catch (ServerReturnedError serverReturnedError) {
+        return null;
+      } catch (ServerReturnedNoAnswer serverReturnedNoAnswer) {
+        JOptionPane.showMessageDialog(null, "Сервер не отвечает");
+        return null;
+      }
     }
 
     public static boolean adjustContestData(AdjustContestRequest acr) {
         try {
-            server.doRequest(acr);
+          acr.sessionID = sessionID;
+          server.doRequest(acr);
         } catch (ServerReturnedError serverReturnedError) {
             return false; //TODO create process of notifying a user of errors
         } catch (ServerReturnedNoAnswer serverReturnedNoAnswer) {

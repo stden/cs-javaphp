@@ -13,10 +13,12 @@ public class ServerReturnedError extends Exception {
 
     public ServerReturnedError(String message) {
         super(message);
+        System.out.println("Server error answer = " + message + "\n");
     }
 
     public ServerReturnedError(String message, Throwable cause) {
         super(message, cause);
+        System.out.println("Server error answer = " + message + "\n");
     }
 
     public ServerReturnedError(Throwable cause) {
