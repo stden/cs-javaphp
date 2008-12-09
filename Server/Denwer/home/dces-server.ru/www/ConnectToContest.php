@@ -1,11 +1,12 @@
 <?php
 
-function processConnectToContestRequest($request) {  
+function processConnectToContestRequest($request) {
+  $prfx = $GLOBALS['dces_mysql_prefix'];
   $con = connectToDB();
 
   //find user in table
   $contest_rows = mysql_query(
-                    sprintf("SELECT * FROM user WHERE login=%s AND contest_id=%s",
+                    sprintf("SELECT * FROM ${prfx}user WHERE login=%s AND contest_id=%s",
                             quote_smart($request->login),
                             quote_smart($request->contestID)
                            )

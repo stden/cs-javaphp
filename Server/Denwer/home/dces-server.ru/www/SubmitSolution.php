@@ -1,6 +1,8 @@
 <?php
 
   function processSubmitSolutionRequest($request) {
+    $prfx = $GLOBALS['dces_mysql_prefix'];
+
     //get db connection
     $con = connectToDB();
 
@@ -18,7 +20,7 @@
 
     //get plugin_alias
     $problem_rows = mysql_query(
-                      sprintf("SELECT server_plugin_alias, answer FROM problem WHERE id=%s", quote_smart($request->problemID))
+                      sprintf("SELECT server_plugin_alias, answer FROM ${prfx}problem WHERE id=%s", quote_smart($request->problemID))
                     , $con) or die("DB error 21. ".mysql_error());
     if (! ($problem_row = mysql_fetch_array($problem_rows)) ) throwError("Problem with specified ID not found");
 
@@ -35,7 +37,7 @@
 
     //get previous result
     $previous_result_query = mysql_query(
-                               sprintf("SELECT result FROM task_result WHERE problem_id=%s AND user_id=%s ORDER BY submission_time DESC",
+                               sprintf("SELECT result FROM ${prfx}task_result WHERE problem_id=%s AND user_id=%s ORDER BY submission_time DESC",
                                        quote_smart($request->problemID),
                                        quote_smart($user_id)
                                ), $con) or die("DB error 23. ".mysql_error());

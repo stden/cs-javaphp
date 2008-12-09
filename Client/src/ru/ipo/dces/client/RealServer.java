@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.*;
-import java.util.HashMap;
 import java.util.Arrays;
 
 import ru.ipo.dces.clientservercommunication.*;
@@ -14,17 +13,6 @@ public class RealServer implements ServerFacade {
 
   private final String              URL_string; 
   private final byte[] REQUEST_VAR = "x=".getBytes(PHP.SERVER_CHARSET);
-
-  static HashMap<Character, String> rep = new HashMap<Character, String>();
-
-  static {
-    rep.put('%', "%25");
-    rep.put('&', "%26");
-    rep.put((char) 0x00, "%00");
-    rep.put('+', "%2B");
-    rep.put((char) 0x0A, "%0A");
-    rep.put((char) 0x0D, "%0D");
-  }
 
   public RealServer(String URL_string) {
     this.URL_string = URL_string;
@@ -79,8 +67,6 @@ public class RealServer implements ServerFacade {
     try {
       input = doPost(obj);
       buf = inputStreamToByteArray(input);
-      //DEBUGING PURPOSES
-//      System.out.println("RESPONSE : " + new String(buf));
     } catch (Exception e) {
       throw new ServerReturnedNoAnswer("Ошибка соединения с сервером");
     }

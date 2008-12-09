@@ -1,6 +1,8 @@
 <?php
 
   function processRegisterToContestRequest($request) {
+    $prfx = $GLOBALS['dces_mysql_prefix'];
+
     //get db connection
     $con = connectToDB();
 
@@ -22,7 +24,7 @@
 
     //get contest registration type
     $contest_rows = mysql_query(
-                      sprintf("SELECT * FROM contest WHERE id=%s", quote_smart($contest_id))
+                      sprintf("SELECT * FROM ${prfx}contest WHERE id=%s", quote_smart($contest_id))
                     , $con) or die ("DB error 29: ".mysql_error());
     $contest_row = mysql_fetch_array($contest_rows) or throwError("Contest with id $contest_id not found");              
 
@@ -40,7 +42,7 @@
 
     //test that there is no user with the same login in this contest
     $users_with_the_same_login = mysql_query(
-                                   sprintf("SELECT * FROM user WHERE contest_id=%s AND login=%s",
+                                   sprintf("SELECT * FROM ${prfx}user WHERE contest_id=%s AND login=%s",
                                    quote_smart($contest_id),
                                    quote_smart($u->login)
                                    ) , $con) or die("DB error 31: ".mysql_error());

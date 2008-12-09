@@ -3,6 +3,8 @@
   require_once("ServerPlugin.php");
 
   function processGetContestDataRequest($request) {
+    $prfx = $GLOBALS['dces_mysql_prefix'];
+
     //get db connection
     $con = connectToDB();
 
@@ -28,7 +30,7 @@
     //fill contest description with data
     //query db
     $contest_rows = mysql_query(
-                      sprintf("SELECT * FROM contest WHERE id=%s", quote_smart($contest_id))
+                      sprintf("SELECT * FROM ${prfx}contest WHERE id=%s", quote_smart($contest_id))
                     , $con) or die("DB error 15: ".mysql_error());
     $row = mysql_fetch_array($contest_rows) or throwError("Found no contest with specified id");
 
@@ -39,8 +41,8 @@
     $c->start = DateMySQLToPHP($row['start_time']);
     $c->finish = DateMySQLToPHP($row['finish_time']);
     $c->registrationType = $row['reg_type'];
-    $c->data = unserialize($row['user_data']) or die("DB error 20");
-    $c->compulsory = unserialize($row['user_data_compulsory']) or die("DB error 21");
+    $c->data = unserialize($row['user_data']) or $c->data = array();
+    $c->compulsory = unserialize($row['user_data_compulsory']) or $c->compulsory = array();
 
     $res->contest = $c;
 
@@ -51,7 +53,7 @@
     $extended_data = $request->extendedData;
     //query db to find out problems
     $problems_rows = mysql_query(
-                       sprintf("SELECT * FROM problem WHERE contest_id=%s ORDER BY contest_pos ASC", quote_smart($contest_id))
+                       sprintf("SELECT * FROM ${prfx}problem WHERE contest_id=%s ORDER BY contest_pos ASC", quote_smart($contest_id))
                      , $con) or die("DB error 16: ".mysql_error());
 
     while ($row = mysql_fetch_array($problems_rows)) {

@@ -56,8 +56,11 @@
   //remove_handle is a value to be passed to closeZip() function
   function openZip($s, $zip_file) {    
     if (!file_put_contents($zip_file, $s)) return false;
-    $zip = new ZipArchive;
+    $zip = new ZipArchive();
     $res = $zip->open($zip_file);
-    return $zip;
+    if ($res === true)
+      return $zip;
+    else
+      return false;
   }
 ?>

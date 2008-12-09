@@ -29,7 +29,7 @@ public class ServerReturnedNoAnswer extends Exception {
       super(message);
       this.actualAnswer = actualAnswer;
       //TODO make somehow the next line to come out only if defined DEBUG
-      System.out.println("actual server answer = " + actualAnswer);
+      System.out.println("actual server answer = " + actualAnswer + "\n");
     }
 
     public String getActualAnswer() {
