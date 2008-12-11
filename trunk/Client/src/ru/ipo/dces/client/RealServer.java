@@ -175,14 +175,7 @@ public class RealServer implements ServerFacade {
     return doRequest(AcceptedResponse.class, r);
   }
 
-  // Подготовка строки к передаче в GET/POST запросе
-  /*public String StringPrepare(String string) {
-    StringBuilder sb = new StringBuilder();
-    for (int i = 0; i < string.length(); i++)
-      if (rep.containsKey(string.charAt(i)))
-        sb.append(rep.get(string.charAt(i)));
-      else
-        sb.append(string.charAt(i));
-    return sb.toString();
-  }*/
+  public AcceptedResponse doRequest(CreateDataBaseRequest r) throws ServerReturnedError, ServerReturnedNoAnswer {
+    return doRequest(AcceptedResponse.class, r);
+  } 
 }

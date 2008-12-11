@@ -29,4 +29,5 @@ class SubmitSolutionRequest{};
 class SubmitSolutionResponse{};
 class UploadClientPluginRequest{};
 class UserDescription{};
+class CreateDataBaseRequest{};
 ?>

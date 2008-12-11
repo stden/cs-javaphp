@@ -20,6 +20,7 @@ import java.lang.reflect.Constructor;
 public class Controller {
   private static ServerFacade       server;
   private static String             sessionID;
+  private static int                contestID;
   private static ClientDialog       clientDialog;
 
   /** Добавление Plugin'а в клиент
@@ -51,6 +52,7 @@ public class Controller {
     try {
       ConnectToContestRequest request = new ConnectToContestRequest();
       request.contestID = contestID;
+      Controller.contestID = contestID;
       request.login = login;
       // TODO improve the security here
       request.password = new String(password);
@@ -67,6 +69,7 @@ public class Controller {
           addAdminPlugin(AdjustContestsPlugin.class);
           break;
         case SuperAdmin:
+          addAdminPlugin(CreateContestPlugin.class);
           addAdminPlugin(CreateContestPlugin.class);
           addAdminPlugin(AdjustContestsPlugin.class);
           break;
@@ -126,6 +129,7 @@ public class Controller {
 
       try {
           server.doRequest(dr);
+          Controller.contestID = -1;
       } catch (Exception serverReturnedError) {
           // TODO to think what to do
       }
@@ -149,9 +153,44 @@ public class Controller {
     }
 
     server = new RealServer(Settings.getInstance().getHost());
+
+    processArgs(args);
+
     clientDialog = new ClientDialog();
     clientDialog.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     clientDialog.setVisible(true);
+  }
+
+  private static void processArgs(String[] args) {
+    if (args.length == 0) return;
+
+    if (args[0].equals("-help")) {
+      System.out.println("Usage: -help shows this help");
+      System.out.println("       -createdb <superuser-login> <superuser-password>");
+      System.exit(0);
+    }
+    else if (args[0].equals("-createdb")) {
+      if (args.length != 3)
+        System.out.println("need exactly two additional paramenters: superuser login and superuser password"); 
+      else
+      {
+        final CreateDataBaseRequest createDataBaseRequest = new CreateDataBaseRequest();
+        createDataBaseRequest.login = args[1];
+        createDataBaseRequest.password = args[2];
+        try {
+          server.doRequest(createDataBaseRequest);
+        } catch (ServerReturnedError sre) {
+          System.out.println("Server returned error: " + sre.getMessage());
+          System.exit(1);
+        } catch (ServerReturnedNoAnswer srna) {
+          System.out.println("Server returned no answer: " + srna.getMessage());
+          System.exit(1);
+        }
+
+        System.out.println("Database successfully created");
+        System.exit(0);
+      }
+    }
   }
 
   public static ContestDescription[] getAvailableContests() {
@@ -242,5 +281,9 @@ public class Controller {
 
   public static ServerFacade getServer() {
     return server;
+  }
+
+  public static int getContestID() {
+    return contestID;
   }
 }

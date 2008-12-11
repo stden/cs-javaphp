@@ -64,38 +64,12 @@ function composeUpdateQuery($table, $col_value, $where) {
   return "UPDATE $prfx$table SET $values WHERE $where";
 }
 
-function createDataBase($con) {
- $lines = file("dces-create-db.sql") or die("failed to read sql file");
-
- $dbname = $GLOBALS['dces_mysql_db'];
- $sql = "";
- $queries = array();
- foreach ($lines as $line)
- {   
-   $line = str_replace("___DCES___INITIAL___DB___", "$dbname", $line);
-   $sql .= $line;
-   $is_last_line = ereg(".*;[[:space:]]*$", $line) || ereg(".*;\*/[[:space:]]*$", $line);
-   if ($is_last_line) {
-     $sql = ereg_replace(";\*/[[:space:]]*$", "*/", $sql);
-     $sql = ereg_replace(";[[:space:]]*$", "", $sql);
-       
-     $queries[] = $sql;
-     $sql = "";
-   }
- }
-
- transaction($con, $queries); //Try to create a db. If fail, error will be noticed later
-}
-
 function connectToDB() {
   $con = mysql_connect($GLOBALS["dces_mysql_host"], $GLOBALS["dces_mysql_user"], $GLOBALS["dces_mysql_password"]);
   if (!$con) die('Could not connect: ' . mysql_error());
-  if (!mysql_select_db($GLOBALS["dces_mysql_db"], $con)) {
-     createDataBase($con);
-     mysql_select_db($GLOBALS["dces_mysql_db"], $con) or die("failed to select db: ".mysql_error());
-  }
+  mysql_select_db($GLOBALS["dces_mysql_db"], $con) or die("failed to select db: ".mysql_error());
+     
   return $con;
-
 }
 
 ?>

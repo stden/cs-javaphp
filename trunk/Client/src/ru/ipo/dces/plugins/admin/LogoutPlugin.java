@@ -3,6 +3,7 @@ package ru.ipo.dces.plugins.admin;
 import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
 import ru.ipo.dces.client.Controller;
+import ru.ipo.dces.clientservercommunication.*;
 
 import javax.swing.*;
 
@@ -11,6 +12,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.Arrays;
 
 /**
  * Created by IntelliJ IDEA.
@@ -44,6 +46,24 @@ public class LogoutPlugin extends Plugin {
     refreshButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         //TODO to implement
+
+        //getUserRequestTest
+        GetUsersRequest r = new GetUsersRequest();
+        r.contestID = Controller.getContestID();
+        r.sessionID = Controller.getSessionID();
+
+        try {
+          final GetUsersResponse resp = Controller.getServer().doRequest(r);
+          for (UserDescription user : resp.users) {
+            System.out.println("user.login = " + user.login);
+            System.out.println("user.password = " + user.password);
+            System.out.println("user.userType = " + user.userType);
+            System.out.println("user.dataValue = " + Arrays.toString(user.dataValue));
+            System.out.println();
+          }
+        } catch (Exception ee) {
+          ee.printStackTrace();
+        }
       }
     });
   }
