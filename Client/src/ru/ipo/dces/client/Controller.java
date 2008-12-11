@@ -2,33 +2,49 @@ package ru.ipo.dces.client;
 
 import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.pluginapi.Plugin;
-import ru.ipo.dces.plugins.LogoutPlugin;
+import ru.ipo.dces.pluginapi.PluginEnvironment;
+import ru.ipo.dces.plugins.admin.LogoutPlugin;
 import ru.ipo.dces.plugins.admin.AdjustContestsPlugin;
 import ru.ipo.dces.plugins.admin.CreateContestPlugin;
 
 import javax.swing.*;
-import java.util.Date;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipEntry;
 import java.io.*;
+import java.lang.reflect.Constructor;
 
 /**
  * Контроллер, который хранит данные о соединении с сервером и позволяет
  * выполнять стандартные действия с сервером
  */
 public class Controller {
-  public static ServerFacade       server;
-  public static String             sessionID;
-  private static ClientDialog      clientDialog;
+  private static ServerFacade       server;
+  private static String             sessionID;
+  private static ClientDialog       clientDialog;
 
-    /** Добавление Plugin'а в клиент
-   * @param pd the description of the problem for which the plugin is added*/
+  /** Добавление Plugin'а в клиент
+   * @param pd the description of the problem for which the plugin is added
+   */
   public static void addPlugin(ProblemDescription pd) {
     PluginEnvironmentImpl pe = new PluginEnvironmentImpl(pd);
 
     Plugin p = PluginLoader.load(pd.clientPluginAlias, pe);
 
-    clientDialog.addPluginToForm(pe, p);
+    clientDialog.addPluginToForm(pe.getView(), p);
+  }
+
+  /** Добавление Plugin'а в клиент
+   * @param pluginClass class of new Plugin
+   */
+  public static void addAdminPlugin(Class<? extends Plugin> pluginClass) {
+    try {
+      PluginEnvironmentImpl pe = new PluginEnvironmentImpl(null);
+      final Constructor<? extends Plugin> constructor = pluginClass.getConstructor(PluginEnvironment.class);
+      Plugin p = constructor.newInstance(pe);
+      clientDialog.addPluginToForm(pe.getView(), p);
+    } catch (Exception e) {
+      System.exit(1); //it should not occur
+    }
   }
 
   public static void login(String login, char[] password, int contestID) {
@@ -48,19 +64,11 @@ public class Controller {
       // загружаем ему административные Plugin'ы
       switch (res.user.userType) {
         case ContestAdmin:
-          PluginEnvironmentImpl ec = new PluginEnvironmentImpl(null);
-          clientDialog.addPluginToForm(ec, new AdjustContestsPlugin(ec));
+          addAdminPlugin(AdjustContestsPlugin.class);
           break;
         case SuperAdmin:
-          //add plugin CreateContest
-          PluginEnvironmentImpl ms1 = new PluginEnvironmentImpl(null);
-          CreateContestPlugin ccp = new CreateContestPlugin(ms1);
-          clientDialog.addPluginToForm(ms1, ccp);
-
-          //add plugin AdjustContest
-          PluginEnvironmentImpl ms2 = new PluginEnvironmentImpl(null);
-          AdjustContestsPlugin mcp = new AdjustContestsPlugin(ms2);
-          clientDialog.addPluginToForm(ms2, mcp);
+          addAdminPlugin(CreateContestPlugin.class);
+          addAdminPlugin(AdjustContestsPlugin.class);
           break;
         case Participant:
           // Получаем данные о задачах
@@ -73,7 +81,7 @@ public class Controller {
           //TODO if server has new statements, they are to be downloaded
           GetContestDataResponse rs = Controller.server.doRequest(rq);
           for (ProblemDescription pd : rs.problems) {
-            File problemFolder = getProblemFolder(pd.id);
+            File problemFolder = getProblemDirectoryByID(pd.id);
             if (!problemFolder.exists()) {
               problemFolder.mkdir();
               unzip(pd.statement, problemFolder);
@@ -83,8 +91,7 @@ public class Controller {
       }
 
       // Добавляем Plugin выхода из контеста в самый конец
-      PluginEnvironmentImpl pe = new PluginEnvironmentImpl(null);
-      clientDialog.addPluginToForm(pe, new LogoutPlugin(pe));
+      addAdminPlugin(LogoutPlugin.class);
 
     } catch (Exception e) {
       JOptionPane.showMessageDialog(null, "При попытке подключения к контесту произошла ошибка: " + e.getMessage(), "Ошибка",
@@ -225,7 +232,15 @@ public class Controller {
     }
   }
 
-  public static File getProblemFolder(int problemID) {
+  public static File getProblemDirectoryByID(int problemID) {
     return new File(Settings.getInstance().getProblemsDirectory() + '/' + problemID);
+  }
+
+  public static String getSessionID() {
+    return sessionID;
+  }
+
+  public static ServerFacade getServer() {
+    return server;
   }
 }

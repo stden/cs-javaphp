@@ -215,7 +215,13 @@ public class PHP {
       case 'b':
         switch (Integer.parseInt(st.readToken(';'))) {
           case 0:
-            return cls.cast(false);
+            try {
+              return cls.cast(false);
+            } catch (Exception e) {
+              //boolean sometimes mean null
+              System.out.println("Warning: false value in deserialization might mean null");
+              return null;
+            }
           case 1:
             return cls.cast(true);
           default:

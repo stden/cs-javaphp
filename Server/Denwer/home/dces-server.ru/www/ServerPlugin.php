@@ -42,12 +42,12 @@
 
     public function getStatementData($problem_id) {
       //May NOT be overriden
-      return file_get_contents($GLOBALS['dces_dir_problems'] . '/' . $problem_id . "_statement.zip");
+      return @file_get_contents($GLOBALS['dces_dir_problems'] . '/' . $problem_id . "_statement.zip");
     }
 
     public function getAnswerData($problem_id) {
       //May NOT be overriden
-      return file_get_contents($GLOBALS['dces_dir_problems'] . '/' . $problem_id . "_answer.zip");
+      return @file_get_contents($GLOBALS['dces_dir_problems'] . '/' . $problem_id . "_answer.zip");
     }
 
   }

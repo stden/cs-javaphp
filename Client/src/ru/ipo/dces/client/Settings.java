@@ -54,7 +54,11 @@ public class Settings {
           line = line.substring(0, pos);
 
         pos = line.indexOf('=');
-        if (pos == -1) throw new Exception("No '=' found in line " + lineNo);
+        if (pos == -1)
+          if (line.trim().equals(""))
+            continue;
+          else
+            throw new Exception("No '=' found in line " + lineNo);
         String name = line.substring(0, pos-1).trim();
         String value = line.substring(pos+1).trim();
 
