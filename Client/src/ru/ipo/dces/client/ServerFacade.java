@@ -48,4 +48,7 @@ public interface ServerFacade {
 
   public AcceptedResponse doRequest(UploadClientPluginRequest r)
       throws ServerReturnedError, ServerReturnedNoAnswer;
+
+  public AcceptedResponse doRequest(CreateDataBaseRequest r)
+      throws ServerReturnedError, ServerReturnedNoAnswer;
 }

@@ -83,6 +83,21 @@ switch(get_class($request)){
 	  $result = processInstallClientPluginRequest($request);
 	  break;
 
+	case 'CreateDataBaseRequest':
+	  require("CreateDataBase.php");
+	  $result = processCreateDataBaseRequest($request);
+	  break;
+
+	case 'GetUsersRequest':
+	  require("GetUsers.php");
+	  $result = processGetUsersRequest($request);
+	  break;
+
+	case 'RemoveUserRequest':
+	  require("RemoveUser.php");
+	  $result = processGetUsersRequest($request);
+	  break;
+
   default:
 	  $result = 'Unknown message type "'.get_class($s).'"';
 };

@@ -18,6 +18,11 @@
       $userRow = getUserRow($con, $request_user_id);
       $request_user_type = $userRow['user_type'];
       $contest_id = getRequestedContest($request->contestID, $userRow['contest_id'], $request_user_type);
+
+      //make possible for superadmin to register users of zero-contest
+      if ($user_type == 'SuperAdmin' && ($request->contestID == 0 || $request->contestID == -1))
+        $contest_id = 0;
+
       if ($contest_id == -1)
         throwError("You don't have permissions to add users for contest $contest_id");
     }
@@ -38,7 +43,7 @@
 
     //test that superadmins are registered only for 0 contest
     if ($u->userType === "SuperAdmin" && $contest_id != 0)
-      throwError("Super Admin can be registered only to zero contest");
+      throwError("Super Admin can be registered only for zero contest");
 
     //test that there is no user with the same login in this contest
     $users_with_the_same_login = mysql_query(
