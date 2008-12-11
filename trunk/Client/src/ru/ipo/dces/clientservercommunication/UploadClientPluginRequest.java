@@ -9,8 +9,4 @@ public class UploadClientPluginRequest implements Request {
   public String sessionID;
   public String pluginAlias;
   public byte[] pluginInstaller;
-
-  public UploadClientPluginRequest() {
-    sessionID = Controller.sessionID;
-  }
 }

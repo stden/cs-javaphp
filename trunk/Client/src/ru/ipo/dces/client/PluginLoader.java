@@ -19,21 +19,21 @@ public class PluginLoader {
         //load file from server
         final InstallClientPluginRequest installRequest = new InstallClientPluginRequest();
         installRequest.clientPluginAlias = plugin_alias;
-        final InstallClientPluginResponse installResponse = Controller.server.doRequest(installRequest);
+        final InstallClientPluginResponse installResponse = Controller.getServer().doRequest(installRequest);
         FileOutputStream fout = new FileOutputStream(pluginFile);
         fout.write(installResponse.pluginInstaller);
         fout.close();
       }
       URL pluginURL = pluginFile.toURI().toURL();
 
-      //try load plugin class
+      //try load plugins class
       URLClassLoader classLoader = new URLClassLoader(new URL[] { pluginURL });
-      Class<?> mainClass = classLoader.loadClass("ru.ipo.dces.plugin.Main");
+      Class<?> mainClass = classLoader.loadClass("ru.ipo.dces.plugins.Main");
       Constructor<?> constructor = mainClass
           .getConstructor(PluginEnvironment.class);
       return (Plugin) constructor.newInstance(pe);
     } catch (Exception e) {
-      //something wrong with plugin
+      //something wrong with plugins
       return null;
     }
   }

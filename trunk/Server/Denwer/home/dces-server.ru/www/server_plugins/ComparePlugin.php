@@ -10,10 +10,8 @@
       return $res;
     }
 
-    public function updateStatementData($statement_zip) {      
-      $p = $statement_zip->getFromName('statement.txt');
-      if (! $p) return false;
-           else return $p;
+    public function updateStatementData($statement_zip) {
+      return true;
     }
 
     public function updateAnswerData($answer_zip) {

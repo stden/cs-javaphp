@@ -10,6 +10,31 @@
         <attribute name="method" value="1" />
         <attribute name="URI" value="/" />
       </containerElement>
+      <containerElement type="library" level="module">
+        <attribute name="method" value="2" />
+        <attribute name="URI" value="/TableLayout.jar" />
+        <url>jar://$MODULE_DIR$/lib/TableLayout.jar!/</url>
+      </containerElement>
+      <containerElement type="library" level="module">
+        <attribute name="method" value="2" />
+        <attribute name="URI" value="/appframework-1.0.3.jar" />
+        <url>jar://$MODULE_DIR$/libs/appframework-1.0.3.jar!/</url>
+      </containerElement>
+      <containerElement type="library" level="module">
+        <attribute name="method" value="2" />
+        <attribute name="URI" value="/forms.jar" />
+        <url>jar://$MODULE_DIR$/lib/forms.jar!/</url>
+      </containerElement>
+      <containerElement type="library" level="module">
+        <attribute name="method" value="2" />
+        <attribute name="URI" value="/junit-4.4.jar" />
+        <url>jar://$JUNIT_HOME$!/</url>
+      </containerElement>
+      <containerElement type="library" level="module">
+        <attribute name="method" value="2" />
+        <attribute name="URI" value="/swing-worker-1.1.jar" />
+        <url>jar://$MODULE_DIR$/libs/swing-worker-1.1.jar!/</url>
+      </containerElement>
     </containerInfo>
     <setting name="jarUrl" value="file://$MODULE_DIR$/JavaClient.jar" />
     <setting name="buildJar" value="true" />

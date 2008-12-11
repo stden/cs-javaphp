@@ -2,6 +2,8 @@ package ru.ipo.dces.client;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Enumeration;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -11,6 +13,7 @@ import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.plugins.admin.LoginPluginV2;
 
 public class ClientDialog extends JFrame {
+  private static final int MIN_LEFT_PANEL_ROWS = 10;
 
   public class OpenPanelActionListener implements ActionListener {
     private final Plugin panel;
@@ -44,20 +47,39 @@ public class ClientDialog extends JFrame {
   public LoginPluginV2 adminPanel;
   private JPanel            leftPanel        = null;
   private Plugin            rightPanel       = null;
+  private GridLayout        bLayout;
+  private ButtonGroup pluginsButtonGroup = new ButtonGroup();
 
   public ClientDialog() {
     super();
     initGUI();
   }
 
-  public void addPluginToForm(PluginEnvironmentImpl pe, Plugin p) {
-    pe.getButton().addActionListener(new OpenPanelActionListener(p));
-    leftPanel.add(pe.getButton(), BorderLayout.NORTH);
+  public void addPluginToForm(PluginEnvironmentView pev, Plugin p) {
+    if (p == null) {
+      JOptionPane.showMessageDialog(null, "Не удалось загрузить плагин");
+      return;
+    }
+
+    final JToggleButton button = pev.getButton();
+    button.addActionListener(new OpenPanelActionListener(p));
+
+    //increase left panel size if there are
+    bLayout.setRows(Math.max(MIN_LEFT_PANEL_ROWS, bLayout.getRows() + 1));
+
+    //make button radio
+    pluginsButtonGroup.add(button);
+
+    //add button
+    leftPanel.add(button, BorderLayout.NORTH);
     // Показываем сразу первый Plugin
     if (rightPanel == null) {
       setRightPanel(p);
       p.activate();
+      button.setSelected(true);
     }
+    else
+      button.setSelected(false);
   }
 
   /** Удалить все Plugin'ы */
@@ -65,6 +87,17 @@ public class ClientDialog extends JFrame {
     leftPanel.removeAll();
     setRightPanel(new Plugin(null) {});
     rightPanel = null;
+
+    //clear radio group of left buttons
+    ArrayList<AbstractButton> al = new ArrayList<AbstractButton>();
+    final Enumeration<AbstractButton> buttonEnumeration = pluginsButtonGroup.getElements();
+    while (buttonEnumeration.hasMoreElements()) {
+      AbstractButton b = buttonEnumeration.nextElement();
+      al.add(b);
+    }
+    for (AbstractButton button : al) {
+      pluginsButtonGroup.remove(button);
+    }
   }
 
   private void initGUI() {
@@ -78,7 +111,7 @@ public class ClientDialog extends JFrame {
         {
           leftPanel = new JPanel();
           leftPanel.setName("Left panel");
-          GridLayout bLayout = new GridLayout(10, 1);
+          bLayout = new GridLayout(MIN_LEFT_PANEL_ROWS, 1);
           bLayout.setColumns(1);
           bLayout.setHgap(2);
           bLayout.setVgap(2);
@@ -108,7 +141,7 @@ public class ClientDialog extends JFrame {
     clearLeftPanel();
 
     PluginEnvironmentImpl pe = new PluginEnvironmentImpl(null);
-    addPluginToForm(pe, new LoginPluginV2(pe));
+    addPluginToForm(pe.getView(), new LoginPluginV2(pe));
 
     // addPlugin("SamplePlugin");
   }
