@@ -1,7 +1,7 @@
 <?php
 
   function processRemoveUserRequest($request) {
-    //TODO to implement
+    //TODO to implement 42
   }
 
 ?>
