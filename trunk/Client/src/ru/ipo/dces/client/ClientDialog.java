@@ -140,6 +140,8 @@ public class ClientDialog extends JFrame {
   public void initialState() {
     clearLeftPanel();
 
+    //add login plugin.
+    //can not use Controller.addAdminPlugin() because sometimes it's called from constructor
     PluginEnvironmentImpl pe = new PluginEnvironmentImpl(null);
     addPluginToForm(pe.getView(), new LoginPluginV2(pe));
 
