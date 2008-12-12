@@ -40,6 +40,7 @@ function createSession($con, $user_id) { //returns session string
 
 //$con - connection to MySQL
 //$sessionID - string to test
+//TODO try to implement it with one query with INNER JOIN
 function testSession($con, $session_id) { //returns user id, dies absolutely if session is invalid
   $prfx = $GLOBALS['dces_mysql_prefix'];
   //test session ID to have only alphanumeric characters
@@ -52,11 +53,17 @@ function testSession($con, $session_id) { //returns user id, dies absolutely if 
   if ( ! $user_find ) die ("DB error 6: ".mysql_error());
 
   //test if there is at least one such user
-  if ( !($user_row = mysql_fetch_array($user_find)) )
+  if ( !($session_user_row = mysql_fetch_array($user_find)) )
     throwError("invalid session");
 
+  //get user row
+  $user_rows = mysql_query(
+                   sprintf("SELECT * FROM ${prfx}user WHERE id=%s", quote_smart($session_user_row['user_id']))
+                 , $con) or die('DB error 3: '.mysql_error());
+  $user_row = mysql_fetch_array($user_rows) or die("DB error 4: session $sessionID refers to unknown user");
+
   //return found user
-  return $user_row['user_id'];  
+  return $user_row;  
 }
 
 function removeSession($con, $session_id) {
@@ -72,7 +79,8 @@ function getUserRow($con, $user_id) {
   $user_rows = mysql_query(
                    sprintf("SELECT * FROM ${prfx}user WHERE id=%s", quote_smart($user_id))
                  , $con) or die('DB error 3: '.mysql_error());
-  $user_row = mysql_fetch_array($user_rows) or die ("DB error 4 no user with id $user_id");
+  if (! ($user_row = mysql_fetch_array($user_rows)))
+    return false;
   return $user_row;
 }
 

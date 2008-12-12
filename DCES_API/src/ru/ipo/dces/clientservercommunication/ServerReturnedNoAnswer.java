@@ -14,7 +14,9 @@ public class ServerReturnedNoAnswer extends Exception {
     }
 
     public ServerReturnedNoAnswer(String message) {
-        super(message);
+      super(message);
+      //TODO make somehow the next line to come out only if defined DEBUG
+      System.out.println("actual server answer unknown");
     }
 
     public ServerReturnedNoAnswer(String message, Throwable cause) {

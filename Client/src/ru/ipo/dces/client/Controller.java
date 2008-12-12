@@ -125,7 +125,8 @@ public class Controller {
 
   /** Завершение сессии пользователя */
   public static void logout() {
-    DisconnectRequest dr = new DisconnectRequest(sessionID);
+    DisconnectRequest dr = new DisconnectRequest();
+    dr.sessionID = sessionID;
 
       try {
           server.doRequest(dr);

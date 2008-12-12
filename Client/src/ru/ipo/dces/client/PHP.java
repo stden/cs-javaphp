@@ -181,10 +181,12 @@ public class PHP {
           NoSuchFieldException, IllegalClassException, IOException {
     String nextToken = st.readToken(':',';');
 
+    /*
     //TODO get rid of this temporary solution
     //remove UTF-8 markers if any
     if (nextToken.length() > 1)
       nextToken = nextToken.substring(nextToken.length() - 1);
+    */
 
     //TODO think of 'charAt()'. The string should have only one symbol
     switch (nextToken.charAt(0)) {
@@ -275,8 +277,8 @@ public class PHP {
         }
         //if (cls.asSubclass(HashMap.class) != null) {
         if (cls == HashMap.class) {
-          ParameterizedType t = (ParameterizedType) cls.getGenericSuperclass();
-          Type[] params = t.getActualTypeArguments();
+          //ParameterizedType t = (ParameterizedType) cls.getGenericSuperclass();
+          //Type[] params = t.getActualTypeArguments();
           //TODO to think a lot. Generics are not saved in Runtime, and we can not get real values for K and V
           Class K = String.class; //(Class) params[0];
           Class V = String.class;  //(Class) params[1];
