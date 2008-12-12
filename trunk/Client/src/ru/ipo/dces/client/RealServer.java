@@ -2,7 +2,6 @@ package ru.ipo.dces.client;
 
 import java.io.OutputStream;
 import java.io.InputStream;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.*;
 import java.util.Arrays;
@@ -61,37 +60,48 @@ public class RealServer implements ServerFacade {
 
   public <T> T doRequest(Class<T> cls, Request obj)
       throws ServerReturnedError, ServerReturnedNoAnswer {
-    InputStream input;
 
-    final byte[] buf;
+    InputStream input;
+    RequestFailedResponse failedResponse = null;
+    int[] magic;
+    byte[] bytes = null;
+
     try {
       input = doPost(obj);
-      buf = inputStreamToByteArray(input);
     } catch (Exception e) {
       throw new ServerReturnedNoAnswer("Ошибка соединения с сервером");
     }
     try {
-      return PHP.unserialize(cls, new ByteArrayInputStream(buf));
-    } catch (IllegalClassException e) {
-      
-      RequestFailedResponse response;
-      try {
-          response = PHP.unserialize(RequestFailedResponse.class, new ByteArrayInputStream(buf));
-      } catch (Exception e1) {
-          throw new ServerReturnedNoAnswer("Неправильный формат ответа сервера", new String(buf, PHP.SERVER_CHARSET));
+      //test magic
+      magic = new int[4];
+      magic[0] = input.read();
+      magic[1] = input.read();
+      magic[2] = input.read();
+      magic[3] = input.read();
+      if (magic[0] != 4 || magic[1] != 2 || magic[2] != 3 || magic[3] != 9) {
+        bytes = inputStreamToByteArray(4, input);
+        for (int i = 0; i < 4; i++)
+          if (magic[i] != -1) bytes[i] = (byte)magic[i]; else break;
+      } else {
+        failedResponse = PHP.unserialize(RequestFailedResponse.class, input);
+        if (failedResponse == null)
+          return PHP.unserialize(cls, input);
       }
-      throw new ServerReturnedError(response.message);
-
     } catch (Exception e) {
-      e.printStackTrace();
-      throw new ServerReturnedNoAnswer("Неправильный формат ответа сервера", new String(buf, PHP.SERVER_CHARSET));
+      throw new ServerReturnedNoAnswer("Неправильный формат ответа сервера");
     }
+
+    if (failedResponse != null)
+      throw new ServerReturnedError(failedResponse.message);
+    if (bytes != null)
+      throw new ServerReturnedNoAnswer("Неправильный формат ответа сервера", new String(bytes, PHP.SERVER_CHARSET));
+    throw new ServerReturnedNoAnswer("Произошло невозможное");
   }
 
-  private byte[] inputStreamToByteArray(InputStream input) throws IOException {
+  private byte[] inputStreamToByteArray(int fromIndex, InputStream input) throws IOException {
     byte[] buf = new byte[4096];
     int n;
-    for (int i = 0; (n = input.read()) != -1 ; i++ )
+    for (int i = fromIndex; (n = input.read()) != -1 ; i++ )
     {
       if (i >= buf.length) {
         //copy array
@@ -177,5 +187,14 @@ public class RealServer implements ServerFacade {
 
   public AcceptedResponse doRequest(CreateDataBaseRequest r) throws ServerReturnedError, ServerReturnedNoAnswer {
     return doRequest(AcceptedResponse.class, r);
-  } 
+  }
+
+  @Override
+  public AcceptedResponse doRequest(RemoveUserRequest r) throws ServerReturnedError, ServerReturnedNoAnswer {
+    return doRequest(AcceptedResponse.class, r);
+  }
+
+  public AcceptedResponse doRequest(RemoveContestRequest r) throws ServerReturnedError, ServerReturnedNoAnswer {
+    return doRequest(AcceptedResponse.class, r);
+  }
 }

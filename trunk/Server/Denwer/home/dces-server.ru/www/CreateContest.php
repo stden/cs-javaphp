@@ -5,10 +5,10 @@ function processCreateContestRequest($request) {
   $con = connectToDB();
 
   //get user_id or die, if session is invalid
-  $user_id = testSession($con, $request->sessionID);
+  $user_row = testSession($con, $request->sessionID);
+  $user_id = $user_row['id'];
 
   //authorize user for this operation
-  $user_row = getUserRow($con, $user_id);
   $user_type = $user_row['user_type'];
   if ($user_type !== 'SuperAdmin')
     throwError("The user has no rights to the operation");

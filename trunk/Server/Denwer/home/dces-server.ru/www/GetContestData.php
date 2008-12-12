@@ -9,11 +9,11 @@
     $con = connectToDB();
 
     //get user_id or die, if session is invalid
-    $user_id = testSession($con, $request->sessionID);
+    $userRow = testSession($con, $request->sessionID);
+    $user_id = $userRow['id']; 
 
     //authorize user for this operation
     // get contest ID
-    $userRow = getUserRow($con, $user_id);
     $user_type = $userRow['user_type'];
 
     //compare requested contest and user contest

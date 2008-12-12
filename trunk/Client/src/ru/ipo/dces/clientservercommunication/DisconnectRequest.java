@@ -8,7 +8,4 @@ public class DisconnectRequest implements Request {
   /** Сессия пользователя, который хочет отлючиться от сервера */
   public String sessionID;
 
-  public DisconnectRequest(String sessionID) {
-    this.sessionID = sessionID;
-  }
 }

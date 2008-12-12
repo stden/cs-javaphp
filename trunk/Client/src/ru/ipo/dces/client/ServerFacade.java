@@ -51,4 +51,10 @@ public interface ServerFacade {
 
   public AcceptedResponse doRequest(CreateDataBaseRequest r)
       throws ServerReturnedError, ServerReturnedNoAnswer;
+
+  public AcceptedResponse doRequest(RemoveUserRequest r)
+      throws ServerReturnedError, ServerReturnedNoAnswer;
+
+  public AcceptedResponse doRequest(RemoveContestRequest r)
+      throws ServerReturnedError, ServerReturnedNoAnswer;
 }

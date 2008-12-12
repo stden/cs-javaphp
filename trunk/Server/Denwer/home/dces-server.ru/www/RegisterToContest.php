@@ -14,8 +14,8 @@
     }
     else
     {
-      $request_user_id = testSession($con, $request->sessionID);
-      $userRow = getUserRow($con, $request_user_id);
+      $userRow = testSession($con, $request->sessionID);
+      $request_user_id = $userRow['id'];
       $request_user_type = $userRow['user_type'];
       $contest_id = getRequestedContest($request->contestID, $userRow['contest_id'], $request_user_type);
 

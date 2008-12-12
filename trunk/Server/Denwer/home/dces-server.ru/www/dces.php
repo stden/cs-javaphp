@@ -11,20 +11,12 @@ require("SQLDateTime.php");
 
 require("ReturnError.php");
 
-function prepare( $a ){
-  $a = str_replace('\0',chr(0),$a);
-  $a = str_replace('\"','"',$a);
-  $a = str_replace("\'","'",$a);
-  $a = str_replace("\\\\","\\",$a);  	
-  return $a;
-}
-
 $x = @file_get_contents('php://input');
 if (strpos($x, 'x=') === 0)
  $s_request = substr($x, 2);
 else
 {
-  echo "DCES версии 0.1, добро пожаловать\n";
+  echo "<b>DCES</b> версии 0.1, добро пожаловать\n";
   echo "¬еб интерфейс к DCES-серверу пока не предусмотрен";
   exit();
 }
@@ -32,8 +24,8 @@ else
 //$s_request = prepare($_REQUEST['x']);
 
 //open log file
-$log = fopen("messages.log", "a");
-fwrite($log, "request = $s_request\n");
+//$log = fopen("messages.log", "a");
+//fwrite($log, "request = $s_request\n");
 
 $request = unserialize($s_request) or throwError('Failed to understand the request');
 
@@ -95,16 +87,25 @@ switch(get_class($request)){
 
 	case 'RemoveUserRequest':
 	  require("RemoveUser.php");
-	  $result = processGetUsersRequest($request);
+	  $result = processRemoveUserRequest($request);
+	  break;
+
+	case 'RemoveContestRequest':
+	  require("RemoveContest.php");
+	  $result = processRemoveContestRequest($request);
 	  break;
 
   default:
 	  $result = 'Unknown message type "'.get_class($s).'"';
 };
 
+$magic = chr(4) . chr(2) . chr(3) . chr(9);
+$nil = serialize(null);
 $s_result = serialize($result);
+echo $magic;
+echo $nil; //means no error
 echo $s_result;
 
-fwrite($log, "answer = $s_result\n\n");
-fclose($log);
+//fwrite($log, "answer = $s_result\n\n");
+//fclose($log);
 ?>
