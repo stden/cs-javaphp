@@ -1,0 +1,45 @@
+#summary Отладка плагина стороны клиента
+#labels Phase-Implementation
+
+= Отладка плагина стороны клиента =
+
+Без специального framework отлаживать плагины было бы сложно. Потому что они должы быть запакованы в jar, находится в каталоге, где [Client клиент] ищет плагины, к тому же чтобы плагин загрузился, программист-отладчик должен при каждой отладке подключиться к контесту, в котором этот плагин требуется для отображения задач.
+
+Для удобной отладки в DCES API определены класс `PluginBox` и интерфейс `ServerPluginEmulator`. Первый наследует JFrame и является окном, в котором работает отлаживаемый плагин.
+`ServerPluginEmulator` это эмуляция серверного плагина, для отладки она должен быть реализована. В простом случае в методе checkSolution() программист сам производит проверку решения. Для сложной отладки метод checkSolution() перенаправляет запрос на сервер и в этом случае `ServerPluginEmulator` является proxy для серверного плагина.
+
+Примерный код для запуска отладки
+{{{
+//создаем эмуляцию сервера
+ServerPluginEmulator serverEmulator = new ServerPluginEmulator() {
+      //Реализуем проверку решения. Если 42 то "yes", иначе "no". Плагин клиента должен
+      //уметь оформлять решение участника и понимать ответ от сервера
+      public HashMap<String, String> checkSolution(HashMap<String, String> solution, HashMap<String, String> previousResult) {
+        HashMap<String, String> res = new HashMap<String, String>();
+        String ans = solution.get("answer");
+        if ("42".equals(ans))
+          res.put("result", "yes");
+        else
+          res.put("result", "no");
+        return res;
+      }
+
+      //Возвращаем каталог с задачами. В простом случае задача не зависит от участника
+      //и всегда возвращается одно и тоже условие
+      public File getStatement() {
+        return new File("C:\problems");
+      }
+    };
+
+//создаем окно для отладки
+PluginBox box = new PluginBox(
+                      ru.ipo.dces.plugins.Main.class, //класс файл с отлаживаемым плагином
+                      serverEmulator, //эмулятор плагина сервера
+                      "Имя Задачи" //имя задачи, параметр необязателен
+                );
+
+//делаем так, чтобы после закрытия окна программа закрывалась
+box.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//показываем окно на экране
+box.setVisible(true);
+}}}
