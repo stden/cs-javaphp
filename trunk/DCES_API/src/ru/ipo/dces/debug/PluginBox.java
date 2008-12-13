@@ -168,6 +168,11 @@ public class PluginBox extends JFrame {
 
     private HashMap<String, String> previousResult = null;
     public String problemName;
+    private final File problemFolder;
+
+    private PluginEnvironmentImpl() {
+      problemFolder = serverEmulator.getStatement();
+    }
 
     public void setTitle(String title) {
       pluginButton.setText(title);
@@ -180,7 +185,7 @@ public class PluginBox extends JFrame {
     }
 
     public File getProblemFolder() {
-      return serverEmulator.getStatement();
+      return problemFolder;
     }
 
     public String getProblemName() {
