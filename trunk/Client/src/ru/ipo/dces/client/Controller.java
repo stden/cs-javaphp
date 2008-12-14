@@ -22,6 +22,7 @@ public class Controller {
   private static String             sessionID;
   private static int                contestID;
   private static ClientDialog       clientDialog;
+  private static UserDescription.UserType userType;
 
   /** Добавление Plugin'а в клиент
    * @param pd the description of the problem for which the plugin is added
@@ -64,6 +65,7 @@ public class Controller {
 
       // Если пользователь администратор или администратор сервера
       // загружаем ему административные Plugin'ы
+      userType = res.user.userType;
       switch (res.user.userType) {
         case ContestAdmin:
           addAdminPlugin(AdjustContestsPlugin.class);
@@ -128,14 +130,15 @@ public class Controller {
     DisconnectRequest dr = new DisconnectRequest();
     dr.sessionID = sessionID;
 
-      try {
-          server.doRequest(dr);
-          Controller.contestID = -1;
-      } catch (Exception serverReturnedError) {
-          // TODO to think what to do
-      }
+    try {
+        server.doRequest(dr);
+        Controller.contestID = -1;
+    } catch (Exception serverReturnedError) {
+        // TODO to think what to do
+    }
 
-      Controller.sessionID = null;
+    Controller.sessionID = null;
+    Controller.userType = null;
     clientDialog.initialState();
   }
 
@@ -286,5 +289,13 @@ public class Controller {
 
   public static int getContestID() {
     return contestID;
+  }
+
+  /**
+   * Returns user type of the user currently logged in or null if client is not connected to a contest
+   * @return user type of the user currently logged  in or null if client is not connected to a contest
+   */
+  public static UserDescription.UserType getUserType() {
+    return userType;
   }
 }
