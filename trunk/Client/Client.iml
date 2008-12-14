@@ -1,5 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module relativePaths="true" type="JAVA_MODULE" version="4">
+  <component name="BuildJarSettings">
+    <containerInfo>
+      <containerElement type="module" name="Client">
+        <attribute name="method" value="1" />
+        <attribute name="URI" value="/" />
+      </containerElement>
+      <containerElement type="module" name="DCES_API">
+        <attribute name="method" value="1" />
+        <attribute name="URI" value="/" />
+      </containerElement>
+      <containerElement type="library" level="module">
+        <attribute name="method" value="2" />
+        <attribute name="URI" value="/TableLayout.jar" />
+        <url>jar://$MODULE_DIR$/lib/TableLayout.jar!/</url>
+      </containerElement>
+      <containerElement type="library" level="module">
+        <attribute name="method" value="2" />
+        <attribute name="URI" value="/appframework-1.0.3.jar" />
+        <url>jar://$MODULE_DIR$/libs/appframework-1.0.3.jar!/</url>
+      </containerElement>
+      <containerElement type="library" level="module">
+        <attribute name="method" value="2" />
+        <attribute name="URI" value="/forms.jar" />
+        <url>jar://$MODULE_DIR$/lib/forms.jar!/</url>
+      </containerElement>
+      <containerElement type="library" level="module">
+        <attribute name="method" value="2" />
+        <attribute name="URI" value="/swing-worker-1.1.jar" />
+        <url>jar://$MODULE_DIR$/libs/swing-worker-1.1.jar!/</url>
+      </containerElement>
+    </containerInfo>
+    <setting name="jarUrl" value="file://$MODULE_DIR$/Client.jar" />
+    <setting name="buildJar" value="true" />
+    <setting name="mainClass" value="ru.ipo.dces.client.Controller" />
+  </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">

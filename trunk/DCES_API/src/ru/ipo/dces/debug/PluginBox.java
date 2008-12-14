@@ -152,7 +152,7 @@ public class PluginBox extends JFrame {
       super(env);
 
       this.setLayout(new GridLayout(1,1));
-      jLabel = new JLabel("Other Plugin");
+      jLabel = new JLabel("Для просмотра Вашего плагина нажмите кнопку слева");
       jLabel.setHorizontalAlignment(JLabel.CENTER);
       this.add(jLabel);
 
