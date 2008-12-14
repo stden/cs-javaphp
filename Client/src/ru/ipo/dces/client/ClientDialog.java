@@ -88,6 +88,8 @@ public class ClientDialog extends JFrame {
     setRightPanel(new Plugin(null) {});
     rightPanel = null;
 
+    bLayout.setRows(MIN_LEFT_PANEL_ROWS);
+
     //clear radio group of left buttons
     ArrayList<AbstractButton> al = new ArrayList<AbstractButton>();
     final Enumeration<AbstractButton> buttonEnumeration = pluginsButtonGroup.getElements();

@@ -8,7 +8,7 @@
 
     //get user_id or die, if session is invalid
     $userRow = testSession($con, $request->sessionID);
-    $user_id = testSession($con, $request->sessionID);
+    $user_id = $userRow['id'];
 
     //authorize user for this operation
     // get contest ID
