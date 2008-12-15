@@ -182,7 +182,7 @@
           <text value="Самостоятельно"/>
         </properties>
       </component>
-      <component id="efab2" class="javax.swing.JSeparator">
+      <component id="efab2" class="javax.swing.JSeparator" binding="contestsSeparator">
         <constraints>
           <grid row="2" column="4" row-span="40" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
           <forms defaultalign-horz="false" defaultalign-vert="false"/>
