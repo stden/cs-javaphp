@@ -67,6 +67,11 @@ public class LoginPluginV2 extends Plugin {
     defaultTableModel = new DefaultTableModel();
 
     registerToContestTable.setModel(noRegistrationTableModel);
+
+    //set default login/pass
+    loginEdit.setText("admin");
+    passwordEdit.setText("pass");
+    loginAsAdminCheckBox.setSelected(true);
   }
 
   private void setListeners() {

@@ -3,15 +3,16 @@ package ru.ipo.dces.client;
 import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
-import ru.ipo.dces.plugins.admin.LogoutPlugin;
 import ru.ipo.dces.plugins.admin.AdjustContestsPlugin;
 import ru.ipo.dces.plugins.admin.CreateContestPlugin;
+import ru.ipo.dces.plugins.admin.LogoutPlugin;
+import ru.ipo.dces.plugins.admin.ManageUsersPlugin;
 
 import javax.swing.*;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipEntry;
 import java.io.*;
 import java.lang.reflect.Constructor;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 /**
  *  онтроллер, который хранит данные о соединении с сервером и позвол€ет
@@ -69,11 +70,12 @@ public class Controller {
       switch (res.user.userType) {
         case ContestAdmin:
           addAdminPlugin(AdjustContestsPlugin.class);
+          addAdminPlugin(ManageUsersPlugin.class);
           break;
         case SuperAdmin:
           addAdminPlugin(CreateContestPlugin.class);
-          addAdminPlugin(CreateContestPlugin.class);
           addAdminPlugin(AdjustContestsPlugin.class);
+          addAdminPlugin(ManageUsersPlugin.class);
           break;
         case Participant:
           // ѕолучаем данные о задачах
