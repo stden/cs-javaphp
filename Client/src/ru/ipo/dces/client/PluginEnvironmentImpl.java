@@ -32,7 +32,6 @@ public class PluginEnvironmentImpl implements PluginEnvironment {
     ssr.problemID = pd.id;
     ssr.problemResult = solution;    
     ssr.sessionID = Controller.getSessionID();
-    ssr.contestID = -1;
     final SubmitSolutionResponse response = Controller.getServer().doRequest(ssr);
     return response.problemResult;
   }

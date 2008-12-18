@@ -95,6 +95,16 @@ switch(get_class($request)){
 	  $result = processRemoveContestRequest($request);
 	  break;
 
+	case 'AdjustClientPluginRequest':
+	  require("AdjustClientPlugin.php");
+	  $result = processAdjustClientPluginRequest($request);
+	  break;
+
+	case 'RemoveClientPluginRequest':
+	  require("RemoveClientPlugin.php");
+	  $result = processRemoveClientPluginRequest($request);
+	  break;
+
   default:
 	  $result = 'Unknown message type "'.get_class($s).'"';
 };

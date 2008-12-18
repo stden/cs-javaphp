@@ -112,7 +112,7 @@ public class PluginBox extends JFrame {
   }
 
   /** Начальное состояние клиента до присоединения контеста */
-  public void initialState() {
+  private void initialState() {
     otherPluginButton = new JToggleButton();
     pluginButton = new JToggleButton();
     pluginsButtonGroup.add(pluginButton);
@@ -152,7 +152,7 @@ public class PluginBox extends JFrame {
       super(env);
 
       this.setLayout(new GridLayout(1,1));
-      jLabel = new JLabel("Для просмотра Вашего плагина нажмите кнопку слева");
+      jLabel = new JLabel("Для просмотра вашего плагина нажмите кнопку слева");
       jLabel.setHorizontalAlignment(JLabel.CENTER);
       this.add(jLabel);
 

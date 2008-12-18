@@ -12,7 +12,6 @@ import com.jgoodies.forms.layout.CellConstraints;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.util.Arrays;
 
 /**
  * Created by IntelliJ IDEA.
@@ -45,24 +44,19 @@ public class LogoutPlugin extends Plugin {
     });
     refreshButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        //TODO to implement
-
-        //getUserRequestTest
-        GetUsersRequest r = new GetUsersRequest();
-        r.contestID = Controller.getContestID();
-        r.sessionID = Controller.getSessionID();
+        if (Controller.getUserType() != UserDescription.UserType.Participant) {
+          JOptionPane.showMessageDialog(null, "Только участники могут обновлять список задач");
+          return;
+        }
 
         try {
-          final GetUsersResponse resp = Controller.getServer().doRequest(r);
-          for (UserDescription user : resp.users) {
-            System.out.println("user.login = " + user.login);
-            System.out.println("user.password = " + user.password);
-            System.out.println("user.userType = " + user.userType);
-            System.out.println("user.dataValue = " + Arrays.toString(user.dataValue));
-            System.out.println();
-          }
+          Controller.getClientDialog().clearLeftPanel();
+          //the first plugin will be selected after this call
+          Controller.refreshParticipantInfo();
+          JOptionPane.showMessageDialog(null, "Условия успешно обновлены");
         } catch (Exception ee) {
-          ee.printStackTrace();
+          JOptionPane.showMessageDialog(null, "Не удалось обновить условия");
+          Controller.getClientDialog().initialState();
         }
       }
     });

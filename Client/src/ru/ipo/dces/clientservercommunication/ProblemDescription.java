@@ -3,7 +3,7 @@ package ru.ipo.dces.clientservercommunication;
 /**
  * Описание задачи
  */
-public class ProblemDescription implements Comparable<ProblemDescription> {
+public class ProblemDescription {
 
   /** идентификатор задачи, номер задачи в контесте*/
   public int    id;
@@ -32,10 +32,5 @@ public class ProblemDescription implements Comparable<ProblemDescription> {
    * Ответ к задаче. Это данные, которые используются для создания ответа
    */
   public byte[] answerData;
-
-  @Override
-  public int compareTo(ProblemDescription o) {
-    return name.compareTo(o.name);
-  }
 
 }

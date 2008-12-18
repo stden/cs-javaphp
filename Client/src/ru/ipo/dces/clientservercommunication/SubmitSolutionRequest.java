@@ -7,11 +7,7 @@ import java.util.HashMap;
  */
 public class SubmitSolutionRequest implements Request {
   public String  sessionID;
-  /** ID контеста, по которому посылается решение. Содержится в session ID,
-   *  но super admin способен посылать решение для любого контеста
-   */
-  public int     contestID;
   /** ID задачи, по которой посылается решение */
-  public int     problemID;
+  public int     problemID; /*Содержит в себе заодно contestID*/
   public HashMap<String, String> problemResult;
 }
