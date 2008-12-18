@@ -14,16 +14,21 @@
     // get contest ID
     $user_type = $userRow['user_type'];
 
-    $contest_id = getRequestedContest($request->contestID, $userRow['contest_id'], $user_type);
+    //get problem row
+    $problem_rows = mysql_query(
+                      sprintf("SELECT * FROM ${prfx}problem WHERE id=%s", quote_smart($request->problemID))
+                    , $con) or die("DB error 21. ".mysql_error());
+    if (! ($problem_row = mysql_fetch_array($problem_rows)) ) throwError("Problem with specified ID not found");
+
+    //get contest id of a problem
+    $problem_contest_id = $problem_row['contest_id'];
+
+    //test if we have rights to submit solution for the contest
+    $contest_id = getRequestedContest($problem_contest_id, $userRow['contest_id'], $user_type);
 
     if ($contest_id < 0) throwError("You don't have permissions to submit solution for this contest");
 
     //get plugin_alias
-    $problem_rows = mysql_query(
-                      sprintf("SELECT server_plugin_alias, answer FROM ${prfx}problem WHERE id=%s", quote_smart($request->problemID))
-                    , $con) or die("DB error 21. ".mysql_error());
-    if (! ($problem_row = mysql_fetch_array($problem_rows)) ) throwError("Problem with specified ID not found");
-
     $plugin_alias = $problem_row['server_plugin_alias'];
 
     //get plugin

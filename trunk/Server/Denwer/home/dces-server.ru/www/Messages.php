@@ -2,6 +2,7 @@
 // Registered message types
 class AcceptedResponse{};
 class AdjustContestRequest{};
+class AdjustClientPluginRequest{};
 class AvailableContestsRequest{};
 class AvailableContestsResponse{};
 class ChangePasswordRequest{};

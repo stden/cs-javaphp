@@ -6,7 +6,7 @@ import ru.ipo.dces.pluginapi.PluginEnvironment;
 import ru.ipo.dces.plugins.admin.AdjustContestsPlugin;
 import ru.ipo.dces.plugins.admin.CreateContestPlugin;
 import ru.ipo.dces.plugins.admin.LogoutPlugin;
-import ru.ipo.dces.plugins.admin.ManageUsersPlugin;
+import ru.ipo.dces.debug.PluginBox;
 
 import javax.swing.*;
 import java.io.*;
@@ -70,36 +70,19 @@ public class Controller {
       switch (res.user.userType) {
         case ContestAdmin:
           addAdminPlugin(AdjustContestsPlugin.class);
-          addAdminPlugin(ManageUsersPlugin.class);
+          //addAdminPlugin(ManageUsersPlugin.class);
+          addAdminPlugin(LogoutPlugin.class);
           break;
         case SuperAdmin:
           addAdminPlugin(CreateContestPlugin.class);
           addAdminPlugin(AdjustContestsPlugin.class);
-          addAdminPlugin(ManageUsersPlugin.class);
+          //addAdminPlugin(ManageUsersPlugin.class);
+          addAdminPlugin(LogoutPlugin.class);
           break;
         case Participant:
           // Получаем данные о задачах
-          GetContestDataRequest rq = new GetContestDataRequest();
-          rq.contestID = -1;
-          rq.infoType = GetContestDataRequest.InformationType.ParticipantInfo;
-          rq.extendedData = null;
-          rq.sessionID = sessionID;
-          //TODO don't download problem statements if they are already downloaded
-          //TODO if server has new statements, they are to be downloaded
-          GetContestDataResponse rs = Controller.server.doRequest(rq);
-          for (ProblemDescription pd : rs.problems) {
-            File problemFolder = getProblemDirectoryByID(pd.id);
-            if (!problemFolder.exists()) {
-              problemFolder.mkdir();
-              unzip(pd.statement, problemFolder);
-            }
-            addPlugin(pd);
-          }
+          refreshParticipantInfo();
       }
-
-      // Добавляем Plugin выхода из контеста в самый конец
-      addAdminPlugin(LogoutPlugin.class);
-
     } catch (Exception e) {
       JOptionPane.showMessageDialog(null, "При попытке подключения к контесту произошла ошибка: " + e.getMessage(), "Ошибка",
           JOptionPane.ERROR_MESSAGE);
@@ -107,7 +90,34 @@ public class Controller {
     }
   }
 
-  private static void unzip(byte[] zip, File folder) throws IOException {
+  //TODO add param 'refresh' and if false don't download statements that already are on disk
+  public static void refreshParticipantInfo() throws ServerReturnedError, ServerReturnedNoAnswer, IOException {
+    GetContestDataRequest rq = new GetContestDataRequest();
+    rq.contestID = -1;
+    rq.infoType = GetContestDataRequest.InformationType.ParticipantInfo;
+    rq.extendedData = null;
+    rq.sessionID = sessionID;
+    GetContestDataResponse rs = Controller.server.doRequest(rq);
+    for (ProblemDescription pd : rs.problems) {
+      File problemFolder = getProblemDirectoryByID(pd.id);
+
+      if (problemFolder.exists()) {
+        FileSystemUtils.deleteDir(problemFolder);
+        problemFolder.mkdir();
+      }
+      else
+        problemFolder.mkdirs();
+
+      unzip(pd.statement, problemFolder);
+
+      addPlugin(pd);
+    }
+
+    addAdminPlugin(LogoutPlugin.class);
+  }
+
+  //TODO test this method to work with directories inside an archive
+  public static void unzip(byte[] zip, File folder) throws IOException {
     int BUFFER = 4096;
     BufferedOutputStream dest;
     ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(zip));
@@ -115,8 +125,15 @@ public class Controller {
     while ((entry = zis.getNextEntry()) != null) {
       int count;
       byte data[] = new byte[BUFFER];
+      if (entry.isDirectory()) {
+        (new File(entry.getName())).mkdirs();
+        continue;
+      }
+
       // write the files to the disk
-      FileOutputStream fos = new FileOutputStream(folder.getCanonicalPath() + '/' + entry.getName());
+      File fout = new File(folder.getCanonicalPath() + '/' + entry.getName());
+      FileSystemUtils.ensureFileHasPath(fout);
+      FileOutputStream fos = new FileOutputStream(fout);
       dest = new BufferedOutputStream(fos, BUFFER);
       while ((count = zis.read(data, 0, BUFFER)) != -1) {
         dest.write(data, 0, count);
@@ -205,7 +222,7 @@ public class Controller {
           .doRequest(new AvailableContestsRequest());
       return res.contests;
     } catch (Exception e) {
-      JOptionPane.showMessageDialog(null, "При попытке обночить список контестов произошла ошибка: " + e.getMessage(), "Ошибка",
+      JOptionPane.showMessageDialog(null, "При попытке обновить список контестов произошла ошибка: " + e.getMessage(), "Ошибка",
           JOptionPane.ERROR_MESSAGE);
       return new ContestDescription[]{};
     }
@@ -281,6 +298,12 @@ public class Controller {
     return new File(Settings.getInstance().getProblemsDirectory() + '/' + problemID);
   }
 
+  public static File getProblemDebugDirectoryByID(int problemID) {
+    final File debugDir = new File(Settings.getInstance().getProblemsDirectory() + "/debug");
+    debugDir.mkdir();
+    return new File(debugDir.getPath() + '/' + problemID);
+  }
+
   public static String getSessionID() {
     return sessionID;
   }
@@ -299,5 +322,48 @@ public class Controller {
    */
   public static UserDescription.UserType getUserType() {
     return userType;
+  }
+
+  public static void debugProblem(int problemID, int contestID) {
+    //create and fill get contest data request
+    final GetContestDataRequest contestRequest = new GetContestDataRequest();
+    contestRequest.contestID = contestID;
+    contestRequest.extendedData = new int[] {problemID};
+    contestRequest.infoType = GetContestDataRequest.InformationType.ParticipantInfo;
+    contestRequest.sessionID = sessionID;
+
+    //do a request and get a response
+    final GetContestDataResponse contestResponse;
+    try {
+      contestResponse = Controller.getServer().doRequest(contestRequest);
+    } catch (ServerReturnedError e) {
+      System.out.println("DEBUG error:");
+      e.printStackTrace();
+      return;
+    } catch (ServerReturnedNoAnswer e) {
+      System.out.println("DEBUG error:");
+      e.printStackTrace();
+      return;
+    }
+
+    //find problem with the desired id
+    ProblemDescription problem = null;
+    for (ProblemDescription p : contestResponse.problems)
+      if (p.id == problemID)
+        problem = p;
+
+    if (problem == null) {
+      System.out.println("Debug error: can not debug problem id " + problemID + ". It is not found on the server");
+      return;
+    }
+
+    //run debug
+    final Class<? extends Plugin> pluginClass = PluginLoader.getPluginClass(problem.clientPluginAlias);
+    PluginBox box = new PluginBox(pluginClass, new ServerPluginProxy(problem), problem.name);
+    box.setVisible(true);    
+  }
+
+  public static ClientDialog getClientDialog() {
+    return clientDialog;
   }
 }

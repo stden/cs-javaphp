@@ -220,6 +220,28 @@ public class AdjustContestsPlugin extends NotificationPlugin {
                 problemAnswer.setText(selFile.getAbsolutePath());
             }
         });
+        previewButton.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
+            int i = problemsList.getSelectedIndex();
+            if (i == -1) return;
+
+            //get problem id
+            int problemID = updatedBean.getProblemDescriptions()[i].id;
+
+            //get contest id
+            int contestID;
+            //if super admin
+            if (Controller.getUserType() == UserDescription.UserType.SuperAdmin) {
+              final ContestBean bean = (ContestBean) contestsList.getSelectedValue();
+              if (bean == null) return;
+              contestID = bean.description.contestID;
+            }
+            else //if contest admin
+              contestID = Controller.getContestID();
+            
+            Controller.debugProblem(problemID, contestID);
+          }
+        });
     }
 
 

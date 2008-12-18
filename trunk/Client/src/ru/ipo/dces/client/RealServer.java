@@ -197,4 +197,8 @@ public class RealServer implements ServerFacade {
   public AcceptedResponse doRequest(RemoveContestRequest r) throws ServerReturnedError, ServerReturnedNoAnswer {
     return doRequest(AcceptedResponse.class, r);
   }
+
+  public AcceptedResponse doRequest(AdjustClientPluginRequest r) throws ServerReturnedError, ServerReturnedNoAnswer {
+    return doRequest(AcceptedResponse.class, r);
+  }
 }

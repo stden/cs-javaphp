@@ -57,4 +57,7 @@ public interface ServerFacade {
 
   public AcceptedResponse doRequest(RemoveContestRequest r)
       throws ServerReturnedError, ServerReturnedNoAnswer;
+
+  public AcceptedResponse doRequest(AdjustClientPluginRequest r)
+      throws ServerReturnedError, ServerReturnedNoAnswer;
 }
