@@ -16,15 +16,15 @@ public class ClientDialog extends JFrame {
   private static final int MIN_LEFT_PANEL_ROWS = 10;
 
   public class OpenPanelActionListener implements ActionListener {
-    private final Plugin panel;
+    private final Plugin plugin;
 
-    public OpenPanelActionListener(Plugin panel) {
-      this.panel = panel;
+    public OpenPanelActionListener(Plugin plugin) {
+      this.plugin = plugin;
     }
 
     public void actionPerformed(ActionEvent evt) {
       //TODO: create a dialog of correct size
-      /*Dimension preferredPluginSize = panel.getPreferredSize();
+      /*Dimension preferredPluginSize = plugin.getPreferredSize();
       Dimension preferredMenuSize = leftPanel.getPreferredSize();
 
       int hDelta = ClientDialog.this.getHeight() - ClientDialog.this.getContentPane().getHeight();
@@ -36,7 +36,7 @@ public class ClientDialog extends JFrame {
       );*/
 
       if (rightPanel != null) rightPanel.deactivate();
-      setRightPanel(panel);
+      setRightPanel(plugin);
       if (rightPanel != null) rightPanel.activate();
     }
   }
@@ -64,7 +64,7 @@ public class ClientDialog extends JFrame {
     final JToggleButton button = pev.getButton();
     button.addActionListener(new OpenPanelActionListener(p));
 
-    //increase left panel size if there are
+    //increase left plugin size if there are
     bLayout.setRows(Math.max(MIN_LEFT_PANEL_ROWS, bLayout.getRows() + 1));
 
     //make button radio
@@ -85,7 +85,13 @@ public class ClientDialog extends JFrame {
   /** ”далить все Plugin'ы */
   public void clearLeftPanel() {
     leftPanel.removeAll();
-    setRightPanel(new Plugin(null) {});
+    setRightPanel(new Plugin() {
+      public JPanel getPanel() {
+        return new JPanel();
+      }
+      public void activate() {}
+      public void deactivate() {}
+    });
     rightPanel = null;
 
     bLayout.setRows(MIN_LEFT_PANEL_ROWS);
@@ -112,7 +118,7 @@ public class ClientDialog extends JFrame {
         getContentPane().add(splitPane);
         {
           leftPanel = new JPanel();
-          leftPanel.setName("Left panel");
+          leftPanel.setName("Left plugin");
           bLayout = new GridLayout(MIN_LEFT_PANEL_ROWS, 1);
           bLayout.setColumns(1);
           bLayout.setHgap(2);
@@ -152,6 +158,6 @@ public class ClientDialog extends JFrame {
 
   private void setRightPanel(Plugin panel) {
     rightPanel = panel;
-    splitPane.add(panel, JSplitPane.RIGHT);
+    splitPane.add(panel.getPanel(), JSplitPane.RIGHT);
   }
 }

@@ -68,7 +68,7 @@ public class PluginBox extends JFrame {
       setErrorPlugin();
     }
 
-    setRightPanel(otherPlugin);
+    setRightPanel(otherPlugin.getPanel());
   }
 
   private void setErrorPlugin() {
@@ -122,14 +122,14 @@ public class PluginBox extends JFrame {
     otherPluginButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         plugin.deactivate();
-        setRightPanel(otherPlugin);
+        setRightPanel(otherPlugin.getPanel());
       }
     });
 
     pluginButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         plugin.activate();
-        setRightPanel(plugin);
+        setRightPanel(plugin.getPanel());
       }
     });
 
@@ -137,20 +137,19 @@ public class PluginBox extends JFrame {
     leftPanel.add(pluginButton);
   }
 
-  private void setRightPanel(Plugin panel) {
+  private void setRightPanel(JPanel panel) {
     splitPane.add(panel, JSplitPane.RIGHT);
   }
 
-  private class OtherPlugin extends Plugin {
+  private class OtherPlugin extends JPanel implements Plugin {
 
     private final JLabel jLabel; 
 
     /**
      * @param env environment for the plugin
      */
+    @SuppressWarnings({"UnusedDeclaration", "UnusedDeclaration", "UnusedDeclaration"})
     public OtherPlugin(PluginEnvironment env) {
-      super(env);
-
       this.setLayout(new GridLayout(1,1));
       jLabel = new JLabel("Для просмотра вашего плагина нажмите кнопку слева");
       jLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -161,6 +160,18 @@ public class PluginBox extends JFrame {
 
     public void setLabel(String s) {
       jLabel.setText(s);
+    }
+
+    public JPanel getPanel() {
+      return this;
+    }
+
+    public void activate() {
+      //do nothing
+    }
+
+    public void deactivate() {
+      //do nothing
     }
   }
 

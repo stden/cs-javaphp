@@ -19,7 +19,7 @@ import java.awt.event.ActionEvent;
  * Date: 11.12.2008
  * Time: 20:06:45
  */
-public class LogoutPlugin extends Plugin {
+public class LogoutPlugin extends JPanel implements Plugin {
   private JButton logoutButton;
   private JPanel mainPanel;
   private JButton refreshButton;
@@ -30,8 +30,6 @@ public class LogoutPlugin extends Plugin {
    * @param env environment for the plugin
    */
   public LogoutPlugin(PluginEnvironment env) {
-    super(env);
-
     $$$setupUI$$$();
     env.setTitle("- ”правление -");
 
@@ -96,5 +94,17 @@ public class LogoutPlugin extends Plugin {
    */
   public JComponent $$$getRootComponent$$$() {
     return mainPanel;
+  }
+
+  public JPanel getPanel() {
+    return this;
+  }
+
+  public void activate() {
+    //do nothing
+  }
+
+  public void deactivate() {
+    //do nothing
   }
 }

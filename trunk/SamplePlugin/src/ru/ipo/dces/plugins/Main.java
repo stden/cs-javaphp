@@ -22,16 +22,17 @@ import com.jgoodies.forms.layout.CellConstraints;
  * Date: 07.12.2008
  * Time: 20:08:15
  */
-public class Main extends Plugin {
+public class Main extends JPanel implements Plugin {
   private JTextPane statementTextPane;
   private JPanel pluginPanel;
   private JButton submitButton;
   private JTextField answerTextField;
 
-  public Main(PluginEnvironment pluginEnvironment) {
-    super(pluginEnvironment);
+  private final PluginEnvironment env;
 
-    pluginEnvironment.setTitle(pluginEnvironment.getProblemName());
+  public Main(PluginEnvironment pluginEnvironment) {
+    env = pluginEnvironment;
+    env.setTitle(pluginEnvironment.getProblemName());
 
     $$$setupUI$$$();
     addListeners();
@@ -42,7 +43,7 @@ public class Main extends Plugin {
   private void showStatement() {
     statementTextPane.setContentType("text/html");
     try {
-      statementTextPane.setPage("file:///" + getClient().getProblemFolder().getCanonicalPath() + '/' + "statement.html");
+      statementTextPane.setPage("file:///" + env.getProblemFolder().getCanonicalPath() + '/' + "statement.html");
     } catch (IOException e) {
       Document d = statementTextPane.getDocument();
       try {
@@ -65,7 +66,7 @@ public class Main extends Plugin {
           HashMap<String, String> res = new HashMap<String, String>();
           res.put("answer", answerTextField.getText());
           try {
-            final HashMap<String, String> ans = getClient().submitSolution(res);
+            final HashMap<String, String> ans = env.submitSolution(res);
             if (ans.get("result").equals("yes"))
               JOptionPane.showMessageDialog(null, "Вы дали правильный ответ!");
             else
@@ -116,5 +117,17 @@ public class Main extends Plugin {
    */
   public JComponent $$$getRootComponent$$$() {
     return pluginPanel;
+  }
+
+  public JPanel getPanel() {
+    return this;
+  }
+
+  public void activate() {
+    //do nothing
+  }
+
+  public void deactivate() {
+    //do nothing
   }
 }
