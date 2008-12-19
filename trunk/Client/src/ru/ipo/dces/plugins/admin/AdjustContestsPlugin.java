@@ -4,6 +4,8 @@ import com.jgoodies.forms.layout.*;
 import ru.ipo.dces.client.Controller;
 import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
+import ru.ipo.dces.plugins.admin.beans.ContestsListBean;
+import ru.ipo.dces.plugins.admin.beans.ProblemsBean;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -67,12 +69,12 @@ public class AdjustContestsPlugin extends NotificationPlugin {
 
         contestsList.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e) {
-                ContestBean selected = (ContestBean) contestsList.getSelectedValue();
+                ContestsListBean selected = (ContestsListBean) contestsList.getSelectedValue();
 
                 if (selected == null)
                     return;
 
-                fillDaFormWithData(selected.description.contestID);
+                fillDaFormWithData(selected.getDescription().contestID);
             }
         });
 
@@ -107,9 +109,9 @@ public class AdjustContestsPlugin extends NotificationPlugin {
                     problemStatement.setText("");
                     problemName.setText("");
                 } else {
-                    clientPlugin.setText(pb.description.clientPluginAlias);
-                    serverPlugin.setText(pb.description.serverPluginAlias);
-                    problemName.setText(pb.description.name);
+                    clientPlugin.setText(pb.getDescription().clientPluginAlias);
+                    serverPlugin.setText(pb.getDescription().serverPluginAlias);
+                    problemName.setText(pb.getDescription().name);
                     //TODO: save humane name or get files from server if name was not set
                     problemAnswer.setText("Некоторые данные");
                     problemStatement.setText("Некоторые данные");
@@ -221,26 +223,26 @@ public class AdjustContestsPlugin extends NotificationPlugin {
             }
         });
         previewButton.addActionListener(new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
-            int i = problemsList.getSelectedIndex();
-            if (i == -1) return;
+            public void actionPerformed(ActionEvent e) {
+                //TODO process locally stored problem instead of server one
+                int i = problemsList.getSelectedIndex();
+                if (i == -1) return;
 
-            //get problem id
-            int problemID = updatedBean.getProblemDescriptions()[i].id;
+                //get problem id
+                int problemID = updatedBean.getProblemDescriptions()[i].id;
 
-            //get contest id
-            int contestID;
-            //if super admin
-            if (Controller.getUserType() == UserDescription.UserType.SuperAdmin) {
-              final ContestBean bean = (ContestBean) contestsList.getSelectedValue();
-              if (bean == null) return;
-              contestID = bean.description.contestID;
+                //get contest id
+                int contestID;
+                //if super admin
+                if (Controller.getUserType() == UserDescription.UserType.SuperAdmin) {
+                    final ContestsListBean bean = (ContestsListBean) contestsList.getSelectedValue();
+                    if (bean == null) return;
+                    contestID = bean.getDescription().contestID;
+                } else //if contest admin
+                    contestID = Controller.getContestID();
+
+                Controller.debugProblem(problemID, contestID);
             }
-            else //if contest admin
-              contestID = Controller.getContestID();
-            
-            Controller.debugProblem(problemID, contestID);
-          }
         });
     }
 
@@ -258,7 +260,7 @@ public class AdjustContestsPlugin extends NotificationPlugin {
         ContestDescription[] contestDescriptions = Controller.getAvailableContests();
 
         for (ContestDescription description : contestDescriptions)
-            contestsListModel.addElement(new ContestBean(description));
+            contestsListModel.addElement(new ContestsListBean(description));
     }
 
     private void createUIComponents() {
@@ -486,15 +488,15 @@ public class AdjustContestsPlugin extends NotificationPlugin {
                         zipOS.close();
                     } catch (IOException e1) {
                         if (e.getDocument() == problemAnswer.getDocument())
-                            pb.description.answerData = null;
+                            pb.getDescription().answerData = null;
                         else
-                            pb.description.statementData = null;
+                            pb.getDescription().statementData = null;
                     }
 
                     if (e.getDocument() == problemAnswer.getDocument())
-                        pb.description.answerData = baos.toByteArray();
+                        pb.getDescription().answerData = baos.toByteArray();
                     else
-                        pb.description.statementData = baos.toByteArray();
+                        pb.getDescription().statementData = baos.toByteArray();
                 } else if (e.getDocument() == problemName.getDocument()) {
                     int i = problemsList.getSelectedIndex();
                     if (i == -1) return;
@@ -504,26 +506,25 @@ public class AdjustContestsPlugin extends NotificationPlugin {
                     if (pb == null)
                         return;
 
-                    pb.description.name = problemName.getText();
+                    pb.getDescription().name = problemName.getText();
                     //refresh list by hack
                     problemsListModel.setElementAt(pb, i);
                 } else if (e.getDocument() == clientPlugin.getDocument()) {
                     ProblemsBean pb = (ProblemsBean) problemsList.getSelectedValue();
 
                     if (pb != null)
-                        pb.description.clientPluginAlias = clientPlugin.getText();
+                        pb.getDescription().clientPluginAlias = clientPlugin.getText();
                 } else if (e.getDocument() == serverPlugin.getDocument()) {
                     ProblemsBean pb = (ProblemsBean) problemsList.getSelectedValue();
 
                     if (pb != null)
-                        pb.description.serverPluginAlias = serverPlugin.getText();
+                        pb.getDescription().serverPluginAlias = serverPlugin.getText();
                 }
             }
         });
     }
 
-    private void setColumn(FormLayout form, int colNo, int xSize, double grow)
-    {
+    private void setColumn(FormLayout form, int colNo, int xSize, double grow) {
         form.setColumnSpec(colNo, new ColumnSpec(ColumnSpec.FILL, Sizes.dluX(xSize), grow));
     }
 
@@ -611,7 +612,7 @@ public class AdjustContestsPlugin extends NotificationPlugin {
      */
     private void $$$setupUI$$$() {
         createUIComponents();
-        drawPanel.setLayout(new FormLayout("fill:max(d;4px):noGrow,left:4dlu:noGrow,fill:122dlu:noGrow,left:4dlu:grow,fill:2dlu:noGrow,left:4dlu:grow,fill:92dlu:noGrow,left:4dlu:grow(4.0),fill:72dlu:noGrow,left:4dlu:noGrow,fill:30dlu:noGrow,left:4dlu:noGrow,left:30dlu:noGrow,fill:max(d;4px):noGrow,fill:62dlu:noGrow,left:4dlu:noGrow,fill:max(d;4px):noGrow", "center:max(d;4px):noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:60dlu:noGrow,top:4dlu:noGrow,center:17dlu:noGrow,top:4dlu:noGrow,center:1px:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:28px:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:noGrow,top:4dlu:noGrow,center:0dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:5dlu:noGrow,center:16dlu:noGrow,top:5dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow"));
+        drawPanel.setLayout(new FormLayout("fill:max(d;4px):noGrow,left:4dlu:noGrow,fill:122dlu:noGrow,left:4dlu:grow,fill:1dlu:noGrow,left:4dlu:grow,fill:92dlu:noGrow,left:4dlu:grow(4.0),fill:72dlu:noGrow,left:4dlu:noGrow,fill:30dlu:noGrow,left:4dlu:noGrow,left:30dlu:noGrow,fill:max(d;4px):noGrow,fill:62dlu:noGrow,left:4dlu:noGrow,fill:max(d;4px):noGrow", "center:max(d;4px):noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:60dlu:noGrow,top:4dlu:noGrow,center:17dlu:noGrow,top:4dlu:noGrow,center:1px:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:28px:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:noGrow,top:4dlu:noGrow,center:0dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:5dlu:noGrow,center:16dlu:noGrow,top:5dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow"));
         contestsList = new JList();
         final DefaultListModel defaultListModel1 = new DefaultListModel();
         contestsList.setModel(defaultListModel1);
@@ -742,46 +743,6 @@ public class AdjustContestsPlugin extends NotificationPlugin {
      */
     public JComponent $$$getRootComponent$$$() {
         return drawPanel;
-    }
-
-    private class ProblemsBean {
-        private ProblemDescription description;
-
-        private ProblemsBean(ProblemDescription description) {
-            this.description = description;
-        }
-
-        public ProblemDescription getDescription() {
-            return description;
-        }
-
-        public void setDescription(ProblemDescription description) {
-            this.description = description;
-        }
-
-        public String toString() {
-            return description == null ? "DCES error" : description.name;
-        }
-    }
-
-    private class ContestBean {
-        private ContestDescription description;
-
-        private ContestBean(ContestDescription description) {
-            this.description = description;
-        }
-
-        public ContestDescription getDescription() {
-            return description;
-        }
-
-        public void setDescription(ContestDescription description) {
-            this.description = description;
-        }
-
-        public String toString() {
-            return description == null ? "DCES error" : description.name;
-        }
     }
 
 }

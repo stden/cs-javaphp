@@ -1,7 +1,7 @@
 package ru.ipo.dces.gen;
 
 import ru.ipo.dces.clientservercommunication.*;
-import ru.ipo.dces.tests.samples.Sum;
+import ru.ipo.dces.clientservercommunication.ContestDescription;
 
 public class GenPHP {
 

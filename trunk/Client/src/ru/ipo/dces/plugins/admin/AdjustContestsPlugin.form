@@ -48,7 +48,7 @@
     <colspec value="left:4dlu:noGrow"/>
     <colspec value="fill:122dlu:noGrow"/>
     <colspec value="left:4dlu:grow"/>
-    <colspec value="fill:2dlu:noGrow"/>
+    <colspec value="fill:1dlu:noGrow"/>
     <colspec value="left:4dlu:grow"/>
     <colspec value="fill:92dlu:noGrow"/>
     <colspec value="left:4dlu:grow(4.0)"/>
@@ -62,7 +62,7 @@
     <colspec value="left:4dlu:noGrow"/>
     <colspec value="fill:max(d;4px):noGrow"/>
     <constraints>
-      <xy x="20" y="20" width="669" height="641"/>
+      <xy x="20" y="20" width="671" height="641"/>
     </constraints>
     <properties/>
     <border type="none"/>

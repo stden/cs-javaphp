@@ -1,12 +1,13 @@
 package ru.ipo.dces.client;
 
 import ru.ipo.dces.clientservercommunication.*;
+import ru.ipo.dces.debug.PluginBox;
 import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
 import ru.ipo.dces.plugins.admin.AdjustContestsPlugin;
 import ru.ipo.dces.plugins.admin.CreateContestPlugin;
 import ru.ipo.dces.plugins.admin.LogoutPlugin;
-import ru.ipo.dces.debug.PluginBox;
+import ru.ipo.dces.plugins.admin.ManageUsersPlugin;
 
 import javax.swing.*;
 import java.io.*;
@@ -22,6 +23,7 @@ public class Controller {
   private static ServerFacade       server;
   private static String             sessionID;
   private static int                contestID;
+  private static ContestDescription contestDescription;
   private static ClientDialog       clientDialog;
   private static UserDescription.UserType userType;
 
@@ -60,6 +62,7 @@ public class Controller {
       request.password = new String(password);
       ConnectToContestResponse res = Controller.server.doRequest(request);
       Controller.sessionID = res.sessionID;
+      //TODO save contest description in 'contestDescription'
 
       // Удаляем все запущенные Plugin'ы
       clientDialog.clearLeftPanel();
@@ -70,13 +73,13 @@ public class Controller {
       switch (res.user.userType) {
         case ContestAdmin:
           addAdminPlugin(AdjustContestsPlugin.class);
-          //addAdminPlugin(ManageUsersPlugin.class);
+          addAdminPlugin(ManageUsersPlugin.class);
           addAdminPlugin(LogoutPlugin.class);
           break;
         case SuperAdmin:
           addAdminPlugin(CreateContestPlugin.class);
           addAdminPlugin(AdjustContestsPlugin.class);
-          //addAdminPlugin(ManageUsersPlugin.class);
+          addAdminPlugin(ManageUsersPlugin.class);
           addAdminPlugin(LogoutPlugin.class);
           break;
         case Participant:
@@ -366,4 +369,28 @@ public class Controller {
   public static ClientDialog getClientDialog() {
     return clientDialog;
   }
+
+    public static UserDescription[] getUsers(int contestID) {
+        final GetUsersRequest req = new GetUsersRequest();
+
+        req.contestID = contestID;
+        req.sessionID = sessionID;
+
+        try {
+            GetUsersResponse res = server.doRequest(req);
+
+            return res.users;
+
+        } catch (ServerReturnedError e) {
+            JOptionPane.showMessageDialog(null, "Сервер сообщает об ошибке: " + e.getMessage());
+        } catch (ServerReturnedNoAnswer serverReturnedNoAnswer) {
+            JOptionPane.showMessageDialog(null, "Отсутствует соединение с сервером, попробуйте позже");
+        }
+
+        return new UserDescription[]{};
+    }
+
+    public static ContestDescription getContestDescription() {
+        return contestDescription;
+    }
 }

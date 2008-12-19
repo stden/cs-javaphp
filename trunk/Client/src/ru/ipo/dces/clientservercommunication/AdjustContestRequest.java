@@ -1,5 +1,7 @@
 package ru.ipo.dces.clientservercommunication;
 
+import ru.ipo.dces.clientservercommunication.ContestDescription;
+
 /**
  * Adjust = Ќастроить. Ќастроить текущий контест, задав ему новое описание и
  * новый список задач.
@@ -21,7 +23,7 @@ public class AdjustContestRequest implements Request {
    * посылаютс€ как null или другое дефолтовое значение, -1 дл€ int, см. класс
    * ContestDescription
    */
-  public ContestDescription   contest;
+  public ContestDescription contest;
 
   /**
    * ќписание задач. null, если мен€ть задачи не нужно.
