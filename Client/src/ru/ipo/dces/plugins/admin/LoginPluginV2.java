@@ -23,7 +23,7 @@ import java.awt.event.ActionEvent;
  * Time: 15:20:38
  */
 
-public class LoginPluginV2 extends Plugin {
+public class LoginPluginV2 extends JPanel implements Plugin {
   private JPanel loginPanel;
   private JButton refreshContestsButton;
   private JPasswordField passwordEdit;
@@ -47,7 +47,6 @@ public class LoginPluginV2 extends Plugin {
    */
 
   public LoginPluginV2(PluginEnvironment env) {
-    super(env);
     env.setTitle("Контесты");
 
     //set list model for contest list
@@ -239,6 +238,18 @@ public class LoginPluginV2 extends Plugin {
    */
   public JComponent $$$getRootComponent$$$() {
     return loginPanel;
+  }
+
+  public JPanel getPanel() {
+    return this;
+  }
+
+  public void activate() {
+    //do nothing
+  }
+
+  public void deactivate() {
+    //do nothing
   }
 
   private class ContestListBean {

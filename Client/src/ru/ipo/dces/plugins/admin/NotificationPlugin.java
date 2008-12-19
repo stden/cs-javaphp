@@ -12,15 +12,15 @@ import java.awt.*;
  * Date: 04.12.2008
  * Time: 17:45:46
  */
-public class NotificationPlugin extends Plugin {
+public class NotificationPlugin extends JPanel implements Plugin {
 
 
     /**
      * Инициализация plugin'а
      * @param env environment for plugin
      */
+    @SuppressWarnings({"UnusedDeclaration"})
     public NotificationPlugin(PluginEnvironment env) {
-        super(env);
     }
 
     protected void fireNotificationMessage(JLabel infoMessageLabel, String s, NotificationType type) {
@@ -39,4 +39,16 @@ public class NotificationPlugin extends Plugin {
                 break;
         }
     }
+
+  public JPanel getPanel() {
+    return this;
+  }
+
+  public void activate() {
+    //do nothing
+  }
+
+  public void deactivate() {
+    //do nothing
+  }
 }

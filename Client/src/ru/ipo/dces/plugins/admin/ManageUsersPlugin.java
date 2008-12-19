@@ -16,7 +16,7 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 
-public class ManageUsersPlugin extends Plugin {
+public class ManageUsersPlugin extends JPanel implements Plugin {
     private JPanel drawPanel;
     private JList contestsList;
     private JLabel contestsLabel;
@@ -38,7 +38,6 @@ public class ManageUsersPlugin extends Plugin {
      * @param env environment for the plugin
      */
     public ManageUsersPlugin(PluginEnvironment env) {
-        super(env);
 
         $$$setupUI$$$();
 
@@ -70,6 +69,7 @@ public class ManageUsersPlugin extends Plugin {
         //other fields won't be filled
         zeroContestDescription.name = "Нулевой контест";
         zeroContestDescription.contestID = 0;
+        zeroContestDescription.data = new String[]{};
 
         contestsListModel.addElement(new ContestsListBean(zeroContestDescription));
 
@@ -80,7 +80,11 @@ public class ManageUsersPlugin extends Plugin {
     }
 
 
-    public void activate() {
+  public JPanel getPanel() {
+    return this;
+  }
+
+  public void activate() {
 
         FormLayout cur = (FormLayout) drawPanel.getLayout();
 
@@ -106,7 +110,11 @@ public class ManageUsersPlugin extends Plugin {
 
     }
 
-    private void fillDaFormWithData(int contestID, String[] keys) {
+  public void deactivate() {
+    //do nothing
+  }
+
+  private void fillDaFormWithData(int contestID, String[] keys) {
 
         UserDescription[] ud = Controller.getUsers(contestID);
 
