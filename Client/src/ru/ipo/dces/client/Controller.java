@@ -4,16 +4,14 @@ import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.debug.PluginBox;
 import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
-import ru.ipo.dces.plugins.admin.AdjustContestsPlugin;
-import ru.ipo.dces.plugins.admin.CreateContestPlugin;
-import ru.ipo.dces.plugins.admin.LogoutPlugin;
-import ru.ipo.dces.plugins.admin.ManageUsersPlugin;
+import ru.ipo.dces.plugins.admin.*;
 
 import javax.swing.*;
 import java.io.*;
 import java.lang.reflect.Constructor;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import java.util.HashSet;
 
 /**
  * Контроллер, который хранит данные о соединении с сервером и позволяет
@@ -22,7 +20,6 @@ import java.util.zip.ZipInputStream;
 public class Controller {
   private static ServerFacade       server;
   private static String             sessionID;
-  private static int                contestID;
   private static ContestDescription contestDescription;
   private static ClientDialog       clientDialog;
   private static UserDescription.UserType userType;
@@ -52,11 +49,11 @@ public class Controller {
     }
   }
 
-  public static void login(String login, char[] password, int contestID) {
+  public static void login(String login, char[] password, ContestDescription contest) {
     try {
       ConnectToContestRequest request = new ConnectToContestRequest();
-      request.contestID = contestID;
-      Controller.contestID = contestID;
+      request.contestID = contest.contestID;
+      Controller.contestDescription = contest;
       request.login = login;
       // TODO improve the security here
       request.password = new String(password);
@@ -79,12 +76,13 @@ public class Controller {
         case SuperAdmin:
           addAdminPlugin(CreateContestPlugin.class);
           addAdminPlugin(AdjustContestsPlugin.class);
-          addAdminPlugin(ManageUsersPlugin.class);
+          addAdminPlugin(ManageUsersPlugin.class);          
+          addAdminPlugin(PluginsManagementPlugin.class);          
           addAdminPlugin(LogoutPlugin.class);
           break;
         case Participant:
           // Получаем данные о задачах
-          refreshParticipantInfo();
+          refreshParticipantInfo(false, false);
       }
     } catch (Exception e) {
       JOptionPane.showMessageDialog(null, "При попытке подключения к контесту произошла ошибка: " + e.getMessage(), "Ошибка",
@@ -93,14 +91,25 @@ public class Controller {
     }
   }
 
-  //TODO add param 'refresh' and if false don't download statements that already are on disk
-  public static void refreshParticipantInfo() throws ServerReturnedError, ServerReturnedNoAnswer, IOException {
+  public static void refreshParticipantInfo(boolean refreshProblems, boolean refreshPlugins) throws ServerReturnedError, ServerReturnedNoAnswer, IOException {
     GetContestDataRequest rq = new GetContestDataRequest();
     rq.contestID = -1;
     rq.infoType = GetContestDataRequest.InformationType.ParticipantInfo;
-    rq.extendedData = null;
+    rq.extendedData = null; //TODO download only problems that are not already on disk
     rq.sessionID = sessionID;
     GetContestDataResponse rs = Controller.server.doRequest(rq);
+
+    if (refreshPlugins) {
+      //get contest plugins
+      HashSet<String> contestPlugins = new HashSet<String>();
+      for (ProblemDescription pd : rs.problems)
+        contestPlugins.add(pd.clientPluginAlias);
+      //remove contest plugins
+      for (String contestPlugin : contestPlugins)
+        new File(Settings.getInstance().getPluginsDirectory() + '/' + contestPlugin).delete();  
+    }
+
+    //fill dirs with data
     for (ProblemDescription pd : rs.problems) {
       File problemFolder = getProblemDirectoryByID(pd.id);
 
@@ -154,7 +163,7 @@ public class Controller {
 
     try {
         server.doRequest(dr);
-        Controller.contestID = -1;
+        Controller.contestDescription = null;
     } catch (Exception serverReturnedError) {
         // TODO to think what to do
     }
@@ -316,7 +325,7 @@ public class Controller {
   }
 
   public static int getContestID() {
-    return contestID;
+    return contestDescription.contestID;
   }
 
   /**
@@ -393,4 +402,39 @@ public class Controller {
     public static ContestDescription getContestDescription() {
         return contestDescription;
     }
+
+  public static void adjustClientPlugin(String alias, String description, File file) throws ServerReturnedError, ServerReturnedNoAnswer {
+    AdjustClientPluginRequest r = new AdjustClientPluginRequest();
+
+    r.pluginAlias = alias;
+
+    if (description.equals(""))
+      r.description = null;
+    else
+      r.description = description;
+
+    r.sessionID = sessionID;
+
+    //load plugin data from file
+    if (file != null) {
+      r.pluginData = new byte[(int)file.length()];
+      try {
+        InputStream is = new FileInputStream(file);
+        if (is.read(r.pluginData) < r.pluginData.length) throw new IOException();
+      } catch (IOException e) {
+        throw new ServerReturnedError();
+      }
+    }
+    else
+      r.pluginData = null;
+
+    server.doRequest(r);
+  }
+
+  public static void removeClientPlugin(String alias) throws ServerReturnedError, ServerReturnedNoAnswer {
+    RemoveClientPluginRequest r = new RemoveClientPluginRequest();
+    r.pluginAlias = alias;
+    r.sessionID = sessionID;
+    server.doRequest(r);
+  }
 }

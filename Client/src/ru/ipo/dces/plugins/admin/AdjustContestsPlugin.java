@@ -54,8 +54,9 @@ public class AdjustContestsPlugin extends NotificationPlugin {
 
     private DefaultListModel problemsListModel = new DefaultListModel();
     private DefaultListModel contestsListModel = new DefaultListModel();
+    private JFileChooser chooseFileDialog = new JFileChooser();
 
-    /**
+  /**
      * Инициализация plugin'а
      *
      * @param env plugin environment
@@ -248,9 +249,8 @@ public class AdjustContestsPlugin extends NotificationPlugin {
 
 
     private File chooseFileOrFolder() {
-        JFileChooser dialog = new JFileChooser();
-        if (dialog.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
-            return dialog.getSelectedFile();
+        if (chooseFileDialog.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+            return chooseFileDialog.getSelectedFile();
         else
             return null;
     }

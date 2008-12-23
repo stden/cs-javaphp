@@ -6,6 +6,14 @@
     <rowspec value="center:20dlu:noGrow"/>
     <rowspec value="top:8dlu:noGrow"/>
     <rowspec value="center:20dlu:noGrow"/>
+    <rowspec value="top:8dlu:noGrow"/>
+    <rowspec value="center:8dlu:noGrow"/>
+    <rowspec value="top:4dlu:noGrow"/>
+    <rowspec value="center:8dlu:noGrow"/>
+    <rowspec value="top:8dlu:noGrow"/>
+    <rowspec value="center:20dlu:noGrow"/>
+    <rowspec value="top:4dlu:noGrow"/>
+    <rowspec value="center:10dlu:noGrow"/>
     <colspec value="fill:max(d;4px):grow"/>
     <colspec value="left:4dlu:noGrow"/>
     <colspec value="fill:160dlu:noGrow"/>
@@ -19,40 +27,65 @@
     <properties/>
     <border type="none"/>
     <children>
-      <component id="fd9f9" class="javax.swing.JLabel">
+      <component id="70b57" class="javax.swing.JLabel">
         <constraints>
-          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="10" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <forms/>
         </constraints>
         <properties>
           <text value="Прекратить участие в контесте"/>
         </properties>
       </component>
-      <component id="10623" class="javax.swing.JLabel">
+      <component id="cf040" class="javax.swing.JButton" binding="refreshPluginsButton">
+        <constraints>
+          <grid row="4" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-vert="false"/>
+        </constraints>
+        <properties>
+          <text value="Обновить"/>
+        </properties>
+      </component>
+      <component id="a70b2" class="javax.swing.JButton" binding="refreshProblemsButton">
+        <constraints>
+          <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="Обновить"/>
+        </properties>
+      </component>
+      <component id="fa9bb" class="javax.swing.JLabel">
         <constraints>
           <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="Обновить модули задач"/>
+        </properties>
+      </component>
+      <component id="e682d" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <forms/>
         </constraints>
         <properties>
           <text value="Обновить условия задачи"/>
         </properties>
       </component>
-      <component id="2f6e7" class="javax.swing.JButton" binding="logoutButton">
+      <component id="ebb22" class="javax.swing.JSeparator">
         <constraints>
-          <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="7" column="2" row-span="1" col-span="3" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false" defaultalign-vert="false"/>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="7ce95" class="javax.swing.JButton" binding="logoutButton">
+        <constraints>
+          <grid row="10" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
           <forms/>
         </constraints>
         <properties>
           <text value="Выход"/>
-        </properties>
-      </component>
-      <component id="f97b" class="javax.swing.JButton" binding="refreshButton">
-        <constraints>
-          <grid row="4" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="Обновить"/>
         </properties>
       </component>
     </children>

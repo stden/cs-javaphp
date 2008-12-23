@@ -1,5 +1,7 @@
 <?php
 
+$DO_LOG = true;
+
 require("Debug.php");
 
 require("dces-settings.php");
@@ -24,8 +26,10 @@ else
 //$s_request = prepare($_REQUEST['x']);
 
 //open log file
-//$log = fopen("messages.log", "a");
-//fwrite($log, "request = $s_request\n");
+if ($DO_LOG) {
+  $log = fopen("messages.log", "a");
+  fwrite($log, "request = $s_request\n");
+}
 
 $request = unserialize($s_request) or throwError('Failed to understand the request');
 
@@ -106,7 +110,7 @@ switch(get_class($request)){
 	  break;
 
   default:
-	  $result = 'Unknown message type "'.get_class($s).'"';
+	  throwError('Unknown message type "'.get_class($s).'"');
 };
 
 $magic = chr(4) . chr(2) . chr(3) . chr(9);
@@ -116,6 +120,8 @@ echo $magic;
 echo $nil; //means no error
 echo $s_result;
 
-//fwrite($log, "answer = $s_result\n\n");
-//fclose($log);
+if ($DO_LOG) {
+  fwrite($log, "answer = $s_result\n\n");
+  fclose($log);
+}
 ?>

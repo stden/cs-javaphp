@@ -7,86 +7,49 @@
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:16dlu:noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
-    <rowspec value="center:48dlu:noGrow"/>
+    <rowspec value="center:16dlu:noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
-    <rowspec value="center:32dlu:noGrow"/>
+    <rowspec value="center:16dlu:noGrow"/>
+    <rowspec value="top:4dlu:noGrow"/>
+    <rowspec value="center:16dlu:noGrow"/>
+    <rowspec value="top:4dlu:noGrow"/>
+    <rowspec value="center:2px:noGrow"/>
+    <rowspec value="top:4dlu:noGrow"/>
+    <rowspec value="center:12dlu:noGrow"/>
+    <rowspec value="top:4dlu:noGrow"/>
+    <rowspec value="center:20dlu:noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:2dlu:noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
-    <rowspec value="center:12dlu:noGrow"/>
+    <rowspec value="center:16px:noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
-    <rowspec value="center:12dlu:noGrow"/>
+    <rowspec value="top:60dlu:noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
-    <rowspec value="center:12dlu:noGrow"/>
+    <rowspec value="center:16dlu:noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
-    <rowspec value="center:2dlu:noGrow"/>
-    <rowspec value="top:5dlu:noGrow"/>
-    <rowspec value="center:48dlu:noGrow"/>
-    <rowspec value="top:4dlu:noGrow"/>
-    <rowspec value="center:12dlu:noGrow"/>
-    <rowspec value="top:4dlu:noGrow"/>
+    <rowspec value="center:4dlu:noGrow"/>
     <colspec value="fill:0dlu:grow"/>
     <colspec value="left:4dlu:noGrow"/>
-    <colspec value="fill:32dlu:noGrow"/>
-    <colspec value="left:4dlu:noGrow"/>
-    <colspec value="fill:60dlu:noGrow"/>
+    <colspec value="fill:100dlu:noGrow"/>
     <colspec value="left:4dlu:noGrow"/>
     <colspec value="fill:58dlu:noGrow"/>
     <colspec value="left:4dlu:noGrow"/>
-    <colspec value="fill:106dlu:noGrow"/>
+    <colspec value="fill:2dlu:noGrow"/>
     <colspec value="left:4dlu:noGrow"/>
-    <colspec value="fill:64dlu:noGrow"/>
+    <colspec value="fill:26dlu:noGrow"/>
+    <colspec value="left:4dlu:noGrow"/>
+    <colspec value="fill:120dlu:noGrow"/>
     <colspec value="left:4dlu:noGrow"/>
     <colspec value="left:0dlu:grow"/>
     <constraints>
-      <xy x="20" y="20" width="516" height="402"/>
+      <xy x="20" y="20" width="498" height="411"/>
     </constraints>
     <properties/>
     <border type="none"/>
     <children>
-      <component id="61fb0" class="javax.swing.JLabel">
-        <constraints>
-          <grid row="12" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <forms defaultalign-horz="false"/>
-        </constraints>
-        <properties>
-          <horizontalAlignment value="4"/>
-          <horizontalTextPosition value="11"/>
-          <text value="Логин"/>
-        </properties>
-      </component>
-      <component id="8d3b8" class="javax.swing.JLabel">
-        <constraints>
-          <grid row="14" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <horizontalAlignment value="4"/>
-          <horizontalTextPosition value="11"/>
-          <text value="Пароль"/>
-        </properties>
-      </component>
-      <component id="b820c" class="javax.swing.JPasswordField" binding="passwordEdit">
-        <constraints>
-          <grid row="14" column="4" row-span="1" col-span="5" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-          <forms defaultalign-horz="false"/>
-        </constraints>
-        <properties/>
-      </component>
-      <component id="9b110" class="javax.swing.JTextField" binding="loginEdit">
-        <constraints>
-          <grid row="12" column="4" row-span="1" col-span="5" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-          <forms defaultalign-horz="false"/>
-        </constraints>
-        <properties/>
-      </component>
       <scrollpane id="f43ef">
         <constraints>
-          <grid row="4" column="2" row-span="5" col-span="5" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="4" column="2" row-span="13" col-span="3" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
           <forms defaultalign-horz="false" defaultalign-vert="false"/>
         </constraints>
         <properties/>
@@ -100,74 +63,118 @@
           </component>
         </children>
       </scrollpane>
-      <scrollpane id="e8194">
-        <constraints>
-          <grid row="20" column="2" row-span="1" col-span="7" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-          <forms defaultalign-horz="false" defaultalign-vert="false"/>
-        </constraints>
-        <properties/>
-        <border type="none"/>
-        <children>
-          <component id="cf0de" class="javax.swing.JTable" binding="registerToContestTable">
-            <constraints/>
-            <properties/>
-            <clientProperties>
-              <JTable.autoStartsEdit class="java.lang.Boolean" value="true"/>
-              <Table.isFileList class="java.lang.Boolean" value="false"/>
-              <terminateEditOnFocusLost class="java.lang.Boolean" value="true"/>
-            </clientProperties>
-          </component>
-        </children>
-      </scrollpane>
       <component id="e838a" class="javax.swing.JLabel">
         <constraints>
-          <grid row="2" column="2" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="2" column="2" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <forms/>
         </constraints>
         <properties>
           <text value="Список доступных контестов"/>
         </properties>
       </component>
-      <component id="bd591" class="javax.swing.JLabel">
-        <constraints>
-          <grid row="16" column="2" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="Регистрация для участния в контесте"/>
-        </properties>
-      </component>
-      <component id="396ae" class="javax.swing.JCheckBox" binding="loginAsAdminCheckBox">
-        <constraints>
-          <grid row="22" column="2" row-span="1" col-span="9" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <horizontalAlignment value="4"/>
-          <text value="Администратор"/>
-        </properties>
-      </component>
-      <component id="56fd" class="javax.swing.JLabel">
-        <constraints>
-          <grid row="4" column="8" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="Описание контеста"/>
-        </properties>
-      </component>
       <component id="fb5e7" class="javax.swing.JButton" binding="refreshContestsButton">
         <constraints>
-          <grid row="2" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
           <forms defaultalign-vert="false"/>
         </constraints>
         <properties>
           <text value="Обновить"/>
         </properties>
       </component>
+      <scrollpane id="e8194">
+        <constraints>
+          <grid row="16" column="8" row-span="7" col-span="3" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false" defaultalign-vert="false"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="94871" class="ru.ipo.dces.plugins.admin.JUserTable" binding="registerToContestTable">
+            <constraints/>
+            <properties/>
+            <clientProperties>
+              <JTable.autoStartsEdit class="java.lang.Boolean" value="true"/>
+              <terminateEditOnFocusLost class="java.lang.Boolean" value="true"/>
+            </clientProperties>
+          </component>
+        </children>
+      </scrollpane>
+      <component id="61fb0" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="4" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties>
+          <horizontalAlignment value="4"/>
+          <horizontalTextPosition value="11"/>
+          <text value="Логин"/>
+        </properties>
+      </component>
+      <component id="8d3b8" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="6" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <horizontalAlignment value="4"/>
+          <horizontalTextPosition value="11"/>
+          <text value="Пароль"/>
+        </properties>
+      </component>
+      <component id="9b110" class="javax.swing.JTextField" binding="loginEdit">
+        <constraints>
+          <grid row="4" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="b820c" class="javax.swing.JPasswordField" binding="passwordEdit">
+        <constraints>
+          <grid row="6" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="b0164" class="javax.swing.JSeparator">
+        <constraints>
+          <grid row="12" column="8" row-span="1" col-span="4" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false" defaultalign-vert="false"/>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="bd591" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="14" column="8" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="Регистрация для участния в контесте"/>
+        </properties>
+      </component>
+      <component id="d42d7" class="javax.swing.JSeparator">
+        <constraints>
+          <grid row="18" column="2" row-span="1" col-span="3" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false" defaultalign-vert="false"/>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="56fd" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="20" column="2" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <labelFor value="59e37"/>
+          <text value="Описание контеста"/>
+        </properties>
+      </component>
       <component id="80230" class="javax.swing.JButton" binding="loginButton">
         <constraints>
-          <grid row="12" column="10" row-span="3" col-span="1" vsize-policy="0" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="8" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
           <forms defaultalign-horz="false" defaultalign-vert="false"/>
         </constraints>
         <properties>
@@ -176,7 +183,7 @@
       </component>
       <component id="1d768" class="javax.swing.JButton" binding="registerToContestButton">
         <constraints>
-          <grid row="20" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="24" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
           <forms defaultalign-horz="false" defaultalign-vert="false"/>
         </constraints>
         <properties>
@@ -185,35 +192,36 @@
       </component>
       <scrollpane id="7ecab">
         <constraints>
-          <grid row="6" column="8" row-span="1" col-span="3" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="22" column="2" row-span="3" col-span="3" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
           <forms defaultalign-horz="false" defaultalign-vert="false"/>
         </constraints>
         <properties/>
         <border type="none"/>
         <children>
-          <component id="7ccac" class="javax.swing.JTextArea" binding="contestDescriptionTextArea">
+          <component id="59e37" class="javax.swing.JTextPane" binding="contestDescriptionTextPane">
             <constraints/>
-            <properties>
-              <editable value="false"/>
-              <font swing-font="List.font"/>
-              <lineWrap value="true"/>
-            </properties>
+            <properties/>
           </component>
         </children>
       </scrollpane>
-      <component id="6d887" class="javax.swing.JSeparator">
+      <component id="396ae" class="javax.swing.JCheckBox" binding="loginAsAdminCheckBox">
         <constraints>
-          <grid row="10" column="1" row-span="1" col-span="11" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-          <forms defaultalign-horz="false" defaultalign-vert="false"/>
+          <grid row="10" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false"/>
         </constraints>
-        <properties/>
+        <properties>
+          <horizontalAlignment value="4"/>
+          <text value="Администратор"/>
+        </properties>
       </component>
-      <component id="91138" class="javax.swing.JSeparator">
+      <component id="f14d5" class="javax.swing.JSeparator">
         <constraints>
-          <grid row="18" column="1" row-span="1" col-span="11" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="2" column="6" row-span="23" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
           <forms defaultalign-horz="false" defaultalign-vert="false"/>
         </constraints>
-        <properties/>
+        <properties>
+          <orientation value="1"/>
+        </properties>
       </component>
     </children>
   </grid>
