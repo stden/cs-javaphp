@@ -53,7 +53,8 @@ function composeUpdateQuery($table, $col_value, $where) {
 
   $prfx = $GLOBALS['dces_mysql_prefix'];
 
-  if (count($col_value) == 0) return "";
+  //TODO invent another way to do nothing in the query
+  if (count($col_value) == 0) return "SELECT * FROM ${prfx}client_plugin WHERE 0";
 
   $values = "";
   foreach ($col_value as $col => $val) {

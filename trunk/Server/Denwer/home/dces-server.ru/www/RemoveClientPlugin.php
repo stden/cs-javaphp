@@ -12,7 +12,7 @@
 
     //remove from db
     mysql_query(
-      sprintf("DELETE FROM ${prfx} WHERE alias=$s",$request->pluginAlias)
+      sprintf("DELETE FROM ${prfx}client_plugin WHERE alias=%s", quote_smart($request->pluginAlias))
     , $con) or die("DB error 35: ".mysql_error());
 
     //remove from disk
