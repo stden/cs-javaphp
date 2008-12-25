@@ -179,6 +179,7 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="DCES_API" />
+    <orderEntry type="library" name="junit" level="project" />
     <orderEntryProperties />
   </component>
 </module>

@@ -159,7 +159,16 @@ public class CreateContestPlugin extends NotificationPlugin {
                 }
 
                 boolean status = Controller.addContest(cd);
-                //TODO clear all interface if status is OK
+
+                contestName.setText("");
+                contestDescription.setText("");
+                beginDate.setText("");
+                beginTime.setText("");
+                endDate.setText("");
+                endTime.setText("");
+                administratorRegistrationRB.setSelected(true);
+                typeNameModel.clear();
+                typeNameField.setText("");
             }
         });
 
@@ -340,7 +349,7 @@ public class CreateContestPlugin extends NotificationPlugin {
      */
     private void $$$setupUI$$$() {
         createUIComponents();
-        drawPanel.setLayout(new FormLayout("fill:max(d;4px):noGrow,fill:4dlu:noGrow,fill:92dlu:noGrow,left:4dlu:noGrow,fill:80dlu:noGrow,left:4dlu:noGrow,fill:80dlu:noGrow,left:4dlu:noGrow,fill:max(d;4px):noGrow", "center:max(d;4px):noGrow,top:12dlu:noGrow,center:max(d;4px):noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:noGrow,top:4dlu:noGrow,center:60dlu:grow,top:0dlu:noGrow,top:4dlu:noGrow,center:d:grow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:grow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:23dlu:noGrow,top:4dlu:noGrow,top:4dlu:noGrow,center:d:grow,center:16dlu:noGrow,center:max(d;4px):noGrow"));
+        drawPanel.setLayout(new FormLayout("fill:max(d;4px):noGrow,fill:4dlu:noGrow,fill:92dlu:noGrow,left:4dlu:noGrow,fill:80dlu:grow,left:4dlu:noGrow,fill:80dlu:grow,left:4dlu:noGrow,fill:max(d;4px):noGrow", "center:max(d;4px):noGrow,top:12dlu:noGrow,center:max(d;4px):noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:noGrow,top:4dlu:noGrow,center:60dlu:grow,top:0dlu:noGrow,top:4dlu:noGrow,center:d:grow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:grow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:23dlu:noGrow,top:4dlu:noGrow,top:4dlu:noGrow,center:d:grow,center:16dlu:noGrow,center:max(d;4px):noGrow"));
         contestName = new JTextField();
         CellConstraints cc = new CellConstraints();
         drawPanel.add(contestName, cc.xyw(5, 5, 3, CellConstraints.FILL, CellConstraints.DEFAULT));
