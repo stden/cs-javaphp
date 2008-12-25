@@ -47,6 +47,7 @@ public class AdjustContestsPlugin extends NotificationPlugin {
     private JButton applyButton;
     private JLabel infoMessageLabel;
     private JSeparator contestsSeparator;
+    private JButton refreshContestsButton;
 
     private AdjustContestsPluginBean initialBean = new AdjustContestsPluginBean();
     private AdjustContestsPluginBean updatedBean = new AdjustContestsPluginBean();
@@ -56,7 +57,7 @@ public class AdjustContestsPlugin extends NotificationPlugin {
     private DefaultListModel contestsListModel = new DefaultListModel();
     private JFileChooser chooseFileDialog = new JFileChooser();
 
-  /**
+    /**
      * Инициализация plugin'а
      *
      * @param env plugin environment
@@ -245,6 +246,18 @@ public class AdjustContestsPlugin extends NotificationPlugin {
                 Controller.debugProblem(problemID, contestID);
             }
         });
+        refreshContestsButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                contestsListModel.clear();
+
+                final ContestDescription[] contestDescriptions = Controller.getAvailableContests();
+
+                for (ContestDescription cd : contestDescriptions)
+                    contestsListModel.addElement(new ContestsListBean(cd));
+
+                contestsList.setSelectedIndex(-1);
+            }
+        });
     }
 
 
@@ -347,9 +360,11 @@ public class AdjustContestsPlugin extends NotificationPlugin {
 
         //TODO: inform user with problem details and ways to work it around
         if (succeeded)
-            fireNotificationMessage(infoMessageLabel, "Изменения прошли успешно", NotificationType.Confirm);
+            JOptionPane.showMessageDialog(null, "Изменения прошли успешно, контест создан", "Создание контеста", JOptionPane.INFORMATION_MESSAGE);
+            //fireNotificationMessage(infoMessageLabel, "Изменения прошли успешно", NotificationType.Confirm);
         else
-            fireNotificationMessage(infoMessageLabel, "Не удалось произвести изменения", NotificationType.Error);
+            JOptionPane.showMessageDialog(null, "Не удалось произвести изменения", "Создание контеста", JOptionPane.ERROR_MESSAGE);
+        //fireNotificationMessage(infoMessageLabel, "Не удалось произвести изменения", NotificationType.Error);
 
         fillDaFormWithData(cd.contestID);
     }
@@ -612,13 +627,13 @@ public class AdjustContestsPlugin extends NotificationPlugin {
      */
     private void $$$setupUI$$$() {
         createUIComponents();
-        drawPanel.setLayout(new FormLayout("fill:max(d;4px):noGrow,left:4dlu:noGrow,fill:122dlu:noGrow,left:4dlu:grow,fill:1dlu:noGrow,left:4dlu:grow,fill:92dlu:noGrow,left:4dlu:grow(4.0),fill:72dlu:noGrow,left:4dlu:noGrow,fill:30dlu:noGrow,left:4dlu:noGrow,left:30dlu:noGrow,fill:max(d;4px):noGrow,fill:62dlu:noGrow,left:4dlu:noGrow,fill:max(d;4px):noGrow", "center:max(d;4px):noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:60dlu:noGrow,top:4dlu:noGrow,center:17dlu:noGrow,top:4dlu:noGrow,center:1px:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:28px:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:noGrow,top:4dlu:noGrow,center:0dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:5dlu:noGrow,center:16dlu:noGrow,top:5dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow"));
+        drawPanel.setLayout(new FormLayout("fill:max(d;4px):noGrow,left:4dlu:noGrow,fill:m:grow,left:4dlu:noGrow,fill:1dlu:noGrow,left:4dlu:noGrow,fill:92dlu:grow,left:4dlu:noGrow,fill:72dlu:grow,left:4dlu:noGrow,fill:m:noGrow,left:4dlu:noGrow,left:30dlu:grow,fill:max(d;4px):noGrow,fill:62dlu:grow,left:4dlu:noGrow,fill:max(d;4px):noGrow", "center:max(d;4px):noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:60dlu:grow,top:4dlu:noGrow,center:17dlu:noGrow,top:4dlu:noGrow,center:1px:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:28px:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:noGrow,top:4dlu:noGrow,center:0dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:5dlu:noGrow,center:16dlu:noGrow,top:5dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow"));
         contestsList = new JList();
         final DefaultListModel defaultListModel1 = new DefaultListModel();
         contestsList.setModel(defaultListModel1);
         contestsList.setSelectionMode(0);
         CellConstraints cc = new CellConstraints();
-        drawPanel.add(contestsList, cc.xywh(3, 4, 1, 39, CellConstraints.DEFAULT, CellConstraints.FILL));
+        drawPanel.add(contestsList, cc.xywh(3, 7, 1, 36, CellConstraints.DEFAULT, CellConstraints.FILL));
         contestName = new JTextField();
         drawPanel.add(contestName, cc.xyw(9, 5, 7, CellConstraints.FILL, CellConstraints.FILL));
         final JLabel label1 = new JLabel();
@@ -732,6 +747,9 @@ public class AdjustContestsPlugin extends NotificationPlugin {
         previewButton = new JButton();
         previewButton.setText("Посмотреть");
         drawPanel.add(previewButton, cc.xy(15, 27));
+        refreshContestsButton = new JButton();
+        refreshContestsButton.setText("Обновить список");
+        drawPanel.add(refreshContestsButton, cc.xy(3, 5));
         ButtonGroup buttonGroup;
         buttonGroup = new ButtonGroup();
         buttonGroup.add(ownRegistrationRB);
@@ -744,9 +762,4 @@ public class AdjustContestsPlugin extends NotificationPlugin {
     public JComponent $$$getRootComponent$$$() {
         return drawPanel;
     }
-
 }
-//TODO add a button "refresh contests list"
-//TODO when one changes problem's name, it is not updated in the problems list
-//TODO make all listeners sensible to user- versus GUI-generated events
-//TODO Debug :)
