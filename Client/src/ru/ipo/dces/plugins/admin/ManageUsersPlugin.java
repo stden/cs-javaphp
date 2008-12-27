@@ -28,6 +28,9 @@ public class ManageUsersPlugin extends JPanel implements Plugin {
     private JRadioButton superAdminCB;
     private JRadioButton participantCB;
     private JRadioButton contestAdminCB;
+    private JTextField usernameField;
+    private JTextField passwordField;
+    private JCheckBox showPasswordsCheckBox;
     private DefaultListModel contestsListModel = new DefaultListModel();
     private DefaultListModel usersListModel = new DefaultListModel();
 
