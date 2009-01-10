@@ -32,7 +32,7 @@ public class LogoutPlugin extends JPanel implements Plugin {
    */
   public LogoutPlugin(PluginEnvironment env) {
     $$$setupUI$$$();
-    env.setTitle("- ”правление -");
+    env.setTitle("”правление");
 
     logoutButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {

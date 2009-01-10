@@ -66,12 +66,15 @@ function testSession($con, $session_id) { //returns user id, dies absolutely if 
   return $user_row;  
 }
 
+//return boolean - true if succeeded and false otherwise
 function removeSession($con, $session_id) {
   $prfx = $GLOBALS['dces_mysql_prefix'];  
   //test if session for user_id is already set
   $session_regexp = "^[a-zA-Z0-9_]+$";
   if ( !ereg($session_regexp, $session_id) ) throwError("invalid session");
   mysql_query("DELETE FROM ${prfx}session WHERE session_id='$session_id'", $con) or die("DB error 8: ".mysql_error());
+  if (mysql_affected_rows() === 0) return false;
+                              else return true; 
 }
 
 function getUserRow($con, $user_id) {

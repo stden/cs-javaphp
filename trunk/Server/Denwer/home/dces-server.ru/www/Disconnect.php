@@ -2,7 +2,8 @@
 
 function processDisconnectRequest($request) {
   $con = connectToDB();
-  removeSession($con, $request->sessionID);  
+  if (!removeSession($con, $request->sessionID))
+    throwError('Invalid session ID');
   return new AcceptedResponse();
 }
 
