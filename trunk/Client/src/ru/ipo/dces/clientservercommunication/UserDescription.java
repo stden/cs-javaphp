@@ -9,7 +9,7 @@ public class UserDescription {
     Participant, ContestAdmin, SuperAdmin
   }
 
-  public int userID; 
+  public int      userID;
   public String   login;
   public String   password;
 
