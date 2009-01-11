@@ -41,6 +41,7 @@ public class CreateContestPlugin extends NotificationPlugin {
     private static final long serialVersionUID = -4584214565491150823L;
 
     //TODO Verify for startDateTime > endDateTime
+    //TODO Rewrite plugin with new notification system
     private static Pattern dateValidator = Pattern.compile("(0?[1-9]|[1-2][0-9]|3[01])[\\./](0?[1-9]|1[012])[\\./](19[0-9]{2}|20[0-9]{2}|[0-9]{2})");
     private static Pattern timeValidator = Pattern.compile("([01][0-9]|2[0-3]):[0-5][0-9]");
 
@@ -160,15 +161,21 @@ public class CreateContestPlugin extends NotificationPlugin {
 
                 boolean status = Controller.addContest(cd);
 
-                contestName.setText("");
-                contestDescription.setText("");
-                beginDate.setText("");
-                beginTime.setText("");
-                endDate.setText("");
-                endTime.setText("");
-                administratorRegistrationRB.setSelected(true);
-                typeNameModel.clear();
-                typeNameField.setText("");
+                if (status) {
+                    JOptionPane.showMessageDialog(null, "Контест успешно добавлен", "Создание контеста", JOptionPane.INFORMATION_MESSAGE);
+
+                    contestName.setText("");
+                    contestDescription.setText("");
+                    beginDate.setText("");
+                    beginTime.setText("");
+                    endDate.setText("");
+                    endTime.setText("");
+                    administratorRegistrationRB.setSelected(true);
+                    typeNameModel.clear();
+                    typeNameField.setText("");
+                }
+                else
+                    JOptionPane.showMessageDialog(null, "Произошла ошибка при создании контеста", "Создание контеста", JOptionPane.ERROR_MESSAGE);
             }
         });
 

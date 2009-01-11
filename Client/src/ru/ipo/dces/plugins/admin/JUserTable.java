@@ -9,6 +9,7 @@ public class JUserTable extends JTable {
     private UserTableModel userDataTableModel = new UserTableModel();
     protected final String[] COLUMN_NAMES = new String [] {"Поле", "Значение"};
 
+    //TODO add parameter for _selected_ values
     public void setKeys(String[] keys) {
 
         userDataTableModel.setRowCount(keys.length);
@@ -26,6 +27,15 @@ public class JUserTable extends JTable {
             String value = values[i];
             userDataTableModel.setValueAt(value, i, 1);
         }
+    }
+
+    public String[] getValues()
+    {
+        String[] v = new String[getRowCount()];
+        for (int i = 0; i < v.length; i++)
+            v[i] = getValue(i);
+
+        return v;
     }
 
     public class UserTableModel extends DefaultTableModel {
@@ -57,6 +67,7 @@ public class JUserTable extends JTable {
         this.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
     }
 
+    //TODO add parameter for _selected_ values
     public void setData(String[] key, String[] value)
     {
         if(key.length != value.length) throw new IllegalArgumentException();
