@@ -165,7 +165,7 @@ public class Controller {
         server.doRequest(dr);
         Controller.contestDescription = null;
     } catch (Exception serverReturnedError) {
-        // TODO to think what to do
+        // //TODO [ERROR_FRAMEWORK] to think what to do
     }
 
     Controller.sessionID = null;
@@ -247,10 +247,12 @@ public class Controller {
           contestRequest.contest = cd;
           server.doRequest(contestRequest);
       } catch (ServerReturnedError serverReturnedError) {
-          JOptionPane.showMessageDialog(null, "failed to create a contest");
+          //TODO [ERROR_FRAMEWORK] Log this error and check for inconsistency with error framework
+          //JOptionPane.showMessageDialog(null, "failed to create a contest");
           return false;
       } catch (ServerReturnedNoAnswer serverReturnedNoAnswer) {
-          JOptionPane.showMessageDialog(null, "failed to connect to the server");
+          //TODO [ERROR_FRAMEWORK] Log this error and check for inconsistency with error framework
+          //JOptionPane.showMessageDialog(null, "failed to connect to the server");
           return false;
       }
 
@@ -437,4 +439,30 @@ public class Controller {
     r.sessionID = sessionID;
     server.doRequest(r);
   }
+
+    public static void addUser(String login, char[] password, String[] dataValue, UserDescription.UserType ut) throws ServerReturnedError, ServerReturnedNoAnswer {
+
+        CreateUserRequest cur = new CreateUserRequest();
+
+        UserDescription ud = new UserDescription();
+
+        ud.login = login;
+        ud.password = new String(password);
+        ud.dataValue = dataValue;
+        ud.userType = ut;
+
+        cur.sessionID = sessionID;
+        cur.user = ud;
+
+        server.doRequest(cur);
+    }
+
+    public static void removeUser(int userID) throws ServerReturnedError, ServerReturnedNoAnswer {
+        RemoveUserRequest rur = new RemoveUserRequest();
+
+        rur.sessionID = sessionID;
+        rur.userID = userID;
+
+        server.doRequest(rur);
+    }
 }

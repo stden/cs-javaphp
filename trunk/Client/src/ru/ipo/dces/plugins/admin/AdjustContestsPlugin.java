@@ -284,7 +284,7 @@ public class AdjustContestsPlugin extends NotificationPlugin {
 
         GetContestDataResponse gcdr = Controller.getContestData(contestID);
 
-        //TODO handle as an error
+        //TODO [ERROR_FRAMEWORK] handle as an error
         if (gcdr == null) return;
 
         ContestDescription cd = gcdr.contest;
@@ -358,7 +358,7 @@ public class AdjustContestsPlugin extends NotificationPlugin {
 
         boolean succeeded = Controller.adjustContestData(acr);
 
-        //TODO: inform user with problem details and ways to work it around
+        //TODO: [ERROR_FRAMEWORK] inform user with problem details and ways to work it around
         if (succeeded)
             JOptionPane.showMessageDialog(null, "Изменения прошли успешно, контест создан", "Создание контеста", JOptionPane.INFORMATION_MESSAGE);
             //fireNotificationMessage(infoMessageLabel, "Изменения прошли успешно", NotificationType.Confirm);
@@ -550,10 +550,10 @@ public class AdjustContestsPlugin extends NotificationPlugin {
         if (Controller.getUserType() == UserDescription.UserType.SuperAdmin) {
 
             refreshContestsList();
-            setColumn(cur, 3, 122, 0);
-            setColumn(cur, 4, 4, 1);
+            setColumn(cur, 3, 122, 1);
+            setColumn(cur, 4, 4, 0);
             setColumn(cur, 5, 2, 0);
-            setColumn(cur, 6, 4, 1);
+            setColumn(cur, 6, 4, 0);
 
         } else if (Controller.getUserType() == UserDescription.UserType.ContestAdmin) {
 
@@ -627,7 +627,7 @@ public class AdjustContestsPlugin extends NotificationPlugin {
      */
     private void $$$setupUI$$$() {
         createUIComponents();
-        drawPanel.setLayout(new FormLayout("fill:max(d;4px):noGrow,left:4dlu:noGrow,fill:m:grow,left:4dlu:noGrow,fill:1dlu:noGrow,left:4dlu:noGrow,fill:92dlu:noGrow,left:4dlu:noGrow,fill:72dlu:grow,left:4dlu:noGrow,fill:m:noGrow,left:4dlu:noGrow,left:30dlu:noGrow,fill:max(d;4px):noGrow,fill:62dlu:noGrow,left:4dlu:noGrow,fill:max(d;4px):noGrow", "center:max(d;4px):noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:60dlu:grow,top:4dlu:noGrow,center:17dlu:noGrow,top:4dlu:noGrow,center:1px:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:28px:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:noGrow,top:4dlu:noGrow,center:0dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:5dlu:noGrow,center:16dlu:noGrow,top:5dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow"));
+        drawPanel.setLayout(new FormLayout("fill:max(d;4px):noGrow,left:4dlu:noGrow,fill:m:grow,left:4dlu:noGrow,fill:1dlu:noGrow,left:4dlu:noGrow,fill:92dlu:noGrow,left:4dlu:noGrow,fill:72dlu:grow(2.0),left:4dlu:noGrow,fill:m:noGrow,left:4dlu:noGrow,left:30dlu:grow(2.0),fill:max(d;4px):noGrow,fill:62dlu:noGrow,left:4dlu:noGrow,fill:max(d;4px):noGrow", "center:max(d;4px):noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:60dlu:grow,top:4dlu:noGrow,center:17dlu:noGrow,top:4dlu:noGrow,center:1px:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:28px:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:noGrow,top:4dlu:noGrow,center:0dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:5dlu:noGrow,center:16dlu:noGrow,top:5dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow"));
         contestsList = new JList();
         final DefaultListModel defaultListModel1 = new DefaultListModel();
         contestsList.setModel(defaultListModel1);

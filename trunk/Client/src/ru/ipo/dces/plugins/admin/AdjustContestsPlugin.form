@@ -52,11 +52,11 @@
     <colspec value="left:4dlu:noGrow"/>
     <colspec value="fill:92dlu:noGrow"/>
     <colspec value="left:4dlu:noGrow"/>
-    <colspec value="fill:72dlu:grow"/>
+    <colspec value="fill:72dlu:grow(2.0)"/>
     <colspec value="left:4dlu:noGrow"/>
     <colspec value="fill:m:noGrow"/>
     <colspec value="left:4dlu:noGrow"/>
-    <colspec value="left:30dlu:noGrow"/>
+    <colspec value="left:30dlu:grow(2.0)"/>
     <colspec value="fill:max(d;4px):noGrow"/>
     <colspec value="fill:62dlu:noGrow"/>
     <colspec value="left:4dlu:noGrow"/>

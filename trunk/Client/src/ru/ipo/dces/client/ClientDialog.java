@@ -137,7 +137,7 @@ public class ClientDialog extends JFrame {
       Application.getInstance().getContext().getResourceMap(getClass())
           .injectComponents(getContentPane());
     } catch (Exception e) {
-      //TODO Show message
+      //TODO [ERROR_FRAMEWORK] Show message
       System.out.println("exception in the init gui method");
       e.printStackTrace();
     }
