@@ -45,7 +45,7 @@ public class CreateContestPlugin extends NotificationPlugin {
     private static Pattern dateValidator = Pattern.compile("(0?[1-9]|[1-2][0-9]|3[01])[\\./](0?[1-9]|1[012])[\\./](19[0-9]{2}|20[0-9]{2}|[0-9]{2})");
     private static Pattern timeValidator = Pattern.compile("([01][0-9]|2[0-3]):[0-5][0-9]");
 
-    private boolean hasErrors = false;
+    private static boolean hasErrors = false;
 
     private DefaultListModel typeNameModel = new DefaultListModel();
 
@@ -159,9 +159,9 @@ public class CreateContestPlugin extends NotificationPlugin {
                     cd.compulsory[i] = ((TypeNameBean) typeNameModel.get(i)).isCompulsory();
                 }
 
-                boolean status = Controller.addContest(cd);
+                boolean setstatus = Controller.addContest(cd);
 
-                if (status) {
+                if (setstatus) {
                     JOptionPane.showMessageDialog(null, "Контест успешно добавлен", "Создание контеста", JOptionPane.INFORMATION_MESSAGE);
 
                     contestName.setText("");
