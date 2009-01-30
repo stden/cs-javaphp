@@ -2,6 +2,7 @@ package ru.ipo.dces.plugins;
 
 import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
+import ru.ipo.dces.pluginapi.DCESPluginLoadable;
 import ru.ipo.dces.clientservercommunication.ServerReturnedError;
 import ru.ipo.dces.clientservercommunication.ServerReturnedNoAnswer;
 
@@ -22,6 +23,7 @@ import com.jgoodies.forms.layout.CellConstraints;
  * Date: 07.12.2008
  * Time: 20:08:15
  */
+@DCESPluginLoadable
 public class Main extends JPanel implements Plugin {
   private JTextPane statementTextPane;
   private JPanel pluginPanel;
