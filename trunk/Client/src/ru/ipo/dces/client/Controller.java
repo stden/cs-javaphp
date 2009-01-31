@@ -105,8 +105,13 @@ public class Controller {
       for (ProblemDescription pd : rs.problems)
         contestPlugins.add(pd.clientPluginAlias);
       //remove contest plugins
-      for (String contestPlugin : contestPlugins)
-        new File(Settings.getInstance().getPluginsDirectory() + '/' + contestPlugin).delete();  
+      for (String contestPlugin : contestPlugins) {
+          File pluginFile = new File(Settings.getInstance().getPluginsDirectory() + '/' + contestPlugin + ".jar");
+          if (!pluginFile.exists())
+              System.out.println("surprise");
+          if (!pluginFile.delete())
+              System.out.println("surprise 2");   //TODO:release file handler to plugins (unload plugin from memory)
+      }
     }
 
     //fill dirs with data

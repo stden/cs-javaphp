@@ -25,111 +25,132 @@ import com.jgoodies.forms.layout.CellConstraints;
  */
 @DCESPluginLoadable
 public class Main extends JPanel implements Plugin {
-  private JTextPane statementTextPane;
-  private JPanel pluginPanel;
-  private JButton submitButton;
-  private JTextField answerTextField;
+    private JTextPane statementTextPane;
+    private JPanel pluginPanel;
+    private JButton submitButton;
+    private JTextField answerTextField;
 
-  private final PluginEnvironment env;
+    private final PluginEnvironment env;
 
-  public Main(PluginEnvironment pluginEnvironment) {
-    env = pluginEnvironment;
-    env.setTitle(pluginEnvironment.getProblemName());
+    public Main(PluginEnvironment pluginEnvironment) {
+        env = pluginEnvironment;
+        env.setTitle(pluginEnvironment.getProblemName());
 
-    $$$setupUI$$$();
-    addListeners();
+        $$$setupUI$$$();
+        addListeners();
 
-    showStatement();
-  }
-
-  private void showStatement() {
-    statementTextPane.setContentType("text/html");
-    try {
-      statementTextPane.setPage("file:///" + env.getProblemFolder().getCanonicalPath() + '/' + "statement.html");
-    } catch (IOException e) {
-      Document d = statementTextPane.getDocument();
-      try {
-        d.remove(0, d.getLength());
-        d.insertString(0, "Не удается отобразить условие", null);
-      } catch (BadLocationException e1) {
-        //do nothing
-      }
+        showStatement();
     }
-  }
 
-  private void addListeners() {
-    submitButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        if (answerTextField.getText().length() == 0) {
-          JOptionPane.showMessageDialog(null, "Вы не ввели ответ");
-          return;
+    private void showStatement() {
+
+        /**TODO
+         * 1. get directory env.getProblemFolder()
+         * 2. if there is statement.html -> show it
+         * 3. else if there is a set of html files -> show any
+         * 4. else if there is no html, then picture (.gif .jpeg .jpg .png)
+         * 5. else if there is a .txt .rtf -> show
+         * 6. (html <- rtf <- txt <- picture (gif <- jpeg <- png) - priorities
+         */
+
+        statementTextPane.setContentType("text/html");
+        try {
+            statementTextPane.setPage("file:///" + env.getProblemFolder().getCanonicalPath() + '/' + "statement.html");
+        } catch (IOException e) {
+            Document d = statementTextPane.getDocument();
+            try {
+                d.remove(0, d.getLength());
+                d.insertString(0, "Не удается отобразить условие", null);
+            } catch (BadLocationException e1) {
+                //do nothing
+            }
         }
-        if (JOptionPane.showConfirmDialog(null, "Подтвердите отсылку решения") == JOptionPane.YES_OPTION) {
-          HashMap<String, String> res = new HashMap<String, String>();
-          res.put("answer", answerTextField.getText());
-          try {
-            final HashMap<String, String> ans = env.submitSolution(res);
-            if (ans.get("result").equals("yes"))
-              JOptionPane.showMessageDialog(null, "Вы дали правильный ответ!");
-            else
-              JOptionPane.showMessageDialog(null, "Вы дали неправильный ответ!!");
-          } catch (ServerReturnedError error) {
-            JOptionPane.showMessageDialog(null, "Сервер недоволен ответом. Его сообщение: " + error.getMessage());
-          } catch (ServerReturnedNoAnswer error) {
-            JOptionPane.showMessageDialog(null, "Не удалось связаться с сервером. Ошибка: " + error.getMessage());
-          }
-        }
-      }
-    });
-  }
+    }
 
-  private void createUIComponents() {
-    pluginPanel = this;
-  }
+    private void addListeners() {
+        submitButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
 
-  public JPanel getPanel() {
-    return this;
-  }
+                /**TODO
+                 * add a task solving status to this component:
+                 * - If the task is solved, prohibit to send a solution to the server!!!
+                 * - If not solved then permit sending a solution
+                 *
+                 * Represent a status with a label on the form (= status of a problem being solved)
+                 * Statuses: not sent (can send), sent but wrong (can send), correct (can't send)
+                 * Sf 'solved' from a server then green color and "Задача решена" message else red and other
+                 */
 
-  public void activate() {
-    //do nothing
-  }
+                if (answerTextField.getText().length() == 0) {
+                    JOptionPane.showMessageDialog(null, "Вы не ввели ответ");
+                    return;
+                }
+                if (JOptionPane.showConfirmDialog(null, "Подтвердите отсылку решения") == JOptionPane.YES_OPTION) {
+                    HashMap<String, String> res = new HashMap<String, String>();
+                    res.put("answer", answerTextField.getText());
+                    try {
+                        final HashMap<String, String> ans = env.submitSolution(res);
+                        if (ans.get("result").equals("yes"))
+                            JOptionPane.showMessageDialog(null, "Вы дали правильный ответ!");
+                        else
+                            JOptionPane.showMessageDialog(null, "Вы дали неправильный ответ!!");
+                    } catch (ServerReturnedError error) {
+                        JOptionPane.showMessageDialog(null, "Сервер недоволен ответом. Его сообщение: " + error.getMessage());
+                    } catch (ServerReturnedNoAnswer error) {
+                        JOptionPane.showMessageDialog(null, "Не удалось связаться с сервером. Ошибка: " + error.getMessage());
+                    }
+                }
+            }
+        });
+    }
 
-  public void deactivate() {
-    //do nothing
-  }
+    private void createUIComponents() {
+        pluginPanel = this;
+    }
 
-  /**
-   * Method generated by IntelliJ IDEA GUI Designer
-   * >>> IMPORTANT!! <<<
-   * DO NOT edit this method OR call it in your code!
-   *
-   * @noinspection ALL
-   */
-  private void $$$setupUI$$$() {
-    createUIComponents();
-    pluginPanel.setLayout(new FormLayout("fill:0dlu:noGrow,left:4dlu:noGrow,fill:40dlu:noGrow,left:4dlu:noGrow,fill:140dlu:grow,left:4dlu:noGrow,fill:60dlu:noGrow,left:4dlu:noGrow,fill:0dlu:noGrow", "center:max(d;0px):noGrow,top:4dlu:noGrow,center:12dlu:noGrow,top:4dlu:noGrow,center:80dlu:grow,top:4dlu:noGrow,center:20dlu:noGrow,top:4dlu:noGrow,center:max(d;4px):grow"));
-    statementTextPane = new JTextPane();
-    statementTextPane.setEditable(false);
-    CellConstraints cc = new CellConstraints();
-    pluginPanel.add(statementTextPane, cc.xyw(3, 5, 5, CellConstraints.FILL, CellConstraints.FILL));
-    submitButton = new JButton();
-    submitButton.setText("Ответить");
-    pluginPanel.add(submitButton, cc.xy(7, 7));
-    answerTextField = new JTextField();
-    pluginPanel.add(answerTextField, cc.xy(5, 7, CellConstraints.FILL, CellConstraints.DEFAULT));
-    final JLabel label1 = new JLabel();
-    label1.setText("Условие задачи");
-    pluginPanel.add(label1, cc.xyw(3, 3, 5));
-    final JLabel label2 = new JLabel();
-    label2.setText("Ответ");
-    pluginPanel.add(label2, cc.xy(3, 7));
-  }
+    public JPanel getPanel() {
+        return this;
+    }
 
-  /**
-   * @noinspection ALL
-   */
-  public JComponent $$$getRootComponent$$$() {
-    return pluginPanel;
-  }
+    public void activate() {
+        //do nothing
+    }
+
+    public void deactivate() {
+        //do nothing
+    }
+
+    /**
+     * Method generated by IntelliJ IDEA GUI Designer
+     * >>> IMPORTANT!! <<<
+     * DO NOT edit this method OR call it in your code!
+     *
+     * @noinspection ALL
+     */
+    private void $$$setupUI$$$() {
+        createUIComponents();
+        pluginPanel.setLayout(new FormLayout("fill:0dlu:noGrow,left:4dlu:noGrow,fill:40dlu:noGrow,left:4dlu:noGrow,fill:140dlu:grow,left:4dlu:noGrow,fill:60dlu:noGrow,left:4dlu:noGrow,fill:0dlu:noGrow", "center:max(d;0px):noGrow,top:4dlu:noGrow,center:12dlu:noGrow,top:4dlu:noGrow,center:80dlu:grow,top:4dlu:noGrow,center:20dlu:noGrow,top:4dlu:noGrow,center:max(d;4px):grow"));
+        statementTextPane = new JTextPane();
+        statementTextPane.setEditable(false);
+        CellConstraints cc = new CellConstraints();
+        pluginPanel.add(statementTextPane, cc.xyw(3, 5, 5, CellConstraints.FILL, CellConstraints.FILL));
+        submitButton = new JButton();
+        submitButton.setText("Ответить");
+        pluginPanel.add(submitButton, cc.xy(7, 7));
+        answerTextField = new JTextField();
+        pluginPanel.add(answerTextField, cc.xy(5, 7, CellConstraints.FILL, CellConstraints.DEFAULT));
+        final JLabel label1 = new JLabel();
+        label1.setText("Условие задачи");
+        pluginPanel.add(label1, cc.xyw(3, 3, 5));
+        final JLabel label2 = new JLabel();
+        label2.setText("Ответ");
+        pluginPanel.add(label2, cc.xy(3, 7));
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    public JComponent $$$getRootComponent$$$() {
+        return pluginPanel;
+    }
 }
