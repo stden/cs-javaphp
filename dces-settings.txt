@@ -1,2 +1,0 @@
-;contest server = http://localhost/dces-server.ru/www/ ;don't append dces.php to the end of the url
-contest server = http://ipo.spb.ru/dces/test/
