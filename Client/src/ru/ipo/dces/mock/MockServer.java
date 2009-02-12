@@ -31,7 +31,7 @@
 //  }
 //
 //  private void CheckPassword(String sessionID, String password)
-//      throws ServerReturnedNoAnswer, ServerReturnedError {
+//      throws GeneralRequestFailureException, ServerReturnedError {
 //    if (sessions.get(sessionID) == null
 //        || !users.get(sessions.get(sessionID).login).password.equals(password))
 //      throw new ServerReturnedError("Неверный пароль");
@@ -40,7 +40,7 @@
 //  /** Настройка контеста */
 //  @Override
 //  public AcceptedResponse doRequest(AdjustContestRequest r)
-//      throws ServerReturnedNoAnswer, ServerReturnedError {
+//      throws GeneralRequestFailureException, ServerReturnedError {
 //    MockSessionServer session = getSession(r.sessionID);
 //    // Если заданы новые параметры контеста => сначала меняем параметры контеста
 //    if (r.contest != null)
@@ -64,7 +64,7 @@
 //
 //  @Override
 //  public AcceptedResponse doRequest(ChangePasswordRequest r)
-//      throws ServerReturnedNoAnswer, ServerReturnedError {
+//      throws GeneralRequestFailureException, ServerReturnedError {
 //    getSession(r.sessionID);
 //    CheckPassword(r.sessionID, r.oldPassword);
 //    return new AcceptedResponse();
@@ -73,7 +73,7 @@
 //  /** Присоединиться к контесту или к просто к серверу для создания контестов */
 //  @Override
 //  public ConnectToContestResponse doRequest(ConnectToContestRequest r)
-//      throws ServerReturnedNoAnswer, ServerReturnedError {
+//      throws GeneralRequestFailureException, ServerReturnedError {
 //    // Проверяем логин и пароль пользователя
 //    // Для этого получаем пользователя по login'у
 //    UserDescription user = users.get(r.login);
@@ -98,7 +98,7 @@
 //  /** Создание нового контеста */
 //  @Override
 //  public AcceptedResponse doRequest(CreateContestRequest r)
-//      throws ServerReturnedNoAnswer, ServerReturnedError {
+//      throws GeneralRequestFailureException, ServerReturnedError {
 //    getSession(r.sessionID);
 //    r.contest.contestID = contests.size();
 //    contests.put(r.contest.contestID, r.contest);
@@ -108,7 +108,7 @@
 //  /** Создание нового пользователя */
 //  @Override
 //  public AcceptedResponse doRequest(CreateUserRequest r)
-//      throws ServerReturnedNoAnswer, ServerReturnedError {
+//      throws GeneralRequestFailureException, ServerReturnedError {
 //    getSession(r.sessionID);
 //    users.put(r.user.login, r.user);
 //    return new AcceptedResponse();
@@ -116,7 +116,7 @@
 //
 //  @Override
 //  public AcceptedResponse doRequest(DisconnectRequest r)
-//      throws ServerReturnedNoAnswer, ServerReturnedError {
+//      throws GeneralRequestFailureException, ServerReturnedError {
 //    getSession(r.sessionID);
 //    sessions.remove(r.sessionID);
 //    return new AcceptedResponse();
@@ -125,7 +125,7 @@
 //  /** Получение подробных данных о контесте */
 //  @Override
 //  public GetContestDataResponse doRequest(GetContestDataRequest r)
-//      throws ServerReturnedNoAnswer, ServerReturnedError {
+//      throws GeneralRequestFailureException, ServerReturnedError {
 //    GetContestDataResponse res = new GetContestDataResponse();
 //    MockSessionServer sd = getSession(r.sessionID);
 //    res.contest = contests.get(sd.contestID);
@@ -143,7 +143,7 @@
 //  /** Получение списка всех пользователей, которые в том же контесте */
 //  @Override
 //  public GetUsersResponse doRequest(GetUsersRequest gur)
-//      throws ServerReturnedNoAnswer, ServerReturnedError {
+//      throws GeneralRequestFailureException, ServerReturnedError {
 //    MockSessionServer session = getSession(gur.sessionID);
 //    // if (!session.isAdmin)
 //    // throw new RequestFailedResponse("Требуются права администратора");
@@ -160,7 +160,7 @@
 //
 //  @Override
 //  public InstallClientPluginResponse doRequest(InstallClientPluginRequest r)
-//      throws ServerReturnedNoAnswer, ServerReturnedError {
+//      throws GeneralRequestFailureException, ServerReturnedError {
 //    //getSession(r.sessionID);
 //
 //    return new InstallClientPluginResponse();
@@ -174,7 +174,7 @@
 //
 //  @Override
 //  public AcceptedResponse doRequest(RemoveClientPluginRequest r)
-//      throws ServerReturnedNoAnswer, ServerReturnedError {
+//      throws GeneralRequestFailureException, ServerReturnedError {
 //    getSession(r.sessionID);
 //
 //    return new AcceptedResponse();
@@ -182,13 +182,13 @@
 //
 //  @Override
 //  public AcceptedResponse doRequest(RestorePasswordRequest r)
-//      throws ServerReturnedNoAnswer, ServerReturnedError {
+//      throws GeneralRequestFailureException, ServerReturnedError {
 //
 //    return new AcceptedResponse();
 //  }
 //
 //  public SubmitSolutionResponse doRequest(SubmitSolutionRequest r)
-//      throws ServerReturnedNoAnswer, ServerReturnedError {
+//      throws GeneralRequestFailureException, ServerReturnedError {
 //    getSession(r.sessionID);
 //    JOptionPane.showMessageDialog(null, r.problemResult.toString(),
 //        "Сообщение", JOptionPane.INFORMATION_MESSAGE);
@@ -198,7 +198,7 @@
 //  }
 //
 //  public AcceptedResponse doRequest(UploadClientPluginRequest r)
-//      throws ServerReturnedNoAnswer, ServerReturnedError {
+//      throws GeneralRequestFailureException, ServerReturnedError {
 //    getSession(r.sessionID);
 //
 //    return new AcceptedResponse();
@@ -211,9 +211,9 @@
 //  }
 //
 //  /** Наполняем базу данных тестовыми данными
-//   * @throws ru.ipo.dces.clientservercommunication.ServerReturnedError is probably not thrown
-//   * @throws ru.ipo.dces.clientservercommunication.ServerReturnedNoAnswer is probably not thrown*/
-//  public void genMockData() throws ServerReturnedNoAnswer, ServerReturnedError {
+//   * @throws ru.ipo.dces.exceptions.ServerReturnedError is probably not thrown
+//   * @throws ru.ipo.dces.exceptions.GeneralRequestFailureException is probably not thrown*/
+//  public void genMockData() throws GeneralRequestFailureException, ServerReturnedError {
 //    ConnectToContestRequest c = new ConnectToContestRequest();
 //    c.login = rootLogin;
 //    c.password = rootPassword;
@@ -225,7 +225,7 @@
 //  }
 //
 //  private MockSessionServer getSession(String sessionID)
-//      throws ServerReturnedNoAnswer, ServerReturnedError {
+//      throws GeneralRequestFailureException, ServerReturnedError {
 //    MockSessionServer sessionData = sessions.get(sessionID);
 //    if (sessionData == null)
 //      throw new ServerReturnedError("Неверный sessionID");

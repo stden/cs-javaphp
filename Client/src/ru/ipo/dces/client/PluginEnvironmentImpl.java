@@ -2,6 +2,8 @@ package ru.ipo.dces.client;
 
 import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
+import ru.ipo.dces.exceptions.ServerReturnedError;
+import ru.ipo.dces.exceptions.GeneralRequestFailureException;
 
 import java.util.HashMap;
 import java.io.File;
@@ -27,13 +29,19 @@ public class PluginEnvironmentImpl implements PluginEnvironment {
   }
 
   @Override
-  public HashMap<String, String> submitSolution(HashMap<String, String> solution) throws ServerReturnedError, ServerReturnedNoAnswer {
+  public HashMap<String, String> submitSolution(HashMap<String, String> solution) throws GeneralRequestFailureException {
     SubmitSolutionRequest ssr = new SubmitSolutionRequest();
     ssr.problemID = pd.id;
     ssr.problemResult = solution;    
     ssr.sessionID = Controller.getSessionID();
-    final SubmitSolutionResponse response = Controller.getServer().doRequest(ssr);
-    return response.problemResult;
+      final SubmitSolutionResponse response;
+      try {
+          response = Controller.getServer().doRequest(ssr);
+      } catch (ServerReturnedError serverReturnedError) {
+          //TODO: refactor PHP server to process table exceptions
+          throw new GeneralRequestFailureException();
+      }
+      return response.problemResult;
   }
 
   public File getProblemFolder() {

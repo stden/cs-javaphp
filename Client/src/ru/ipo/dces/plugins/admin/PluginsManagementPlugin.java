@@ -1,18 +1,17 @@
 package ru.ipo.dces.plugins.admin;
 
-import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.CellConstraints;
-
-import javax.swing.*;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.io.File;
-
+import com.jgoodies.forms.layout.FormLayout;
+import ru.ipo.dces.client.Controller;
+import ru.ipo.dces.exceptions.GeneralRequestFailureException;
+import ru.ipo.dces.exceptions.ServerReturnedError;
 import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
-import ru.ipo.dces.client.Controller;
-import ru.ipo.dces.clientservercommunication.ServerReturnedError;
-import ru.ipo.dces.clientservercommunication.ServerReturnedNoAnswer;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
 /**
  * Created by IntelliJ IDEA.
@@ -65,7 +64,7 @@ public class PluginsManagementPlugin implements Plugin {
           JOptionPane.showMessageDialog(null, "Плагин успешно изменен");
         } catch (ServerReturnedError ee) {
           JOptionPane.showMessageDialog(null, "Сервер сообщает об ошибке: " + ee.getMessage());
-        } catch (ServerReturnedNoAnswer ee) {
+        } catch (GeneralRequestFailureException ee) {
           JOptionPane.showMessageDialog(null, "Не удалось изменить плагин стороны клиента");
         }
       }
@@ -85,7 +84,7 @@ public class PluginsManagementPlugin implements Plugin {
           JOptionPane.showMessageDialog(null, "Плагин успешно удален");
         } catch (ServerReturnedError ee) {
           JOptionPane.showMessageDialog(null, "Сервер сообщает об ошибке: " + ee.getMessage());
-        } catch (ServerReturnedNoAnswer ee) {
+        } catch (GeneralRequestFailureException ee) {
           JOptionPane.showMessageDialog(null, "Не удалось удалить плагин стороны клиента");
         }
       }
