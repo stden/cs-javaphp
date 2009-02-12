@@ -1,21 +1,19 @@
 package ru.ipo.dces.plugins;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import ru.ipo.dces.exceptions.GeneralRequestFailureException;
+import ru.ipo.dces.pluginapi.DCESPluginLoadable;
 import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
-import ru.ipo.dces.pluginapi.DCESPluginLoadable;
-import ru.ipo.dces.clientservercommunication.ServerReturnedError;
-import ru.ipo.dces.clientservercommunication.ServerReturnedNoAnswer;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.util.HashMap;
+import java.awt.event.ActionListener;
 import java.io.IOException;
-
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.CellConstraints;
+import java.util.HashMap;
 
 /**
  * Created by IntelliJ IDEA.
@@ -94,9 +92,7 @@ public class Main extends JPanel implements Plugin {
                             JOptionPane.showMessageDialog(null, "Вы дали правильный ответ!");
                         else
                             JOptionPane.showMessageDialog(null, "Вы дали неправильный ответ!!");
-                    } catch (ServerReturnedError error) {
-                        JOptionPane.showMessageDialog(null, "Сервер недоволен ответом. Его сообщение: " + error.getMessage());
-                    } catch (ServerReturnedNoAnswer error) {
+                    } catch (GeneralRequestFailureException error) {
                         JOptionPane.showMessageDialog(null, "Не удалось связаться с сервером. Ошибка: " + error.getMessage());
                     }
                 }

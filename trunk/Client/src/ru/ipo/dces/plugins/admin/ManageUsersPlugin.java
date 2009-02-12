@@ -10,6 +10,8 @@ import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
 import ru.ipo.dces.plugins.admin.beans.ContestsListBean;
 import ru.ipo.dces.plugins.admin.beans.UsersListBean;
+import ru.ipo.dces.exceptions.ServerReturnedError;
+import ru.ipo.dces.exceptions.GeneralRequestFailureException;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -101,7 +103,7 @@ public class ManageUsersPlugin extends JPanel implements Plugin {
                     Controller.addUser(usernameField.getText(), passwordField.getPassword(), userDataTable.getValues(), ut);
                 } catch (ServerReturnedError serverReturnedError) {
                     JOptionPane.showMessageDialog(null, "Сервер вернул ошибку: " + serverReturnedError, "Ошибка сервера", JOptionPane.ERROR_MESSAGE);
-                } catch (ServerReturnedNoAnswer serverReturnedNoAnswer) {
+                } catch (GeneralRequestFailureException serverReturnedNoAnswer) {
                     JOptionPane.showMessageDialog(null, "Не удалось связаться с сервером", "Ошибка сервера", JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -118,7 +120,7 @@ public class ManageUsersPlugin extends JPanel implements Plugin {
                     Controller.removeUser(ulb.getDescription().userID);
                 } catch (ServerReturnedError serverReturnedError) {
                     JOptionPane.showMessageDialog(null, "Сервер вернул ошибку: " + serverReturnedError, "Ошибка сервера", JOptionPane.ERROR_MESSAGE);
-                } catch (ServerReturnedNoAnswer serverReturnedNoAnswer) {
+                } catch (GeneralRequestFailureException serverReturnedNoAnswer) {
                     JOptionPane.showMessageDialog(null, "Не удалось связаться с сервером", "Ошибка сервера", JOptionPane.ERROR_MESSAGE);
                 }
 

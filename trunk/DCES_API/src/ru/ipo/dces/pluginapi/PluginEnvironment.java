@@ -1,10 +1,9 @@
 package ru.ipo.dces.pluginapi;
 
-import ru.ipo.dces.clientservercommunication.*;
+import ru.ipo.dces.exceptions.GeneralRequestFailureException;
 
 import java.util.HashMap;
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Интерфейс, через который Plugin'ы обращаются к основной части клиента.
@@ -26,11 +25,9 @@ public interface PluginEnvironment {
    * @param solution
    *          information to send
    * @return recieved information. May return RequestFailedResponse
-   * @throws ru.ipo.dces.clientservercommunication.ServerReturnedError if server failed to process the problem solution,
-   *          e.g. the contest is over or its problemset has changed and there is no more such problem 
-   * @throws ru.ipo.dces.clientservercommunication.ServerReturnedNoAnswer if the serever is inaccessible
+   * @throws ru.ipo.dces.exceptions.GeneralRequestFailureException if the serever is inaccessible
    */
-  public HashMap<String, String> submitSolution(HashMap<String, String> solution) throws ServerReturnedError, ServerReturnedNoAnswer;
+  public HashMap<String, String> submitSolution(HashMap<String, String> solution) throws GeneralRequestFailureException;
 
 
   /**

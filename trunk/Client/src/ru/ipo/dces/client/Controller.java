@@ -5,6 +5,8 @@ import ru.ipo.dces.debug.PluginBox;
 import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
 import ru.ipo.dces.plugins.admin.*;
+import ru.ipo.dces.exceptions.ServerReturnedError;
+import ru.ipo.dces.exceptions.GeneralRequestFailureException;
 
 import javax.swing.*;
 import java.io.*;
@@ -23,6 +25,7 @@ public class Controller {
   private static ContestDescription contestDescription;
   private static ClientDialog       clientDialog;
   private static UserDescription.UserType userType;
+  private static UserMessagesLogger logger;
 
   /** Добавление Plugin'а в клиент
    * @param pd the description of the problem for which the plugin is added
@@ -91,7 +94,7 @@ public class Controller {
     }
   }
 
-  public static void refreshParticipantInfo(boolean refreshProblems, boolean refreshPlugins) throws ServerReturnedError, ServerReturnedNoAnswer, IOException {
+  public static void refreshParticipantInfo(boolean refreshProblems, boolean refreshPlugins) throws ServerReturnedError, GeneralRequestFailureException, IOException {
     GetContestDataRequest rq = new GetContestDataRequest();
     rq.contestID = -1;
     rq.infoType = GetContestDataRequest.InformationType.ParticipantInfo;
@@ -178,7 +181,11 @@ public class Controller {
     clientDialog.initialState();
   }
 
-  /**
+    public static UserMessagesLogger getLogger() {
+        return logger;
+    }
+
+    /**
    * Запуск клиента
    *
    * @param args the command line input
@@ -191,6 +198,10 @@ public class Controller {
       System.out.println("Failed to set system look and feel");
       System.exit(1);
     }
+
+    //debug logger
+    //TODO implement real logger
+    logger = new ConsoleUserMessagesLogger();
 
     server = new RealServer(Settings.getInstance().getHost());
 
@@ -222,7 +233,7 @@ public class Controller {
         } catch (ServerReturnedError sre) {
           System.out.println("Server returned error: " + sre.getMessage());
           System.exit(1);
-        } catch (ServerReturnedNoAnswer srna) {
+        } catch (GeneralRequestFailureException srna) {
           System.out.println("Server returned no answer: " + srna.getMessage());
           System.exit(1);
         }
@@ -255,7 +266,7 @@ public class Controller {
           //TODO [ERROR_FRAMEWORK] Log this error and check for inconsistency with error framework
           //JOptionPane.showMessageDialog(null, "failed to create a contest");
           return false;
-      } catch (ServerReturnedNoAnswer serverReturnedNoAnswer) {
+      } catch (GeneralRequestFailureException GeneralRequestFailureException) {
           //TODO [ERROR_FRAMEWORK] Log this error and check for inconsistency with error framework
           //JOptionPane.showMessageDialog(null, "failed to connect to the server");
           return false;
@@ -275,7 +286,7 @@ public class Controller {
         return server.doRequest(gcdr);
       } catch (ServerReturnedError serverReturnedError) {
         return null;
-      } catch (ServerReturnedNoAnswer serverReturnedNoAnswer) {
+      } catch (GeneralRequestFailureException GeneralRequestFailureException) {
         JOptionPane.showMessageDialog(null, "Сервер не отвечает");
         return null;
       }
@@ -287,7 +298,7 @@ public class Controller {
           server.doRequest(acr);
         } catch (ServerReturnedError serverReturnedError) {
             return false; //TODO create process of notifying a user of errors
-        } catch (ServerReturnedNoAnswer serverReturnedNoAnswer) {
+        } catch (GeneralRequestFailureException GeneralRequestFailureException) {
             return false;
         }
         return true;
@@ -308,7 +319,7 @@ public class Controller {
       JOptionPane.showMessageDialog(null, "Регистрация прошла успешно");
     } catch (ServerReturnedError serverReturnedError) {
       JOptionPane.showMessageDialog(null, "Регистрация не удалась. Ответ: " + serverReturnedError.getMessage());
-    } catch (ServerReturnedNoAnswer serverReturnedNoAnswer) {
+    } catch (GeneralRequestFailureException GeneralRequestFailureException) {
       JOptionPane.showMessageDialog(null, "Отсутствует соединение с сервером, попробуйте позже");
     }
   }
@@ -359,7 +370,7 @@ public class Controller {
       System.out.println("DEBUG error:");
       e.printStackTrace();
       return;
-    } catch (ServerReturnedNoAnswer e) {
+    } catch (GeneralRequestFailureException e) {
       System.out.println("DEBUG error:");
       e.printStackTrace();
       return;
@@ -399,7 +410,7 @@ public class Controller {
 
         } catch (ServerReturnedError e) {
             JOptionPane.showMessageDialog(null, "Сервер сообщает об ошибке: " + e.getMessage());
-        } catch (ServerReturnedNoAnswer serverReturnedNoAnswer) {
+        } catch (GeneralRequestFailureException GeneralRequestFailureException) {
             JOptionPane.showMessageDialog(null, "Отсутствует соединение с сервером, попробуйте позже");
         }
 
@@ -410,7 +421,7 @@ public class Controller {
         return contestDescription;
     }
 
-  public static void adjustClientPlugin(String alias, String description, File file) throws ServerReturnedError, ServerReturnedNoAnswer {
+  public static void adjustClientPlugin(String alias, String description, File file) throws ServerReturnedError, GeneralRequestFailureException {
     AdjustClientPluginRequest r = new AdjustClientPluginRequest();
 
     r.pluginAlias = alias;
@@ -438,14 +449,14 @@ public class Controller {
     server.doRequest(r);
   }
 
-  public static void removeClientPlugin(String alias) throws ServerReturnedError, ServerReturnedNoAnswer {
+  public static void removeClientPlugin(String alias) throws ServerReturnedError, GeneralRequestFailureException {
     RemoveClientPluginRequest r = new RemoveClientPluginRequest();
     r.pluginAlias = alias;
     r.sessionID = sessionID;
     server.doRequest(r);
   }
 
-    public static void addUser(String login, char[] password, String[] dataValue, UserDescription.UserType ut) throws ServerReturnedError, ServerReturnedNoAnswer {
+    public static void addUser(String login, char[] password, String[] dataValue, UserDescription.UserType ut) throws ServerReturnedError, GeneralRequestFailureException {
 
         CreateUserRequest cur = new CreateUserRequest();
 
@@ -462,7 +473,7 @@ public class Controller {
         server.doRequest(cur);
     }
 
-    public static void removeUser(int userID) throws ServerReturnedError, ServerReturnedNoAnswer {
+    public static void removeUser(int userID) throws ServerReturnedError, GeneralRequestFailureException {
         RemoveUserRequest rur = new RemoveUserRequest();
 
         rur.sessionID = sessionID;

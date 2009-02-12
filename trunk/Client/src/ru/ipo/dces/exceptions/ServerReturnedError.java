@@ -1,4 +1,4 @@
-package ru.ipo.dces.clientservercommunication;
+package ru.ipo.dces.exceptions;
 
 /**
  * Created by IntelliJ IDEA.

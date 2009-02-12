@@ -1,18 +1,17 @@
 package ru.ipo.dces.debug;
 
+import ru.ipo.dces.exceptions.GeneralRequestFailureException;
 import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
-import ru.ipo.dces.clientservercommunication.ServerReturnedError;
-import ru.ipo.dces.clientservercommunication.ServerReturnedNoAnswer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
-import java.io.File;
 
 /**
  * Created by IntelliJ IDEA.
@@ -189,7 +188,7 @@ public class PluginBox extends JFrame {
       pluginButton.setText(title);
     }
 
-    public HashMap<String, String> submitSolution(HashMap<String, String> solution) throws ServerReturnedError, ServerReturnedNoAnswer {
+    public HashMap<String, String> submitSolution(HashMap<String, String> solution) throws GeneralRequestFailureException {
       final HashMap<String, String> serverAnswer = serverEmulator.checkSolution(solution, previousResult);
       previousResult = new HashMap<String, String>(serverAnswer);
       return new HashMap<String, String>(serverAnswer);
