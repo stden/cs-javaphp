@@ -1,3 +1,5 @@
+package ru.ipo.dces.tests.plugins;
+
 import ru.ipo.dces.debug.PluginBox;
 import ru.ipo.dces.debug.ServerPluginEmulator;
 
