@@ -226,7 +226,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Client/Client.iml" filepath="$PROJECT_DIR$/Client/Client.iml" />
-      <module fileurl="file://$PROJECT_DIR$/TestAnnotation/DCESTests.iml" filepath="$PROJECT_DIR$/TestAnnotation/DCESTests.iml" />
+      <module fileurl="file://$PROJECT_DIR$/DCESTests/DCESTests.iml" filepath="$PROJECT_DIR$/DCESTests/DCESTests.iml" />
       <module fileurl="file://$PROJECT_DIR$/DCES_API/DCES_API.iml" filepath="$PROJECT_DIR$/DCES_API/DCES_API.iml" />
       <module fileurl="file://$PROJECT_DIR$/SamplePlugin/SamplePlugin.iml" filepath="$PROJECT_DIR$/SamplePlugin/SamplePlugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/Server/dces-server.iml" filepath="$PROJECT_DIR$/Server/dces-server.iml" />
