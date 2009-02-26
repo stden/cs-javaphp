@@ -13,6 +13,8 @@ import javax.swing.text.Document;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.io.File;
+import java.io.StringReader;
 import java.util.HashMap;
 
 /**
@@ -40,18 +42,124 @@ public class Main extends JPanel implements Plugin {
         showStatement();
     }
 
+    private int getPriority(String extension, String filename) {
+        if (extension.equals("html"))
+            if (filename.equals("statement.html"))
+                return 5;
+            else
+                return 4;
+        else if (extension.equals("rtf"))
+            return 3;
+        else if (extension.equals("txt"))
+            return 2;
+        else if (extension.equals("bmp") || extension.equals("gif") || extension.equals("jpeg") || extension.equals("jpg") || extension.equals("png"))
+            return 1;
+        else
+            return 0;
+
+    }
+
     private void showStatement() {
 
-        /**TODO
-         * 1. get directory env.getProblemFolder()
-         * 2. if there is statement.html -> show it
-         * 3. else if there is a set of html files -> show any
-         * 4. else if there is no html, then picture (.gif .jpeg .jpg .png)
-         * 5. else if there is a .txt .rtf -> show
-         * 6. (html <- rtf <- txt <- picture (gif <- jpeg <- png) - priorities
-         */
+        /*TODO
+     * 1. get directory env.getProblemFolder()
+     * 2. if there is statement.html -> show it
+     * 3. else if there is a set of html files -> show any
+     * 4. else if there is no html, then picture (.gif .jpeg .jpg .png)
+     * 5. else if there is a .txt .rtf -> show
+     * 6. (html <- rtf <- txt <- picture (gif <- jpeg <- png) - priorities
+     */
 
-        statementTextPane.setContentType("text/html");
+        File folder = env.getProblemFolder();
+
+        if (!folder.isDirectory()) {
+            return;
+        }
+
+        final String title = "Заголовок";
+        String resName = "";
+        String resExt = "";
+        int curPriority = 0;
+        String filename = "";
+
+        try {
+            for (File f : folder.listFiles()) {
+                if (f.isFile()) {
+                    filename = f.getName();
+                    String[] fileParts = filename.split("\\.");
+                    String ext = fileParts[fileParts.length - 1];
+
+                    switch (getPriority(ext.toLowerCase(), filename.toLowerCase())) {
+                        case 5:
+                            curPriority = 5;
+                            resExt = "text/html";
+                            resName = "file:///" + folder.getCanonicalPath() + '/' + filename;
+                            break;
+
+                        case 4:
+                            if (curPriority < 4) {
+                                curPriority = 4;
+                                resExt = "text/html";
+                                resName = "file:///" + folder.getCanonicalPath() + '/' + filename;
+                            }
+                            break;
+                        case 3:
+                            if (curPriority < 3) {
+                                curPriority = 3;
+                                resExt = "text/rtf";
+                                resName = "file:///" + folder.getCanonicalPath() + '/' + filename;
+                            }
+                            break;
+                        case 2:
+                            if (curPriority < 2) {
+                                curPriority = 2;
+                                resExt = "text/plain";
+                                resName = "file:///" + folder.getCanonicalPath() + '/' + filename;
+                            }
+                            break;
+                        case 1:
+                            if (curPriority < 1) {
+                                curPriority = 1;
+                                resExt = "text/html";
+                            }
+
+                            break;
+                        case 0:
+                            break;
+                    }
+                }
+            }
+
+            if (curPriority == 1) {
+                statementTextPane.read(new StringReader(
+                        "<html>" +
+                                "<head>" +
+                                "<meta http-equiv=\"Content-Type\" content=\"text/html\">" +
+                                "<title>" + title + "</title>" +
+                                "</head>" +
+                                "<body>" +
+                                "<base href=\"" + "file:///" + folder.getCanonicalPath() + '/' + "\"/>" +
+                                "<img width=100% height=100% src=\"" + filename.toLowerCase() + "\" alt=\"Условие задачи\" />" +
+                                "</body>" +
+                                "</html>"), null);
+            } else if (curPriority != 0) {
+                statementTextPane.setContentType(resExt);
+                statementTextPane.setPage(resName);
+            }
+            else
+                throw new IOException();
+        }
+        catch (IOException e) {
+            Document d = statementTextPane.getDocument();
+            try {
+                d.remove(0, d.getLength());
+                d.insertString(0, "Не удается отобразить условие", null);
+            } catch (BadLocationException e1) {
+                //do nothing
+            }
+        }
+
+        /*   statementTextPane.setContentType("text/html");
         try {
             statementTextPane.setPage("file:///" + env.getProblemFolder().getCanonicalPath() + '/' + "statement.html");
         } catch (IOException e) {
@@ -62,7 +170,7 @@ public class Main extends JPanel implements Plugin {
             } catch (BadLocationException e1) {
                 //do nothing
             }
-        }
+        }*/
     }
 
     private void addListeners() {

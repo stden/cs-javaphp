@@ -33,7 +33,8 @@ public class TestSamplePlugin {
             //Возвращаем каталог с задачами. В простом случае задача не зависит от участника
             //и всегда возвращается одно и тоже условие
             public File getStatement() {
-                return new File("D:\\Data\\Projects\\DCES\\problems\\154\\");
+                //return new File("D:\\Data\\Projects\\DCES\\problems\\154\\");
+                return new File(System.getenv("testdir"));
             }
         };
 
