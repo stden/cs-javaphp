@@ -9,6 +9,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="DCES_API" />
     <orderEntry type="module" module-name="SamplePlugin" />
+    <orderEntry type="library" exported="" name="junit" level="project" />
+    <orderEntry type="module" module-name="Client" exported="" />
     <orderEntryProperties />
   </component>
 </module>
