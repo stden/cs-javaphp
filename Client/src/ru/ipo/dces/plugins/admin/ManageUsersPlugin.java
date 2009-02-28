@@ -90,17 +90,25 @@ public class ManageUsersPlugin extends JPanel implements Plugin {
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
+                ContestsListBean selectedContest = (ContestsListBean) (contestsList.getSelectedValue());
+
+                if (selectedContest == null)
+                    return;
+
                 UserDescription.UserType ut;
 
-                if (contestAdminCB.isSelected())
+                if (contestAdminCB.isSelected()) {
                     ut = UserDescription.UserType.ContestAdmin;
-                else if (superAdminCB.isSelected())
+                } else if (superAdminCB.isSelected()) {
                     ut = UserDescription.UserType.SuperAdmin;
-                else
+                } else {
                     ut = UserDescription.UserType.Participant;
+                }
 
                 try {
-                    Controller.addUser(usernameField.getText(), passwordField.getPassword(), userDataTable.getValues(), ut);
+
+
+                    Controller.addUser(usernameField.getText(), passwordField.getPassword(), userDataTable.getValues(), ut, selectedContest.getDescription().contestID);
                 } catch (ServerReturnedError serverReturnedError) {
                     JOptionPane.showMessageDialog(null, "Сервер вернул ошибку: " + serverReturnedError, "Ошибка сервера", JOptionPane.ERROR_MESSAGE);
                 } catch (GeneralRequestFailureException serverReturnedNoAnswer) {
