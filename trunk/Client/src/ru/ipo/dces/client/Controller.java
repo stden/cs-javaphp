@@ -456,9 +456,9 @@ public class Controller {
     server.doRequest(r);
   }
 
-    public static void addUser(String login, char[] password, String[] dataValue, UserDescription.UserType ut) throws ServerReturnedError, GeneralRequestFailureException {
+    public static void addUser(String login, char[] password, String[] dataValue, UserDescription.UserType ut, int contestID) throws ServerReturnedError, GeneralRequestFailureException {
 
-        CreateUserRequest cur = new CreateUserRequest();
+        RegisterToContestRequest cur = new RegisterToContestRequest();
 
         UserDescription ud = new UserDescription();
 
@@ -467,6 +467,7 @@ public class Controller {
         ud.dataValue = dataValue;
         ud.userType = ut;
 
+        cur.contestID = contestID;
         cur.sessionID = sessionID;
         cur.user = ud;
 
