@@ -6,6 +6,7 @@ import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
 import ru.ipo.dces.plugins.admin.beans.ContestsListBean;
 import ru.ipo.dces.plugins.admin.beans.ProblemsBean;
+import ru.ipo.dces.plugins.admin.beans.AdjustContestsPluginBean;
 
 import javax.swing.*;
 import javax.swing.event.*;

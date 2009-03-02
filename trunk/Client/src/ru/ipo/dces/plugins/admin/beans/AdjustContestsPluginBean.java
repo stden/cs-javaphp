@@ -1,4 +1,4 @@
-package ru.ipo.dces.plugins.admin;
+package ru.ipo.dces.plugins.admin.beans;
 
 import ru.ipo.dces.clientservercommunication.ContestDescription;
 import ru.ipo.dces.clientservercommunication.ProblemDescription;

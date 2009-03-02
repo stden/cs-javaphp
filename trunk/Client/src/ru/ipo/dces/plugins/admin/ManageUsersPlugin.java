@@ -5,17 +5,18 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.Sizes;
 import ru.ipo.dces.client.Controller;
-import ru.ipo.dces.clientservercommunication.*;
+import ru.ipo.dces.clientservercommunication.ContestDescription;
+import ru.ipo.dces.clientservercommunication.UserDescription;
+import ru.ipo.dces.exceptions.GeneralRequestFailureException;
+import ru.ipo.dces.exceptions.ServerReturnedError;
 import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
 import ru.ipo.dces.plugins.admin.beans.ContestsListBean;
+import ru.ipo.dces.plugins.admin.beans.ManageUsersPluginBean;
 import ru.ipo.dces.plugins.admin.beans.UsersListBean;
-import ru.ipo.dces.exceptions.ServerReturnedError;
-import ru.ipo.dces.exceptions.GeneralRequestFailureException;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -36,6 +37,8 @@ public class ManageUsersPlugin extends JPanel implements Plugin {
     private DefaultListModel contestsListModel = new DefaultListModel();
     private DefaultListModel usersListModel = new DefaultListModel();
 
+    private ManageUsersPluginBean oldBean = null;
+    private ManageUsersPluginBean newBean = null;
 
     /**
      * Инициализация plugin'а
@@ -54,6 +57,9 @@ public class ManageUsersPlugin extends JPanel implements Plugin {
         contestsList.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e) {
                 ContestsListBean cb = (ContestsListBean) contestsList.getSelectedValue();
+
+                oldBean = null;
+                newBean = new ManageUsersPluginBean();
 
                 if (cb == null)
                     return;
@@ -84,6 +90,15 @@ public class ManageUsersPlugin extends JPanel implements Plugin {
                     case Participant:
                         participantCB.setSelected(true);
                 }
+
+                oldBean = new ManageUsersPluginBean();
+
+                oldBean.setType(ulb.getDescription().userType);
+                oldBean.setLogin(ulb.getDescription().login);
+                oldBean.setPassword(new char[0]);
+                oldBean.setValues(ulb.getDescription().dataValue);
+
+                newBean = new ManageUsersPluginBean(oldBean);
             }
         });
 
@@ -95,25 +110,20 @@ public class ManageUsersPlugin extends JPanel implements Plugin {
                 if (selectedContest == null)
                     return;
 
-                UserDescription.UserType ut;
-
-                if (contestAdminCB.isSelected()) {
-                    ut = UserDescription.UserType.ContestAdmin;
-                } else if (superAdminCB.isSelected()) {
-                    ut = UserDescription.UserType.SuperAdmin;
-                } else {
-                    ut = UserDescription.UserType.Participant;
-                }
-
                 try {
+                    Controller.addUser(newBean.getLogin(),
+                            newBean.getPassword(),
+                            newBean.getValues(),
+                            newBean.getType(),
+                            selectedContest.getDescription().contestID);
 
-
-                    Controller.addUser(usernameField.getText(), passwordField.getPassword(), userDataTable.getValues(), ut, selectedContest.getDescription().contestID);
                 } catch (ServerReturnedError serverReturnedError) {
                     JOptionPane.showMessageDialog(null, "Сервер вернул ошибку: " + serverReturnedError, "Ошибка сервера", JOptionPane.ERROR_MESSAGE);
                 } catch (GeneralRequestFailureException serverReturnedNoAnswer) {
                     JOptionPane.showMessageDialog(null, "Не удалось связаться с сервером", "Ошибка сервера", JOptionPane.ERROR_MESSAGE);
                 }
+
+                fillDaFormWithData(selectedContest.getDescription().contestID, selectedContest.getDescription().data);
             }
         });
         deleteButton.addActionListener(new ActionListener() {
@@ -132,9 +142,87 @@ public class ManageUsersPlugin extends JPanel implements Plugin {
                     JOptionPane.showMessageDialog(null, "Не удалось связаться с сервером", "Ошибка сервера", JOptionPane.ERROR_MESSAGE);
                 }
 
+                ContestsListBean value = (ContestsListBean) contestsList.getSelectedValue();
+
+                if (value == null)
+                    fillDaFormWithData(-1, null);
+                else
+                    fillDaFormWithData(value.getDescription().contestID, value.getDescription().data);
+            }
+        });
+
+        ActionListener rbListener = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+                if (newBean == null)
+                    return;
+
+                if (superAdminCB.isSelected())
+                    newBean.setType(UserDescription.UserType.SuperAdmin);
+                else if (participantCB.isSelected())
+                    newBean.setType(UserDescription.UserType.Participant);
+                else if (contestAdminCB.isSelected())
+                    newBean.setType(UserDescription.UserType.ContestAdmin);
+            }
+        };
+
+        superAdminCB.addActionListener(rbListener);
+        participantCB.addActionListener(rbListener);
+        contestAdminCB.addActionListener(rbListener);
+
+
+        usernameField.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {
+                updateFields();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                updateFields();
+            }
+
+            public void changedUpdate(DocumentEvent e) {
+            }
+
+            private void updateFields() {
+                if (newBean == null)
+                    return;
+
+                newBean.setLogin(usernameField.getText());
+            }
+        });
+
+
+        passwordField.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {
+                updateFields();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                updateFields();
+            }
+
+            public void changedUpdate(DocumentEvent e) {
+            }
+
+            private void updateFields() {
+                if (newBean == null)
+                    return;
+
+                newBean.setPassword(passwordField.getPassword());
+            }
+        });
+
+        userDataTable.getModel().addTableModelListener(new TableModelListener() {
+            public void tableChanged(TableModelEvent e) {
+
+                if (e.getColumn() != 2) return;
+                if (e.getFirstRow() != e.getLastRow()) return;
+
+                newBean.setValue(e.getFirstRow(), userDataTable.getValue(e.getFirstRow()));
             }
         });
     }
+
 
     private void setColumn(FormLayout form, int colNo, int xSize, double grow) {
         form.setColumnSpec(colNo, new ColumnSpec(ColumnSpec.FILL, Sizes.dluX(xSize), grow));
@@ -194,20 +282,43 @@ public class ManageUsersPlugin extends JPanel implements Plugin {
 
     private void fillDaFormWithData(int contestID, String[] keys) {
 
-        UserDescription[] ud = Controller.getUsers(contestID);
+        if (newBean == null) throw new AssertionError("asd");
 
         usersListModel.clear();
 
-        for (UserDescription userDescription : ud)
-            usersListModel.addElement(new UsersListBean(userDescription));
+        if (contestID != -1) {
+            UserDescription[] ud = Controller.getUsers(contestID);
 
-        userDataTable.setKeys(keys);
+            for (UserDescription userDescription : ud)
+                usersListModel.addElement(new UsersListBean(userDescription));
 
-        superAdminCB.setSelected(false);
-        contestAdminCB.setSelected(false);
-        participantCB.setSelected(false);
+            userDataTable.setKeys(keys);
+
+            switch (newBean.getType()) {
+            case ContestAdmin:
+                contestAdminCB.setSelected(true);
+                break;
+            case SuperAdmin:
+                superAdminCB.setSelected(true);
+                break;
+            case Participant:
+                participantCB.setSelected(true);
+                break;
+            }
+
+            usernameField.setText(newBean.getLogin());
+            passwordField.setText("");
+
+            userDataTable.setValues(newBean.getValues());
+        } else {
+            contestAdminCB.setSelected(false);
+            superAdminCB.setSelected(false);
+            participantCB.setSelected(false);
+            usernameField.setText("");
+            passwordField.setText("");           
+            userDataTable.setKeys(new String[0]);
+        }
     }
-
 
     private void createUIComponents() {
         drawPanel = this;
@@ -222,48 +333,25 @@ public class ManageUsersPlugin extends JPanel implements Plugin {
      */
     private void $$$setupUI$$$() {
         createUIComponents();
-        drawPanel.setLayout(new FormLayout("fill:max(d;4px):noGrow,left:4dlu:noGrow,fill:130dlu:grow(3.0),left:4dlu:noGrow,fill:1dlu:noGrow,left:4dlu:noGrow,fill:100dlu:grow(4.0),left:4dlu:noGrow,left:90dlu:grow,fill:max(d;4px):noGrow,fill:max(d;4px):noGrow", "center:max(d;4px):noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:84dlu:grow,top:4dlu:noGrow,top:1dlu:noGrow,center:4dlu:noGrow,top:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:0dlu:grow,center:max(d;4px):noGrow,top:16dlu:noGrow,top:4dlu:noGrow,center:max(d;4px):noGrow"));
+        drawPanel.setLayout(new FormLayout("fill:max(d;4px):noGrow,left:4dlu:noGrow,fill:115dlu:grow,left:4dlu:noGrow,fill:1dlu:noGrow,left:4dlu:noGrow,fill:115dlu:grow,left:4dlu:noGrow,left:90dlu:grow(2.0),fill:4dlu:noGrow,fill:4dlu:noGrow", "center:max(d;4px):noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:17dlu:noGrow,top:4dlu:noGrow,center:80dlu:grow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:grow,top:4dlu:noGrow,top:4dlu:noGrow"));
         contestsLabel = new JLabel();
         contestsLabel.setText("Доступные контесты");
         CellConstraints cc = new CellConstraints();
         drawPanel.add(contestsLabel, cc.xy(3, 3, CellConstraints.DEFAULT, CellConstraints.CENTER));
         final JSeparator separator1 = new JSeparator();
         separator1.setOrientation(1);
-        drawPanel.add(separator1, cc.xywh(5, 3, 1, 27, CellConstraints.FILL, CellConstraints.FILL));
+        drawPanel.add(separator1, cc.xywh(5, 3, 1, 26, CellConstraints.FILL, CellConstraints.FILL));
         final JScrollPane scrollPane1 = new JScrollPane();
-        drawPanel.add(scrollPane1, cc.xywh(7, 5, 1, 13, CellConstraints.FILL, CellConstraints.FILL));
+        drawPanel.add(scrollPane1, cc.xywh(7, 5, 1, 23, CellConstraints.FILL, CellConstraints.FILL));
         usersList = new JList();
         scrollPane1.setViewportView(usersList);
-        final JSeparator separator2 = new JSeparator();
-        drawPanel.add(separator2, cc.xyw(7, 19, 3, CellConstraints.FILL, CellConstraints.FILL));
         final JScrollPane scrollPane2 = new JScrollPane();
-        drawPanel.add(scrollPane2, cc.xywh(7, 21, 1, 7, CellConstraints.FILL, CellConstraints.FILL));
-        userDataTable = new JUserTable();
-        userDataTable.putClientProperty("JTable.autoStartsEdit", Boolean.TRUE);
-        userDataTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
-        scrollPane2.setViewportView(userDataTable);
-        changeButton = new JButton();
-        changeButton.setText("Изменить");
-        drawPanel.add(changeButton, cc.xyw(7, 29, 3));
-        final JScrollPane scrollPane3 = new JScrollPane();
-        drawPanel.add(scrollPane3, cc.xywh(3, 5, 1, 25, CellConstraints.FILL, CellConstraints.FILL));
+        drawPanel.add(scrollPane2, cc.xywh(3, 5, 1, 23, CellConstraints.FILL, CellConstraints.FILL));
         contestsList = new JList();
-        scrollPane3.setViewportView(contestsList);
+        scrollPane2.setViewportView(contestsList);
         final JLabel label1 = new JLabel();
         label1.setText("Пользователи");
         drawPanel.add(label1, cc.xy(7, 3));
-        superAdminCB = new JRadioButton();
-        superAdminCB.setText("Администратор");
-        drawPanel.add(superAdminCB, cc.xy(9, 21));
-        participantCB = new JRadioButton();
-        participantCB.setSelected(false);
-        participantCB.setText("Участник");
-        drawPanel.add(participantCB, cc.xy(9, 25));
-        contestAdminCB = new JRadioButton();
-        contestAdminCB.setHorizontalAlignment(10);
-        contestAdminCB.setHorizontalTextPosition(11);
-        contestAdminCB.setText("Администратор контеста");
-        drawPanel.add(contestAdminCB, cc.xy(9, 23));
         final JLabel label2 = new JLabel();
         label2.setText("Логин");
         label2.setVerticalAlignment(3);
@@ -277,15 +365,36 @@ public class ManageUsersPlugin extends JPanel implements Plugin {
         label3.setVerticalAlignment(3);
         label3.setVerticalTextPosition(0);
         drawPanel.add(label3, cc.xy(9, 9, CellConstraints.DEFAULT, CellConstraints.FILL));
-        addButton = new JButton();
-        addButton.setText("Добавить");
-        drawPanel.add(addButton, cc.xy(9, 13, CellConstraints.FILL, CellConstraints.DEFAULT));
-        deleteButton = new JButton();
-        deleteButton.setText("Удалить");
-        drawPanel.add(deleteButton, cc.xy(9, 15, CellConstraints.FILL, CellConstraints.DEFAULT));
         passwordField = new JPasswordField();
         passwordField.setText("");
         drawPanel.add(passwordField, cc.xy(9, 11, CellConstraints.FILL, CellConstraints.DEFAULT));
+        superAdminCB = new JRadioButton();
+        superAdminCB.setText("Администратор");
+        drawPanel.add(superAdminCB, cc.xy(9, 13));
+        contestAdminCB = new JRadioButton();
+        contestAdminCB.setHorizontalAlignment(10);
+        contestAdminCB.setHorizontalTextPosition(11);
+        contestAdminCB.setText("Администратор контеста");
+        drawPanel.add(contestAdminCB, cc.xy(9, 15));
+        participantCB = new JRadioButton();
+        participantCB.setSelected(false);
+        participantCB.setText("Участник");
+        drawPanel.add(participantCB, cc.xy(9, 17));
+        addButton = new JButton();
+        addButton.setText("Добавить");
+        drawPanel.add(addButton, cc.xy(9, 21, CellConstraints.FILL, CellConstraints.DEFAULT));
+        final JScrollPane scrollPane3 = new JScrollPane();
+        drawPanel.add(scrollPane3, cc.xy(9, 19, CellConstraints.FILL, CellConstraints.FILL));
+        userDataTable = new JUserTable();
+        userDataTable.putClientProperty("JTable.autoStartsEdit", Boolean.TRUE);
+        userDataTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+        scrollPane3.setViewportView(userDataTable);
+        changeButton = new JButton();
+        changeButton.setText("Изменить");
+        drawPanel.add(changeButton, cc.xy(9, 23, CellConstraints.FILL, CellConstraints.DEFAULT));
+        deleteButton = new JButton();
+        deleteButton.setText("Удалить");
+        drawPanel.add(deleteButton, cc.xy(9, 25, CellConstraints.FILL, CellConstraints.DEFAULT));
         ButtonGroup buttonGroup;
         buttonGroup = new ButtonGroup();
         buttonGroup.add(contestAdminCB);

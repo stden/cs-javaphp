@@ -8,8 +8,11 @@ package ru.ipo.dces.clientservercommunication;
  */
 public class AdjustUserDataRequest implements Request {
 
-  public String sessionID;
-  public int userID;
-  public String[] userData;
+    public int userID;
+    public String sessionID;
 
+    public String login;
+    public String password;
+    public UserDescription.UserType newType;
+    public String[] userData;
 }

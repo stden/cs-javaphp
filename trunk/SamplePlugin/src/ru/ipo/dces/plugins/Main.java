@@ -182,9 +182,9 @@ public class Main extends JPanel implements Plugin {
                  * - If the task is solved, prohibit to send a solution to the server!!!
                  * - If not solved then permit sending a solution
                  *
-                 * Represent a status with a label on the form (= status of a problem being solved)
+                 * Represent a status (see SamplePluginProtocol.txt) with a label on the form (= status of a problem being solved)
                  * Statuses: not sent (can send), sent but wrong (can send), correct (can't send)
-                 * Sf 'solved' from a server then green color and "Задача решена" message else red and other
+                 * If 'solved' from a server then green color and "Задача решена" message else red and other message
                  */
 
                 if (answerTextField.getText().length() == 0) {
