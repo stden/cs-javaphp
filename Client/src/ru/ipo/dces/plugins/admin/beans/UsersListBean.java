@@ -13,10 +13,6 @@ public class UsersListBean {
         return description;
     }
 
-    public void setDescription(UserDescription description) {
-        this.description = description;
-    }
-
     public String toString() {
         return description.login + " : " + description.userType;
     }
