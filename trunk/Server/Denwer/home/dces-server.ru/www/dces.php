@@ -121,6 +121,7 @@ echo $nil; //means no error
 echo $s_result;
 
 if ($DO_LOG) {
+
   fwrite($log, "answer = $s_result\n\n");
   fclose($log);
 }
