@@ -28,7 +28,7 @@
     while ($row = mysql_fetch_array($rows)) {
       $ud = new UserDescription();
 
-      $ud->userID = $row['id'];
+      $ud->userID = (int)$row['id'];
       $ud->login = $row['login'];
       $ud->password = $row['password'];
       $ud->dataValue = @unserialize($row['user_data']) or $ud->dataValue = array();

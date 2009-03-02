@@ -28,7 +28,7 @@ function processConnectToContestRequest($request) {
   $res = new ConnectToContestResponse();
   $res->sessionID = $session_id;
   $res->user = new UserDescription();
-  $res->user->userID = $row['id'];
+  $res->user->userID = (int)$row['id'];
   $res->user->login = $request->login;
   $res->user->dataValue = unserialize($row['user_data']) or $res->user->dataValue = array();
   $res->user->userType = $row['user_type'];
