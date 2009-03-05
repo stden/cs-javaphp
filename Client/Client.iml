@@ -12,22 +12,22 @@
       </containerElement>
       <containerElement type="library" level="module">
         <attribute name="method" value="2" />
-        <attribute name="URI" value="/TableLayout.jar" />
+        <attribute name="URI" value="/" />
         <url>jar://$MODULE_DIR$/lib/TableLayout.jar!/</url>
       </containerElement>
       <containerElement type="library" level="module">
         <attribute name="method" value="2" />
-        <attribute name="URI" value="/forms.jar" />
+        <attribute name="URI" value="/" />
         <url>jar://$MODULE_DIR$/lib/forms.jar!/</url>
       </containerElement>
       <containerElement type="library" level="module">
         <attribute name="method" value="2" />
-        <attribute name="URI" value="/appframework-1.0.3.jar" />
+        <attribute name="URI" value="/" />
         <url>jar://$MODULE_DIR$/libs/appframework-1.0.3.jar!/</url>
       </containerElement>
       <containerElement type="library" level="module">
         <attribute name="method" value="2" />
-        <attribute name="URI" value="/swing-worker-1.1.jar" />
+        <attribute name="URI" value="/" />
         <url>jar://$MODULE_DIR$/libs/swing-worker-1.1.jar!/</url>
       </containerElement>
     </containerInfo>
@@ -180,7 +180,6 @@
     </orderEntry>
     <orderEntry type="module" module-name="DCES_API" />
     <orderEntry type="library" name="junit" level="project" />
-    <orderEntryProperties />
   </component>
 </module>
 

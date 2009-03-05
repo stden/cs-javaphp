@@ -1,12 +1,12 @@
 package ru.ipo.dces.tests;
 
-import org.junit.*;
-
 import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.client.RealServer;
 import ru.ipo.dces.client.Settings;
 
 import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
 
 /** Работа анонимного пользователя */
 public class TestAnonym {
@@ -63,6 +63,7 @@ public class TestAnonym {
       //do nothing
     }
 
+    /*
     try {
       final CreateUserRequest userRequest = new CreateUserRequest();
       userRequest.user.login = "login";
@@ -72,6 +73,7 @@ public class TestAnonym {
     } catch (Exception e) {
       //do nothing
     }
+    */
 
     try {
       final DisconnectRequest r = new DisconnectRequest();
