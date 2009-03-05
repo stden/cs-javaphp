@@ -42,19 +42,16 @@ public class RealServer implements ServerFacade {
         return in;
     }
 
-    @Override
     public AcceptedResponse doRequest(AdjustContestRequest r)
             throws ServerReturnedError, GeneralRequestFailureException {
         return doRequest(AcceptedResponse.class, r);
     }
 
-    @Override
     public AvailableContestsResponse doRequest(AvailableContestsRequest r)
             throws ServerReturnedError, GeneralRequestFailureException {
         return doRequest(AvailableContestsResponse.class, r);
     }
 
-    @Override
     public AcceptedResponse doRequest(ChangePasswordRequest r)
             throws ServerReturnedError, GeneralRequestFailureException {
         return doRequest(AcceptedResponse.class, r);
@@ -125,73 +122,56 @@ public class RealServer implements ServerFacade {
         return buf;
     }
 
-    @Override
     public ConnectToContestResponse doRequest(ConnectToContestRequest r)
             throws ServerReturnedError, GeneralRequestFailureException {
         return doRequest(ConnectToContestResponse.class, r);
     }
 
-    @Override
     public AcceptedResponse doRequest(CreateContestRequest r)
             throws ServerReturnedError, GeneralRequestFailureException {
         return doRequest(AcceptedResponse.class, r);
     }
 
-    @Override
-    public AcceptedResponse doRequest(CreateUserRequest r)
-            throws ServerReturnedError, GeneralRequestFailureException {
-        return doRequest(AcceptedResponse.class, r);
-    }
-
-    @Override
     public AcceptedResponse doRequest(DisconnectRequest r)
             throws ServerReturnedError, GeneralRequestFailureException {
         return doRequest(AcceptedResponse.class, r);
     }
 
-    @Override
     public GetContestDataResponse doRequest(GetContestDataRequest r)
             throws ServerReturnedError, GeneralRequestFailureException {
         return doRequest(GetContestDataResponse.class, r);
     }
 
-    @Override
     public GetUsersResponse doRequest(GetUsersRequest r)
             throws ServerReturnedError, GeneralRequestFailureException {
         return doRequest(GetUsersResponse.class, r);
     }
 
-    @Override
     public InstallClientPluginResponse doRequest(InstallClientPluginRequest r)
             throws ServerReturnedError, GeneralRequestFailureException {
         return doRequest(InstallClientPluginResponse.class, r);
     }
 
-    @Override
     public AcceptedResponse doRequest(RegisterToContestRequest r)
             throws ServerReturnedError, GeneralRequestFailureException {
         return doRequest(AcceptedResponse.class, r);
     }
 
-    @Override
     public AcceptedResponse doRequest(RemoveClientPluginRequest r)
             throws ServerReturnedError, GeneralRequestFailureException {
         return doRequest(AcceptedResponse.class, r);
     }
 
-    @Override
     public AcceptedResponse doRequest(RestorePasswordRequest r)
             throws ServerReturnedError, GeneralRequestFailureException {
         return doRequest(AcceptedResponse.class, r);
     }
 
-    @Override
     public SubmitSolutionResponse doRequest(SubmitSolutionRequest r)
             throws ServerReturnedError, GeneralRequestFailureException {
         return doRequest(SubmitSolutionResponse.class, r);
     }
 
-    @Override
     public AcceptedResponse doRequest(UploadClientPluginRequest r)
             throws ServerReturnedError, GeneralRequestFailureException {
         return doRequest(AcceptedResponse.class, r);
@@ -201,7 +181,6 @@ public class RealServer implements ServerFacade {
         return doRequest(AcceptedResponse.class, r);
     }
 
-    @Override
     public AcceptedResponse doRequest(RemoveUserRequest r) throws ServerReturnedError, GeneralRequestFailureException {
         return doRequest(AcceptedResponse.class, r);
     }

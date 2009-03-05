@@ -10,7 +10,7 @@ public class GenPHP {
       AvailableContestsResponse.class, ChangePasswordRequest.class,
       ConnectToContestRequest.class, ConnectToContestResponse.class,
       ContestDescription.class, CreateContestRequest.class,
-      /*CreateUserRequest.class,*/ DisconnectRequest.class,
+      DisconnectRequest.class,
       GetContestDataRequest.class, GetContestDataResponse.class,
       GetUsersRequest.class, GetUsersResponse.class,
       InstallClientPluginRequest.class, InstallClientPluginResponse.class,

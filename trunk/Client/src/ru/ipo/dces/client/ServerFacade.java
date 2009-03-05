@@ -19,10 +19,7 @@ public interface ServerFacade {
       throws ServerReturnedError, GeneralRequestFailureException;
 
   public AcceptedResponse doRequest(CreateContestRequest r)
-      throws ServerReturnedError, GeneralRequestFailureException;
-
-  public AcceptedResponse doRequest(CreateUserRequest r)
-      throws ServerReturnedError, GeneralRequestFailureException;
+      throws ServerReturnedError, GeneralRequestFailureException;  
 
   public AcceptedResponse doRequest(DisconnectRequest r)
       throws ServerReturnedError, GeneralRequestFailureException;

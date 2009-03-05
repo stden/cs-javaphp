@@ -9,9 +9,16 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="DCES_API" />
     <orderEntry type="module" module-name="SamplePlugin" />
-    <orderEntry type="library" exported="" name="junit" level="project" />
     <orderEntry type="module" module-name="Client" exported="" />
-    <orderEntryProperties />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$JUNIT_HOME$!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
 
