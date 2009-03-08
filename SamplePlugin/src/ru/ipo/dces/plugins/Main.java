@@ -3,11 +3,11 @@ package ru.ipo.dces.plugins;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import ru.ipo.dces.exceptions.GeneralRequestFailureException;
+import ru.ipo.dces.exceptions.ServerReturnedError;
 import ru.ipo.dces.pluginapi.DCESPluginLoadable;
 import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
-import ru.ipo.dces.clientservercommunication.ServerReturnedError;
-import ru.ipo.dces.clientservercommunication.ServerReturnedNoAnswer;
+import ru.ipo.dces.exceptions.ServerReturnedError;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
@@ -54,7 +54,8 @@ public class Main extends JPanel implements Plugin {
       return 3;
     else if (extension.equals("txt"))
       return 2;
-    else if (extension.equals("bmp") || extension.equals("gif") || extension.equals("jpeg") || extension.equals("jpg") || extension.equals("png"))
+    else
+    if (extension.equals("bmp") || extension.equals("gif") || extension.equals("jpeg") || extension.equals("jpg") || extension.equals("png"))
       return 1;
     else
       return 0;
@@ -201,12 +202,9 @@ public class Main extends JPanel implements Plugin {
               JOptionPane.showMessageDialog(null, "Вы дали правильный ответ!");
             else
               JOptionPane.showMessageDialog(null, "Вы дали неправильный ответ!!");
-          } /*catch (GeneralRequestFailureException error) {
-            JOptionPane.showMessageDialog(null, "Не удалось связаться с сервером. Ошибка: " + error.getMessage());
-          }*/ catch (ServerReturnedError serverReturnedError) {
-            serverReturnedError.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-          } catch (ServerReturnedNoAnswer serverReturnedNoAnswer) {
-            serverReturnedNoAnswer.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+          }
+          catch (GeneralRequestFailureException e1) {
+            JOptionPane.showMessageDialog(null, "Не удалось связаться с сервером. Ошибка: " + e1.getMessage());
           }
         }
       }
