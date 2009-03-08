@@ -117,6 +117,7 @@
     </orderEntry>
     <orderEntry type="module" module-name="DCES_API" />
     <orderEntry type="module" module-name="Client" />
+    <orderEntryProperties />
   </component>
 </module>
 
