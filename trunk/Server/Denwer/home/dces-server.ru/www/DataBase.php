@@ -67,8 +67,8 @@ function composeUpdateQuery($table, $col_value, $where) {
 
 function connectToDB() {
   $con = mysql_connect($GLOBALS["dces_mysql_host"], $GLOBALS["dces_mysql_user"], $GLOBALS["dces_mysql_password"]);
-  if (!$con) die('Could not connect: ' . mysql_error());
-  mysql_select_db($GLOBALS["dces_mysql_db"], $con) or die("failed to select db: ".mysql_error());
+  if (!$con) throwServerProblem(66);
+  mysql_select_db($GLOBALS["dces_mysql_db"], $con) or throwServerProblem(67, mysql_error());
      
   return $con;
 }

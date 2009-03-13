@@ -8,16 +8,16 @@
     $contest_id = $request->contestID;
 
     //simple security check
-    if (!is_numeric($contest_id)) throwError("Contest id is not a number");
+    if (!is_numeric($contest_id)) throwBusinessLogicError(14);
 
     if ($user_row['user_type'] !== 'SuperAdmin')
-      throwError("You don't have permission to remove contest $contest_id");
+      throwBusinessLogicError(0);
     else
-      if ($contest_id === 0) throwError("Can not remove zero contest");
+      if ($contest_id === 0) throwBusinessLogicError(16);
 
     //get all users of the contest
     $contest_user_rows = mysql_query("SELECT id FROM ${prfx}user WHERE contest_id=$contest_id")
-      or die("DB error 32: ".mysql_error());
+      or throwServerProblem(32, mysql_error());
 
     //compose where clause for delete query
     $where_user_id = "";
@@ -33,7 +33,7 @@
     $queries[] = "DELETE FROM ${prfx}user WHERE contest_id=$contest_id";
 
     //start transaction
-    transaction($con, $queries) or throwError("Failed to remove contest $contest_id");
+    transaction($con, $queries) or throwServerProblem(70);
 
     return new AcceptedResponse();
   }

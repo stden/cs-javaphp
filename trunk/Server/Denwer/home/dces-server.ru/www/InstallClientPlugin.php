@@ -6,12 +6,12 @@
     //test file name to be a pure file name
     if (strpos($request->clientPluginAlias, '/') ||
         strpos($request->clientPluginAlias, '\\')
-       ) throwError("ClientPluginAlias has unallowed characters");
+       ) throwBusinessLogicError(6);
 
     $res = new InstallClientPluginResponse();
     $res->pluginInstaller =
       @file_get_contents($GLOBALS['dces_dir_client_plugins'] . '/' . $request->clientPluginAlias . '.jar')
-        or throwError("Plugin with alias '" . $request->clientPluginAlias . "' not found");
+        or throwBusinessLogicError(6);
 
     return $res;
   }

@@ -18,10 +18,10 @@
       $contest_id = 0;
       
     if ($contest_id < 0 || $user_type === 'Participant')
-      throwError('You do not have permission to get user list of this contest');
+      throwBusinessLogicError(0);
 
     $rows = mysql_query(sprintf("SELECT * FROM ${prfx}user WHERE contest_id=$contest_id"), $con)
-              or die("DB error 31: ".mysql_error());
+              or throwServerProblem(31, mysql_error());
 
     $res = new GetUsersResponse();
     $res->users = array();

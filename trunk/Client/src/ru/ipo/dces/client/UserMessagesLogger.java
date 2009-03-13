@@ -6,6 +6,6 @@ public interface UserMessagesLogger {
         OK, Warning, Error
     }
 
-    void log(String message, LogMessageType type, Object sender);
+    void log(String message, LogMessageType type, String sender);    
 
 }

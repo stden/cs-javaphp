@@ -45,7 +45,7 @@ $a = f("42");
 echo $a["asdf"];
 
 exit;
-  $zip = new ZipArchive;
+  $zip = new ZipArchive();
   $res = $zip->open('.\temp/statement.zip');
   if ($res === TRUE) {
     echo 'ok';

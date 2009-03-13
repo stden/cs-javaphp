@@ -69,16 +69,17 @@
       if ($p->id != -1 && is_null($p->serverPluginAlias) ) {
         $rows = mysql_query(
                   sprintf("SELECT server_plugin_alias FROM ${prfx}problem WHERE id=%s", quote_smart($p->id))
-                , $con) or die("DB error 12".mysql_error());
-        $row = mysql_fetch_array($rows, $con) or throwError("Problem with specified ID not found");        
+                , $con) or throwServerProblem(12, mysql_error());
+        $row = mysql_fetch_array($rows, $con) or throwBusinessLogicError(4);        
         $plugin_alias = $row['server_plugin_alias'];
       }
-      elseif ($p->id == -1 && is_null($p->serverPluginAlias)) throwError("Server plugin not specified in the task being created");
+      elseif ($p->id == -1 && is_null($p->serverPluginAlias))
+        throwBusinessLogicError(1);
 
       //get current server plugin
       //TODO improve security here
       $server_plugin_file = $GLOBALS['dces_dir_server_plugins'] . '/' . $plugin_alias . '.php';
-      if (!file_exists($server_plugin_file)) throwError("Server plugin '$plugin_alias' not found");
+      if (!file_exists($server_plugin_file)) throwBusinessLogicError(5);
       require_once($server_plugin_file);
               
       if ($p->id == -1) {
@@ -101,9 +102,9 @@
           $zip_file = $GLOBALS['dces_dir_problems'] . "/${problem_id}_statement.zip";
         }
         $zip = openZip($p->statementData, $zip_file);
-        if ($zip === false) throwError("Statement data seems to be not a zip compressed set of files");
+        if ($zip === false) throwBusinessLogicError(7);
         $data_updated = $plugin->updateStatementData($zip);
-        if ($data_updated === false) throwError('Server plugin did not accept statement data');
+        if ($data_updated === false) throwBusinessLogicError(9);
         $col_value['statement'] = serialize((string)$data_updated);        
         if ($p->id == -1)
           $temp_statement_zips[] = $zip_file;
@@ -119,9 +120,9 @@
           $zip_file = $GLOBALS['dces_dir_problems'] . "/${problem_id}_answer.zip";
         }
         $zip = openZip($p->answerData, $zip_file);
-        if ($zip === false) throwError("Answer data seems to be not a zip compressed set of files");
+        if ($zip === false) throwBusinessLogicError(8);
         $data_updated = $plugin->updateAnswerData($zip);
-        if ($data_updated === false) throwError('Server plugin did not accept answer data');
+        if ($data_updated === false) throwBusinessLogicError(10);
         $col_value['answer'] = serialize((string)$data_updated);
         if ($p->id == -1)
           $temp_answer_zips[] = $zip_file;
@@ -133,7 +134,7 @@
       if ($p->id == -1)
       {
         //create new task
-        if (!$all_set) throwError("An attempt to insert a new Problem with not all parameters set");
+        if (!$all_set) throwBusinessLogicError(1);
 
         $queries[] = composeInsertQuery('problem', $col_value);
       }
@@ -149,7 +150,7 @@
     //queries to remove problems
     $res = mysql_query(
              sprintf("SELECT id FROM ${prfx}problem WHERE contest_id=%s", quote_smart($contest_id))
-           , $con) or die("DB error 13: ".mysql_error());
+           , $con) or throwServerProblem(13, mysql_error());
     while ($row = mysql_fetch_array($res))
       if ($changed_probs[$row['id']] != 1) {
         $pid = $row['id']; 
@@ -174,7 +175,7 @@
     $contest_id = getRequestedContest($request->contest->contestID, $userRow['contest_id'], $user_type);
     if ($user_type === "Participant") $contest_id = -1;
 
-    if ($contest_id < 0) throwError("You don't have permissions to adjust this contest");
+    if ($contest_id < 0) throwBusinessLogicError(0);
 
     //get elements to adjust
     $queries = array();
@@ -196,7 +197,7 @@
     //run transaction
     if (count($queries) != 0) {
       $inserted_ids = array();
-      transaction($con, $queries, $inserted_ids) or die("Failed to make update, db error or incorrect data");
+      transaction($con, $queries, $inserted_ids) or throwServerProblem(60);
 
       //server 2003 enterprise ru 32 SP2
 
@@ -204,11 +205,11 @@
       if ( count($temp_dirs) != count($inserted_ids) ||
            count($temp_dirs) != count($temp_statement_zips) ||
            count($temp_dirs) != count($temp_answer_zips) ) {
-             var_dump($temp_dirs);
-             var_dump($inserted_ids);
-             var_dump($temp_statement_zips);
-             var_dump($temp_answer_zips);
-             die("Assertion failed, call developers");
+             $dump = var_dump($temp_dirs);
+             $dump .= var_dump($inserted_ids);
+             $dump .= var_dump($temp_statement_zips);
+             $dump .= var_dump($temp_answer_zips);
+             throwServerProblem(61, $dump);
            }
 
       for ($i = 0; $i < count($temp_dirs); $i++) {
@@ -222,7 +223,7 @@
       }
     }
     else
-      throwError("Nothing updated by request");
+      throwBusinessLogicError(11);
 
     return new AcceptedResponse();
   }

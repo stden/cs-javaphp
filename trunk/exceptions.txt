@@ -1,4 +1,4 @@
-﻿Различные типы ошибок:
+Различные типы ошибок:
 
 а. Server не может с собой сладить и сообщает это ServerProxy
 б. ServerPlugin с собой не сладил
@@ -36,7 +36,19 @@
 б: BrokenServerPluginException, //ServerPlugin с собой не сладил
 в: ConnectionFailedException, //ServerProxy не может соединиться с Server
 г: CommunicationFailedException, //ServerProxy не понимает, что идет от Server
-//д: Exception //Server возвращает осмысленную ошибку (предусмотренную логикой проведения контестов)
+//д: ServerReturn //Server возвращает осмысленную ошибку (предусмотренную логикой проведения контестов)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

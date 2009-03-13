@@ -6,11 +6,12 @@ import java.util.Enumeration;
 import java.util.ArrayList;
 
 import javax.swing.*;
-
-import org.jdesktop.application.Application;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.DocumentEvent;
 
 import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.plugins.admin.LoginPluginV2;
+import info.clearthought.layout.TableLayout;
 
 public class ClientDialog extends JFrame {
   private static final int MIN_LEFT_PANEL_ROWS = 10;
@@ -43,21 +44,16 @@ public class ClientDialog extends JFrame {
 
   private static final long serialVersionUID = -5765060013197859310L;
 
-  private JSplitPane        splitPane;
-  public LoginPluginV2 adminPanel;
-  private JPanel            leftPanel        = null;
-  private Plugin            rightPanel       = null;
-  private GridLayout        bLayout;
+  private JSplitPane splitPane;
+  private JPanel leftPanel = null;
+  private Plugin rightPanel = null;
+  private GridLayout bLayout;
   private ButtonGroup pluginsButtonGroup = new ButtonGroup();
-
-  public ClientDialog() {
-    super();
-    initGUI();
-  }
+  private JTextPane logTextPane;
 
   public void addPluginToForm(PluginEnvironmentView pev, Plugin p) {
     if (p == null) {
-      JOptionPane.showMessageDialog(null, "Не удалось загрузить плагин");
+      Controller.getLogger().log("Не удалось загрузить плагин", UserMessagesLogger.LogMessageType.Error, Controller.LOGGER_NAME);
       return;
     }
 
@@ -77,20 +73,25 @@ public class ClientDialog extends JFrame {
       setRightPanel(p);
       p.activate();
       button.setSelected(true);
-    }
-    else
+    } else
       button.setSelected(false);
   }
 
-  /** Удалить все Plugin'ы */
+  /**
+   * Удалить все Plugin'ы
+   */
   public void clearLeftPanel() {
     leftPanel.removeAll();
     setRightPanel(new Plugin() {
       public JPanel getPanel() {
         return new JPanel();
       }
-      public void activate() {}
-      public void deactivate() {}
+
+      public void activate() {
+      }
+
+      public void deactivate() {
+      }
     });
     rightPanel = null;
 
@@ -108,43 +109,59 @@ public class ClientDialog extends JFrame {
     }
   }
 
-  private void initGUI() {
-    try {
-      BoxLayout thisLayout = new BoxLayout(getContentPane(),
-          javax.swing.BoxLayout.X_AXIS);
-      getContentPane().setLayout(thisLayout);
-      {
-        splitPane = new JSplitPane();
-        getContentPane().add(splitPane);
-        {
-          leftPanel = new JPanel();
-          leftPanel.setName("Left plugin");
-          bLayout = new GridLayout(MIN_LEFT_PANEL_ROWS, 1);
-          bLayout.setColumns(1);
-          bLayout.setHgap(2);
-          bLayout.setVgap(2);
-          leftPanel.setLayout(bLayout);
-          splitPane.add(leftPanel, JSplitPane.LEFT);
+  public void initGUI() {
+    //set outer components and outer layout
+    TableLayout outerLayout = new TableLayout(new double[][]
+            {{TableLayout.FILL}, {TableLayout.FILL, 60}}
+    );
+    getContentPane().setLayout(outerLayout);
+    JPanel mainPanel = new JPanel();
+    logTextPane = new JTextPane();
+    final JScrollPane logScrollPane = new JScrollPane(logTextPane);
+    getContentPane().add(mainPanel, "0, 0");
+    getContentPane().add(logScrollPane, "0, 1");
 
-          initialState();
-        }
+    //logTextPane adjust
+    logTextPane.setEditable(false);
+    logTextPane.setBackground(Color.BLACK);
+    logTextPane.getDocument().addDocumentListener(new DocumentListener() {
+      public void insertUpdate(DocumentEvent e) {
+        //scroll to the top
+        logScrollPane.getVerticalScrollBar().setValue(0);
+        logScrollPane.getHorizontalScrollBar().setValue(0);
       }
-      setSize(800, 600);
-      // Разместить окно по центру экрана
-      setLocationRelativeTo(null);
-      setTitle("DCES Client");
 
-      Application.getInstance().getContext().getResourceMap(getClass())
-          .injectComponents(getContentPane());
-    } catch (Exception e) {
-      //TODO [ERROR_FRAMEWORK] Show message
-      System.out.println("exception in the init gui method");
-      e.printStackTrace();
-    }
+      public void removeUpdate(DocumentEvent e) {/*do nothing*/}
+      public void changedUpdate(DocumentEvent e) {/*do nothing*/}
+    });
 
+    //set mainPanel layout and components
+    BoxLayout thisLayout = new BoxLayout(mainPanel, javax.swing.BoxLayout.X_AXIS);
+    mainPanel.setLayout(thisLayout);
+
+    splitPane = new JSplitPane();
+    mainPanel.add(splitPane);
+
+    leftPanel = new JPanel();
+    leftPanel.setName("Left plugin");
+    bLayout = new GridLayout(MIN_LEFT_PANEL_ROWS, 1);
+    bLayout.setColumns(1);
+    bLayout.setHgap(2);
+    bLayout.setVgap(2);
+    leftPanel.setLayout(bLayout);
+    splitPane.add(leftPanel, JSplitPane.LEFT);
+
+    initialState();
+
+    setSize(800, 600);
+    // Разместить окно по центру экрана
+    setLocationRelativeTo(null);
+    setTitle("DCES Client");
   }
 
-  /** Начальное состояние клиента до присоединения контеста */
+  /**
+   * Начальное состояние клиента до присоединения контеста
+   */
   public void initialState() {
     clearLeftPanel();
 
@@ -159,5 +176,9 @@ public class ClientDialog extends JFrame {
   private void setRightPanel(Plugin panel) {
     rightPanel = panel;
     splitPane.add(panel.getPanel(), JSplitPane.RIGHT);
+  }
+
+  public JTextPane getLogTextPane() {
+    return logTextPane;
   }
 }

@@ -10,15 +10,15 @@ function processConnectToContestRequest($request) {
                             quote_smart($request->login),
                             quote_smart($request->contestID)
                            )
-                  ) or die("db error 26:". mysql_error());
+                  ) or throwServerProblem(26, mysql_error());
 
   //test if there is at least one user
   if ( !($row = mysql_fetch_array($contest_rows)) )
-      throwError("User, password or contest not found");
+      throwBusinessLogicError(12);
 
   //test password
   if ($row['password'] != $request->password)
-      throwError("User, password or contest not found");
+      throwBusinessLogicError(12);
 
   //TODO implement the test: if user $row['id'] is a participant, then connection is allowed only duing the contest time
 

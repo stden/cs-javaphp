@@ -6,6 +6,7 @@ Place file dces-settings.php in this folder, and fill it with the following line
   $dces_mysql_password = "";
   $dces_mysql_db = "dces";
   $dces_mysql_prefix = "dces_";
+  $dces_logging = true;
 ?>
 
 Don't forget to set appropriate values for the parameters
