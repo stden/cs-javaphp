@@ -3,6 +3,7 @@ package ru.ipo.dces.client;
 import java.io.OutputStream;
 import java.io.InputStream;
 import java.io.IOException;
+import java.io.BufferedInputStream;
 import java.net.*;
 import java.util.Arrays;
 
@@ -13,7 +14,7 @@ import ru.ipo.dces.exceptions.GeneralRequestFailureException;
 public class RealServer implements ServerFacade {
 
     private final String              URL_string;
-    private final byte[] REQUEST_VAR = "x=".getBytes(PHP.SERVER_CHARSET);
+    private final byte[] REQUEST_VAR = "x=".getBytes(PHP.SERVER_CHARSET);    
 
     public RealServer(String URL_string) {
         this.URL_string = URL_string;
@@ -61,50 +62,59 @@ public class RealServer implements ServerFacade {
             throws ServerReturnedError, GeneralRequestFailureException {
 
         InputStream input;
-        RequestFailedResponse failedResponse = null;
-        int[] magic;
-        byte[] bytes = null;
+        RequestFailedResponse failedResponse;
 
         try {
             input = doPost(obj);
+            input = new BufferedInputStream(input, 4096);
+            input.mark(4096);          
         } catch (Exception e) {
-            Controller.getLogger().log("Ошибка соединения с сервером", UserMessagesLogger.LogMessageType.Error, this);
+            Controller.getLogger().log("Не удалось соединиться с сервером", UserMessagesLogger.LogMessageType.Error, Controller.LOGGER_NAME);
             throw new GeneralRequestFailureException();
         }
 
         try {
-            //test magic
-            magic = new int[4];
-            magic[0] = input.read();
-            magic[1] = input.read();
-            magic[2] = input.read();
-            magic[3] = input.read();
-            if (magic[0] != 4 || magic[1] != 2 || magic[2] != 3 || magic[3] != 9) {
-                bytes = inputStreamToByteArray(4, input);
-                for (int i = 0; i < 4; i++)
-                    if (magic[i] != -1) bytes[i] = (byte)magic[i]; else break;
-            } else {
-                failedResponse = PHP.unserialize(RequestFailedResponse.class, input);
-                if (failedResponse == null)
-                    return PHP.unserialize(cls, input);
-            }
+          failedResponse = PHP.unserialize(RequestFailedResponse.class, input);
+          if (failedResponse == null)
+            return PHP.unserialize(cls, input);
         } catch (Exception e) {
-            Controller.getLogger().log("Произошла ошибка связи с сервером", UserMessagesLogger.LogMessageType.Error, this);
-            //throw new CommunicationFailedException(); //TODO: refactor PHP server to process BrokenServer exceptions
-            throw new GeneralRequestFailureException();
+          Controller.getLogger().log("Произошла ошибка связи с сервером", UserMessagesLogger.LogMessageType.Error, Controller.LOGGER_NAME);
+          try {
+            byte[] actualAnswer;
+            input.reset();
+            actualAnswer = inputStreamToByteArray(0, input);
+            System.out.println("actual server answer: " + new String(actualAnswer, PHP.SERVER_CHARSET));
+          } catch (IOException ioe) {
+            System.out.println("failed to get actual server answer");
+          }
+
+          throw new GeneralRequestFailureException();
         }
 
-        if (failedResponse != null)
-            throw new ServerReturnedError(failedResponse.message);
-        if (bytes != null) {
-            System.err.println("Неправильный формат ответа сервера: " + new String(bytes, PHP.SERVER_CHARSET));
-            Controller.getLogger().log("Произошла ошибка связи с сервером", UserMessagesLogger.LogMessageType.Error, this);
-            //throw new CommunicationFailedException(); //TODO: refactor PHP server to process BrokenServer exceptions
+        //now failedResponse != null
+        switch (failedResponse.failReason) {
+          case BrokenServerError:
+            Controller.getLogger().log(
+                    "Ошибка на стороне сервера №" + failedResponse.failErrNo +
+                            (failedResponse.extendedInfo == null ? "" : ". " + failedResponse.extendedInfo),
+                    UserMessagesLogger.LogMessageType.Error,
+                    Controller.LOGGER_NAME
+            );
             throw new GeneralRequestFailureException();
+          case BrokenServerPluginError:
+            Controller.getLogger().log(
+                    "Ошибка на стороне сервера №" + failedResponse.failErrNo +
+                            (failedResponse.extendedInfo == null ? "" : ". " + failedResponse.extendedInfo),
+                    UserMessagesLogger.LogMessageType.Error,
+                    Controller.LOGGER_NAME
+            );
+            throw new GeneralRequestFailureException();
+          case BusinessLogicError:
+            throw new ServerReturnedError(failedResponse.failErrNo,  failedResponse.extendedInfo);
         }
-        System.err.println("Ошибка неизвестного типа");
-        Controller.getLogger().log("Произошла ошибка связи с сервером", UserMessagesLogger.LogMessageType.Error, this);
-        throw new GeneralRequestFailureException();
+
+      Controller.getLogger().log("Неизвестная ошибка при попытке связи с сервером", UserMessagesLogger.LogMessageType.Error, Controller.LOGGER_NAME);
+      throw new GeneralRequestFailureException();
     }
 
     private byte[] inputStreamToByteArray(int fromIndex, InputStream input) throws IOException {

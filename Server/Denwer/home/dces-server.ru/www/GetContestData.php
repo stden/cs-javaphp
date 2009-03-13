@@ -19,7 +19,7 @@
     //compare requested contest and user contest
     $contest_id = getRequestedContest($request->contestID, $userRow['contest_id'], $user_type);
 
-    if ($contest_id < 0) throwError("You don't have permissions to get data from this contest");
+    if ($contest_id < 0) throwBusinessLogicError(0);
 
     //create response
     $res = new GetContestDataResponse();
@@ -31,8 +31,8 @@
     //query db
     $contest_rows = mysql_query(
                       sprintf("SELECT * FROM ${prfx}contest WHERE id=%s", quote_smart($contest_id))
-                    , $con) or die("DB error 15: ".mysql_error());
-    $row = mysql_fetch_array($contest_rows) or throwError("Found no contest with specified id");
+                    , $con) or throwServerProblem(15, mysql_error());
+    $row = mysql_fetch_array($contest_rows) or throwBusinessLogicError(14);
 
     //TODO remove this code duplication, the code is simular to AvailableContests.php
     $c->contestID = (int)$row['id'];
@@ -54,7 +54,7 @@
     //query db to find out problems
     $problems_rows = mysql_query(
                        sprintf("SELECT * FROM ${prfx}problem WHERE contest_id=%s ORDER BY contest_pos ASC", quote_smart($contest_id))
-                     , $con) or die("DB error 16: ".mysql_error());
+                     , $con) or throwServerProblem(16, mysql_error());
 
     while ($row = mysql_fetch_array($problems_rows)) {
       $p = new ProblemDescription();
@@ -80,7 +80,7 @@
           $p->statement = $plugin->getStatement($user_id, $statement);
         }
         elseif ($info_type === "AdminInfo") {
-          if ($user_type === "Participant") throwError("You don't have permissions to get admin info for a problem");
+          if ($user_type === "Participant") throwBusinessLogicError(0);
           //TODO process error: statement not found and return correct error info
           $p->statementData = $plugin->getStatementData($p->id);
           $p->answerData = $plugin->getAnswerData($p->id);

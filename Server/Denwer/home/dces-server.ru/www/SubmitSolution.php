@@ -17,8 +17,8 @@
     //get problem row
     $problem_rows = mysql_query(
                       sprintf("SELECT * FROM ${prfx}problem WHERE id=%s", quote_smart($request->problemID))
-                    , $con) or die("DB error 21. ".mysql_error());
-    if (! ($problem_row = mysql_fetch_array($problem_rows)) ) throwError("Problem with specified ID not found");
+                    , $con) or throwServerProblem(21, mysql_error());
+    if (! ($problem_row = mysql_fetch_array($problem_rows)) ) throwBusinessLogicError(4);
 
     //get contest id of a problem
     $problem_contest_id = $problem_row['contest_id'];
@@ -26,7 +26,7 @@
     //test if we have rights to submit solution for the contest
     $contest_id = getRequestedContest($problem_contest_id, $userRow['contest_id'], $user_type);
 
-    if ($contest_id < 0) throwError("You don't have permissions to submit solution for this contest");
+    if ($contest_id < 0) throwBusinessLogicError(0);
 
     //get plugin_alias
     $plugin_alias = $problem_row['server_plugin_alias'];
@@ -35,22 +35,22 @@
     require_once('ServerPlugin.php');
     require_once($GLOBALS['dces_dir_server_plugins'] . '/' . $plugin_alias . '.php');
 
-    $plugin = new $plugin_alias($con, $GLOBALS['dces_dir_problems'] . '/' . $requsest->problemID);
+    $plugin = new $plugin_alias($con, $GLOBALS['dces_dir_problems'] . '/' . $request->problemID);
 
     //get answer data
-    $answer_data = unserialize($problem_row['answer']) or die("DB error 22.");
+    $answer_data = @unserialize($problem_row['answer']) or throwServerProblem(22);
 
     //get previous result
     $previous_result_query = mysql_query(
                                sprintf("SELECT result FROM ${prfx}task_result WHERE problem_id=%s AND user_id=%s ORDER BY submission_time DESC",
                                        quote_smart($request->problemID),
                                        quote_smart($user_id)
-                               ), $con) or die("DB error 23. ".mysql_error());
+                               ), $con) or throwServerProblem(23, mysql_error());
     $previous_result_row = mysql_fetch_array($previous_result_query);
     if (!$previous_result_row)
       $previous_result = null;
     else
-      $previous_result = unserialize($previous_result_row['result']) or die("DB error 24.");      
+      $previous_result = @unserialize($previous_result_row['result']) or throwServerProblem(24);      
 
     //call plugin to check solution
     $check_result = $plugin->checkSolution($request->problemResult, $user_id, $answer_data, $previous_result);
@@ -65,7 +65,7 @@
     $col_value['result'] = serialize($check_result);
     $col_value['submission_time'] = DatePHPToMySQL($cur_php_time[0]);
 
-    mysql_query(composeInsertQuery('task_result', $col_value), $con) or die("DB error 25." . mysql_error());
+    mysql_query(composeInsertQuery('task_result', $col_value), $con) or throwServerProblem(25, mysql_error());
 
     //return submission result
     $res = new SubmitSolutionResponse();

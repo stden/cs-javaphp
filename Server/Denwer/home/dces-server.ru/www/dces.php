@@ -1,7 +1,5 @@
 <?php
 
-$DO_LOG = true;
-
 require("Debug.php");
 
 require("dces-settings.php");
@@ -26,27 +24,27 @@ else
 //$s_request = prepare($_REQUEST['x']);
 
 //open log file
-if ($DO_LOG) {
+if ($GLOBALS['dces_logging']) {
   $log = fopen("messages.log", "a");
   fwrite($log, "request = $s_request\n");
 }
 
-$request = unserialize($s_request) or throwError('Failed to understand the request');
+$request = @unserialize($s_request) or throwBusinessLogicError(15);
 
-switch(get_class($request)){
+switch(get_class($request)) {
   case 'AvailableContestsRequest':
-    require("AvailableContests.php");
-    $result = processAvailableContestsRequest($request);
+      require("AvailableContests.php");
+      $result = processAvailableContestsRequest($request);
 	  break;
 
 	case 'CreateContestRequest':
 	  require("CreateContest.php");
-    $result = processCreateContestRequest($request);
+      $result = processCreateContestRequest($request);
 	  break;
 
 	case 'ConnectToContestRequest':
 	  require("ConnectToContest.php");
-    $result = processConnectToContestRequest($request);
+      $result = processConnectToContestRequest($request);
 	  break;
 
 	case 'DisconnectRequest':
@@ -110,17 +108,17 @@ switch(get_class($request)){
 	  break;
 
   default:
-	  throwError('Unknown message type "'.get_class($s).'"');
+      throwBusinessLogicError(15, get_class($request));      	  
 };
 
-$magic = chr(4) . chr(2) . chr(3) . chr(9);
+//$magic = chr(4) . chr(2) . chr(3) . chr(9);
 $nil = serialize(null);
 $s_result = serialize($result);
-echo $magic;
+//echo $magic;
 echo $nil; //means no error
 echo $s_result;
 
-if ($DO_LOG) {
+if ($GLOBALS['dces_logging']) {
 
   fwrite($log, "answer = $s_result\n\n");
   fclose($log);

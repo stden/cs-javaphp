@@ -14,7 +14,6 @@ import java.lang.reflect.Constructor;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.HashSet;
-import java.awt.*;
 
 /**
  * Контроллер, который хранит данные о соединении с сервером и позволяет
@@ -27,6 +26,18 @@ public class Controller {
   private static ClientDialog       clientDialog;
   private static UserDescription.UserType userType;
   private static UserMessagesLogger logger;
+
+  public final static String LOGGER_NAME = "Система";
+
+  public static void log(ServerReturnedError err) {
+    logger.log(err.getMessage(), UserMessagesLogger.LogMessageType.Error, LOGGER_NAME);
+    System.out.print("ERROR:");
+    System.out.println(err.getMessage());
+    if (err.getExtendedInfo() != null) {
+      System.out.print("extended info:");
+      System.out.println(err.getExtendedInfo());
+    }
+  }
 
   /** Добавление Plugin'а в клиент
    * @param pd the description of the problem for which the plugin is added
@@ -88,9 +99,16 @@ public class Controller {
           // Получаем данные о задачах
           refreshParticipantInfo(false, false);
       }
-    } catch (Exception e) {
-      JOptionPane.showMessageDialog(null, "При попытке подключения к контесту произошла ошибка: " + e.getMessage(), "Ошибка",
-          JOptionPane.ERROR_MESSAGE);
+    } catch (ServerReturnedError e) {
+      Controller.log(e);
+      clientDialog.initialState();
+    //} catch (IOException e) {
+    //  e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+    } catch (GeneralRequestFailureException e) {
+      //log nothing
+      clientDialog.initialState();
+    } catch (IOException e) {
+      Controller.getLogger().log("Не удалось загрузить плагины", UserMessagesLogger.LogMessageType.Error, Controller.LOGGER_NAME);
       clientDialog.initialState();
     }
   }
@@ -183,7 +201,9 @@ public class Controller {
   }
 
     public static UserMessagesLogger getLogger() {
-        return logger;
+      if (logger == null)
+        logger = new TextPaneUserMessagesLogger(clientDialog.getLogTextPane());
+      return logger;      
     }
 
     /**
@@ -200,17 +220,14 @@ public class Controller {
       System.exit(1);
     }
 
-    //debug logger
-    //TODO implement real logger
-    logger = new ConsoleUserMessagesLogger();
-
     server = new RealServer(Settings.getInstance().getHost());
 
     processArgs(args);
 
     clientDialog = new ClientDialog();
+    clientDialog.initGUI();
     clientDialog.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    clientDialog.setVisible(true);
+    clientDialog.setVisible(true);    
   }
 
   private static void processArgs(String[] args) {
@@ -250,11 +267,13 @@ public class Controller {
       AvailableContestsResponse res = Controller.server
           .doRequest(new AvailableContestsRequest());
       return res.contests;
-    } catch (Exception e) {
-      JOptionPane.showMessageDialog(null, "При попытке обновить список контестов произошла ошибка: " + e.getMessage(), "Ошибка",
-          JOptionPane.ERROR_MESSAGE);
-      return new ContestDescription[]{};
+    } catch (GeneralRequestFailureException e) {
+      //log nothing
+    } catch (ServerReturnedError serverReturnedError) {
+      Controller.log(serverReturnedError);
     }
+
+    return new ContestDescription[]{};
   }
 
   public static boolean addContest(ContestDescription cd) {
@@ -263,13 +282,11 @@ public class Controller {
           contestRequest.sessionID = sessionID;
           contestRequest.contest = cd;
           server.doRequest(contestRequest);
-      } catch (ServerReturnedError serverReturnedError) {
-          //TODO [ERROR_FRAMEWORK] Log this error and check for inconsistency with error framework
-          //JOptionPane.showMessageDialog(null, "failed to create a contest");
+      } catch (ServerReturnedError e) {
+          Controller.log(e);
           return false;
-      } catch (GeneralRequestFailureException GeneralRequestFailureException) {
-          //TODO [ERROR_FRAMEWORK] Log this error and check for inconsistency with error framework
-          //JOptionPane.showMessageDialog(null, "failed to connect to the server");
+      } catch (GeneralRequestFailureException e) {
+          //log nothing
           return false;
       }
 
@@ -286,9 +303,10 @@ public class Controller {
       try {
         return server.doRequest(gcdr);
       } catch (ServerReturnedError serverReturnedError) {
+        Controller.log(serverReturnedError);
         return null;
       } catch (GeneralRequestFailureException GeneralRequestFailureException) {
-        JOptionPane.showMessageDialog(null, "Сервер не отвечает");
+        //log nothing
         return null;
       }
     }
@@ -316,12 +334,12 @@ public class Controller {
     r.user.userType = UserDescription.UserType.Participant;
 
     try {
-      server.doRequest(r);
-      JOptionPane.showMessageDialog(null, "Регистрация прошла успешно");
+      server.doRequest(r);      
+      Controller.getLogger().log("Регистрация прошла успешно", UserMessagesLogger.LogMessageType.OK, Controller.LOGGER_NAME);
     } catch (ServerReturnedError serverReturnedError) {
-      JOptionPane.showMessageDialog(null, "Регистрация не удалась. Ответ: " + serverReturnedError.getMessage());
+      Controller.log(serverReturnedError);
     } catch (GeneralRequestFailureException GeneralRequestFailureException) {
-      JOptionPane.showMessageDialog(null, "Отсутствует соединение с сервером, попробуйте позже");
+      //log nothing
     }
   }
 
@@ -410,9 +428,9 @@ public class Controller {
             return res.users;
 
         } catch (ServerReturnedError e) {
-            JOptionPane.showMessageDialog(null, "Сервер сообщает об ошибке: " + e.getMessage());
-        } catch (GeneralRequestFailureException GeneralRequestFailureException) {
-            JOptionPane.showMessageDialog(null, "Отсутствует соединение с сервером, попробуйте позже");
+            Controller.log(e);
+        } catch (GeneralRequestFailureException e) {
+            //log nothing
         }
 
         return new UserDescription[]{};
@@ -441,7 +459,7 @@ public class Controller {
         InputStream is = new FileInputStream(file);
         if (is.read(r.pluginData) < r.pluginData.length) throw new IOException();
       } catch (IOException e) {
-        throw new ServerReturnedError();
+        throw new ServerReturnedError(0, "");
       }
     }
     else

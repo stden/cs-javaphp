@@ -12,10 +12,10 @@
    $tables = mysql_list_tables($dbname, $con); 
      while (list ($temp) = mysql_fetch_array ($tables))
        if ($temp == "${prfx}user")
-         throwError('DataBase already exists');
+         throwBusinessLogicError(13);
 
    //read query lines from files
-   $lines = file("dces-create-db.sql") or die("failed to read sql file");
+   $lines = file("dces-create-db.sql") or throwServerProblem(64);
 
    //fill queries list
    $sql = "";
@@ -43,7 +43,7 @@
    );
    $queries[] = composeInsertQuery('user', $col_value);
 
-   transaction($con, $queries) or throwError('Failed to create a DB');
+   transaction($con, $queries) or throwServerProblem(65);
 
    return new AcceptedResponse();
 

@@ -3,25 +3,27 @@ package ru.ipo.dces.clientservercommunication;
 /**
  * Ответ: запрос окончился неудачей
  */
-@SuppressWarnings("serial")
 public class RequestFailedResponse implements Response {
 
-  enum FailReason {
-    Default
+  public enum FailReason {
+    BusinessLogicError,
+    BrokenServerError,
+    BrokenServerPluginError,
   }
 
-  public FailReason failReason = FailReason.Default;
+  public FailReason failReason;
 
   /**
-   * В сообщении можно дать дополнительную информацию об ошибке. Например, при
-   * регистрации каких полей не хватает
+   * Номер ошибки, см. таблица
    */
-  public String     message;
+  public int        failErrNo;
 
-  public RequestFailedResponse(String message) {
-    this.message = message;
-  }
+  /**
+   * Дополнительная к ошибке информация
+   * Для BuisnessLogicError - что угодно
+   * Для BrokenServerError  - скорее всего, описание проблемы с MySQL
+   * Для BrokenServerPluginError - описание плагина
+   */
+  public String     extendedInfo;
 
-  public RequestFailedResponse() {    
-  }
 }

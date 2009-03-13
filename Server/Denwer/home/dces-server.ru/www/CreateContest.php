@@ -11,7 +11,7 @@ function processCreateContestRequest($request) {
   //authorize user for this operation
   $user_type = $user_row['user_type'];
   if ($user_type !== 'SuperAdmin')
-    throwError("The user has no rights to the operation");
+    throwBusinessLogicError(0);
 
   //get contest
   $c = $request->contest;
@@ -25,7 +25,7 @@ function processCreateContestRequest($request) {
   $col_value['user_data'] = serialize($c->data);
   $col_value['user_data_compulsory'] = serialize($c->compulsory);
 
-  mysql_query(composeInsertQuery('contest', $col_value)) or die("DB error 5: ".mysql_error());
+  mysql_query(composeInsertQuery('contest', $col_value)) or throwServerProblem(5, mysql_error());
 
   return new AcceptedResponse();
 }

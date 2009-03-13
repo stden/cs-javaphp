@@ -23,12 +23,10 @@ public class PluginEnvironmentImpl implements PluginEnvironment {
     return view;
   }
 
-  @Override
   public void setTitle(String title) {
     view.setTitle(title);
   }
 
-  @Override
   public HashMap<String, String> submitSolution(HashMap<String, String> solution) throws GeneralRequestFailureException {
     SubmitSolutionRequest ssr = new SubmitSolutionRequest();
     ssr.problemID = pd.id;
@@ -37,8 +35,12 @@ public class PluginEnvironmentImpl implements PluginEnvironment {
       final SubmitSolutionResponse response;
       try {
           response = Controller.getServer().doRequest(ssr);
-      } catch (ServerReturnedError serverReturnedError) {
-          //TODO: refactor PHP server to process table exceptions
+      } catch (ServerReturnedError err) {
+          Controller.getLogger().log(
+                  err.getMessage(),
+                  UserMessagesLogger.LogMessageType.Error,
+                  Controller.LOGGER_NAME
+          );
           throw new GeneralRequestFailureException();
       }
       return response.problemResult;

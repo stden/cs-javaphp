@@ -7,7 +7,7 @@ function processAvailableContestsRequest($request) {
   $res = new AvailableContestsResponse();
   $res->contests = array();
 
-  $contest_rows = mysql_query("SELECT * FROM ${prfx}contest") or die("DBERROR 27 in AvailableContests.php: ".mysql_error());
+  $contest_rows = mysql_query("SELECT * FROM ${prfx}contest") or throwServerProblem(27, mysql_error());
 
   while($row = mysql_fetch_array($contest_rows))
   {

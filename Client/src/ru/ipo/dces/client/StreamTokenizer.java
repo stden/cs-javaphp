@@ -27,13 +27,17 @@ public class StreamTokenizer {
   }
 
   public String readToken(char delim) throws IOException {
-    StringBuffer sb = new StringBuffer(16);
+    StringBuffer sb = new StringBuffer(64);
+    int cnt = 0;
     int n;
     while (true) {
       n = in.read();
       if (n == -1) break;
       if (n == delim) break;
       sb.append((char)n);
+
+      cnt ++;
+      if (cnt > 64) throw new IOException("too long token");
     }
     return sb.toString();
   }
