@@ -30,7 +30,7 @@ public class Controller {
   public final static String LOGGER_NAME = "Система";
 
   public static void log(ServerReturnedError err) {
-    logger.log(err.getMessage(), UserMessagesLogger.LogMessageType.Error, LOGGER_NAME);
+    getLogger().log(err.getMessage(), UserMessagesLogger.LogMessageType.Error, LOGGER_NAME);
     System.out.print("ERROR:");
     System.out.println(err.getMessage());
     if (err.getExtendedInfo() != null) {
@@ -201,8 +201,12 @@ public class Controller {
   }
 
     public static UserMessagesLogger getLogger() {
-      if (logger == null)
-        logger = new TextPaneUserMessagesLogger(clientDialog.getLogTextPane());
+      if (logger == null) {
+        if (clientDialog != null)
+          logger = new TextPaneUserMessagesLogger(clientDialog.getLogTextPane());
+        else
+          logger = new ConsoleUserMessagesLogger();
+      }
       return logger;      
     }
 
@@ -501,4 +505,10 @@ public class Controller {
 
         server.doRequest(rur);
     }
+
+  public static void setFreeze(boolean freeze) {
+    if (clientDialog == null) return;
+
+    clientDialog.setEnabled(!freeze);
+  }
 }
