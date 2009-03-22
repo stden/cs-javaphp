@@ -58,19 +58,22 @@ public class RealServer implements ServerFacade {
         return doRequest(AcceptedResponse.class, r);
     }
 
-    public <T> T doRequest(Class<T> cls, Request obj)
+    public <T extends Response> T doRequest(Class<T> cls, Request obj)
             throws ServerReturnedError, GeneralRequestFailureException {
 
         InputStream input;
         RequestFailedResponse failedResponse;
 
         try {
+            Controller.setFreeze(true);
             input = doPost(obj);
             input = new BufferedInputStream(input, 4096);
             input.mark(4096);          
         } catch (Exception e) {
             Controller.getLogger().log("Не удалось соединиться с сервером", UserMessagesLogger.LogMessageType.Error, Controller.LOGGER_NAME);
             throw new GeneralRequestFailureException();
+        } finally {
+            Controller.setFreeze(false);
         }
 
         try {

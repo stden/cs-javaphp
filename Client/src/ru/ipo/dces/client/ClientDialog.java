@@ -6,8 +6,6 @@ import java.util.Enumeration;
 import java.util.ArrayList;
 
 import javax.swing.*;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.DocumentEvent;
 
 import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.plugins.admin.LoginPluginV2;
@@ -23,19 +21,7 @@ public class ClientDialog extends JFrame {
       this.plugin = plugin;
     }
 
-    public void actionPerformed(ActionEvent evt) {
-      //TODO: create a dialog of correct size
-      /*Dimension preferredPluginSize = plugin.getPreferredSize();
-      Dimension preferredMenuSize = leftPanel.getPreferredSize();
-
-      int hDelta = ClientDialog.this.getHeight() - ClientDialog.this.getContentPane().getHeight();
-      int wDelta = ClientDialog.this.getWidth() - ClientDialog.this.getContentPane().getWidth();
-
-      ClientDialog.this.setSize(
-              (int)(preferredPluginSize.getWidth() + preferredMenuSize.getWidth() + wDelta + 30),
-              (int)Math.max(preferredPluginSize.getHeight(), preferredMenuSize.getHeight() + hDelta)
-      );*/
-
+    public void actionPerformed(ActionEvent evt) {     
       if (rightPanel != null) rightPanel.deactivate();
       setRightPanel(plugin);
       if (rightPanel != null) rightPanel.activate();
@@ -117,26 +103,16 @@ public class ClientDialog extends JFrame {
     getContentPane().setLayout(outerLayout);
     JPanel mainPanel = new JPanel();
     logTextPane = new JTextPane();
-    final JScrollPane logScrollPane = new JScrollPane(logTextPane);
+    JScrollPane logScrollPane = new JScrollPane(logTextPane);
     getContentPane().add(mainPanel, "0, 0");
-    getContentPane().add(logScrollPane, "0, 1");
+    getContentPane().add(logScrollPane, "0, 1");    
 
     //logTextPane adjust
     logTextPane.setEditable(false);
     logTextPane.setBackground(Color.BLACK);
-    logTextPane.getDocument().addDocumentListener(new DocumentListener() {
-      public void insertUpdate(DocumentEvent e) {
-        //scroll to the top
-        logScrollPane.getVerticalScrollBar().setValue(0);
-        logScrollPane.getHorizontalScrollBar().setValue(0);
-      }
-
-      public void removeUpdate(DocumentEvent e) {/*do nothing*/}
-      public void changedUpdate(DocumentEvent e) {/*do nothing*/}
-    });
 
     //set mainPanel layout and components
-    BoxLayout thisLayout = new BoxLayout(mainPanel, javax.swing.BoxLayout.X_AXIS);
+    BoxLayout thisLayout = new BoxLayout(mainPanel, BoxLayout.X_AXIS);
     mainPanel.setLayout(thisLayout);
 
     splitPane = new JSplitPane();
@@ -181,4 +157,5 @@ public class ClientDialog extends JFrame {
   public JTextPane getLogTextPane() {
     return logTextPane;
   }
+
 }

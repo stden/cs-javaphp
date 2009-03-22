@@ -55,6 +55,49 @@ public class TextPaneUserMessagesLogger implements UserMessagesLogger {
     } catch (BadLocationException e) {
       //do nothing
     }
+
+    //pane.scrollRectToVisible(new Rectangle(1, 1));
+    pane.setCaretPosition(0);
   }
+
+  /*
+  private int lastLocation() {
+    return pane.getDocument().getLength();
+  }
+
+  public void log(String message, LogMessageType type, String sender) {
+
+    try {
+
+      StyleConstants.setForeground(attributeSet, Color.WHITE);
+
+      StyleConstants.setBold(attributeSet, false);
+
+      pane.getDocument().insertString(lastLocation(), dateFormat.format(new Date()), attributeSet);
+      pane.getDocument().insertString(lastLocation(), " ", attributeSet);
+      pane.getDocument().insertString(lastLocation(), sender, attributeSet);
+      pane.getDocument().insertString(lastLocation(), ": ", attributeSet);
+
+      switch (type) {
+        case Error:
+          StyleConstants.setForeground(attributeSet, Color.RED);
+          break;
+        case OK:
+          StyleConstants.setForeground(attributeSet, Color.GREEN);
+          break;
+        case Warning:
+          StyleConstants.setForeground(attributeSet, Color.ORANGE);
+          break;
+      }
+
+      StyleConstants.setBold(attributeSet, true);
+      pane.getDocument().insertString(lastLocation(), message, attributeSet);
+      pane.getDocument().insertString(lastLocation(), "\n", attributeSet);
+
+    } catch (BadLocationException e) {
+      //do nothing
+      System.out.println("asdf");
+    }
+  }*/
 
 }
