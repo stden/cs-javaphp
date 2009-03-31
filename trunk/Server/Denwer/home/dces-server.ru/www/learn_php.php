@@ -1,5 +1,8 @@
 <?php
 
+    $a = array();
+    var_dump($a[1]);
+
     var_dump(ZIPARCHIVE::ER_EXISTS);
     var_dump(ZIPARCHIVE::ER_INCONS);
     var_dump(ZIPARCHIVE::ER_INVAL);

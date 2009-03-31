@@ -4,9 +4,18 @@
 
   class ComparePlugin extends ServerPlugin {
 
-    public function checkSolution($solution, $user_id, $answer_data, $previous_result) {
+    public function checkSolution($solution, $user_id, $answer_data, &$current_result, &$table_cols) {        
+
       $res = array();
-      $res['result'] = $solution['answer'] === $answer_data ? "yes" : "no";
+      $ok = $solution['answer'] === $answer_data;
+      $res['result'] = $ok ? "yes" : "no";
+      if ($ok) {
+        $current_result = "+";
+        $table_cols = array("+");
+      } else {
+        $table_cols = array("-");
+      }
+
       return $res;
     }
 

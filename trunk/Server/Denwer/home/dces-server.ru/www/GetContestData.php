@@ -41,8 +41,7 @@
     $c->start = DateMySQLToPHP($row['start_time']);
     $c->finish = DateMySQLToPHP($row['finish_time']);
     $c->registrationType = $row['reg_type'];
-    $c->data = unserialize($row['user_data']) or $c->data = array();
-    $c->compulsory = unserialize($row['user_data_compulsory']) or $c->compulsory = array();
+    $c->data = @unserialize($row['user_data']) or $c->data = array();
 
     $res->contest = $c;
 

@@ -344,8 +344,7 @@ public class AdjustContestsPlugin extends NotificationPlugin {
     AdjustContestRequest acr = new AdjustContestRequest();
 
     ContestDescription cd = new ContestDescription();
-
-    cd.compulsory = null;
+   
     cd.data = null;
     cd.description = initialBean.compareContestDescriptions(updatedBean.getContestDescription());
     cd.start = initialBean.compareBeginDateTime(updatedBean.getBeginDateTime());
@@ -359,15 +358,8 @@ public class AdjustContestsPlugin extends NotificationPlugin {
 
     boolean succeeded = Controller.adjustContestData(acr);
 
-    //TODO: [ERROR_FRAMEWORK] inform user with problem details and ways to work it around
     if (succeeded)
-      JOptionPane.showMessageDialog(null, "Изменения прошли успешно, контест создан", "Создание контеста", JOptionPane.INFORMATION_MESSAGE);
-      //fireNotificationMessage(infoMessageLabel, "Изменения прошли успешно", NotificationType.Confirm);
-    else
-      JOptionPane.showMessageDialog(null, "Не удалось произвести изменения", "Создание контеста", JOptionPane.ERROR_MESSAGE);
-    //fireNotificationMessage(infoMessageLabel, "Не удалось произвести изменения", NotificationType.Error);
-
-    fillDaFormWithData(cd.contestID);
+      fillDaFormWithData(cd.contestID);
   }
 
   private void addDocumentListener(Document d) {

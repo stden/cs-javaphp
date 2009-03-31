@@ -10,9 +10,9 @@
 
    //test if creation is necessary
    $tables = mysql_list_tables($dbname, $con); 
-     while (list ($temp) = mysql_fetch_array ($tables))
-       if ($temp == "${prfx}user")
-         throwBusinessLogicError(13);
+   while (list ($temp) = mysql_fetch_array ($tables))
+     if ($temp === "${prfx}user")
+       throwBusinessLogicError(13);
 
    //read query lines from files
    $lines = file("dces-create-db.sql") or throwServerProblem(64);

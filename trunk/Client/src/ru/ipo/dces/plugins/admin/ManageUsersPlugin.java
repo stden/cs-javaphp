@@ -5,8 +5,10 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.Sizes;
 import ru.ipo.dces.client.Controller;
+import ru.ipo.dces.client.RequestResponseUtils;
 import ru.ipo.dces.clientservercommunication.ContestDescription;
 import ru.ipo.dces.clientservercommunication.UserDescription;
+import ru.ipo.dces.clientservercommunication.UserDataField;
 import ru.ipo.dces.exceptions.GeneralRequestFailureException;
 import ru.ipo.dces.exceptions.ServerReturnedError;
 import ru.ipo.dces.pluginapi.Plugin;
@@ -64,7 +66,7 @@ public class ManageUsersPlugin extends JPanel implements Plugin {
                 if (cb == null)
                     return;
 
-                fillDaFormWithData(cb.getDescription().contestID, cb.getDescription().data);
+                fillDaFormWithData(cb.getDescription().contestID, RequestResponseUtils.extractFieldNames(cb.getDescription().data));
             }
         });
 
@@ -123,7 +125,7 @@ public class ManageUsersPlugin extends JPanel implements Plugin {
                     JOptionPane.showMessageDialog(null, "Не удалось связаться с сервером", "Ошибка сервера", JOptionPane.ERROR_MESSAGE);
                 }
 
-                fillDaFormWithData(selectedContest.getDescription().contestID, selectedContest.getDescription().data);
+                fillDaFormWithData(selectedContest.getDescription().contestID, RequestResponseUtils.extractFieldNames(selectedContest.getDescription().data));
             }
         });
         deleteButton.addActionListener(new ActionListener() {
@@ -147,7 +149,7 @@ public class ManageUsersPlugin extends JPanel implements Plugin {
                 if (value == null)
                     fillDaFormWithData(-1, null);
                 else
-                    fillDaFormWithData(value.getDescription().contestID, value.getDescription().data);
+                    fillDaFormWithData(value.getDescription().contestID, RequestResponseUtils.extractFieldNames(value.getDescription().data));
             }
         });
 
@@ -223,8 +225,7 @@ public class ManageUsersPlugin extends JPanel implements Plugin {
         });
     }
 
-
-    private void setColumn(FormLayout form, int colNo, int xSize, double grow) {
+  private void setColumn(FormLayout form, int colNo, int xSize, double grow) {
         form.setColumnSpec(colNo, new ColumnSpec(ColumnSpec.FILL, Sizes.dluX(xSize), grow));
     }
 
@@ -235,7 +236,7 @@ public class ManageUsersPlugin extends JPanel implements Plugin {
         //other fields won't be filled
         zeroContestDescription.name = "Список администраторов";
         zeroContestDescription.contestID = 0;
-        zeroContestDescription.data = new String[]{};
+        zeroContestDescription.data = new UserDataField[]{};
 
         contestsListModel.addElement(new ContestsListBean(zeroContestDescription));
 
@@ -269,7 +270,7 @@ public class ManageUsersPlugin extends JPanel implements Plugin {
             setColumn(cur, 5, 0, 0);
             setColumn(cur, 6, 0, 0);
 
-            fillDaFormWithData(Controller.getContestID(), Controller.getContestDescription().data);
+            fillDaFormWithData(Controller.getContestID(), RequestResponseUtils.extractFieldNames(Controller.getContestDescription().data));
 
         } else
             throw new IllegalArgumentException();

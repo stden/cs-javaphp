@@ -14,8 +14,8 @@
       $this->folder = $folder;
     }
 
-    //returns cheking result
-    public function checkSolution($solution, $user_id, $answer_data, $previous_result) {
+    //returns submission result
+    public function checkSolution($solution, $user_id, $answer_data, &$current_result, &$table_cols) {
       //Needs to be overriden
     }
 

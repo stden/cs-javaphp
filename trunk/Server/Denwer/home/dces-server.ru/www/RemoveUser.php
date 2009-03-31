@@ -26,7 +26,7 @@
     //from 'users' table
     $queries[] = sprintf("DELETE FROM ${prfx}user WHERE id=%s", quote_smart($remove_user_id));
     $queries[] = sprintf("DELETE FROM ${prfx}session WHERE user_id=%s", quote_smart($remove_user_id));
-    $queries[] = sprintf("DELETE FROM ${prfx}task_result WHERE user_id=%s", quote_smart($remove_user_id));
+    $queries[] = sprintf("DELETE FROM ${prfx}submission_history WHERE user_id=%s", quote_smart($remove_user_id));
 
     transaction($con, $queries) or throwServerProblem(71);
 
