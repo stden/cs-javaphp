@@ -3,7 +3,9 @@ package ru.ipo.dces.plugins.admin;
 import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
 import ru.ipo.dces.client.Controller;
+import ru.ipo.dces.client.RequestResponseUtils;
 import ru.ipo.dces.clientservercommunication.ContestDescription;
+import ru.ipo.dces.clientservercommunication.UserDataField;
 import ru.ipo.dces.plugins.admin.beans.ContestsListBean;
 
 import javax.swing.*;
@@ -70,8 +72,8 @@ public class LoginPluginV2 extends JPanel implements Plugin {
         registerToContestButton.setEnabled(false);
     }
 
-    private void setSelfRegistration(String[] data) {
-        registerToContestTable.setKeys(data);
+    private void setSelfRegistration(UserDataField[] data) {
+        registerToContestTable.setKeys(RequestResponseUtils.extractFieldNames(data));
         registerToContestButton.setEnabled(true);
     }
 
@@ -143,7 +145,7 @@ public class LoginPluginV2 extends JPanel implements Plugin {
                 ) == JOptionPane.NO_OPTION) return;
 
                 //get user data
-                final String[] contestData = bean.getDescription().data;
+                UserDataField[] contestData = bean.getDescription().data;
                 String[] userData = new String[contestData.length];
                 for (int i = 0; i < contestData.length; i++)
                     userData[i] = registerToContestTable.getValue(i);
@@ -151,7 +153,7 @@ public class LoginPluginV2 extends JPanel implements Plugin {
                 Controller.registerAnonymouslyToContest(login, passwordEdit.getPassword(), bean.getDescription().contestID, userData);
 
                 //clear values
-                registerToContestTable.setKeys(contestData);
+                registerToContestTable.setKeys(RequestResponseUtils.extractFieldNames(contestData));
             }
         });
     }

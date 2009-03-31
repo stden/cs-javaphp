@@ -4,6 +4,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import ru.ipo.dces.client.Controller;
 import ru.ipo.dces.clientservercommunication.ContestDescription;
+import ru.ipo.dces.clientservercommunication.UserDataField;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
 
 import javax.swing.*;
@@ -151,12 +152,11 @@ public class CreateContestPlugin extends NotificationPlugin {
                     throw new IllegalArgumentException();
                 }
 
-                cd.data = new String[typeNameModel.getSize()];
-                cd.compulsory = new boolean[typeNameModel.getSize()];
+                cd.data = new UserDataField[typeNameModel.getSize()];
 
                 for (int i = 0; i < typeNameModel.getSize(); i++) {
-                    cd.data[i] = ((TypeNameBean) typeNameModel.get(i)).getName();
-                    cd.compulsory[i] = ((TypeNameBean) typeNameModel.get(i)).isCompulsory();
+                    cd.data[i].data = ((TypeNameBean) typeNameModel.get(i)).getName();
+                    cd.data[i].compulsory = ((TypeNameBean) typeNameModel.get(i)).isCompulsory();
                 }
 
                 boolean setstatus = Controller.addContest(cd);

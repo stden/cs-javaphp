@@ -12,8 +12,9 @@ public class ContestDescription {
     Self,
     /** регистриуют только администраторы */
     ByAdmins,
-    /** значение не установлено */
-    NotDefined
+    //TODO implement participation without registration
+    /** участие возможно без регистрации */
+    NoRegistration,
   }
 
   /** ID контеста */
@@ -35,25 +36,22 @@ public class ContestDescription {
   public RegistrationType registrationType;
 
   /**
-   * названия данных, которые должны быть у каждого участника контеста.
-   * Например, {'Имя','Фамилия','Школа','Класс'}
+   * Набор данных об участнике, которые необходимо отображать
    */
-  public String[]         data;
+  public UserDataField[]  data;
+
+  //temporary, instead of userdata
+//  public String[] data;
+//  public boolean[] compulsory;
 
   /**
-   * обязательность поля из массива data 
-   * */
-  public boolean[]        compulsory;
+   * Настройка метода доступа к результатам
+   */
+  public ResultsAccessPolicy resultsAccessPolicy;
 
-  public ContestDescription() {
-  }
+  /**
+   * управление временем доступа
+   */
+  public SubmissionPolicy submissionPolicy;
 
-  public ContestDescription(String name) {
-    this.name = name;
-  }
-
-  @Override
-  public String toString() {
-    return name;
-  }
 }

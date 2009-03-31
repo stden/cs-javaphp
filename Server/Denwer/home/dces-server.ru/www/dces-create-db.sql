@@ -1,4 +1,4 @@
-# HeidiSQL Dump 
+# HeidiSQL Dump
 #
 # --------------------------------------------------------
 # Host:                 127.0.0.1
@@ -15,7 +15,7 @@
 
 
 #
-# Table structure for table 'client_plugin'
+# Table structure for table 'PREFIX_client_plugin'
 #
 
 CREATE TABLE /*!32312 IF NOT EXISTS*/ "PREFIX_client_plugin" (
@@ -27,7 +27,7 @@ CREATE TABLE /*!32312 IF NOT EXISTS*/ "PREFIX_client_plugin" (
 
 
 #
-# Table structure for table 'contest'
+# Table structure for table 'PREFIX_contest'
 #
 
 CREATE TABLE /*!32312 IF NOT EXISTS*/ "PREFIX_contest" (
@@ -36,9 +36,9 @@ CREATE TABLE /*!32312 IF NOT EXISTS*/ "PREFIX_contest" (
   "start_time" datetime NOT NULL,
   "finish_time" datetime NOT NULL,
   "description" text NOT NULL COMMENT 'description',
-  "reg_type" enum('Self','ByAdmins') NOT NULL default 'ByAdmins' COMMENT 'Registration type',
+  "reg_type" enum('Self','ByAdmins','NoRegistration') NOT NULL default 'ByAdmins' COMMENT 'Registration type',
   "user_data" blob NOT NULL COMMENT 'Serialized array with user data',
-  "user_data_compulsory" blob NOT NULL COMMENT 'Serialized array with compulsory booleans',
+  "contest_plugin_alias" varchar(48) NOT NULL default 'GeneralContestPlugin' COMMENT 'contest plugin alias',
   PRIMARY KEY  ("id"),
   UNIQUE KEY "id" ("id"),
   KEY "id_2" ("id")
@@ -47,7 +47,7 @@ CREATE TABLE /*!32312 IF NOT EXISTS*/ "PREFIX_contest" (
 
 
 #
-# Table structure for table 'problem'
+# Table structure for table 'PREFIX_problem'
 #
 
 CREATE TABLE /*!32312 IF NOT EXISTS*/ "PREFIX_problem" (
@@ -67,7 +67,24 @@ CREATE TABLE /*!32312 IF NOT EXISTS*/ "PREFIX_problem" (
 
 
 #
-# Table structure for table 'server_plugin'
+# Table structure for table 'PREFIX_problem_status'
+#
+
+CREATE TABLE /*!32312 IF NOT EXISTS*/ "PREFIX_problem_status" (
+  "id" int(10) unsigned NOT NULL auto_increment,
+  "problem_id" int(10) unsigned NOT NULL COMMENT 'Problem of the result',
+  "user_id" int(10) unsigned NOT NULL COMMENT 'User of the result',
+  "status" blob NOT NULL COMMENT 'serialized problem status',
+  "columns" blob NOT NULL COMMENT 'serialized result columns',
+  PRIMARY KEY  ("id"),
+  UNIQUE KEY "task_result_id" ("id"),
+  KEY "task_result_id_2" ("id")
+) /*!40100 DEFAULT CHARSET=utf8*/;
+
+
+
+#
+# Table structure for table 'PREFIX_server_plugin'
 #
 
 CREATE TABLE /*!32312 IF NOT EXISTS*/ "PREFIX_server_plugin" (
@@ -79,7 +96,7 @@ CREATE TABLE /*!32312 IF NOT EXISTS*/ "PREFIX_server_plugin" (
 
 
 #
-# Table structure for table 'session'
+# Table structure for table 'PREFIX_session'
 #
 
 CREATE TABLE /*!32312 IF NOT EXISTS*/ "PREFIX_session" (
@@ -94,10 +111,10 @@ CREATE TABLE /*!32312 IF NOT EXISTS*/ "PREFIX_session" (
 
 
 #
-# Table structure for table 'task_result'
+# Table structure for table 'PREFIX_submission_history'
 #
 
-CREATE TABLE /*!32312 IF NOT EXISTS*/ "PREFIX_task_result" (
+CREATE TABLE /*!32312 IF NOT EXISTS*/ "PREFIX_submission_history" (
   "id" int(10) unsigned NOT NULL auto_increment,
   "problem_id" int(10) unsigned NOT NULL COMMENT 'Problem of the result',
   "user_id" int(10) unsigned NOT NULL COMMENT 'User of the result',
@@ -112,7 +129,7 @@ CREATE TABLE /*!32312 IF NOT EXISTS*/ "PREFIX_task_result" (
 
 
 #
-# Table structure for table 'user'
+# Table structure for table 'PREFIX_user'
 #
 
 CREATE TABLE /*!32312 IF NOT EXISTS*/ "PREFIX_user" (

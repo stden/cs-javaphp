@@ -41,22 +41,32 @@
     $answer_data = @unserialize($problem_row['answer']) or throwServerProblem(22);
 
     //get previous result
-    $previous_result_query = mysql_query(
-                               sprintf("SELECT result FROM ${prfx}task_result WHERE problem_id=%s AND user_id=%s ORDER BY submission_time DESC",
+    $problem_status_query = mysql_query(
+                               sprintf("SELECT * FROM ${prfx}problem_status WHERE problem_id=%s AND user_id=%s",
                                        quote_smart($request->problemID),
                                        quote_smart($user_id)
                                ), $con) or throwServerProblem(23, mysql_error());
-    $previous_result_row = mysql_fetch_array($previous_result_query);
-    if (!$previous_result_row)
-      $previous_result = null;
-    else
-      $previous_result = @unserialize($previous_result_row['result']) or throwServerProblem(24);      
+    $problem_status_row = mysql_fetch_array($problem_status_query);
+
+    if (!$problem_status_row) {
+      $current_result = null;
+      $current_cols = array();      
+      $do_status_update = false;
+    }
+    else {
+      $current_result = @unserialize($problem_status_row['status']) or $current_result = null;
+      $current_cols = @unserialize($problem_status_row['columns']) or $current_cols = array();
+      $do_status_update = true;
+    }
 
     //call plugin to check solution
-    $check_result = $plugin->checkSolution($request->problemResult, $user_id, $answer_data, $previous_result);
+    //public function checkSolution($solution, $user_id, $answer_data, &$current_result, &$table_cols) {
+    $check_result = $plugin->checkSolution($request->problemResult, $user_id, $answer_data, $current_result, $current_cols);
 
     //save submition result in db
     $cur_php_time = getdate();
+
+    $update_queries = array();
 
     $col_value = array();
     $col_value['problem_id'] = $request->problemID;
@@ -65,7 +75,23 @@
     $col_value['result'] = serialize($check_result);
     $col_value['submission_time'] = DatePHPToMySQL($cur_php_time[0]);
 
-    mysql_query(composeInsertQuery('task_result', $col_value), $con) or throwServerProblem(25, mysql_error());
+    $update_queries[] = composeInsertQuery('submission_history', $col_value);
+
+    $col_value = array();
+    $col_value['problem_id'] = $request->problemID;
+    $col_value['user_id'] = $user_id;
+    $col_value['status'] = serialize($current_result);
+    $col_value['columns'] = serialize($current_cols);
+
+    if ($do_status_update) {
+      $where = sprintf("problem_id=%s AND user_id=%s", $request->problemID, $user_id);
+      $update_queries[] = composeUpdateQuery('problem_status', $col_value, $where);
+    }
+    else
+      $update_queries[] = composeInsertQuery('problem_status', $col_value);
+
+    //function transaction($con, $queries, &$inserted_ids = null) {
+    transaction($con, $update_queries) or throwServerProblem(25, mysql_error());
 
     //return submission result
     $res = new SubmitSolutionResponse();

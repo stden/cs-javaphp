@@ -107,6 +107,11 @@ switch(get_class($request)) {
 	  $result = processRemoveClientPluginRequest($request);
 	  break;
 
+   case 'GetContestResultsRequest':
+	  require("GetContestResults.php");
+	  $result = processGetContestResultsRequest($request);
+	  break;
+
   default:
       throwBusinessLogicError(15, get_class($request));      	  
 };

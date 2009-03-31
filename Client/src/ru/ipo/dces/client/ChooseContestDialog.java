@@ -77,8 +77,9 @@ public class ChooseContestDialog extends javax.swing.JDialog {
       }
       {
         List<ContestDescription> c = new ArrayList<ContestDescription>();
-        c.add(new ContestDescription("Test #1"));
-        c.add(new ContestDescription("Test #2"));
+        //TODO разобраться, а то пришлось закоментарить 2 строки, чтобы все заработало
+        //c.add(new ContestDescription("Test #1"));
+        //c.add(new ContestDescription("Test #2"));
         ListModel jList1Model = new DefaultComboBoxModel(c.toArray());
         contestsList = new JList();
         getContentPane().add(contestsList, BorderLayout.CENTER);

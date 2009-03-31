@@ -29,7 +29,7 @@
     $queries[] = "DELETE FROM ${prfx}contest WHERE id=$contest_id";
     $queries[] = "DELETE FROM ${prfx}problem WHERE contest_id=$contest_id";
     $queries[] = "DELETE FROM ${prfx}session WHERE $where_user_id";
-    $queries[] = "DELETE FROM ${prfx}task_result WHERE $where_user_id";
+    $queries[] = "DELETE FROM ${prfx}submission_history WHERE $where_user_id";
     $queries[] = "DELETE FROM ${prfx}user WHERE contest_id=$contest_id";
 
     //start transaction
