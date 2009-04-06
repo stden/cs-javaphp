@@ -14,7 +14,7 @@
     }
     else
     {
-      $userRow = testSession($con, $request->sessionID);
+      $userRow = testSession($request->sessionID);
       $request_user_id = $userRow['id'];
       $request_user_type = $userRow['user_type'];
       $contest_id = getRequestedContest($request->contestID, $userRow['contest_id'], $request_user_type);
@@ -63,9 +63,10 @@
     $col_value = array();
     $col_value['login'] = $u->login;
     $col_value['password'] = $u->password;
-    $col_value['user_data'] = serialize($u->dataValue);
+    $col_value['user_data'] = @serialize($u->dataValue);
     $col_value['contest_id'] = $contest_id;
     $col_value['user_type'] = $u->userType;
+    $col_value['results'] = array();
 
     mysql_query(composeInsertQuery('user', $col_value), $con) or throwServerProblem(30, mysql_error());
 

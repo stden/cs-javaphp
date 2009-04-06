@@ -11,16 +11,9 @@ function processAvailableContestsRequest($request) {
 
   while($row = mysql_fetch_array($contest_rows))
   {
-    //echo $row['FirstName'] . " " . $row['LastName'];
-    $c = new ContestDescription();
+    $c = @unserialize($row['settings']) or throwServerProblem(80);
 
-    $c->contestID = (int)$row['id'];
-    $c->name = $row['name'];
-    $c->description = $row['description'];
-    $c->start = DateMySQLToPHP($row['start_time']);
-    $c->finish = DateMySQLToPHP($row['finish_time']);
-    $c->registrationType = $row['reg_type'];   
-    $c->data = @unserialize($row['user_data']) or $c->data = array();
+    $c->contestID = (int)$row['id'];    
 
     $res->contests[] = $c;
   }

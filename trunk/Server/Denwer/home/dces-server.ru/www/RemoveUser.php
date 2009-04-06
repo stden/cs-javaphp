@@ -4,7 +4,7 @@
 
     $con = connectToDB();
 
-    $user_row = testSession($con, $request->sessionID);
+    $user_row = testSession($request->sessionID);
     $user_id = $user_row['id'];
 
     $remove_user_id = $request->userID;

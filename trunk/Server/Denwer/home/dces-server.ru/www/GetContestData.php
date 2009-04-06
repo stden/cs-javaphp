@@ -9,7 +9,7 @@
     $con = connectToDB();
 
     //get user_id or die, if session is invalid
-    $userRow = testSession($con, $request->sessionID);
+    $userRow = testSession($request->sessionID);
     $user_id = $userRow['id']; 
 
     //authorize user for this operation
@@ -24,9 +24,6 @@
     //create response
     $res = new GetContestDataResponse();
 
-    //create contest description
-    $c = new ContestDescription();
-
     //fill contest description with data
     //query db
     $contest_rows = mysql_query(
@@ -35,13 +32,8 @@
     $row = mysql_fetch_array($contest_rows) or throwBusinessLogicError(14);
 
     //TODO remove this code duplication, the code is simular to AvailableContests.php
-    $c->contestID = (int)$row['id'];
-    $c->name = $row['name'];
-    $c->description = $row['description'];
-    $c->start = DateMySQLToPHP($row['start_time']);
-    $c->finish = DateMySQLToPHP($row['finish_time']);
-    $c->registrationType = $row['reg_type'];
-    $c->data = @unserialize($row['user_data']) or $c->data = array();
+    $c = @unserialize($row['settings']) or throwServerProblem(81);
+    $c->contestID = (int)$row['id'];    
 
     $res->contest = $c;
 
@@ -74,7 +66,7 @@
       //fill extended data: statement or statementData and answerData
       if (is_null($extended_data) || in_array($p->id,$extended_data)) {
         if ($info_type === "ParticipantInfo") {
-          $statement = unserialize($row['statement']);
+          $statement = @unserialize($row['statement']) or throwServerProblem(83);
           //TODO process error: statement not found and return correct error info
           $p->statement = $plugin->getStatement($user_id, $statement);
         }

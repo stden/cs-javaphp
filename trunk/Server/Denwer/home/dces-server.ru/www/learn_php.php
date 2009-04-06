@@ -1,5 +1,19 @@
 <?php
 
+  class D {
+    private static $c = 42;
+    static function f() {
+      return D::$c;
+    }
+  }
+
+//var_dump(D::$c);
+var_dump(D::f());
+
+$s = false;
+if ($s === false) die('false'); else die('true'); 
+die();
+
     $a = array();
     var_dump($a[1]);
 
