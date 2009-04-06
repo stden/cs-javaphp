@@ -41,26 +41,25 @@ function createSession($con, $user_id) { //returns session string
 //$con - connection to MySQL
 //$sessionID - string to test
 //TODO try to implement it with one query with INNER JOIN
-function testSession($con, $session_id) { //returns user id, dies absolutely if session is invalid
+function testSession($session_id) { //returns user id, dies absolutely if session is invalid
   $prfx = $GLOBALS['dces_mysql_prefix'];
   //test session ID to have only alphanumeric characters
   $session_regexp = "^[a-zA-Z0-9_]+$";
   if ( !ereg($session_regexp, $session_id) )
     throwBusinessLogicError(3);
 
-  //find user with the specified session
-  $user_find = mysql_query("SELECT user_id FROM ${prfx}session WHERE session_id='$session_id'", $con);
-  if ( ! $user_find ) throwServerProblem(6, mysql_error());
-
   //test if there is at least one such user
-  if ( !($session_user_row = mysql_fetch_array($user_find)) )
+  $user_row = Data::getRow(
+  "SELECT ${prfx}user.*, ${prfx}contest.settings
+   FROM ${prfx}session
+   INNER JOIN ${prfx}user
+   ON ${prfx}session.user_id=${prfx}user.id
+   INNER JOIN ${prfx}contest
+   ON ${prfx}user.contest_id=${prfx}contest.id
+   WHERE session_id='$session_id'"
+  );
+  if ( !$user_row )
     throwBusinessLogicError(3);
-
-  //get user row
-  $user_rows = mysql_query(
-                   sprintf("SELECT * FROM ${prfx}user WHERE id=%s", quote_smart($session_user_row['user_id']))
-                 , $con) or throwServerProblem(3, mysql_error());
-  $user_row = mysql_fetch_array($user_rows) or throwServerProblem(4);
 
   //return found user
   return $user_row;  

@@ -1,34 +1,59 @@
 <?php
 
-  require_once("ServerPlugin.php");  
+  require_once("ServerPlugin.php");
 
-  function queryForContestDescription($c, $contest_id) {
-    $col_value = array();
+  function queryForContestDescription($c, $contest_id, $con) {
+    //get current contest settings
+    $prfx = $GLOBALS['dces_mysql_prefix'];
+    $rows = mysql_query("SELECT settings FROM ${prfx}contest WHERE id=$contest_id", $con) or throwServerProblem(84, mysql_error());
+    $row = mysql_fetch_array($rows, $con) or throwBusinessLogicError(14);
+    $settings = @unserialize($row['settings']) or throwServerProblem(85);
+
+    //TODO make normal copy of settings
 
     //adjust name
     if (!is_null($c->name))
-      $col_value["name"] = $c->name;      
+      $settings->name = $c->name;
 
     //adjust description
     if (!is_null($c->description))
-      $col_value["description"] = $c->description;
+      $settings->description = $c->description;
 
     //adjust start
-    if (!is_null($c->start)) {
-      $date = DatePHPToMySQL($c->start);
-      $col_value["start_time"] = $date;      
-    }
+    if (!is_null($c->start))
+      $settings->start = $c->start;
 
     //adjust finish
-    if (!is_null($c->finish)) {
-      $date = DatePHPToMySQL($c->finish);
-      $col_value["finish_time"] = $date;
-    }
+    if (!is_null($c->finish))
+      $settings->finish = $c->finish;
 
     //adjust registration type
-    if (!is_null($c->registrationType))
-      $col_value["reg_type"] = $c->registrationType;
+    if (!is_null($c->registrationType)) {
+      $settings->registrationType = $c->registrationType;
+    }  
 
+    //adjust result access policy
+    if (!is_null($c->resultsAccessPolicy)) {
+      if (!is_null($c->resultsAccessPolicy->contestPermission))
+        $settings->resultsAccessPolicy->contestPermission = $c->resultsAccessPolicy->contestPermission;
+      if (!is_null($c->resultsAccessPolicy->contestEndingPermission))
+        $settings->resultsAccessPolicy->contestEndingPermission = $c->resultsAccessPolicy->contestEndingPermission;
+      if (!is_null($c->resultsAccessPolicy->afterContestPermission))
+        $settings->resultsAccessPolicy->afterContestPermission = $c->resultsAccessPolicy->afterContestPermission;
+      if ($c->resultsAccessPolicy->contestEndingDuration !== -1)
+        $settings->resultsAccessPolicy->contestEndingDuration = $c->resultsAccessPolicy->contestEndingDuration;
+      if ($c->resultsAccessPolicy->contestEndingStart !== -1)
+        $settings->resultsAccessPolicy->contestEndingStart = $c->resultsAccessPolicy->contestEndingStart;
+    }
+
+    //adjust submission policy
+    if (!is_null($c->submissionPolicy)) {
+      $settings->submissionPolicy->selfContestStart = $c->submissionPolicy->selfContestStart;
+      if ($c->submissionPolicy->maxContestDuration !== -1)
+        $settings->submissionPolicy->maxContestDuration = $c->submissionPolicy->maxContestDuration;                
+    }
+
+    $col_value = array('settings' => @serialize($settings));
     return composeUpdateQuery("contest", $col_value, "id=$contest_id");
   }
 
@@ -86,7 +111,7 @@
         //We are to create a directory for new problem
         //New dir is temporary because we don't know problem id 
         $temp = $GLOBALS['dces_dir_temp'] . '/' . random_str(10);
-        $temp_dirs[] =  $temp;
+        $temp_dirs[] = $temp;
         mkdir($temp);
         $plugin = new $plugin_alias($con, $temp);
       }
@@ -105,7 +130,8 @@
         if ($zip === false) throwBusinessLogicError(7);
         $data_updated = $plugin->updateStatementData($zip);
         if ($data_updated === false) throwBusinessLogicError(9);
-        $col_value['statement'] = serialize((string)$data_updated);        
+        $col_value['statement'] = serialize($data_updated);
+        $col_value['column_names'] = serialize($plugin->getColumnNames($data_updated));
         if ($p->id == -1)
           $temp_statement_zips[] = $zip_file;
       } else $all_set = false;
@@ -123,7 +149,7 @@
         if ($zip === false) throwBusinessLogicError(8);
         $data_updated = $plugin->updateAnswerData($zip);
         if ($data_updated === false) throwBusinessLogicError(10);
-        $col_value['answer'] = serialize((string)$data_updated);
+        $col_value['answer'] = serialize($data_updated);
         if ($p->id == -1)
           $temp_answer_zips[] = $zip_file;
       } else $all_set = false;
@@ -140,7 +166,7 @@
       }
       else
       {
-        //update a task
+        //update the task
         $queries[] = composeUpdateQuery('problem', $col_value, "id='$p->id'");
         $changed_probs[$p->id] = 1;
       }
@@ -165,7 +191,7 @@
     $con = connectToDB();
 
     //get user_id or die, if session is invalid
-    $userRow = testSession($con, $request->sessionID);
+    $userRow = testSession($request->sessionID);
     $user_id = $userRow['id'];
 
     //authorize user for this operation
@@ -181,7 +207,7 @@
     $queries = array();
 
     //adjust contest description
-    $query_1 = queryForContestDescription($request->contest, $contest_id);
+    $query_1 = queryForContestDescription($request->contest, $contest_id, $con);
     if ($query_1 != "")
         $queries[] = $query_1;
 
@@ -199,12 +225,11 @@
       $inserted_ids = array();
       transaction($con, $queries, $inserted_ids) or throwServerProblem(60);
 
-      //server 2003 enterprise ru 32 SP2
-
       //rename temporary dirs
       if ( count($temp_dirs) != count($inserted_ids) ||
            count($temp_dirs) != count($temp_statement_zips) ||
            count($temp_dirs) != count($temp_answer_zips) ) {
+             //TODO looks insane
              $dump = var_dump($temp_dirs);
              $dump .= var_dump($inserted_ids);
              $dump .= var_dump($temp_statement_zips);

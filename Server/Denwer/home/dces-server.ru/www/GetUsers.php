@@ -5,7 +5,7 @@
     //get connection
     $con = connectToDB();
 
-    $user_row = testSession($con, $request->sessionID);
+    $user_row = testSession($request->sessionID);
     $user_id = $user_row['id'];
 
     $prfx = $GLOBALS['dces_mysql_prefix'];

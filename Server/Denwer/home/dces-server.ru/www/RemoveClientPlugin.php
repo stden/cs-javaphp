@@ -4,7 +4,7 @@
     $prfx = $GLOBALS['dces_mysql_prefix'];
 
     $con = connectToDB();
-    $user_row = testSession($con, $request->sessionID);
+    $user_row = testSession($request->sessionID);
 
     //authorize
     if ($user_row['user_type'] !== 'SuperAdmin')

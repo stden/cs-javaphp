@@ -2,14 +2,14 @@
 
 require("Debug.php");
 
+require("ReturnError.php");
+
 require("dces-settings.php");
 require("Directories.php");
 require("DataBase.php");
 require("Authorization.php");
 require("Messages.php");
 require("SQLDateTime.php");
-
-require("ReturnError.php");
 
 $x = @file_get_contents('php://input');
 if (strpos($x, 'x=') === 0)
@@ -115,6 +115,8 @@ switch(get_class($request)) {
   default:
       throwBusinessLogicError(15, get_class($request));      	  
 };
+
+Data::execPendingQueries();
 
 //$magic = chr(4) . chr(2) . chr(3) . chr(9);
 $nil = serialize(null);

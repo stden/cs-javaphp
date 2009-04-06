@@ -6,7 +6,7 @@ package ru.ipo.dces.clientservercommunication;
  * Date: 23.03.2009
  * Time: 21:47:49
  */
-public class GetContestResultsRequest {
+public class GetContestResultsRequest implements Request {
 
   public String sessionID;
 

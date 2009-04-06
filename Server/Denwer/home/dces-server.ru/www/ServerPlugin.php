@@ -8,6 +8,11 @@
     //plugin folder
     protected $folder;
 
+    public function __construct($folder) {
+      //may be overriden, but must call parent constructor      
+      $this->folder = $folder;
+    }
+
     public function __construct($con, $folder) {
       //may be overriden, but must call parent constructor
       $this->con = $con;
@@ -48,6 +53,12 @@
     public function getAnswerData($problem_id) {
       //May NOT be overriden
       return @file_get_contents($GLOBALS['dces_dir_problems'] . '/' . $problem_id . "_answer.zip");
+    }
+
+    //return column names
+    public function getColumnNames($statementData) {
+      //May and usually should be overriden
+      return array("");
     }
 
   }

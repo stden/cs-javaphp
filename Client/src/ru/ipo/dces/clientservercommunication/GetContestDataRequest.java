@@ -13,6 +13,9 @@ public class GetContestDataRequest implements Request {
     AdminInfo,       //посылать данные, формирующие условие и ответ к задаче
   }
 
+  /**
+   * null for anonymous user
+   */
   public String sessionID;
 
   /**
