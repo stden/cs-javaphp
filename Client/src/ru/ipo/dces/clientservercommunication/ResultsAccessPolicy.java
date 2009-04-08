@@ -34,15 +34,6 @@ public class ResultsAccessPolicy {
   /**
    * права на доступ после контеста
    */
-  public AccessPermission afterContestPermission;
-
-  /**
-   * Продолжительность окончания контеста, в минутах
-   */
-  public int contestEndingDuration;
-  /**
-   * Начало окончания контеста, время в минутах от конца контеста в обратную сторону
-   */
-  public int contestEndingStart;
+  public AccessPermission afterContestPermission;  
 
 }

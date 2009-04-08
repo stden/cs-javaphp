@@ -1,6 +1,6 @@
 <?php
 
-  require_once("ServerPlugin.php");
+  require_once(getServerPluginFile());
 
   function queryForContestDescription($c, $contest_id, $con) {
     //get current contest settings
@@ -102,10 +102,8 @@
         throwBusinessLogicError(1);
 
       //get current server plugin
-      //TODO improve security here
-      $server_plugin_file = $GLOBALS['dces_dir_server_plugins'] . '/' . $plugin_alias . '.php';
-      if (!file_exists($server_plugin_file)) throwBusinessLogicError(5);
-      require_once($server_plugin_file);
+      //TODO improve security here            
+      require_once(getServerPlguinFile($plugin_alias));
               
       if ($p->id == -1) {
         //We are to create a directory for new problem

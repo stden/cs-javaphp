@@ -26,4 +26,9 @@ public class GetContestResultsResponse implements Response {
    */
   public String[][][] table;
 
+  /**
+   * номер строки таблицы с данными участника
+   */
+  public int userLine;
+
 }

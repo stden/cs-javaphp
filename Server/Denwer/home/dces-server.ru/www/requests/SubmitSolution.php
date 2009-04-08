@@ -40,8 +40,8 @@
     $plugin_alias = $problem_row['server_plugin_alias'];
 
     //get plugin
-    require_once('ServerPlugin.php');
-    require_once($GLOBALS['dces_dir_server_plugins'] . '/' . $plugin_alias . '.php');
+    require_once(getServerPluginFile());
+    require_once(getServerPluginFile($plugin_alias));
 
     $plugin = new $plugin_alias($GLOBALS['dces_dir_problems'] . '/' . $request->problemID);
 

@@ -1,15 +1,13 @@
 <?php
 
-require("Debug.php");
-
-require("ReturnError.php");
-
 require("dces-settings.php");
-require("Directories.php");
-require("DataBase.php");
-require("Authorization.php");
-require("Messages.php");
-require("SQLDateTime.php");
+require("utils/Debug.php");
+require("utils/ReturnError.php");
+require("utils/Directories.php");
+require("utils/DataBase.php");
+require("utils/Authorization.php");
+require("utils/Messages.php");
+require("utils/DcesDateTime.php");
 
 $x = @file_get_contents('php://input');
 if (strpos($x, 'x=') === 0)
@@ -33,82 +31,82 @@ $request = @unserialize($s_request) or throwBusinessLogicError(15);
 
 switch(get_class($request)) {
   case 'AvailableContestsRequest':
-      require("AvailableContests.php");
+      require("requests/AvailableContests.php");
       $result = processAvailableContestsRequest($request);
 	  break;
 
 	case 'CreateContestRequest':
-	  require("CreateContest.php");
+	  require("requests/CreateContest.php");
       $result = processCreateContestRequest($request);
 	  break;
 
 	case 'ConnectToContestRequest':
-	  require("ConnectToContest.php");
+	  require("requests/ConnectToContest.php");
       $result = processConnectToContestRequest($request);
 	  break;
 
 	case 'DisconnectRequest':
-	  require("Disconnect.php");
+	  require("requests/Disconnect.php");
 	  $result = processDisconnectRequest($request);
 	  break;
 
 	case 'AdjustContestRequest':
-	  require("AdjustContest.php");
+	  require("requests/AdjustContest.php");
 	  $result = processAdjstContestRequest($request);
 	  break;
 
 	case 'GetContestDataRequest':
-	  require("GetContestData.php");
+	  require("requests/GetContestData.php");
 	  $result = processGetContestDataRequest($request);
 	  break;
 
 	case 'SubmitSolutionRequest':
-	  require("SubmitSolution.php");
+	  require("requests/SubmitSolution.php");
 	  $result = processSubmitSolutionRequest($request);
 	  break;
 
 	case 'RegisterToContestRequest':
-	  require("RegisterToContest.php");
+	  require("requests/RegisterToContest.php");
 	  $result = processRegisterToContestRequest($request);
 	  break;
 
 	case 'InstallClientPluginRequest':
-	  require("InstallClientPlugin.php");
+	  require("requests/InstallClientPlugin.php");
 	  $result = processInstallClientPluginRequest($request);
 	  break;
 
 	case 'CreateDataBaseRequest':
-	  require("CreateDataBase.php");
+	  require("requests/CreateDataBase.php");
 	  $result = processCreateDataBaseRequest($request);
 	  break;
 
 	case 'GetUsersRequest':
-	  require("GetUsers.php");
+	  require("requests/GetUsers.php");
 	  $result = processGetUsersRequest($request);
 	  break;
 
 	case 'RemoveUserRequest':
-	  require("RemoveUser.php");
+	  require("requests/RemoveUser.php");
 	  $result = processRemoveUserRequest($request);
 	  break;
 
 	case 'RemoveContestRequest':
-	  require("RemoveContest.php");
+	  require("requests/RemoveContest.php");
 	  $result = processRemoveContestRequest($request);
 	  break;
 
 	case 'AdjustClientPluginRequest':
-	  require("AdjustClientPlugin.php");
+	  require("requests/AdjustClientPlugin.php");
 	  $result = processAdjustClientPluginRequest($request);
 	  break;
 
 	case 'RemoveClientPluginRequest':
-	  require("RemoveClientPlugin.php");
+	  require("requests/RemoveClientPlugin.php");
 	  $result = processRemoveClientPluginRequest($request);
 	  break;
 
    case 'GetContestResultsRequest':
-	  require("GetContestResults.php");
+	  require("requests/GetContestResults.php");
 	  $result = processGetContestResultsRequest($request);
 	  break;
 

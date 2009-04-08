@@ -1,4 +1,4 @@
-# HeidiSQL Dump
+# HeidiSQL Dump 
 #
 # --------------------------------------------------------
 # Host:                 127.0.0.1
@@ -32,6 +32,20 @@ CREATE TABLE /*!32312 IF NOT EXISTS*/ "PREFIX_client_plugin" (
 
 CREATE TABLE /*!32312 IF NOT EXISTS*/ "PREFIX_contest" (
   "id" int(10) unsigned NOT NULL auto_increment,
+  "settings" blob NOT NULL COMMENT 'serialized settings',
+  PRIMARY KEY  ("id"),
+  UNIQUE KEY "id" ("id"),
+  KEY "id_2" ("id")
+) /*!40100 DEFAULT CHARSET=utf8*/;
+
+
+
+#
+# Table structure for table 'PREFIX_contest_old_structure'
+#
+
+CREATE TABLE /*!32312 IF NOT EXISTS*/ "PREFIX_contest_old_structure" (
+  "id" int(10) unsigned NOT NULL auto_increment,
   "name" varchar(64) NOT NULL COMMENT 'User friendly name',
   "start_time" datetime NOT NULL,
   "finish_time" datetime NOT NULL,
@@ -59,6 +73,7 @@ CREATE TABLE /*!32312 IF NOT EXISTS*/ "PREFIX_problem" (
   "server_plugin_alias" varchar(48) NOT NULL,
   "contest_id" int(10) unsigned NOT NULL,
   "contest_pos" int(10) unsigned NOT NULL,
+  "column_names" blob NOT NULL COMMENT 'Serialized array with column names',
   PRIMARY KEY  ("id"),
   UNIQUE KEY "id" ("id"),
   KEY "id_2" ("id")
@@ -75,7 +90,6 @@ CREATE TABLE /*!32312 IF NOT EXISTS*/ "PREFIX_problem_status" (
   "problem_id" int(10) unsigned NOT NULL COMMENT 'Problem of the result',
   "user_id" int(10) unsigned NOT NULL COMMENT 'User of the result',
   "status" blob NOT NULL COMMENT 'serialized problem status',
-  "columns" blob NOT NULL COMMENT 'serialized result columns',
   PRIMARY KEY  ("id"),
   UNIQUE KEY "task_result_id" ("id"),
   KEY "task_result_id_2" ("id")
@@ -134,11 +148,12 @@ CREATE TABLE /*!32312 IF NOT EXISTS*/ "PREFIX_submission_history" (
 
 CREATE TABLE /*!32312 IF NOT EXISTS*/ "PREFIX_user" (
   "id" int(10) unsigned NOT NULL auto_increment,
+  "contest_id" int(10) unsigned NOT NULL COMMENT 'User''s contest',
   "login" varchar(24) NOT NULL,
   "password" varchar(24) NOT NULL,
-  "user_data" blob NOT NULL COMMENT 'Serialized array with user data',
-  "contest_id" int(10) unsigned NOT NULL COMMENT 'User''s contest',
   "user_type" enum('Participant','ContestAdmin','SuperAdmin') NOT NULL default 'Participant',
+  "user_data" blob NOT NULL COMMENT 'Serialized array with user data',
+  "results" blob NOT NULL COMMENT 'Serialized array with results',
   PRIMARY KEY  ("id"),
   UNIQUE KEY "id" ("id"),
   KEY "id_2" ("id")

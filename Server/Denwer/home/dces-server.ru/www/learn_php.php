@@ -1,5 +1,8 @@
 <?php
 
+  require_once('asddasdf.adf');
+  die();
+
   class D {
     private static $c = 42;
     static function f() {
