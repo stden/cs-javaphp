@@ -52,6 +52,6 @@ public class ContestDescription {
   /**
    * управление временем доступа
    */
-  public SubmissionPolicy submissionPolicy;
+  public ContestTiming contestTiming;
 
 }

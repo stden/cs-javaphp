@@ -1,6 +1,6 @@
 <?php
 
-  require_once("ServerPlugin.php");
+  require_once(getServerPluginFile());
 
   function processGetContestDataRequest($request) {
     $prfx = $GLOBALS['dces_mysql_prefix'];
@@ -60,7 +60,7 @@
       $p->answerData = null;
 
       //load plugin
-      require_once($GLOBALS['dces_dir_server_plugins'] . '/' . $p->serverPluginAlias . '.php');      
+      require_once(getServerPluginFile($p->serverPluginAlias));      
       $plugin = new $p->serverPluginAlias ($con, $GLOBALS['dces_dir_problems'] . "/$p->id");
 
       //fill extended data: statement or statementData and answerData
