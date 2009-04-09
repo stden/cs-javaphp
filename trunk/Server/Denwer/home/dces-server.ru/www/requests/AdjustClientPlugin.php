@@ -11,7 +11,7 @@
       throwBusinessLogicError(0);
 
     //test if there already is such plugin
-    $where_clause = sprintf("alias=%s", quote_smart($request->pluginAlias));
+    $where_clause = sprintf("alias=%s", Data::quote_smart($request->pluginAlias));
     $find_rows = mysql_query("SELECT * FROM ${prfx}client_plugin WHERE $where_clause", $con)
                    or throwServerProblem(39, mysql_error());
 

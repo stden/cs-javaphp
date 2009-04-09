@@ -17,14 +17,13 @@ class Data {
         if (is_null(Data::$con))
             Data::$con = connectToDB();
 
-        $rows = mysql_query($query, Data::$con) or throwServerProblem(100);
+        $rows = mysql_query($query, Data::$con) or throwServerProblem(100, mysql_error());
 
         return $rows;
     }
 
     public static function getNextRow($rows) {
-        $row = mysql_fetch_array($rows, Data::$con);
-        return $row;
+        return mysql_fetch_array($rows);
     }
 
     public static function getRow($query, $assert_the_only_row = false) {
@@ -63,6 +62,27 @@ class Data {
         } else {
             mysql_query("COMMIT", Data::$con) or throwServerProblem(103, mysql_error());
         }
+    }
+
+    // Функция экранирования переменных
+    function quote_smart($value)
+    {
+        /*
+        // если magic_quotes_gpc включена - используем stripslashes
+        if (get_magic_quotes_gpc()) {
+            $value = stripslashes($value);
+        }
+        */
+
+        if (is_null(Data::$con))
+            Data::$con = connectToDB();
+
+        // Если переменная - число, то экранировать её не нужно
+        // если нет - то окружем её кавычками, и экранируем
+        if (!is_numeric($value)) {
+            $value = "'" . mysql_real_escape_string($value, Data::$con) . "'";
+        }
+        return $value;
     }
 
 }
@@ -110,7 +130,7 @@ function composeInsertQuery($table, $col_value) {
   $vals = "";
   foreach ($col_value as $col => $val) {
     $cols .= "$col,";
-    $vals .= quote_smart($val) . ',';
+    $vals .= Data::quote_smart($val) . ',';
   }
   $cols = rtrim($cols,',');
   $vals = rtrim($vals,',');
@@ -129,7 +149,7 @@ function composeUpdateQuery($table, $col_value, $where) {
 
   $values = "";
   foreach ($col_value as $col => $val) {
-    $qval = quote_smart($val);
+    $qval = Data::quote_smart($val);
     $values .= "$col='$qval',";
   }  
   $values = rtrim($values,',');

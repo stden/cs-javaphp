@@ -12,7 +12,7 @@
 
     //remove from db
     mysql_query(
-      sprintf("DELETE FROM ${prfx}client_plugin WHERE alias=%s", quote_smart($request->pluginAlias))
+      sprintf("DELETE FROM ${prfx}client_plugin WHERE alias=%s", Data::quote_smart($request->pluginAlias))
     , $con) or throwServerProblem(35, mysql_error());
 
     //remove from disk

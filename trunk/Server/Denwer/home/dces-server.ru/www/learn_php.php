@@ -1,7 +1,30 @@
 <?php
 
-  require_once('asddasdf.adf');
+  require("utils/DataBase.php");
+  $dces_mysql_host = "localhost:3306";
+  $dces_mysql_user = "root";
+  $dces_mysql_password = "";
+  $dces_mysql_db = "dcestest";
+  $dces_mysql_prefix = "pr_";
+  $dces_logging = true;
+
+  $prfx = $GLOBALS['dces_mysql_prefix'];
+
+  //find user in table
+  $row = Data::getRow(
+                    sprintf("SELECT * FROM ${prfx}user WHERE login=%s AND contest_id=%s",
+                            "'admin'",
+                            Data::quote_smart(0)
+                           )
+                  );
+
+  //test if there is at least one user
+  if ( !$row )
+      throwBusinessLogicError(12);
+
+  var_dump($row);
   die();
+
 
   class D {
     private static $c = 42;

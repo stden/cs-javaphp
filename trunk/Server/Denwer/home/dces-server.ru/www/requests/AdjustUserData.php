@@ -31,7 +31,7 @@
     $q = composeUpdateQuery(
            "user",
            $queries,
-           sprintf("id=%s",quote_smart($adjust_user_id))
+           sprintf("id=%s",Data::quote_smart($adjust_user_id))
          );
 
     mysql_query($q, $con) or throwServerProblem(47, mysql_error());
