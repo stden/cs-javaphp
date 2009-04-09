@@ -67,7 +67,7 @@ function processGetContestResultsRequest($request) {
             "SELECT *
              FROM ${prfx}contest
              WHERE id=%s
-            ", quote_smart($contest_id))
+            ", Data::quote_smart($contest_id))
         );
         if (!$contest_row) throwBusinessLogicError(14);
         $serialized_contest_settings = $contest_row['settings'];
@@ -106,7 +106,7 @@ function processGetContestResultsRequest($request) {
                                     FROM ${prfx}problem
                                     WHERE ${prfx}problem.contest_id=%s
                                     ORDER BY ${prfx}problem.contest_pos ASC",
-                                    quote_smart($request->contestID))
+                                    Data::quote_smart($request->contestID))
                          );
 
     //get users rows
@@ -115,7 +115,7 @@ function processGetContestResultsRequest($request) {
                             sprintf("SELECT *
                                      FROM ${prfx}user
                                      WHERE ${prfx}contest_id=%s"
-                                    , quote_smart($request->contestID))
+                                    , Data::quote_smart($request->contestID))
                           );
     else /* if $permission === 'OnlySelfResults'*/
         $all_users_rows = $user_contest_row;               

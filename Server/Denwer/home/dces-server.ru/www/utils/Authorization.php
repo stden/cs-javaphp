@@ -16,23 +16,19 @@ function random_str($length)
   return $random;
 }
 
-function createSession($con, $user_id) { //returns session string
+function createSession($user_id) { //returns session string
   $prfx = $GLOBALS['dces_mysql_prefix'];
 
   //test if session for user_id is already set
-  $open_session = mysql_query("SELECT * FROM ${prfx}session WHERE user_id=$user_id", $con);
-  if ( ! $open_session ) throwServerProblem(62, mysql_error());
-  $open_session_rows = mysql_fetch_array($open_session);
+  $open_session_rows = Data::getRow("SELECT * FROM ${prfx}session WHERE user_id=$user_id");
 
   $session_id = random_str(24);
   if ( ! $open_session_rows ) {
     //session for the user is NOT YET created
-    mysql_query("INSERT INTO ${prfx}session (session_id, user_id) VALUES ('$session_id', $user_id)", $con)
-      or throwServerProblem(1, mysql_error());
+    Data::submitModificationQuery("INSERT INTO ${prfx}session (session_id, user_id) VALUES ('$session_id', $user_id)");
   } else {
     //session for the user is ALREADY created
-    mysql_query("UPDATE ${prfx}session SET session_id='$session_id' WHERE user_id=$user_id", $con)
-      or throwServerProblem(2, mysql_error());
+    Data::submitModificationQuery("UPDATE ${prfx}session SET session_id='$session_id' WHERE user_id=$user_id");
   }
 
   return $session_id;
@@ -80,7 +76,7 @@ function removeSession($con, $session_id) {
 function getUserRow($con, $user_id) {
   $prfx = $GLOBALS['dces_mysql_prefix'];
   $user_rows = mysql_query(
-                   sprintf("SELECT * FROM ${prfx}user WHERE id=%s", quote_smart($user_id))
+                   sprintf("SELECT * FROM ${prfx}user WHERE id=%s", Data::quote_smart($user_id))
                  , $con) or throwServerProblem(63, mysql_error());
   if (! ($user_row = mysql_fetch_array($user_rows)))
     return false;
@@ -101,23 +97,6 @@ function getRequestedContest($requested_contest_id, $user_contest_id, $user_type
       $contest_id = $requested_contest_id;
 
     return $contest_id;
-  }
-
-  // Функция экранирования переменных
-  function quote_smart($value)
-  {
-    /*
-    // если magic_quotes_gpc включена - используем stripslashes
-    if (get_magic_quotes_gpc()) {
-        $value = stripslashes($value);
-    }
-    */
-    // Если переменная - число, то экранировать её не нужно
-    // если нет - то окружем её кавычками, и экранируем
-    if (!is_numeric($value)) {
-        $value = "'" . mysql_real_escape_string($value) . "'";
-    }
-    return $value;
   }
 
 ?>

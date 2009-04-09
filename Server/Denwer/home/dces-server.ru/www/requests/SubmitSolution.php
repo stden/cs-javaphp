@@ -24,7 +24,7 @@
 
     //get problem row
     $problem_row = Data::getRow(
-                      sprintf("SELECT * FROM ${prfx}problem WHERE id=%s", quote_smart($request->problemID))
+                      sprintf("SELECT * FROM ${prfx}problem WHERE id=%s", Data::quote_smart($request->problemID))
                     );
     if ( !$problem_row ) throwBusinessLogicError(4);
 
@@ -51,8 +51,8 @@
     //get previous result
     $problem_status_row = Data::getRow(
                                sprintf("SELECT * FROM ${prfx}problem_status WHERE problem_id=%s AND user_id=%s",
-                                       quote_smart($request->problemID),
-                                       quote_smart($user_id)
+                                       Data::quote_smart($request->problemID),
+                                       Data::quote_smart($user_id)
                                ));
 
     if (!$problem_status_row) {

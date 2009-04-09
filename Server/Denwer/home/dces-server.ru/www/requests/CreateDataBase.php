@@ -15,7 +15,7 @@
        throwBusinessLogicError(13);
 
    //read query lines from files
-   $lines = file("../utils/dces-create-db.sql") or throwServerProblem(64);
+   $lines = @file("utils/dces-create-db.sql") or throwServerProblem(64);
 
    //fill queries list
    $sql = "";

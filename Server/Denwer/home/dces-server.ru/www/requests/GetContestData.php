@@ -27,7 +27,7 @@
     //fill contest description with data
     //query db
     $contest_rows = mysql_query(
-                      sprintf("SELECT * FROM ${prfx}contest WHERE id=%s", quote_smart($contest_id))
+                      sprintf("SELECT * FROM ${prfx}contest WHERE id=%s", Data::quote_smart($contest_id))
                     , $con) or throwServerProblem(15, mysql_error());
     $row = mysql_fetch_array($contest_rows) or throwBusinessLogicError(14);
 
@@ -44,7 +44,7 @@
     $extended_data = $request->extendedData;
     //query db to find out problems
     $problems_rows = mysql_query(
-                       sprintf("SELECT * FROM ${prfx}problem WHERE contest_id=%s ORDER BY contest_pos ASC", quote_smart($contest_id))
+                       sprintf("SELECT * FROM ${prfx}problem WHERE contest_id=%s ORDER BY contest_pos ASC", Data::quote_smart($contest_id))
                      , $con) or throwServerProblem(16, mysql_error());
 
     while ($row = mysql_fetch_array($problems_rows)) {

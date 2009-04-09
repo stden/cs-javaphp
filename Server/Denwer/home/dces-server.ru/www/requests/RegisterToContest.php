@@ -29,7 +29,7 @@
 
     //get contest registration type
     $contest_rows = mysql_query(
-                      sprintf("SELECT * FROM ${prfx}contest WHERE id=%s", quote_smart($contest_id))
+                      sprintf("SELECT * FROM ${prfx}contest WHERE id=%s", Data::quote_smart($contest_id))
                     , $con) or throwServerProblem(29, mysql_error());
     $contest_row = mysql_fetch_array($contest_rows) or throwBusinessLogicError(14);              
 
@@ -48,8 +48,8 @@
     //test that there is no user with the same login in this contest
     $users_with_the_same_login = mysql_query(
                                    sprintf("SELECT * FROM ${prfx}user WHERE contest_id=%s AND login=%s",
-                                   quote_smart($contest_id),
-                                   quote_smart($u->login)
+                                   Data::quote_smart($contest_id),
+                                   Data::quote_smart($u->login)
                                    ) , $con) or throwServerProblem(68, mysql_error());
     if (mysql_fetch_array($users_with_the_same_login))
       throwBusinessLogicError(17);

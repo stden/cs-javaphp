@@ -93,7 +93,7 @@
         $plugin_alias = $p->serverPluginAlias;
       if ($p->id != -1 && is_null($p->serverPluginAlias) ) {
         $rows = mysql_query(
-                  sprintf("SELECT server_plugin_alias FROM ${prfx}problem WHERE id=%s", quote_smart($p->id))
+                  sprintf("SELECT server_plugin_alias FROM ${prfx}problem WHERE id=%s", Data::quote_smart($p->id))
                 , $con) or throwServerProblem(12, mysql_error());
         $row = mysql_fetch_array($rows, $con) or throwBusinessLogicError(4);        
         $plugin_alias = $row['server_plugin_alias'];
@@ -173,7 +173,7 @@
 
     //queries to remove problems
     $res = mysql_query(
-             sprintf("SELECT id FROM ${prfx}problem WHERE contest_id=%s", quote_smart($contest_id))
+             sprintf("SELECT id FROM ${prfx}problem WHERE contest_id=%s", Data::quote_smart($contest_id))
            , $con) or throwServerProblem(13, mysql_error());
     while ($row = mysql_fetch_array($res))
       if ($changed_probs[$row['id']] != 1) {
