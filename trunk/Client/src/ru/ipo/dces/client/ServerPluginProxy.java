@@ -4,6 +4,7 @@ import ru.ipo.dces.debug.ServerPluginEmulator;
 import ru.ipo.dces.clientservercommunication.*;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.io.File;
 import java.io.IOException;
 
@@ -22,7 +23,7 @@ public class ServerPluginProxy implements ServerPluginEmulator {
     this.problem = problem;
   }
 
-  public HashMap<String, String> checkSolution(HashMap<String, String> solution, HashMap<String, String> previousResult) {
+  public Object checkSolution(HashMap<String, String> solution, HashMap<String, String> result, Object state) {
     final SubmitSolutionRequest solutionRequest = new SubmitSolutionRequest();
     solutionRequest.problemID = problem.id;
     solutionRequest.problemResult = solution;
@@ -36,7 +37,9 @@ public class ServerPluginProxy implements ServerPluginEmulator {
       return null;
     }
 
-    return r.problemResult;
+    for (Map.Entry<String, String> k2v : r.problemResult.entrySet())
+      result.put(k2v.getKey(), k2v.getValue());
+    return null; //don't using state
   }
 
   public File getStatement() {

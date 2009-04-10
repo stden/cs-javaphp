@@ -11,16 +11,18 @@
   $prfx = $GLOBALS['dces_mysql_prefix'];
 
   //find user in table
+  //test if there is at least one such user
   $row = Data::getRow(
-                    sprintf("SELECT * FROM ${prfx}user WHERE login=%s AND contest_id=%s",
-                            "'admin'",
-                            Data::quote_smart(0)
-                           )
-                  );
+  "SELECT ${prfx}user.*, ${prfx}contest.settings
+   FROM ${prfx}session
+   INNER JOIN ${prfx}user
+   ON ${prfx}session.user_id=${prfx}user.id
+   INNER JOIN ${prfx}contest
+   ON ${prfx}user.contest_id=${prfx}contest.id
+   WHERE session_id='$session_id'"
+  );
 
   //test if there is at least one user
-  if ( !$row )
-      throwBusinessLogicError(12);
 
   var_dump($row);
   die();

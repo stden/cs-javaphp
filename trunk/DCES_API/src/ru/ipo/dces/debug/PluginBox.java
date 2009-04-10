@@ -60,7 +60,7 @@ public class PluginBox extends JFrame {
       final Constructor<? extends Plugin> PluginConstructor = pluginClass.getConstructor(PluginEnvironment.class);
       plugin = PluginConstructor.newInstance(pluginEnvironment);
     } catch (InvocationTargetException e) {
-      System.err.println("plugin throws exception in constructor:");
+      System.err.println("plugin throws exception in constrctor:");
       e.getCause().printStackTrace();
       setErrorPlugin();
     } catch (Exception e) {
@@ -176,7 +176,7 @@ public class PluginBox extends JFrame {
 
   private class PluginEnvironmentImpl implements PluginEnvironment {
 
-    private HashMap<String, String> previousResult = null;
+    private Object problemState = null;
     public String problemName;
     private final File problemFolder;
 
@@ -189,9 +189,9 @@ public class PluginBox extends JFrame {
     }
 
     public HashMap<String, String> submitSolution(HashMap<String, String> solution) throws GeneralRequestFailureException {
-      final HashMap<String, String> serverAnswer = serverEmulator.checkSolution(solution, previousResult);
-      previousResult = new HashMap<String, String>(serverAnswer);
-      return new HashMap<String, String>(serverAnswer);
+      HashMap<String, String> result = new HashMap<String, String>();
+      problemState = serverEmulator.checkSolution(solution, result, problemState);
+      return result;
     }
 
     public File getProblemFolder() {

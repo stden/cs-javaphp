@@ -61,7 +61,7 @@
 
       //load plugin
       require_once(getServerPluginFile($p->serverPluginAlias));      
-      $plugin = new $p->serverPluginAlias ($con, $GLOBALS['dces_dir_problems'] . "/$p->id");
+      $plugin = new $p->serverPluginAlias ($GLOBALS['dces_dir_problems'] . "/$p->id");
 
       //fill extended data: statement or statementData and answerData
       if (is_null($extended_data) || in_array($p->id,$extended_data)) {

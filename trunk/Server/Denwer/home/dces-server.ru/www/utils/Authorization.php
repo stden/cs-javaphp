@@ -50,12 +50,15 @@ function testSession($session_id) { //returns user id, dies absolutely if sessio
    FROM ${prfx}session
    INNER JOIN ${prfx}user
    ON ${prfx}session.user_id=${prfx}user.id
-   INNER JOIN ${prfx}contest
+   LEFT JOIN ${prfx}contest
    ON ${prfx}user.contest_id=${prfx}contest.id
    WHERE session_id='$session_id'"
   );
   if ( !$user_row )
     throwBusinessLogicError(3);
+
+  if (is_null($user_row['settings']))
+    $user_row['settings'] = serialize(null);  
 
   //return found user
   return $user_row;  

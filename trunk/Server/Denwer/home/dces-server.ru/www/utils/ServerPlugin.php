@@ -2,20 +2,11 @@
 
   /*abstract*/ class ServerPlugin {
 
-    //sql connection, is to be set before calls to plugin
-    protected $con;
-
     //plugin folder
     protected $folder;
 
     public function __construct($folder) {
       //may be overriden, but must call parent constructor      
-      $this->folder = $folder;
-    }
-
-    public function __construct($con, $folder) {
-      //may be overriden, but must call parent constructor
-      $this->con = $con;
       $this->folder = $folder;
     }
 

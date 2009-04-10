@@ -82,7 +82,7 @@ public class AdjustContestsPluginBean {
     }
 
     public Date compareEndDateTime(Date newEndDateTime) {
-        return !endDateTime.equals(endDateTime)? newEndDateTime : null;
+        return !endDateTime.equals(newEndDateTime)? newEndDateTime : null;
     }
 
     public ContestDescription.RegistrationType getIsByAdmin() {
