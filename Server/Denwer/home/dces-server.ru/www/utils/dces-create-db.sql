@@ -41,26 +41,6 @@ CREATE TABLE /*!32312 IF NOT EXISTS*/ "PREFIX_contest" (
 
 
 #
-# Table structure for table 'PREFIX_contest_old_structure'
-#
-
-CREATE TABLE /*!32312 IF NOT EXISTS*/ "PREFIX_contest_old_structure" (
-  "id" int(10) unsigned NOT NULL auto_increment,
-  "name" varchar(64) NOT NULL COMMENT 'User friendly name',
-  "start_time" datetime NOT NULL,
-  "finish_time" datetime NOT NULL,
-  "description" text NOT NULL COMMENT 'description',
-  "reg_type" enum('Self','ByAdmins','NoRegistration') NOT NULL default 'ByAdmins' COMMENT 'Registration type',
-  "user_data" blob NOT NULL COMMENT 'Serialized array with user data',
-  "contest_plugin_alias" varchar(48) NOT NULL default 'GeneralContestPlugin' COMMENT 'contest plugin alias',
-  PRIMARY KEY  ("id"),
-  UNIQUE KEY "id" ("id"),
-  KEY "id_2" ("id")
-) AUTO_INCREMENT=82 /*!40100 DEFAULT CHARSET=utf8*/;
-
-
-
-#
 # Table structure for table 'PREFIX_problem'
 #
 

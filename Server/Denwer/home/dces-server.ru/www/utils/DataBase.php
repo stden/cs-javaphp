@@ -150,7 +150,7 @@ function composeUpdateQuery($table, $col_value, $where) {
   $values = "";
   foreach ($col_value as $col => $val) {
     $qval = Data::quote_smart($val);
-    $values .= "$col='$qval',";
+    $values .= "$col=$qval,";
   }  
   $values = rtrim($values,',');
 

@@ -103,7 +103,7 @@
 
       //get current server plugin
       //TODO improve security here            
-      require_once(getServerPlguinFile($plugin_alias));
+      require_once(getServerPluginFile($plugin_alias));
               
       if ($p->id == -1) {
         //We are to create a directory for new problem
@@ -111,10 +111,10 @@
         $temp = $GLOBALS['dces_dir_temp'] . '/' . random_str(10);
         $temp_dirs[] = $temp;
         mkdir($temp);
-        $plugin = new $plugin_alias($con, $temp);
+        $plugin = new $plugin_alias($temp);
       }
       else //here plugin dir is made from the known problem id
-        $plugin = new $plugin_alias($con, $GLOBALS['dces_dir_problems'] . "/$p->id");
+        $plugin = new $plugin_alias($GLOBALS['dces_dir_problems'] . "/$p->id");
 
       //set statementData
       if (!is_null($p->statementData)) {
@@ -205,7 +205,7 @@
     $queries = array();
 
     //adjust contest description
-    $query_1 = queryForContestDescription($request->contest, $contest_id, $con);
+    $query_1 = queryForContestDescription($request->contest, $contest_id, $con);    
     if ($query_1 != "")
         $queries[] = $query_1;
 

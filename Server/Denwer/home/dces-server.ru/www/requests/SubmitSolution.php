@@ -88,8 +88,7 @@
     $col_value = array();
     $col_value['problem_id'] = $request->problemID;
     $col_value['user_id'] = $user_id;
-    $col_value['status'] = serialize($current_result);
-    $col_value['columns'] = serialize($current_cols);
+    $col_value['status'] = serialize($current_result);    
 
     if ($do_status_update) {
       $where = sprintf("problem_id=%s AND user_id=%s", $request->problemID, $user_id);

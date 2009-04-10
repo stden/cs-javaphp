@@ -66,7 +66,7 @@
     $col_value['user_data'] = @serialize($u->dataValue);
     $col_value['contest_id'] = $contest_id;
     $col_value['user_type'] = $u->userType;
-    $col_value['results'] = array();
+    $col_value['results'] = @serialize(array());
 
     mysql_query(composeInsertQuery('user', $col_value), $con) or throwServerProblem(30, mysql_error());
 

@@ -3,11 +3,9 @@ package ru.ipo.dces.plugins;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import ru.ipo.dces.exceptions.GeneralRequestFailureException;
-import ru.ipo.dces.exceptions.ServerReturnedError;
 import ru.ipo.dces.pluginapi.DCESPluginLoadable;
 import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
-import ru.ipo.dces.exceptions.ServerReturnedError;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
@@ -200,8 +198,10 @@ public class Main extends JPanel implements Plugin {
             final HashMap<String, String> ans = env.submitSolution(res);
             if (ans.get("result").equals("yes"))
               JOptionPane.showMessageDialog(null, "Вы дали правильный ответ!");
-            else
+            else if (ans.get("result").equals("no"))
               JOptionPane.showMessageDialog(null, "Вы дали неправильный ответ!!");
+            else
+              JOptionPane.showMessageDialog(null, "Ответ сервера: " + ans.get("result"));
           }
           catch (GeneralRequestFailureException e1) {
             JOptionPane.showMessageDialog(null, "Не удалось связаться с сервером. Ошибка: " + e1.getMessage());

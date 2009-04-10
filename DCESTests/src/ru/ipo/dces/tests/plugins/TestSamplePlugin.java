@@ -1,3 +1,4 @@
+/*
 package ru.ipo.dces.tests.plugins;
 
 import ru.ipo.dces.debug.PluginBox;
@@ -7,12 +8,14 @@ import javax.swing.*;
 import java.io.File;
 import java.util.HashMap;
 
+*/
 /**
  * Created by IntelliJ IDEA.
  * User: admin
  * Date: 30.01.2009
  * Time: 19:18:30
  */
+/*
 public class TestSamplePlugin {
 
     public static void main(String[] args) {
@@ -52,3 +55,4 @@ public class TestSamplePlugin {
     }
 
 }
+*/
