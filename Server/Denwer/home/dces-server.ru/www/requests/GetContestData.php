@@ -32,7 +32,7 @@
     $row = mysql_fetch_array($contest_rows) or throwBusinessLogicError(14);
 
     //TODO remove this code duplication, the code is simular to AvailableContests.php
-    $c = @unserialize($row['settings']) or throwServerProblem(81);
+    $c = Data::_unserialize($row['settings']);
     $c->contestID = (int)$row['id'];    
 
     $res->contest = $c;
@@ -66,7 +66,7 @@
       //fill extended data: statement or statementData and answerData
       if (is_null($extended_data) || in_array($p->id,$extended_data)) {
         if ($info_type === "ParticipantInfo") {
-          $statement = @unserialize($row['statement']) or throwServerProblem(83);
+          $statement = Data::_unserialize($row['statement']);
           //TODO process error: statement not found and return correct error info
           $p->statement = $plugin->getStatement($user_id, $statement);
         }

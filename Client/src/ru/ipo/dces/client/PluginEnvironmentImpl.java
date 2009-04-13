@@ -10,13 +10,17 @@ import java.io.File;
 
 public class PluginEnvironmentImpl implements PluginEnvironment {
 
-  private PluginEnvironmentView view;
+  private final PluginEnvironmentView view = new PluginEnvironmentView();
   private final ProblemDescription pd;
   public static final String PROBLEMS_DIR = "problems";
 
   public PluginEnvironmentImpl(ProblemDescription pd) {
     this.pd = pd;
-    view = new PluginEnvironmentView();
+  }
+
+  public PluginEnvironmentImpl(String pluginName) {
+    this.pd = new ProblemDescription();
+    this.pd.name = pluginName;
   }
 
   public PluginEnvironmentView getView() {
@@ -38,8 +42,8 @@ public class PluginEnvironmentImpl implements PluginEnvironment {
       } catch (ServerReturnedError err) {
           Controller.getLogger().log(
                   err.getMessage(),
-                  UserMessagesLogger.LogMessageType.Error,
-                  Controller.LOGGER_NAME
+                  LogMessageType.Error,
+                  Localization.LOGGER_NAME
           );
           throw new GeneralRequestFailureException();
       }
@@ -52,5 +56,13 @@ public class PluginEnvironmentImpl implements PluginEnvironment {
 
   public String getProblemName() {    
     return pd.name;
+  }
+
+  public void log(String message, LogMessageType type) {
+    Controller.getLogger().log(
+            message,
+            type,
+            getProblemName()
+    );
   }
 }

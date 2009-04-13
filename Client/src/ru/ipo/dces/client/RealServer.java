@@ -70,7 +70,7 @@ public class RealServer implements ServerFacade {
             input = new BufferedInputStream(input, 4096);
             input.mark(4096);          
         } catch (Exception e) {
-            Controller.getLogger().log("Не удалось соединиться с сервером", UserMessagesLogger.LogMessageType.Error, Controller.LOGGER_NAME);
+            Controller.getLogger().log("Не удалось соединиться с сервером", LogMessageType.Error, Localization.LOGGER_NAME);
             throw new GeneralRequestFailureException();
         } finally {
             Controller.setFreeze(false);
@@ -81,7 +81,7 @@ public class RealServer implements ServerFacade {
           if (failedResponse == null)
             return PHP.unserialize(cls, input);
         } catch (Exception e) {
-          Controller.getLogger().log("Произошла ошибка связи с сервером", UserMessagesLogger.LogMessageType.Error, Controller.LOGGER_NAME);
+          Controller.getLogger().log("Произошла ошибка связи с сервером", LogMessageType.Error, Localization.LOGGER_NAME);
           try {
             byte[] actualAnswer;
             input.reset();
@@ -100,23 +100,23 @@ public class RealServer implements ServerFacade {
             Controller.getLogger().log(
                     "Ошибка на стороне сервера №" + failedResponse.failErrNo +
                             (failedResponse.extendedInfo == null ? "" : ". " + failedResponse.extendedInfo),
-                    UserMessagesLogger.LogMessageType.Error,
-                    Controller.LOGGER_NAME
+                    LogMessageType.Error,
+                    Localization.LOGGER_NAME
             );
             throw new GeneralRequestFailureException();
           case BrokenServerPluginError:
             Controller.getLogger().log(
                     "Ошибка на стороне сервера №" + failedResponse.failErrNo +
                             (failedResponse.extendedInfo == null ? "" : ". " + failedResponse.extendedInfo),
-                    UserMessagesLogger.LogMessageType.Error,
-                    Controller.LOGGER_NAME
+                    LogMessageType.Error,
+                    Localization.LOGGER_NAME
             );
             throw new GeneralRequestFailureException();
           case BusinessLogicError:
             throw new ServerReturnedError(failedResponse.failErrNo,  failedResponse.extendedInfo);
         }
 
-      Controller.getLogger().log("Неизвестная ошибка при попытке связи с сервером", UserMessagesLogger.LogMessageType.Error, Controller.LOGGER_NAME);
+      Controller.getLogger().log("Неизвестная ошибка при попытке связи с сервером", LogMessageType.Error, Localization.LOGGER_NAME);
       throw new GeneralRequestFailureException();
     }
 
@@ -204,5 +204,9 @@ public class RealServer implements ServerFacade {
 
     public AcceptedResponse doRequest(AdjustClientPluginRequest r) throws ServerReturnedError, GeneralRequestFailureException {
         return doRequest(AcceptedResponse.class, r);
+    }
+
+    public GetContestResultsResponse doRequest(GetContestResultsRequest r) throws ServerReturnedError, GeneralRequestFailureException {
+        return doRequest(GetContestResultsResponse.class,  r);
     }
 }

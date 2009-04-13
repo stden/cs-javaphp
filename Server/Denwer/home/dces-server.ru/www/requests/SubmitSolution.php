@@ -2,11 +2,11 @@
 
   function setResultsColumns($user_row, $problem_id, $new_cols) {
     //get old results
-    $new_results = @unserialize($user_row['results']) or throwServerProblem(105);
-    //set new columns for the problem
-    $new_results[problem_id] = $new_cols;
+    $new_results = Data::_unserialize($user_row['results']);
+    //set new columns for the problem    
+    $new_results[$problem_id] = $new_cols;
     //compose query
-    $q = composeUpdateQuery('user', array('results' => $new_results), "id=${user_row['id']}");
+    $q = composeUpdateQuery('user', array('results' => serialize($new_results)), "id=${user_row['id']}");
     //put query to the queue
     Data::submitModificationQuery($q);
   }
@@ -46,7 +46,7 @@
     $plugin = new $plugin_alias($GLOBALS['dces_dir_problems'] . '/' . $request->problemID);
 
     //get answer data
-    $answer_data = @unserialize($problem_row['answer']) or throwServerProblem(22);
+    $answer_data = Data::_unserialize($problem_row['answer']);
 
     //get previous result
     $problem_status_row = Data::getRow(
@@ -60,7 +60,7 @@
       $do_status_update = false;
     }
     else {
-      $current_result = @unserialize($problem_status_row['status']) or $current_result = null;
+      $current_result = Data::_unserialize($problem_status_row['status'], null);
       $do_status_update = true;
     }
     $current_cols = null;

@@ -2,48 +2,16 @@ package ru.ipo.dces.client;
 
 import java.awt.BorderLayout;
 import java.awt.event.*;
-import java.util.*;
 
 import javax.swing.*;
 
-import org.jdesktop.application.Application;
-
 import ru.ipo.dces.clientservercommunication.ContestDescription;
+import ru.ipo.dces.plugins.admin.beans.ContestsListBean;
 
-/**
- * This code was edited or generated using CloudGarden's Jigloo SWT/Swing GUI
- * Builder, which is free for non-commercial use. If Jigloo is being used
- * commercially (ie, by a corporation, company or business for any purpose
- * whatever) then you should purchase a license for each developer using Jigloo.
- * Please visit www.cloudgarden.com for details. Use of Jigloo implies
- * acceptance of these licensing terms. A COMMERCIAL LICENSE HAS NOT BEEN
- * PURCHASED FOR THIS MACHINE, SO JIGLOO OR THIS CODE CANNOT BE USED LEGALLY FOR
- * ANY CORPORATE OR COMMERCIAL PURPOSE.
- */
-public class ChooseContestDialog extends javax.swing.JDialog {
-  /**
-   * 
-   */
-  private static final long serialVersionUID = 9203404106398135141L;
+public class ChooseContestDialog extends JDialog {
 
-  /**
-   * Auto-generated main method to display this JDialog
-   */
-  public static void main(String[] args) {
-    SwingUtilities.invokeLater(new Runnable() {
-      public void run() {
-        JFrame frame = new JFrame();
-        ChooseContestDialog inst = new ChooseContestDialog(frame);
-        inst.setVisible(true);
-      }
-    });
-  }
-
-  private JPanel  buttonsPanel;
-  private JButton CancelButton;
-
-  private JButton OKButton;
   private JList   contestsList;
+  private ContestDescription selectedContest;
 
   public ChooseContestDialog(JFrame frame) {
     super(frame);
@@ -51,47 +19,73 @@ public class ChooseContestDialog extends javax.swing.JDialog {
   }
 
   private void initGUI() {
-    try {
-      {
-        buttonsPanel = new JPanel();
-        getContentPane().add(buttonsPanel, BorderLayout.SOUTH);
-        buttonsPanel.setPreferredSize(new java.awt.Dimension(392, 52));
-        {
-          OKButton = new JButton();
-          buttonsPanel.add(OKButton);
-          OKButton.setName("OKButton");
-          OKButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-              System.out
-                  .println("Selected: " + contestsList.getSelectedIndex());
-              System.out.println("OKButton.actionPerformed, event=" + evt);
-              // TODO add your code for OKButton.actionPerformed
-            }
-          });
-        }
-        {
-          CancelButton = new JButton();
-          buttonsPanel.add(CancelButton);
-          CancelButton.setName("CancelButton");
-        }
+    setModalityType(ModalityType.APPLICATION_MODAL);
+
+    JPanel buttonsPanel = new JPanel();
+    add(buttonsPanel, BorderLayout.SOUTH);
+
+    JButton okButton = new JButton();
+    buttonsPanel.add(okButton);
+    okButton.setText("Выбрать");
+
+    JButton cancelButton = new JButton();
+    buttonsPanel.add(cancelButton);
+    cancelButton.setText("Отменить");
+
+    ContestsListBean[] contestDescriptions = getContestList();
+
+    ListModel listModel = new DefaultComboBoxModel(contestDescriptions);
+    contestsList = new JList();
+    JScrollPane contestsListScroll = new JScrollPane(contestsList);
+    add(contestsListScroll, BorderLayout.CENTER);
+    contestsList.setModel(listModel);
+
+    setSize(400, 300);
+    setTitle("Выберите соревнование");
+        
+    //add action
+    okButton.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent evt) {
+        ContestsListBean val = (ContestsListBean) contestsList.getSelectedValue();
+        if (val == null)
+          selectedContest = null;
+        else
+          selectedContest = val.getDescription();
+        ChooseContestDialog.this.setVisible(false);
       }
-      {
-        List<ContestDescription> c = new ArrayList<ContestDescription>();
-        //TODO разобраться, а то пришлось закоментарить 2 строки, чтобы все заработало
-        //c.add(new ContestDescription("Test #1"));
-        //c.add(new ContestDescription("Test #2"));
-        ListModel jList1Model = new DefaultComboBoxModel(c.toArray());
-        contestsList = new JList();
-        getContentPane().add(contestsList, BorderLayout.CENTER);
-        contestsList.setModel(jList1Model);
+    });
+
+    cancelButton.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        cancelClick();
       }
-      setSize(400, 300);
-      setTitle("Choose contest");
-      Application.getInstance().getContext().getResourceMap(getClass())
-          .injectComponents(getContentPane());
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+    });
+
+    this.addWindowListener(new WindowAdapter() {     
+      public void windowClosing(WindowEvent e) {
+        cancelClick();
+      }
+    });
+  }
+
+  private void cancelClick() {
+    selectedContest = null;
+    this.setVisible(false);
+  }
+
+  private ContestsListBean[] getContestList() {
+    ContestDescription[] contestDescriptions = Controller.getAvailableContests();
+    ContestsListBean[] result = new ContestsListBean[contestDescriptions.length];
+    for (int i = 0; i < contestDescriptions.length; i++)
+      result[i] = new ContestsListBean(contestDescriptions[i]);
+
+    return result;
+  }
+
+  public ContestDescription run() {
+    selectedContest = null;
+    this.setVisible(true);
+    return selectedContest;
   }
 
 }

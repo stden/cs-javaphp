@@ -85,6 +85,17 @@ class Data {
         return $value;
     }
 
+    public function _unserialize($val, $default = false) {
+      $res = @unserialize($val);
+      if ($res === false)
+        if ($default === false)
+            throwServerProblem(110);
+        else
+            $res = $default;        
+
+      return $res;
+    }
+
 }
 
 //------------------------------------------------------------------------------

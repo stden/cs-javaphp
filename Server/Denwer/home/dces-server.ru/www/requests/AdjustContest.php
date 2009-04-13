@@ -7,7 +7,7 @@
     $prfx = $GLOBALS['dces_mysql_prefix'];
     $rows = mysql_query("SELECT settings FROM ${prfx}contest WHERE id=$contest_id", $con) or throwServerProblem(84, mysql_error());
     $row = mysql_fetch_array($rows, $con) or throwBusinessLogicError(14);
-    $settings = @unserialize($row['settings']) or throwServerProblem(85);
+    $settings = Data::_unserialize($row['settings']);
 
     //TODO make normal copy of settings
 

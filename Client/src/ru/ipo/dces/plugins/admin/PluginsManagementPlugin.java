@@ -3,10 +3,13 @@ package ru.ipo.dces.plugins.admin;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import ru.ipo.dces.client.Controller;
+import ru.ipo.dces.client.AdminPlugin;
+import ru.ipo.dces.client.Localization;
 import ru.ipo.dces.exceptions.GeneralRequestFailureException;
 import ru.ipo.dces.exceptions.ServerReturnedError;
 import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
+import ru.ipo.dces.clientservercommunication.ContestDescription;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -19,7 +22,7 @@ import java.io.File;
  * Date: 23.12.2008
  * Time: 2:07:39
  */
-public class PluginsManagementPlugin implements Plugin {
+public class PluginsManagementPlugin implements AdminPlugin {
   private JPanel drawPanel;
   private JTextField aliasTextField;
   private JTextPane descriptionTextPane;
@@ -32,7 +35,7 @@ public class PluginsManagementPlugin implements Plugin {
 
   public PluginsManagementPlugin(PluginEnvironment env) {
 
-    env.setTitle("Плагины");
+    env.setTitle(Localization.getAdminPluginName(PluginsManagementPlugin.class));
 
     fileTextField.setText(NOT_SELECTED);
 
@@ -110,6 +113,10 @@ public class PluginsManagementPlugin implements Plugin {
 
   public void deactivate() {
     //do nothing
+  }
+
+  public void contestSelected(ContestDescription contest) {
+    //To change body of implemented methods use File | Settings | File Templates.
   }
 
   {

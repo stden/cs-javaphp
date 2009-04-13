@@ -9,6 +9,7 @@ import javax.swing.*;
 
 import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.plugins.admin.LoginPluginV2;
+import ru.ipo.dces.plugins.admin.ResultsPlugin;
 import info.clearthought.layout.TableLayout;
 
 public class ClientDialog extends JFrame {
@@ -22,9 +23,7 @@ public class ClientDialog extends JFrame {
     }
 
     public void actionPerformed(ActionEvent evt) {     
-      if (rightPanel != null) rightPanel.deactivate();
       setRightPanel(plugin);
-      if (rightPanel != null) rightPanel.activate();
     }
   }
 
@@ -39,7 +38,7 @@ public class ClientDialog extends JFrame {
 
   public void addPluginToForm(PluginEnvironmentView pev, Plugin p) {
     if (p == null) {
-      Controller.getLogger().log("Не удалось загрузить плагин", UserMessagesLogger.LogMessageType.Error, Controller.LOGGER_NAME);
+      Controller.getLogger().log("Не удалось загрузить плагин", LogMessageType.Error, Localization.LOGGER_NAME);
       return;
     }
 
@@ -56,8 +55,7 @@ public class ClientDialog extends JFrame {
     leftPanel.add(button, BorderLayout.NORTH);
     // Показываем сразу первый Plugin
     if (rightPanel == null) {
-      setRightPanel(p);
-      p.activate();
+      setRightPanel(p);      
       button.setSelected(true);
     } else
       button.setSelected(false);
@@ -98,14 +96,15 @@ public class ClientDialog extends JFrame {
   public void initGUI() {
     //set outer components and outer layout
     TableLayout outerLayout = new TableLayout(new double[][]
-            {{TableLayout.FILL}, {TableLayout.FILL, 60}}
+            {{TableLayout.FILL}, {20, TableLayout.FILL, 60}}
     );
     getContentPane().setLayout(outerLayout);
     JPanel mainPanel = new JPanel();
     logTextPane = new JTextPane();
     JScrollPane logScrollPane = new JScrollPane(logTextPane);
-    getContentPane().add(mainPanel, "0, 0");
-    getContentPane().add(logScrollPane, "0, 1");    
+    getContentPane().add(Controller.getContestChooserPanel(), "0, 0");
+    getContentPane().add(mainPanel, "0, 1");
+    getContentPane().add(logScrollPane, "0, 2");
 
     //logTextPane adjust
     logTextPane.setEditable(false);
@@ -143,15 +142,20 @@ public class ClientDialog extends JFrame {
 
     //add login plugin.
     //can not use Controller.addAdminPlugin() because sometimes it's called from constructor
-    PluginEnvironmentImpl pe = new PluginEnvironmentImpl(null);
-    addPluginToForm(pe.getView(), new LoginPluginV2(pe));
+    //so here it is some code duplication
+    PluginEnvironmentImpl pe1 = new PluginEnvironmentImpl(Localization.getAdminPluginName(LoginPluginV2.class));
+    addPluginToForm(pe1.getView(), new LoginPluginV2(pe1));
 
-    // addPlugin("SamplePlugin");
+    PluginEnvironmentImpl pe2 = new PluginEnvironmentImpl(Localization.getAdminPluginName(ResultsPlugin.class));
+    addPluginToForm(pe2.getView(), new ResultsPlugin(pe2));
   }
 
   private void setRightPanel(Plugin panel) {
+    if (rightPanel != null) rightPanel.deactivate();
     rightPanel = panel;
+    Controller.setCurrentPlugin(panel);
     splitPane.add(panel.getPanel(), JSplitPane.RIGHT);
+    if (rightPanel != null) rightPanel.activate();
   }
 
   public JTextPane getLogTextPane() {

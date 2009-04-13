@@ -2,16 +2,17 @@ package ru.ipo.dces.plugins.admin;
 
 import com.jgoodies.forms.layout.*;
 import ru.ipo.dces.client.Controller;
+import ru.ipo.dces.client.LogMessageType;
+import ru.ipo.dces.client.AdminPlugin;
+import ru.ipo.dces.client.Localization;
 import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
-import ru.ipo.dces.plugins.admin.beans.ContestsListBean;
 import ru.ipo.dces.plugins.admin.beans.ProblemsBean;
 import ru.ipo.dces.plugins.admin.beans.AdjustContestsPluginBean;
 
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.Document;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
@@ -21,9 +22,8 @@ import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-public class AdjustContestsPlugin extends NotificationPlugin {
+public class AdjustContestsPlugin extends JPanel implements AdminPlugin {
   private JPanel drawPanel;
-  private JList contestsList;
   private JTextField contestName;
   private JFormattedTextField beginTime;
   private JFormattedTextField beginDate;
@@ -46,17 +46,15 @@ public class AdjustContestsPlugin extends NotificationPlugin {
   private JButton upButton;
   private JButton previewButton;
   private JButton applyButton;
-  private JLabel infoMessageLabel;
-  private JSeparator contestsSeparator;
-  private JButton refreshContestsButton;
 
   private AdjustContestsPluginBean initialBean = new AdjustContestsPluginBean();
   private AdjustContestsPluginBean updatedBean = new AdjustContestsPluginBean();
   private static final int BUFFER = 4096;
 
   private DefaultListModel problemsListModel = new DefaultListModel();
-  private DefaultListModel contestsListModel = new DefaultListModel();
   private JFileChooser chooseFileDialog = new JFileChooser();
+
+  private final PluginEnvironment environment;
 
   /**
    * Инициализация plugin'а
@@ -64,22 +62,9 @@ public class AdjustContestsPlugin extends NotificationPlugin {
    * @param env plugin environment
    */
   public AdjustContestsPlugin(PluginEnvironment env) {
-    super(env);
-
     $$$setupUI$$$();
-    env.setTitle("Настроить контест");
-    contestsList.setModel(contestsListModel);
-
-    contestsList.addListSelectionListener(new ListSelectionListener() {
-      public void valueChanged(ListSelectionEvent e) {
-        ContestsListBean selected = (ContestsListBean) contestsList.getSelectedValue();
-
-        if (selected == null)
-          return;
-
-        fillDaFormWithData(selected.getDescription().contestID);
-      }
-    });
+    this.environment = env;
+    env.setTitle(Localization.getAdminPluginName(AdjustContestsPlugin.class));
 
     ownRegistrationRB.addChangeListener(new ChangeListener() {
       public void stateChanged(ChangeEvent e) {
@@ -238,25 +223,13 @@ public class AdjustContestsPlugin extends NotificationPlugin {
         int contestID;
         //if super admin
         if (Controller.getUserType() == UserDescription.UserType.SuperAdmin) {
-          final ContestsListBean bean = (ContestsListBean) contestsList.getSelectedValue();
-          if (bean == null) return;
-          contestID = bean.getDescription().contestID;
+          final ContestDescription contest = Controller.getContestDescription();
+          if (contest == null) return;
+          contestID = contest.contestID;
         } else //if contest admin
           contestID = Controller.getContestID();
 
         Controller.debugProblem(problemID, contestID);
-      }
-    });
-    refreshContestsButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        contestsListModel.clear();
-
-        final ContestDescription[] contestDescriptions = Controller.getAvailableContests();
-
-        for (ContestDescription cd : contestDescriptions)
-          contestsListModel.addElement(new ContestsListBean(cd));
-
-        contestsList.setSelectedIndex(-1);
       }
     });
   }
@@ -267,15 +240,7 @@ public class AdjustContestsPlugin extends NotificationPlugin {
       return chooseFileDialog.getSelectedFile();
     else
       return null;
-  }
-
-  private void refreshContestsList() {
-    contestsListModel.clear();
-    ContestDescription[] contestDescriptions = Controller.getAvailableContests();
-
-    for (ContestDescription description : contestDescriptions)
-      contestsListModel.addElement(new ContestsListBean(description));
-  }
+  }  
 
   private void createUIComponents() {
     drawPanel = this;
@@ -344,7 +309,7 @@ public class AdjustContestsPlugin extends NotificationPlugin {
     AdjustContestRequest acr = new AdjustContestRequest();
 
     ContestDescription cd = new ContestDescription();
-   
+
     cd.data = null;
     cd.description = initialBean.compareContestDescriptions(updatedBean.getContestDescription());
     cd.start = initialBean.compareBeginDateTime(updatedBean.getBeginDateTime());
@@ -403,7 +368,7 @@ public class AdjustContestsPlugin extends NotificationPlugin {
 
           } catch (ParseException e1) {
             //TODO: Handle a better validation here
-            fireNotificationMessage(infoMessageLabel, "Введите корректную дату (дд.мм.гг) и время (чч:мм)", NotificationType.Error);
+            environment.log("Введите корректную дату (дд.мм.гг) и время (чч:мм)", LogMessageType.Error);
           }
         } else if (e.getDocument() == beginTime.getDocument()) {
           try {
@@ -425,7 +390,7 @@ public class AdjustContestsPlugin extends NotificationPlugin {
 
           } catch (ParseException e1) {
             //TODO: Handle a better validation here
-            fireNotificationMessage(infoMessageLabel, "Введите корректную дату (дд.мм.гг) и время (чч:мм)", NotificationType.Error);
+            environment.log("Введите корректную дату (дд.мм.гг) и время (чч:мм)", LogMessageType.Error);
           }
 
         } else if (e.getDocument() == endDate.getDocument()) {
@@ -448,7 +413,7 @@ public class AdjustContestsPlugin extends NotificationPlugin {
 
           } catch (ParseException e1) {
             //TODO: Handle a better validation here
-            fireNotificationMessage(infoMessageLabel, "Введите корректную дату (дд.мм.гг) и время (чч:мм)", NotificationType.Error);
+            environment.log("Введите корректную дату (дд.мм.гг) и время (чч:мм)", LogMessageType.Error);
           }
         } else if (e.getDocument() == endTime.getDocument()) {
           try {
@@ -470,7 +435,7 @@ public class AdjustContestsPlugin extends NotificationPlugin {
 
           } catch (ParseException e1) {
             //TODO: Handle a better validation here
-            fireNotificationMessage(infoMessageLabel, "Введите корректную дату (дд.мм.гг) и время (чч:мм)", NotificationType.Error);
+            environment.log("Введите корректную дату (дд.мм.гг) и время (чч:мм)", LogMessageType.Error);
           }
         } else if (e.getDocument() == problemStatement.getDocument() || e.getDocument() == problemAnswer.getDocument()) {
 
@@ -489,7 +454,7 @@ public class AdjustContestsPlugin extends NotificationPlugin {
             } else
               archiveCatalog(res, zipOS, "");
           } catch (IOException e1) {
-            fireNotificationMessage(infoMessageLabel, "Не удалось запаковать условие задачи", NotificationType.Error);
+            environment.log("Не удалось запаковать условие задачи", LogMessageType.Error);
           }
 
           try {
@@ -531,35 +496,17 @@ public class AdjustContestsPlugin extends NotificationPlugin {
       }
     });
   }
-
-  private void setColumn(FormLayout form, int colNo, int xSize, double grow) {
-    form.setColumnSpec(colNo, new ColumnSpec(ColumnSpec.FILL, Sizes.dluX(xSize), grow));
+  
+  public JPanel getPanel() {
+    return drawPanel;
   }
 
   public void activate() {
+    //do nothing
+  }
 
-    FormLayout cur = (FormLayout) drawPanel.getLayout();
-
-    if (Controller.getUserType() == UserDescription.UserType.SuperAdmin) {
-
-      refreshContestsList();
-      setColumn(cur, 3, 122, 1);
-      setColumn(cur, 4, 4, 0);
-      setColumn(cur, 5, 2, 0);
-      setColumn(cur, 6, 4, 0);
-
-    } else if (Controller.getUserType() == UserDescription.UserType.ContestAdmin) {
-
-      setColumn(cur, 3, 0, 0);
-      setColumn(cur, 4, 0, 0);
-      setColumn(cur, 5, 0, 0);
-      setColumn(cur, 6, 0, 0);
-
-      fillDaFormWithData(Controller.getContestID());
-
-    } else
-      throw new IllegalArgumentException();
-
+  public void deactivate() {
+    //do nothing
   }
 
   private void archiveCatalog(File dir, ZipOutputStream zipOS, String zipPath) throws IOException {
@@ -611,6 +558,13 @@ public class AdjustContestsPlugin extends NotificationPlugin {
     return res;
   }
 
+  public void contestSelected(ContestDescription contest) {
+    if (contest == null) return;
+    if (contest.contestID == 0) return;
+
+    fillDaFormWithData(contest.contestID);
+  }
+
   /**
    * Method generated by IntelliJ IDEA GUI Designer
    * >>> IMPORTANT!! <<<
@@ -620,129 +574,110 @@ public class AdjustContestsPlugin extends NotificationPlugin {
    */
   private void $$$setupUI$$$() {
     createUIComponents();
-    drawPanel.setLayout(new FormLayout("fill:max(d;4px):noGrow,left:4dlu:noGrow,fill:m:grow,left:4dlu:noGrow,fill:1dlu:noGrow,left:4dlu:noGrow,fill:92dlu:noGrow,left:4dlu:noGrow,fill:72dlu:grow(2.0),left:4dlu:noGrow,fill:m:noGrow,left:4dlu:noGrow,left:30dlu:grow(2.0),fill:max(d;4px):noGrow,fill:62dlu:noGrow,left:4dlu:noGrow,fill:4dlu:noGrow", "center:max(d;4px):noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:60dlu:grow,top:4dlu:noGrow,center:17dlu:noGrow,top:4dlu:noGrow,center:1px:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:28px:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:noGrow,top:4dlu:noGrow,center:0dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:5dlu:noGrow,center:16dlu:noGrow,top:5dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow"));
-    contestsList = new JList();
-    final DefaultListModel defaultListModel1 = new DefaultListModel();
-    contestsList.setModel(defaultListModel1);
-    contestsList.setSelectionMode(0);
-    CellConstraints cc = new CellConstraints();
-    drawPanel.add(contestsList, cc.xywh(3, 7, 1, 36, CellConstraints.DEFAULT, CellConstraints.FILL));
+    drawPanel.setLayout(new FormLayout("fill:max(d;4px):noGrow,left:4dlu:noGrow,fill:92dlu:noGrow,left:4dlu:noGrow,fill:72dlu:grow(2.0),left:4dlu:noGrow,fill:m:noGrow,left:4dlu:noGrow,left:30dlu:grow(2.0),fill:max(d;4px):noGrow,fill:62dlu:noGrow,left:4dlu:noGrow,fill:4dlu:noGrow", "center:max(d;4px):noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:60dlu:grow,top:4dlu:noGrow,center:17dlu:noGrow,top:4dlu:noGrow,center:1px:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:28px:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:noGrow,top:4dlu:noGrow,center:0dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:5dlu:noGrow,center:16dlu:noGrow,top:5dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow"));
     contestName = new JTextField();
-    drawPanel.add(contestName, cc.xyw(9, 5, 7, CellConstraints.FILL, CellConstraints.FILL));
+    CellConstraints cc = new CellConstraints();
+    drawPanel.add(contestName, cc.xyw(5, 5, 7, CellConstraints.FILL, CellConstraints.FILL));
     final JLabel label1 = new JLabel();
     label1.setText("Название контеста");
-    drawPanel.add(label1, cc.xy(7, 5));
+    drawPanel.add(label1, cc.xy(3, 5));
     final JLabel label2 = new JLabel();
     label2.setText("Дата и время начала");
-    drawPanel.add(label2, cc.xy(7, 7));
+    drawPanel.add(label2, cc.xy(3, 7));
     beginDate = new JFormattedTextField();
-    drawPanel.add(beginDate, cc.xyw(9, 7, 3, CellConstraints.FILL, CellConstraints.FILL));
+    drawPanel.add(beginDate, cc.xyw(5, 7, 3, CellConstraints.FILL, CellConstraints.FILL));
     final JLabel label3 = new JLabel();
     label3.setText("Дата и время окончания");
-    drawPanel.add(label3, cc.xy(7, 9));
+    drawPanel.add(label3, cc.xy(3, 9));
     endDate = new JFormattedTextField();
-    drawPanel.add(endDate, cc.xyw(9, 9, 3, CellConstraints.FILL, CellConstraints.FILL));
+    drawPanel.add(endDate, cc.xyw(5, 9, 3, CellConstraints.FILL, CellConstraints.FILL));
     endTime = new JFormattedTextField();
-    drawPanel.add(endTime, cc.xyw(13, 9, 3, CellConstraints.FILL, CellConstraints.FILL));
+    drawPanel.add(endTime, cc.xyw(9, 9, 3, CellConstraints.FILL, CellConstraints.FILL));
     final JLabel label4 = new JLabel();
     label4.setText("Описание контеста");
-    drawPanel.add(label4, cc.xy(7, 11));
+    drawPanel.add(label4, cc.xy(3, 11));
     contestDescription = new JTextArea();
     contestDescription.setLineWrap(true);
     contestDescription.setText("");
     contestDescription.setWrapStyleWord(true);
-    drawPanel.add(contestDescription, cc.xyw(9, 11, 7, CellConstraints.FILL, CellConstraints.FILL));
+    drawPanel.add(contestDescription, cc.xyw(5, 11, 7, CellConstraints.FILL, CellConstraints.FILL));
     final JLabel label5 = new JLabel();
     label5.setText("Тип регистрации");
-    drawPanel.add(label5, cc.xy(7, 13));
+    drawPanel.add(label5, cc.xy(3, 13));
     ownRegistrationRB = new JRadioButton();
     ownRegistrationRB.setText("Самостоятельно");
-    drawPanel.add(ownRegistrationRB, cc.xyw(9, 13, 3));
-    contestsSeparator = new JSeparator();
-    contestsSeparator.setOrientation(1);
-    drawPanel.add(contestsSeparator, cc.xywh(5, 3, 1, 40, CellConstraints.FILL, CellConstraints.FILL));
+    drawPanel.add(ownRegistrationRB, cc.xyw(5, 13, 3));
     final JSeparator separator1 = new JSeparator();
-    drawPanel.add(separator1, cc.xyw(7, 15, 9, CellConstraints.FILL, CellConstraints.FILL));
+    drawPanel.add(separator1, cc.xyw(3, 15, 9, CellConstraints.FILL, CellConstraints.FILL));
     beginTime = new JFormattedTextField();
-    drawPanel.add(beginTime, cc.xyw(13, 7, 3, CellConstraints.FILL, CellConstraints.FILL));
+    drawPanel.add(beginTime, cc.xyw(9, 7, 3, CellConstraints.FILL, CellConstraints.FILL));
     administratorRegistrationRB = new JRadioButton();
     administratorRegistrationRB.setSelected(true);
     administratorRegistrationRB.setText("Администратором");
-    drawPanel.add(administratorRegistrationRB, cc.xyw(13, 13, 3));
+    drawPanel.add(administratorRegistrationRB, cc.xyw(9, 13, 3));
     final JLabel label6 = new JLabel();
     label6.setText("Ответ");
-    drawPanel.add(label6, cc.xy(7, 40));
+    drawPanel.add(label6, cc.xy(3, 40));
     problemAnswer = new JTextField();
     problemAnswer.setEditable(false);
     problemAnswer.setEnabled(true);
-    drawPanel.add(problemAnswer, cc.xyw(9, 40, 5, CellConstraints.FILL, CellConstraints.FILL));
+    drawPanel.add(problemAnswer, cc.xyw(5, 40, 5, CellConstraints.FILL, CellConstraints.FILL));
     changeAnswerButton = new JButton();
     changeAnswerButton.setText("...");
-    drawPanel.add(changeAnswerButton, cc.xy(15, 40));
+    drawPanel.add(changeAnswerButton, cc.xy(11, 40));
     final JLabel label7 = new JLabel();
     label7.setText("Условие");
-    drawPanel.add(label7, cc.xy(7, 38));
+    drawPanel.add(label7, cc.xy(3, 38));
     problemStatement = new JTextField();
     problemStatement.setEditable(false);
     problemStatement.setEnabled(true);
     problemStatement.setText("");
-    drawPanel.add(problemStatement, cc.xyw(9, 38, 5, CellConstraints.FILL, CellConstraints.FILL));
+    drawPanel.add(problemStatement, cc.xyw(5, 38, 5, CellConstraints.FILL, CellConstraints.FILL));
     changeStatementButton = new JButton();
     changeStatementButton.setText("...");
-    drawPanel.add(changeStatementButton, cc.xy(15, 38, CellConstraints.FILL, CellConstraints.DEFAULT));
+    drawPanel.add(changeStatementButton, cc.xy(11, 38, CellConstraints.FILL, CellConstraints.DEFAULT));
     final JLabel label8 = new JLabel();
     label8.setText("Серверный плагин");
-    drawPanel.add(label8, cc.xy(7, 36));
+    drawPanel.add(label8, cc.xy(3, 36));
     serverPlugin = new JTextField();
-    drawPanel.add(serverPlugin, cc.xyw(9, 36, 7, CellConstraints.FILL, CellConstraints.FILL));
+    drawPanel.add(serverPlugin, cc.xyw(5, 36, 7, CellConstraints.FILL, CellConstraints.FILL));
     final JLabel label9 = new JLabel();
     label9.setText("Клиентский плагин");
-    drawPanel.add(label9, cc.xy(7, 34));
+    drawPanel.add(label9, cc.xy(3, 34));
     clientPlugin = new JTextField();
     clientPlugin.setText("клиентский плагин");
-    drawPanel.add(clientPlugin, cc.xyw(9, 34, 7, CellConstraints.FILL, CellConstraints.FILL));
+    drawPanel.add(clientPlugin, cc.xyw(5, 34, 7, CellConstraints.FILL, CellConstraints.FILL));
     final JLabel label10 = new JLabel();
     label10.setText("Имя задачи");
-    drawPanel.add(label10, cc.xy(7, 32));
+    drawPanel.add(label10, cc.xy(3, 32));
     problemName = new JTextField();
     problemName.setText("Имя задачи");
-    drawPanel.add(problemName, cc.xyw(9, 32, 7, CellConstraints.FILL, CellConstraints.FILL));
+    drawPanel.add(problemName, cc.xyw(5, 32, 7, CellConstraints.FILL, CellConstraints.FILL));
     final JLabel label11 = new JLabel();
     label11.setText("Задачи");
-    drawPanel.add(label11, cc.xywh(7, 17, 1, 11));
+    drawPanel.add(label11, cc.xywh(3, 17, 1, 11));
     problemsList = new JList();
     problemsList.setSelectionMode(0);
-    drawPanel.add(problemsList, cc.xywh(9, 17, 5, 11, CellConstraints.DEFAULT, CellConstraints.FILL));
+    drawPanel.add(problemsList, cc.xywh(5, 17, 5, 11, CellConstraints.DEFAULT, CellConstraints.FILL));
     upButton = new JButton();
     upButton.setText("Вверх");
     upButton.setVerticalAlignment(0);
-    drawPanel.add(upButton, cc.xy(15, 17, CellConstraints.DEFAULT, CellConstraints.CENTER));
+    drawPanel.add(upButton, cc.xy(11, 17, CellConstraints.DEFAULT, CellConstraints.CENTER));
     downButton = new JButton();
     downButton.setText("Вниз");
-    drawPanel.add(downButton, cc.xy(15, 19, CellConstraints.DEFAULT, CellConstraints.CENTER));
+    drawPanel.add(downButton, cc.xy(11, 19, CellConstraints.DEFAULT, CellConstraints.CENTER));
     addButton = new JButton();
     addButton.setText("Добавить");
-    drawPanel.add(addButton, cc.xy(15, 21));
+    drawPanel.add(addButton, cc.xy(11, 21));
     applyButton = new JButton();
     applyButton.setText("Применить");
-    drawPanel.add(applyButton, cc.xyw(7, 42, 9));
-    final JLabel label12 = new JLabel();
-    label12.setText("Доступные контесты");
-    label12.setVerticalAlignment(0);
-    drawPanel.add(label12, cc.xy(3, 3, CellConstraints.DEFAULT, CellConstraints.FILL));
-    infoMessageLabel = new JLabel();
-    infoMessageLabel.setForeground(new Color(-16777216));
-    infoMessageLabel.setText("");
-    drawPanel.add(infoMessageLabel, cc.xyw(7, 3, 9, CellConstraints.DEFAULT, CellConstraints.FILL));
+    drawPanel.add(applyButton, cc.xyw(3, 42, 9));
     deleteButton = new JButton();
     deleteButton.setText("Удалить");
-    drawPanel.add(deleteButton, cc.xy(15, 23));
+    drawPanel.add(deleteButton, cc.xy(11, 23));
     previewButton = new JButton();
     previewButton.setText("Посмотреть");
-    drawPanel.add(previewButton, cc.xy(15, 27));
-    refreshContestsButton = new JButton();
-    refreshContestsButton.setText("Обновить список");
-    drawPanel.add(refreshContestsButton, cc.xy(3, 5));
+    drawPanel.add(previewButton, cc.xy(11, 27));
     ButtonGroup buttonGroup;
     buttonGroup = new ButtonGroup();
     buttonGroup.add(ownRegistrationRB);
