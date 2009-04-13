@@ -15,8 +15,8 @@ function getTableRow($user_row, $is_admin, $problem_ids, $problem_cols_sizes, $u
     //fill user data columns
     $data_cols = array();
     $ind = 0;
-    $user_data = @unserialize($user_row['user_data']) or throwServerProblem(108);
-    foreach ($user_data_cols as $ud) {
+    $user_data = Data::_unserialize($user_row['user_data']);
+    foreach ($user_data_cols as $ud) {        
         if ($is_admin || $ud->showInResult)
             $data_cols[] = $user_data[$ind];
         $ind++;
@@ -24,14 +24,17 @@ function getTableRow($user_row, $is_admin, $problem_ids, $problem_cols_sizes, $u
     $row[] = $data_cols;
 
     //fill problem results
-    $results = @unserialize($user_row['results']) or throwServerProblem(109);
+    $results = Data::_unserialize($user_row['results']);
     $ind = 0;
     foreach ($problem_ids as $pid) {
         $cells = $results[$pid];
         if (is_null($cells)) //add $problem_cols_sizes[$ind] empty cells
             for ($i = 0; $i < $problem_cols_sizes[$ind] ; $i++)
                 $cells[] = '';
-        $ind++;        
+
+        $row[] = $cells;        
+
+        $ind++;
     }
 
     return $row;
@@ -76,13 +79,13 @@ function processGetContestResultsRequest($request) {
      $serialized_contest_settings = $user_contest_row['settings'];
 
     //get $contest_settings
-    $contest_settings = @unserialize($serialized_contest_settings) or throwServerProblem(106);
+    $contest_settings = Data::_unserialize($serialized_contest_settings);
 
     //get $is_admin
     $is_admin = ($user_contest_row['user_type'] === 'SuperAdmin') || ($user_contest_row['user_type'] === 'ContestAdmin');
 
     //get $permission
-    $ctime = getCurrentContestTime();
+    $ctime = getCurrentContestTime($contest_settings);
     if (!is_admin) {
         if ($ctime['interval'] === 'before') throwBusinessLogicError(19);
 
@@ -114,28 +117,25 @@ function processGetContestResultsRequest($request) {
         $all_users_rows = Data::getRows(
                             sprintf("SELECT *
                                      FROM ${prfx}user
-                                     WHERE ${prfx}contest_id=%s"
+                                     WHERE contest_id=%s"
                                     , Data::quote_smart($request->contestID))
                           );
     else /* if $permission === 'OnlySelfResults'*/
         $all_users_rows = $user_contest_row;               
 
     //create result
-    $result = new GetContestDataResponse();
+    $result = new GetContestResultsResponse();
 
     //fill columns ids
-    $col_ids = array();
     $result->headers = array();
     $result->minorHeaders = array();
     //the first column with 'user_id' and 'login'
     if ($is_admin) {
-        $col_ids[] = 'sysinfo';
         $result->headers[] = '';
         $result->minorHeaders[] = array('id', 'login');
     }
     //column with participant data
-    $col_ids[] = 'data';
-    $result->headers[] = 'Участник';
+    $result->headers[] = 'Participant';
     //get participant subcolumns
     $data_subs = array();
     foreach ($contest_settings->data as $df)
@@ -149,7 +149,7 @@ function processGetContestResultsRequest($request) {
     while ($problem_row = Data::getNextRow($all_problems_rows)) {
         $problem_ids[] = $problem_row['id'];
         $result->headers[] = $problem_row['name'];
-        $col_names = @unserialize($problem_row['column_names']) or throwServerProblem(107);
+        $col_names = Data::_unserialize($problem_row['column_names']);
         $result->minorHeaders[] = $col_names;
         $problem_cols_sizes[] = count($col_names);
     }

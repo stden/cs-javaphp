@@ -22,15 +22,15 @@ import java.util.HashSet;
 public class Controller {
   private static ServerFacade       server;
   private static String             sessionID;
-  private static ContestDescription contestDescription;
   private static ClientDialog       clientDialog;
   private static UserDescription.UserType userType;
   private static UserMessagesLogger logger;
-
-  public final static String LOGGER_NAME = "Система";
+  
+  private static ContestChoosingPanel contestChooserPanel;
+  private static Plugin currentPlugin;
 
   public static void log(ServerReturnedError err) {
-    getLogger().log(err.getMessage(), UserMessagesLogger.LogMessageType.Error, LOGGER_NAME);
+    getLogger().log(err.getMessage(), LogMessageType.Error, Localization.LOGGER_NAME);
     System.out.print("ERROR:");
     System.out.println(err.getMessage());
     if (err.getExtendedInfo() != null) {
@@ -45,7 +45,16 @@ public class Controller {
   public static void addPlugin(ProblemDescription pd) {
     PluginEnvironmentImpl pe = new PluginEnvironmentImpl(pd);
 
-    Plugin p = PluginLoader.load(pd.clientPluginAlias, pe);
+    Plugin p;
+    try {
+        Class<? extends Plugin> mainClass = PluginLoader.getPluginClass(pd.clientPluginAlias);
+        //NullPointerException is possible in the next line
+        Constructor<? extends Plugin> constructor = mainClass.getConstructor(PluginEnvironment.class);
+        p = constructor.newInstance((PluginEnvironment) pe);
+    } catch (Exception e) {
+        //something wrong with plugins
+      p = null;
+    }
 
     clientDialog.addPluginToForm(pe.getView(), p);
   }
@@ -53,13 +62,14 @@ public class Controller {
   /** Добавление Plugin'а в клиент
    * @param pluginClass class of new Plugin
    */
-  public static void addAdminPlugin(Class<? extends Plugin> pluginClass) {
+  public static void addAdminPlugin(Class<? extends AdminPlugin> pluginClass) {
     try {
-      PluginEnvironmentImpl pe = new PluginEnvironmentImpl(null);
+      PluginEnvironmentImpl pe = new PluginEnvironmentImpl(Localization.getAdminPluginName(pluginClass));
       final Constructor<? extends Plugin> constructor = pluginClass.getConstructor(PluginEnvironment.class);
       Plugin p = constructor.newInstance(pe);
       clientDialog.addPluginToForm(pe.getView(), p);
     } catch (Exception e) {
+      System.out.println("Admin plugin " + pluginClass.getSimpleName() + " has no constuctor(PluginEnvironment)");
       System.exit(1); //it should not occur
     }
   }
@@ -68,13 +78,14 @@ public class Controller {
     try {
       ConnectToContestRequest request = new ConnectToContestRequest();
       request.contestID = contest.contestID;
-      Controller.contestDescription = contest;
+
+      contestChooserPanel.setContest(contest);
+
       request.login = login;
       // TODO improve the security here
       request.password = new String(password);
       ConnectToContestResponse res = Controller.server.doRequest(request);
       Controller.sessionID = res.sessionID;
-      //TODO save contest description in 'contestDescription'
 
       // Удаляем все запущенные Plugin'ы
       clientDialog.clearLeftPanel();
@@ -84,18 +95,23 @@ public class Controller {
       userType = res.user.userType;
       switch (res.user.userType) {
         case ContestAdmin:
+          contestChooserPanel.setChooserVisible(false);
           addAdminPlugin(AdjustContestsPlugin.class);
           addAdminPlugin(ManageUsersPlugin.class);
+          addAdminPlugin(ResultsPlugin.class);
           addAdminPlugin(LogoutPlugin.class);
           break;
         case SuperAdmin:
+          contestChooserPanel.setChooserVisible(true);
           addAdminPlugin(CreateContestPlugin.class);
           addAdminPlugin(AdjustContestsPlugin.class);
-          addAdminPlugin(ManageUsersPlugin.class);          
-          addAdminPlugin(PluginsManagementPlugin.class);          
+          addAdminPlugin(ManageUsersPlugin.class);
+          addAdminPlugin(PluginsManagementPlugin.class);
+          addAdminPlugin(ResultsPlugin.class);
           addAdminPlugin(LogoutPlugin.class);
           break;
         case Participant:
+          contestChooserPanel.setChooserVisible(false);
           // Получаем данные о задачах
           refreshParticipantInfo(false, false);
       }
@@ -108,7 +124,7 @@ public class Controller {
       //log nothing
       clientDialog.initialState();
     } catch (IOException e) {
-      Controller.getLogger().log("Не удалось загрузить плагины", UserMessagesLogger.LogMessageType.Error, Controller.LOGGER_NAME);
+      Controller.getLogger().log("Не удалось загрузить плагины", LogMessageType.Error, Localization.LOGGER_NAME);
       clientDialog.initialState();
     }
   }
@@ -129,11 +145,14 @@ public class Controller {
       //remove contest plugins
       for (String contestPlugin : contestPlugins) {
           File pluginFile = new File(Settings.getInstance().getPluginsDirectory() + '/' + contestPlugin + ".jar");
-          if (!pluginFile.exists())
-              System.out.println("surprise");
           if (!pluginFile.delete())
-              System.out.println("surprise 2");   //TODO:release file handler to plugins (unload plugin from memory)
+              getLogger().log(
+                      "Не удалось обновить плагин: " + pluginFile.getName(),
+                      LogMessageType.Error,
+                      Localization.LOGGER_NAME
+              );
       }
+      PluginLoader.clear();
     }
 
     //fill dirs with data
@@ -152,6 +171,7 @@ public class Controller {
       addPlugin(pd);
     }
 
+    addAdminPlugin(ResultsPlugin.class);
     addAdminPlugin(LogoutPlugin.class);
   }
 
@@ -190,14 +210,17 @@ public class Controller {
 
     try {
         server.doRequest(dr);
-        Controller.contestDescription = null;
-    } catch (Exception serverReturnedError) {
-        // //TODO [ERROR_FRAMEWORK] to think what to do
+        contestChooserPanel.setContest(null);
+    } catch (ServerReturnedError sre) {
+        log(sre);
+    } catch (GeneralRequestFailureException grfe) {
+      //do nothing
     }
 
     Controller.sessionID = null;
     Controller.userType = null;
     clientDialog.initialState();
+    contestChooserPanel.setChooserVisible(true);
   }
 
     public static UserMessagesLogger getLogger() {
@@ -231,7 +254,7 @@ public class Controller {
     clientDialog = new ClientDialog();
     clientDialog.initGUI();
     clientDialog.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    clientDialog.setVisible(true);    
+    clientDialog.setVisible(true);
   }
 
   private static void processArgs(String[] args) {
@@ -320,7 +343,7 @@ public class Controller {
           acr.sessionID = sessionID;
           server.doRequest(acr);
         } catch (ServerReturnedError serverReturnedError) {
-            return false; //TODO create process of notifying a user of errors
+            log(serverReturnedError);
         } catch (GeneralRequestFailureException GeneralRequestFailureException) {
             return false;
         }
@@ -339,7 +362,7 @@ public class Controller {
 
     try {
       server.doRequest(r);      
-      Controller.getLogger().log("Регистрация прошла успешно", UserMessagesLogger.LogMessageType.OK, Controller.LOGGER_NAME);
+      Controller.getLogger().log("Регистрация прошла успешно", LogMessageType.OK, Localization.LOGGER_NAME);
     } catch (ServerReturnedError serverReturnedError) {
       Controller.log(serverReturnedError);
     } catch (GeneralRequestFailureException GeneralRequestFailureException) {
@@ -366,7 +389,7 @@ public class Controller {
   }
 
   public static int getContestID() {
-    return contestDescription.contestID;
+    return contestChooserPanel.getContest().contestID;
   }
 
   /**
@@ -441,7 +464,7 @@ public class Controller {
     }
 
     public static ContestDescription getContestDescription() {
-        return contestDescription;
+        return contestChooserPanel.getContest();
     }
 
   public static void adjustClientPlugin(String alias, String description, File file) throws ServerReturnedError, GeneralRequestFailureException {
@@ -510,5 +533,29 @@ public class Controller {
     if (clientDialog == null) return;
 
     clientDialog.setEnabled(!freeze);
+  }
+
+  public static ContestChoosingPanel getContestChooserPanel() {
+    return contestChooserPanel == null ? contestChooserPanel = new ContestChoosingPanel() : contestChooserPanel;
+  }
+
+  public static void contestSelected(ContestDescription contest) {    
+    if (currentPlugin instanceof AdminPlugin) {
+      AdminPlugin plugin = (AdminPlugin)currentPlugin;
+      plugin.contestSelected(contest);
+    }
+  }
+
+  public static void setCurrentPlugin(Plugin currentPlugin) {
+    Controller.currentPlugin = currentPlugin;
+
+    if (currentPlugin instanceof AdminPlugin) {
+      AdminPlugin plugin = (AdminPlugin)currentPlugin;
+      plugin.contestSelected(getContestDescription());
+    }
+  }
+
+  public static Plugin getCurrentPlugin() {
+    return currentPlugin;
   }
 }

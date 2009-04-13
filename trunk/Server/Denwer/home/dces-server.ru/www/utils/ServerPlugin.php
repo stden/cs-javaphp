@@ -22,7 +22,7 @@
 
     //returns string to configure db statement settings
     //params:
-    // $statement_folder - already open zip file
+    // $statement_zip - already open zip file
     public function updateStatementData($statement_zip) {
       //May be overriden
       return null;
@@ -30,7 +30,7 @@
 
     //returns string to configure db answer settings
     //params:
-    // $folder - FileFolder object
+    // $answer_zip - already open zip file
     public function updateAnswerData($answer_zip) {
       //May be overriden
       return null;

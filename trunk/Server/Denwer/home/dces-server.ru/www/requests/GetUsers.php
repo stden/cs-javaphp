@@ -31,7 +31,7 @@
       $ud->userID = (int)$row['id'];
       $ud->login = $row['login'];
       $ud->password = $row['password'];
-      $ud->dataValue = @unserialize($row['user_data']) or $ud->dataValue = array();
+      $ud->dataValue = Data::_unserialize($row['user_data'], array());
       $ud->userType = $row['user_type'];
 
       $res->users[] = $ud;

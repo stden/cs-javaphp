@@ -1,5 +1,9 @@
 <?php
 
+  $new_results = Data::_unserialize('a:0:{}');
+  if (!is_array($new_results)) die('asdf');
+  die('x');
+
   require("utils/DataBase.php");
   $dces_mysql_host = "localhost:3306";
   $dces_mysql_user = "root";

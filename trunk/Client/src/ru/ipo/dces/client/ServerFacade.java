@@ -59,4 +59,8 @@ public interface ServerFacade {
 
   public AcceptedResponse doRequest(AdjustClientPluginRequest r)
       throws ServerReturnedError, GeneralRequestFailureException;
+
+  public GetContestResultsResponse doRequest(GetContestResultsRequest r)
+      throws ServerReturnedError, GeneralRequestFailureException;
+
 }

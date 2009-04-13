@@ -3,6 +3,8 @@ package ru.ipo.dces.debug;
 import ru.ipo.dces.exceptions.GeneralRequestFailureException;
 import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
+import ru.ipo.dces.client.LogMessageType;
+import ru.ipo.dces.client.ConsoleUserMessagesLogger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,6 +33,7 @@ public class PluginBox extends JFrame {
   private Plugin            plugin;
   private Plugin            otherPlugin;
   private ServerPluginEmulator serverEmulator;
+  private ConsoleUserMessagesLogger logger = new ConsoleUserMessagesLogger();
 
   /**
    * Создает окно для тестирования плагина стороны клиента. Помимо
@@ -200,6 +203,10 @@ public class PluginBox extends JFrame {
 
     public String getProblemName() {
       return problemName;
+    }
+
+    public void log(String message, LogMessageType type) {
+      logger.log(message, type, problemName);
     }
   }
 

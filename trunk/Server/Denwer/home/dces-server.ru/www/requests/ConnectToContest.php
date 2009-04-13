@@ -29,7 +29,7 @@ function processConnectToContestRequest($request) {
   $res->user = new UserDescription();
   $res->user->userID = (int)$row['id'];
   $res->user->login = $request->login;
-  $res->user->dataValue = unserialize($row['user_data']) or $res->user->dataValue = array();
+  $res->user->dataValue = Data::_unserialize($row['user_data'], array());
   $res->user->userType = $row['user_type'];
 
   return $res;

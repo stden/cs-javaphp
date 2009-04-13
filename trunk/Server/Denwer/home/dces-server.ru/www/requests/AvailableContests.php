@@ -11,7 +11,7 @@ function processAvailableContestsRequest($request) {
 
   while($row = mysql_fetch_array($contest_rows))
   {
-    $c = @unserialize($row['settings']) or throwServerProblem(80);
+    $c = Data::_unserialize($row['settings']);
 
     $c->contestID = (int)$row['id'];    
 

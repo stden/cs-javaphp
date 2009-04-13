@@ -1,6 +1,7 @@
 package ru.ipo.dces.pluginapi;
 
 import ru.ipo.dces.exceptions.GeneralRequestFailureException;
+import ru.ipo.dces.client.LogMessageType;
 
 import java.util.HashMap;
 import java.io.File;
@@ -37,5 +38,7 @@ public interface PluginEnvironment {
   public File getProblemFolder();
 
   public String getProblemName();
+
+  public void log(String message, LogMessageType type);
 
 }

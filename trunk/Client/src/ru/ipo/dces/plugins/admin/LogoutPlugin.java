@@ -3,6 +3,8 @@ package ru.ipo.dces.plugins.admin;
 import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
 import ru.ipo.dces.client.Controller;
+import ru.ipo.dces.client.AdminPlugin;
+import ru.ipo.dces.client.Localization;
 import ru.ipo.dces.clientservercommunication.*;
 
 import javax.swing.*;
@@ -19,7 +21,7 @@ import java.awt.event.ActionEvent;
  * Date: 11.12.2008
  * Time: 20:06:45
  */
-public class LogoutPlugin extends JPanel implements Plugin {
+public class LogoutPlugin extends JPanel implements AdminPlugin {
   private JButton logoutButton;
   private JPanel mainPanel;
   private JButton refreshProblemsButton;
@@ -32,7 +34,7 @@ public class LogoutPlugin extends JPanel implements Plugin {
    */
   public LogoutPlugin(PluginEnvironment env) {
     $$$setupUI$$$();
-    env.setTitle("”правление");
+    env.setTitle(Localization.getAdminPluginName(LogoutPlugin.class));
 
     logoutButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -93,6 +95,10 @@ public class LogoutPlugin extends JPanel implements Plugin {
 
   public void deactivate() {
     //do nothing
+  }
+
+  public void contestSelected(ContestDescription contest) {
+    //To change body of implemented methods use File | Settings | File Templates.
   }
 
   /**
