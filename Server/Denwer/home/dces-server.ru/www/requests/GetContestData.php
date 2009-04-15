@@ -9,7 +9,7 @@
     $con = connectToDB();
 
     //get user_id or die, if session is invalid
-    $userRow = testSession($request->sessionID);
+    $userRow = RequestUtils::testSession($request->sessionID);
     $user_id = $userRow['id']; 
 
     //authorize user for this operation
@@ -17,7 +17,7 @@
     $user_type = $userRow['user_type'];
 
     //compare requested contest and user contest
-    $contest_id = getRequestedContest($request->contestID, $userRow['contest_id'], $user_type);
+    $contest_id = RequestUtils::getRequestedContest($request->contestID, $userRow['contest_id'], $user_type);
 
     if ($contest_id < 0) throwBusinessLogicError(0);
 

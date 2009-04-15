@@ -5,13 +5,13 @@
     //get connection
     $con = connectToDB();
 
-    $user_row = testSession($request->sessionID);
+    $user_row = RequestUtils::testSession($request->sessionID);
     $user_id = $user_row['id'];
 
     $prfx = $GLOBALS['dces_mysql_prefix'];
 
     $user_type = $user_row['user_type'];
-    $contest_id = getRequestedContest($request->contestID, $user_row['contest_id'], $user_type);
+    $contest_id = RequestUtils::getRequestedContest($request->contestID, $user_row['contest_id'], $user_type);
 
     //make superadmin possible to get users of zero-contest
     if ($user_type == 'SuperAdmin' && ($request->contestID == 0 || $request->contestID == -1))

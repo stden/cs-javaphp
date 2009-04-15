@@ -14,10 +14,10 @@
     }
     else
     {
-      $userRow = testSession($request->sessionID);
+      $userRow = RequestUtils::testSession($request->sessionID);
       $request_user_id = $userRow['id'];
       $request_user_type = $userRow['user_type'];
-      $contest_id = getRequestedContest($request->contestID, $userRow['contest_id'], $request_user_type);
+      $contest_id = RequestUtils::getRequestedContest($request->contestID, $userRow['contest_id'], $request_user_type);
 
       //make possible for superadmin to register users of zero-contest
       if ($request_user_type == 'SuperAdmin' && ($request->contestID == 0 || $request->contestID == -1))

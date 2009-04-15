@@ -5,7 +5,7 @@ function processCreateContestRequest($request) {
   $con = connectToDB();
 
   //get user_id or die, if session is invalid
-  $user_row = testSession($request->sessionID);
+  $user_row = RequestUtils::testSession($request->sessionID);
   $user_id = $user_row['id'];
 
   //authorize user for this operation

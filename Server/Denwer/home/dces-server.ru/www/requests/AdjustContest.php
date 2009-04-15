@@ -2,6 +2,18 @@
 
   require_once(getServerPluginFile());
 
+  //gets contents of $s, treats it as a zip, opens zip and returns it.
+  //remove_handle is a value to be passed to closeZip() function
+  function openZip($s, $zip_file) {
+    if (!file_put_contents($zip_file, $s)) return false;
+    $zip = new ZipArchive();
+    $res = $zip->open($zip_file);
+    if ($res === true)
+      return $zip;
+    else
+      return false;
+  }
+
   function queryForContestDescription($c, $contest_id, $con) {
     //get current contest settings
     $prfx = $GLOBALS['dces_mysql_prefix'];
@@ -108,7 +120,7 @@
       if ($p->id == -1) {
         //We are to create a directory for new problem
         //New dir is temporary because we don't know problem id 
-        $temp = $GLOBALS['dces_dir_temp'] . '/' . random_str(10);
+        $temp = $GLOBALS['dces_dir_temp'] . '/' . RequestUtils::random_str(10);
         $temp_dirs[] = $temp;
         mkdir($temp);
         $plugin = new $plugin_alias($temp);
@@ -119,7 +131,7 @@
       //set statementData
       if (!is_null($p->statementData)) {
         if ($p->id == -1)
-          $zip_file = $GLOBALS['dces_dir_temp'] . '/' . random_str(10) . '.zip';
+          $zip_file = $GLOBALS['dces_dir_temp'] . '/' . RequestUtils::random_str(10) . '.zip';
         else {
           $problem_id = $p->id;
           $zip_file = $GLOBALS['dces_dir_problems'] . "/${problem_id}_statement.zip";
@@ -138,7 +150,7 @@
       //TODO think abount code duplication. May be there is no need in two concepts: statement and answer 
       if (!is_null($p->answerData)) {
         if ($p->id == -1)
-          $zip_file = $GLOBALS['dces_dir_temp'] . '/' . random_str(10) . '.zip';
+          $zip_file = $GLOBALS['dces_dir_temp'] . '/' . RequestUtils::random_str(10) . '.zip';
         else {
           $problem_id = $p->id;
           $zip_file = $GLOBALS['dces_dir_problems'] . "/${problem_id}_answer.zip";
@@ -189,14 +201,14 @@
     $con = connectToDB();
 
     //get user_id or die, if session is invalid
-    $userRow = testSession($request->sessionID);
+    $userRow = RequestUtils::testSession($request->sessionID);
     $user_id = $userRow['id'];
 
     //authorize user for this operation
     // get contest ID
     $user_type = $userRow['user_type'];
         
-    $contest_id = getRequestedContest($request->contest->contestID, $userRow['contest_id'], $user_type);
+    $contest_id = RequestUtils::getRequestedContest($request->contest->contestID, $userRow['contest_id'], $user_type);
     if ($user_type === "Participant") $contest_id = -1;
 
     if ($contest_id < 0) throwBusinessLogicError(0);
@@ -227,12 +239,7 @@
       if ( count($temp_dirs) != count($inserted_ids) ||
            count($temp_dirs) != count($temp_statement_zips) ||
            count($temp_dirs) != count($temp_answer_zips) ) {
-             //TODO looks insane
-             $dump = var_dump($temp_dirs);
-             $dump .= var_dump($inserted_ids);
-             $dump .= var_dump($temp_statement_zips);
-             $dump .= var_dump($temp_answer_zips);
-             throwServerProblem(61, $dump);
+             throwServerProblem(61);
            }
 
       for ($i = 0; $i < count($temp_dirs); $i++) {

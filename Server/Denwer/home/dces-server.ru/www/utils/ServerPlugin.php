@@ -10,6 +10,16 @@
       $this->folder = $folder;
     }
 
+    protected function testTime() {
+      $row = RequestUtils::getSessionUserRow();
+      $time = getCurrentContestTime($row['settings']);
+
+      if ($time['interval'] === 'before')
+        throwBuisnessLogicError(19);
+      if ($time['interval'] === 'after')
+        throwBuisnessLogicError(20);
+    }
+
     //returns submission result
     public function checkSolution($solution, $user_id, $answer_data, &$current_result, &$table_cols) {
       //Needs to be overriden
@@ -52,17 +62,5 @@
       return array("");
     }
 
-  }
-
-  //gets contents of $s, treats it as a zip, opens zip and returns it.
-  //remove_handle is a value to be passed to closeZip() function
-  function openZip($s, $zip_file) {    
-    if (!file_put_contents($zip_file, $s)) return false;
-    $zip = new ZipArchive();
-    $res = $zip->open($zip_file);
-    if ($res === true)
-      return $zip;
-    else
-      return false;
   }
 ?>

@@ -1,14 +1,17 @@
 <?php
 
   function processRemoveUserRequest($request) {
+    $prfx = $GLOBALS['dces_mysql_prefix'];
 
-    $con = connectToDB();
-
-    $user_row = testSession($request->sessionID);
+    $user_row = RequestUtils::testSession($request->sessionID);
     $user_id = $user_row['id'];
 
     $remove_user_id = $request->userID;
-    $remove_user_row = getUserRow($con, $remove_user_id);
+    $remove_user_row = Data::getRow(sprintf(
+                                    "SELECT *
+                                     FROM ${prfx}user
+                                     WHERE id=%s", Data::quote_smart($remove_user_id))
+                                   );
     if (!$remove_user_row)
       throwBusinessLogicError(2);
 
@@ -22,13 +25,11 @@
 
     $prfx = $GLOBALS['dces_mysql_prefix'];
 
-    $queries = array();
     //from 'users' table
-    $queries[] = sprintf("DELETE FROM ${prfx}user WHERE id=%s", Data::quote_smart($remove_user_id));
-    $queries[] = sprintf("DELETE FROM ${prfx}session WHERE user_id=%s", Data::quote_smart($remove_user_id));
-    $queries[] = sprintf("DELETE FROM ${prfx}submission_history WHERE user_id=%s", Data::quote_smart($remove_user_id));
-
-    transaction($con, $queries) or throwServerProblem(71);
+    Data::submitModificationQuery(sprintf("DELETE FROM ${prfx}user WHERE id=%s", Data::quote_smart($remove_user_id)));
+    Data::submitModificationQuery(sprintf("DELETE FROM ${prfx}session WHERE user_id=%s", Data::quote_smart($remove_user_id)));
+    Data::submitModificationQuery(sprintf("DELETE FROM ${prfx}submission_history WHERE user_id=%s", Data::quote_smart($remove_user_id)));
+    Data::submitModificationQuery(sprintf("DELETE FROM ${prfx}problem_status WHERE user_id=%s", Data::quote_smart($remove_user_id)));
 
     return new AcceptedResponse();
   }

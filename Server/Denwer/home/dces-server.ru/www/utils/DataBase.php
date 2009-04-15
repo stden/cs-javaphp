@@ -65,7 +65,7 @@ class Data {
     }
 
     // Функция экранирования переменных
-    function quote_smart($value)
+    public static function quote_smart($value)
     {
         /*
         // если magic_quotes_gpc включена - используем stripslashes
@@ -85,7 +85,7 @@ class Data {
         return $value;
     }
 
-    public function _unserialize($val, $default = false) {
+    public static function _unserialize($val, $default = false) {
       $res = @unserialize($val);
       if ($res === false)
         if ($default === false)
