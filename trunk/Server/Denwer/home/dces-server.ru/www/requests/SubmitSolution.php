@@ -32,7 +32,7 @@
     $problem_contest_id = $problem_row['contest_id'];
 
     //test if we have rights to submit solution for the contest
-    $contest_id = getRequestedContest($problem_contest_id, $userRow['contest_id'], $user_type);
+    $contest_id = RequestUtils::getRequestedContest($problem_contest_id, $userRow['contest_id'], $user_type);
 
     if ($contest_id < 0) throwBusinessLogicError(0);
 

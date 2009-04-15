@@ -1,5 +1,14 @@
 <?php
 
+  $a = array('a', 'b', 'c', 'd');
+  var_dump($a);
+  $b = $a;
+  $b[] = 'e';
+  var_dump($a);
+  var_dump($b);
+
+  die();  
+
   $new_results = Data::_unserialize('a:0:{}');
   if (!is_array($new_results)) die('asdf');
   die('x');

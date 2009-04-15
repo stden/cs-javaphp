@@ -47,9 +47,9 @@ function processGetContestResultsRequest($request) {
     //get $is_anonymous, $contest_id, $user_contest_row
     if (!is_null($request->sessionID)) {
         $is_anonymous = false;
-        $user_contest_row = testSession($request->sessionID);
+        $user_contest_row = RequestUtils::testSession($request->sessionID);
 
-        $contest_id = getRequestedContest(
+        $contest_id = RequestUtils::getRequestedContest(
             $request->contestID,
             $user_contest_row['contest_id'],
             $user_contest_row['user_type']

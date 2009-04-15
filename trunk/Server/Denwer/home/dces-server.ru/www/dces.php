@@ -5,7 +5,7 @@ require("utils/Debug.php");
 require("utils/ReturnError.php");
 require("utils/Directories.php");
 require("utils/DataBase.php");
-require("utils/Authorization.php");
+require("utils/RequestUtils.php");
 require("utils/Messages.php");
 require("utils/DcesDateTime.php");
 

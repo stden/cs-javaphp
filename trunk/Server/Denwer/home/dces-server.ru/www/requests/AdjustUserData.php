@@ -1,9 +1,19 @@
 <?php
 
+  function getUserRow($con, $user_id) {
+      $prfx = $GLOBALS['dces_mysql_prefix'];
+      $user_rows = mysql_query(
+                       sprintf("SELECT * FROM ${prfx}user WHERE id=%s", Data::quote_smart($user_id))
+                     , $con) or throwServerProblem(63, mysql_error());
+      if (! ($user_row = mysql_fetch_array($user_rows)))
+        return false;
+      return $user_row;
+  }
+
   function processAdjustUserDataRequest($request) {
     $con = connectToDB();
 
-    $user_row = testSession($request->sessionID);
+    $user_row = RequestUtils::testSession($request->sessionID);
     $user_id = $user_row['id'];
 
     $adjust_user_id = $request->userID;

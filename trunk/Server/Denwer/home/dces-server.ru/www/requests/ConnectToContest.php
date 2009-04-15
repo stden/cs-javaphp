@@ -22,7 +22,7 @@ function processConnectToContestRequest($request) {
   //TODO implement the test: if user $row['id'] is a participant, then connection is allowed only after the beginning of the contest
 
   //start new session
-  $session_id = createSession($row['id']);
+  $session_id = RequestUtils::createSession($row['id']);
 
   $res = new ConnectToContestResponse();
   $res->sessionID = $session_id;
