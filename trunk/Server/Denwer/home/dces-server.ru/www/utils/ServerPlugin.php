@@ -12,7 +12,9 @@
 
     protected function testTime() {
       $row = RequestUtils::getSessionUserRow();
-      $time = getCurrentContestTime($row['settings']);
+      $contest_start = DateMySQLToPHP($row['contest_start']);
+      $contest_finish = DateMySQLToPHP($row['contest_finish']);
+      $time = getCurrentContestTime($row['settings'], $contest_start, $contest_finish);
 
       if ($time['interval'] === 'before')
         throwBuisnessLogicError(19);

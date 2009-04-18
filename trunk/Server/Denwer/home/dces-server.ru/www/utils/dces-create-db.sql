@@ -135,6 +135,7 @@ CREATE TABLE /*!32312 IF NOT EXISTS*/ "PREFIX_user" (
   "user_data" blob NOT NULL COMMENT 'Serialized array with user data',
   "results" blob NOT NULL COMMENT 'Serialized array with results',
   "contest_start" datetime default NULL COMMENT 'moment of the first login',
+  "contest_finish" datetime default NULL COMMENT 'moment of contest fiinish',
   PRIMARY KEY  ("id"),
   UNIQUE KEY "id" ("id"),
   KEY "id_2" ("id")

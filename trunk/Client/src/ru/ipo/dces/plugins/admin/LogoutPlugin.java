@@ -112,7 +112,7 @@ public class LogoutPlugin extends JPanel implements AdminPlugin {
     createUIComponents();
     mainPanel.setLayout(new FormLayout("fill:max(d;4px):grow,left:4dlu:noGrow,fill:160dlu:noGrow,left:4dlu:noGrow,fill:80dlu:noGrow,left:4dlu:noGrow,fill:max(d;4px):grow", "center:12dlu:noGrow,top:4dlu:noGrow,center:20dlu:noGrow,top:8dlu:noGrow,center:20dlu:noGrow,top:8dlu:noGrow,center:8dlu:noGrow,top:4dlu:noGrow,center:8dlu:noGrow,top:8dlu:noGrow,center:20dlu:noGrow,top:4dlu:noGrow,center:10dlu:noGrow"));
     final JLabel label1 = new JLabel();
-    label1.setText("Прекратить участие в контесте");
+    label1.setText("Перейти к другому соревнованию");
     CellConstraints cc = new CellConstraints();
     mainPanel.add(label1, cc.xy(3, 11));
     refreshPluginsButton = new JButton();

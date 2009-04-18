@@ -14,6 +14,8 @@ import java.lang.reflect.Constructor;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.HashSet;
+import java.util.Date;
+import java.text.DateFormat;
 
 /**
  * Контроллер, который хранит данные о соединении с сервером и позволяет
@@ -86,6 +88,21 @@ public class Controller {
       request.password = new String(password);
       ConnectToContestResponse res = Controller.server.doRequest(request);
       Controller.sessionID = res.sessionID;
+
+      //show message - 'ok, connected, finish is at...'
+      Date now = new Date();
+      String leftTimeMessage;
+      if (now.before(res.finishTime))
+        //TODO format only time if the finish is today
+        leftTimeMessage = "Окончание соревнования в " + DateFormat.getInstance().format(res.finishTime);
+      else
+        leftTimeMessage = "Соревнование уже закончилось";
+
+      getLogger().log(
+              "Успешное подключение к соревнованию. " + leftTimeMessage,
+              LogMessageType.OK,
+              Localization.LOGGER_NAME
+      );
 
       // Удаляем все запущенные Plugin'ы
       clientDialog.clearLeftPanel();

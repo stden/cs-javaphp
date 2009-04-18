@@ -33,7 +33,7 @@
           <forms/>
         </constraints>
         <properties>
-          <text value="Прекратить участие в контесте"/>
+          <text value="Перейти к другому соревнованию"/>
         </properties>
       </component>
       <component id="cf040" class="javax.swing.JButton" binding="refreshPluginsButton">
