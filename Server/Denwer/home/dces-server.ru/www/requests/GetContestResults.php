@@ -44,7 +44,7 @@ function processGetContestResultsRequest($request) {
 
     $prfx = $GLOBALS['dces_mysql_prefix'];
 
-    //get $is_anonymous, $contest_id, $user_contest_row
+    //get $is_anonymous, $contest_id, $user_contest_row, $user_contest_start_time
     if (!is_null($request->sessionID)) {
         $is_anonymous = false;
         $user_contest_row = RequestUtils::testSession($request->sessionID);
@@ -55,11 +55,16 @@ function processGetContestResultsRequest($request) {
             $user_contest_row['user_type']
         );
         if ($contest_id < 0) throwBusinessLogicError(14);
+
+        $user_contest_start_time = DateMySQLToPHP($user_contest_row['contest_start']);        
+        $user_contest_finish_time = DateMySQLToPHP($user_contest_row['contest_finish']);        
     }
     else
     {
         $is_anonymous = true;
         $contest_id = $request->contestID;
+        $user_contest_start_time = null; //contest was not started for anonymous
+        $user_contest_finish_time = null; //and was not finished
     }
 
     //get $serialized_contest_settings
@@ -76,7 +81,7 @@ function processGetContestResultsRequest($request) {
         $serialized_contest_settings = $contest_row['settings'];
     }
     else
-     $serialized_contest_settings = $user_contest_row['settings'];
+        $serialized_contest_settings = $user_contest_row['settings'];
 
     //get $contest_settings
     $contest_settings = Data::_unserialize($serialized_contest_settings);
@@ -85,7 +90,7 @@ function processGetContestResultsRequest($request) {
     $is_admin = ($user_contest_row['user_type'] === 'SuperAdmin') || ($user_contest_row['user_type'] === 'ContestAdmin');
 
     //get $permission
-    $ctime = getCurrentContestTime($contest_settings);
+    $ctime = getCurrentContestTime($contest_settings, $user_contest_start_time, $user_contest_finish_time);
     if (!is_admin) {
         if ($ctime['interval'] === 'before') throwBusinessLogicError(19);
 
