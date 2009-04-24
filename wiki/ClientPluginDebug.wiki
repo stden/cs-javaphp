@@ -28,7 +28,7 @@ box.setVisible(true);
 Эмуляция сервера будет проверять посланное решение и сравнивать его с правильным ответом. Будем считать, что правильный ответ - это 42. Также эмулятор будет следить, что решение посылается не более чем три раза.
 
 {{{
-public class MyServerPluginEmulator implements MyServerPluginEmulator {
+public class MyServerPluginEmulator implements ServerPluginEmulator {
      
       //сохраняем ответ
       public static final String RIGHT_ANSWER = "42";
