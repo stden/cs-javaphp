@@ -5,7 +5,7 @@
 //
 //import org.junit.Test;
 //
-//import ru.ipo.dces.client.RealServer;
+//import ru.ipo.dces.server.http.HttpServer;
 //import ru.ipo.dces.clientservercommunication.RequestFailedResponse;
 //import ru.ipo.dces.tests.samples.Sum;
 //
@@ -20,7 +20,7 @@
 //  @Test
 //  public void testAllSymbols() throws IOException {
 //    // Скрипт, который просто показывает строку
-//    final RealServer sc = new RealServer(ServerBaseURL + "str.php");
+//    final HttpServer sc = new HttpServer(ServerBaseURL + "str.php");
 //    // Вывод отдельной строки
 //    assertEquals("123", sc.doPost("a=123"));
 //    // Специальные символы
@@ -65,14 +65,14 @@
 //    final Random random = new Random();
 //    s.a = random.nextInt() % 10000;
 //    s.b = random.nextInt() % 10000;
-//    final RealServer sc = new RealServer(ServerURL);
+//    final HttpServer sc = new HttpServer(ServerURL);
 //    final int i = sc.doRequest(Integer.class, s);
 //    assertEquals(s.a + s.b, i);
 //  }
 //
 //  @Test
 //  public void testSumHTTP() throws IOException {
-//    final RealServer sc = new RealServer(ServerBaseURL + "sum.php");
+//    final HttpServer sc = new HttpServer(ServerBaseURL + "sum.php");
 //    assertEquals("sum=13", sc.doPost("a=11&b=2"));
 //    final Random random = new Random();
 //    final int a = random.nextInt() % 10000;

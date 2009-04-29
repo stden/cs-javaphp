@@ -4,7 +4,8 @@ import ru.ipo.dces.exceptions.GeneralRequestFailureException;
 import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
 import ru.ipo.dces.client.LogMessageType;
-import ru.ipo.dces.client.ConsoleUserMessagesLogger;
+import ru.ipo.dces.client.LoggerFactory;
+import ru.ipo.dces.client.UserMessagesLogger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,7 +34,7 @@ public class PluginBox extends JFrame {
   private Plugin            plugin;
   private Plugin            otherPlugin;
   private ServerPluginEmulator serverEmulator;
-  private ConsoleUserMessagesLogger logger = new ConsoleUserMessagesLogger();
+  private UserMessagesLogger logger = LoggerFactory.getLogger();
 
   /**
    * Создает окно для тестирования плагина стороны клиента. Помимо

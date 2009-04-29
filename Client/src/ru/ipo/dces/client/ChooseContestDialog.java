@@ -32,13 +32,9 @@ public class ChooseContestDialog extends JDialog {
     buttonsPanel.add(cancelButton);
     cancelButton.setText("Отменить");
 
-    ContestsListBean[] contestDescriptions = getContestList();
-
-    ListModel listModel = new DefaultComboBoxModel(contestDescriptions);
     contestsList = new JList();
     JScrollPane contestsListScroll = new JScrollPane(contestsList);
     add(contestsListScroll, BorderLayout.CENTER);
-    contestsList.setModel(listModel);
 
     setSize(400, 300);
     setTitle("Выберите соревнование");
@@ -83,6 +79,10 @@ public class ChooseContestDialog extends JDialog {
   }
 
   public ContestDescription run() {
+    ContestsListBean[] contestDescriptions = getContestList();
+    ListModel listModel = new DefaultComboBoxModel(contestDescriptions);
+    contestsList.setModel(listModel);
+
     selectedContest = null;
     this.setVisible(true);
     return selectedContest;

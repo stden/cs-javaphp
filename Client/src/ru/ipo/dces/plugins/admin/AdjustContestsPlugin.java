@@ -240,7 +240,7 @@ public class AdjustContestsPlugin extends JPanel implements AdminPlugin {
       return chooseFileDialog.getSelectedFile();
     else
       return null;
-  }  
+  }
 
   private void createUIComponents() {
     drawPanel = this;
@@ -496,7 +496,7 @@ public class AdjustContestsPlugin extends JPanel implements AdminPlugin {
       }
     });
   }
-  
+
   public JPanel getPanel() {
     return drawPanel;
   }
@@ -574,7 +574,7 @@ public class AdjustContestsPlugin extends JPanel implements AdminPlugin {
    */
   private void $$$setupUI$$$() {
     createUIComponents();
-    drawPanel.setLayout(new FormLayout("fill:max(d;4px):noGrow,left:4dlu:noGrow,fill:92dlu:noGrow,left:4dlu:noGrow,fill:72dlu:grow(2.0),left:4dlu:noGrow,fill:m:noGrow,left:4dlu:noGrow,left:30dlu:grow(2.0),fill:max(d;4px):noGrow,fill:62dlu:noGrow,left:4dlu:noGrow,fill:4dlu:noGrow", "center:max(d;4px):noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:60dlu:grow,top:4dlu:noGrow,center:17dlu:noGrow,top:4dlu:noGrow,center:1px:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:28px:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:noGrow,top:4dlu:noGrow,center:0dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:5dlu:noGrow,center:16dlu:noGrow,top:5dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow"));
+    drawPanel.setLayout(new FormLayout("fill:max(d;4px):noGrow,left:4dlu:noGrow,fill:92dlu:noGrow,left:4dlu:noGrow,fill:72dlu:grow(2.0),left:4dlu:noGrow,fill:m:noGrow,left:4dlu:noGrow,left:30dlu:grow(2.0),fill:max(d;4px):noGrow,fill:62dlu:noGrow,left:4dlu:noGrow,fill:4dlu:noGrow", "center:max(d;4px):noGrow,top:4dlu:noGrow,center:17dlu:noGrow,top:5dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:60dlu:grow,top:4dlu:noGrow,center:17dlu:noGrow,top:4dlu:noGrow,center:17dlu:noGrow,top:4dlu:noGrow,center:1px:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:28px:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:noGrow,top:4dlu:noGrow,center:0dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:5dlu:noGrow,center:16dlu:noGrow,top:5dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow"));
     contestName = new JTextField();
     CellConstraints cc = new CellConstraints();
     drawPanel.add(contestName, cc.xyw(5, 5, 7, CellConstraints.FILL, CellConstraints.FILL));
@@ -608,76 +608,79 @@ public class AdjustContestsPlugin extends JPanel implements AdminPlugin {
     ownRegistrationRB.setText("Самостоятельно");
     drawPanel.add(ownRegistrationRB, cc.xyw(5, 13, 3));
     final JSeparator separator1 = new JSeparator();
-    drawPanel.add(separator1, cc.xyw(3, 15, 9, CellConstraints.FILL, CellConstraints.FILL));
+    drawPanel.add(separator1, cc.xyw(3, 17, 9, CellConstraints.FILL, CellConstraints.FILL));
     beginTime = new JFormattedTextField();
     drawPanel.add(beginTime, cc.xyw(9, 7, 3, CellConstraints.FILL, CellConstraints.FILL));
-    administratorRegistrationRB = new JRadioButton();
-    administratorRegistrationRB.setSelected(true);
-    administratorRegistrationRB.setText("Администратором");
-    drawPanel.add(administratorRegistrationRB, cc.xyw(9, 13, 3));
     final JLabel label6 = new JLabel();
     label6.setText("Ответ");
-    drawPanel.add(label6, cc.xy(3, 40));
+    drawPanel.add(label6, cc.xy(3, 42));
     problemAnswer = new JTextField();
     problemAnswer.setEditable(false);
     problemAnswer.setEnabled(true);
-    drawPanel.add(problemAnswer, cc.xyw(5, 40, 5, CellConstraints.FILL, CellConstraints.FILL));
+    drawPanel.add(problemAnswer, cc.xyw(5, 42, 5, CellConstraints.FILL, CellConstraints.FILL));
     changeAnswerButton = new JButton();
     changeAnswerButton.setText("...");
-    drawPanel.add(changeAnswerButton, cc.xy(11, 40));
+    drawPanel.add(changeAnswerButton, cc.xy(11, 42));
     final JLabel label7 = new JLabel();
     label7.setText("Условие");
-    drawPanel.add(label7, cc.xy(3, 38));
+    drawPanel.add(label7, cc.xy(3, 40));
     problemStatement = new JTextField();
     problemStatement.setEditable(false);
     problemStatement.setEnabled(true);
     problemStatement.setText("");
-    drawPanel.add(problemStatement, cc.xyw(5, 38, 5, CellConstraints.FILL, CellConstraints.FILL));
+    drawPanel.add(problemStatement, cc.xyw(5, 40, 5, CellConstraints.FILL, CellConstraints.FILL));
     changeStatementButton = new JButton();
     changeStatementButton.setText("...");
-    drawPanel.add(changeStatementButton, cc.xy(11, 38, CellConstraints.FILL, CellConstraints.DEFAULT));
+    drawPanel.add(changeStatementButton, cc.xy(11, 40, CellConstraints.FILL, CellConstraints.DEFAULT));
     final JLabel label8 = new JLabel();
     label8.setText("Серверный плагин");
-    drawPanel.add(label8, cc.xy(3, 36));
+    drawPanel.add(label8, cc.xy(3, 38));
     serverPlugin = new JTextField();
-    drawPanel.add(serverPlugin, cc.xyw(5, 36, 7, CellConstraints.FILL, CellConstraints.FILL));
+    drawPanel.add(serverPlugin, cc.xyw(5, 38, 7, CellConstraints.FILL, CellConstraints.FILL));
     final JLabel label9 = new JLabel();
     label9.setText("Клиентский плагин");
-    drawPanel.add(label9, cc.xy(3, 34));
+    drawPanel.add(label9, cc.xy(3, 36));
     clientPlugin = new JTextField();
     clientPlugin.setText("клиентский плагин");
-    drawPanel.add(clientPlugin, cc.xyw(5, 34, 7, CellConstraints.FILL, CellConstraints.FILL));
+    drawPanel.add(clientPlugin, cc.xyw(5, 36, 7, CellConstraints.FILL, CellConstraints.FILL));
     final JLabel label10 = new JLabel();
     label10.setText("Имя задачи");
-    drawPanel.add(label10, cc.xy(3, 32));
+    drawPanel.add(label10, cc.xy(3, 34));
     problemName = new JTextField();
     problemName.setText("Имя задачи");
-    drawPanel.add(problemName, cc.xyw(5, 32, 7, CellConstraints.FILL, CellConstraints.FILL));
+    drawPanel.add(problemName, cc.xyw(5, 34, 7, CellConstraints.FILL, CellConstraints.FILL));
     final JLabel label11 = new JLabel();
     label11.setText("Задачи");
-    drawPanel.add(label11, cc.xywh(3, 17, 1, 11));
+    drawPanel.add(label11, cc.xywh(3, 19, 1, 11));
     problemsList = new JList();
     problemsList.setSelectionMode(0);
-    drawPanel.add(problemsList, cc.xywh(5, 17, 5, 11, CellConstraints.DEFAULT, CellConstraints.FILL));
+    drawPanel.add(problemsList, cc.xywh(5, 19, 5, 11, CellConstraints.DEFAULT, CellConstraints.FILL));
     upButton = new JButton();
     upButton.setText("Вверх");
     upButton.setVerticalAlignment(0);
-    drawPanel.add(upButton, cc.xy(11, 17, CellConstraints.DEFAULT, CellConstraints.CENTER));
+    drawPanel.add(upButton, cc.xy(11, 19, CellConstraints.DEFAULT, CellConstraints.CENTER));
     downButton = new JButton();
     downButton.setText("Вниз");
-    drawPanel.add(downButton, cc.xy(11, 19, CellConstraints.DEFAULT, CellConstraints.CENTER));
+    drawPanel.add(downButton, cc.xy(11, 21, CellConstraints.DEFAULT, CellConstraints.CENTER));
     addButton = new JButton();
     addButton.setText("Добавить");
-    drawPanel.add(addButton, cc.xy(11, 21));
+    drawPanel.add(addButton, cc.xy(11, 23));
     applyButton = new JButton();
     applyButton.setText("Применить");
-    drawPanel.add(applyButton, cc.xyw(3, 42, 9));
+    drawPanel.add(applyButton, cc.xyw(3, 44, 9));
     deleteButton = new JButton();
     deleteButton.setText("Удалить");
-    drawPanel.add(deleteButton, cc.xy(11, 23));
+    drawPanel.add(deleteButton, cc.xy(11, 25));
     previewButton = new JButton();
     previewButton.setText("Посмотреть");
-    drawPanel.add(previewButton, cc.xy(11, 27));
+    drawPanel.add(previewButton, cc.xy(11, 29));
+    administratorRegistrationRB = new JRadioButton();
+    administratorRegistrationRB.setSelected(true);
+    administratorRegistrationRB.setText("Администратором");
+    drawPanel.add(administratorRegistrationRB, cc.xyw(5, 15, 3));
+    final JPanel panel1 = new JPanel();
+    panel1.setLayout(new FormLayout("", ""));
+    drawPanel.add(panel1, cc.xywh(9, 13, 3, 3, CellConstraints.FILL, CellConstraints.FILL));
     ButtonGroup buttonGroup;
     buttonGroup = new ButtonGroup();
     buttonGroup.add(ownRegistrationRB);

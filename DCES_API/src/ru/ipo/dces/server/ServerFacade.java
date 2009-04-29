@@ -1,4 +1,4 @@
-package ru.ipo.dces.client;
+package ru.ipo.dces.server;
 
 import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.exceptions.ServerReturnedError;
@@ -61,6 +61,9 @@ public interface ServerFacade {
       throws ServerReturnedError, GeneralRequestFailureException;
 
   public GetContestResultsResponse doRequest(GetContestResultsRequest r)
+      throws ServerReturnedError, GeneralRequestFailureException;
+
+  public AcceptedResponse doRequest(StopContestRequest r)
       throws ServerReturnedError, GeneralRequestFailureException;
 
 }

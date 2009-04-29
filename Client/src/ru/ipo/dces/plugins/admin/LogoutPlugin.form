@@ -13,6 +13,10 @@
     <rowspec value="top:8dlu:noGrow"/>
     <rowspec value="center:20dlu:noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
+    <rowspec value="center:20dlu:noGrow"/>
+    <rowspec value="top:4dlu:noGrow"/>
+    <rowspec value="center:20dlu:noGrow"/>
+    <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:10dlu:noGrow"/>
     <colspec value="fill:max(d;4px):grow"/>
     <colspec value="left:4dlu:noGrow"/>
@@ -87,6 +91,31 @@
         <properties>
           <text value="Выход"/>
         </properties>
+      </component>
+      <component id="ef11c" class="javax.swing.JLabel" binding="stopContestLabel">
+        <constraints>
+          <grid row="14" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="Закончить соревнование досрочно"/>
+        </properties>
+      </component>
+      <component id="c9753" class="javax.swing.JButton" binding="stopContestButton">
+        <constraints>
+          <grid row="14" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="Закончить"/>
+        </properties>
+      </component>
+      <component id="1fdaa" class="javax.swing.JSeparator" binding="stopContestSeparator">
+        <constraints>
+          <grid row="12" column="2" row-span="1" col-span="3" vsize-policy="6" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false" defaultalign-vert="false"/>
+        </constraints>
+        <properties/>
       </component>
     </children>
   </grid>

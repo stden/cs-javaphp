@@ -8,8 +8,9 @@ import ru.ipo.dces.client.AdminPlugin;
 import ru.ipo.dces.client.Localization;
 import ru.ipo.dces.clientservercommunication.ContestDescription;
 import ru.ipo.dces.clientservercommunication.UserDataField;
+import ru.ipo.dces.clientservercommunication.ContestTiming;
+import ru.ipo.dces.clientservercommunication.ResultsAccessPolicy;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
-import ru.ipo.dces.pluginapi.Plugin;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -158,9 +159,18 @@ public class CreateContestPlugin extends JPanel implements AdminPlugin {
         cd.data = new UserDataField[typeNameModel.getSize()];
 
         for (int i = 0; i < typeNameModel.getSize(); i++) {
+          cd.data[i] = new UserDataField();
           cd.data[i].data = ((TypeNameBean) typeNameModel.get(i)).getName();
           cd.data[i].compulsory = ((TypeNameBean) typeNameModel.get(i)).isCompulsory();
         }
+
+        //TODO remove the hack
+        cd.contestTiming = new ContestTiming();
+        cd.contestTiming.selfContestStart = false;
+        cd.resultsAccessPolicy = new ResultsAccessPolicy();
+        cd.resultsAccessPolicy.contestPermission = ResultsAccessPolicy.AccessPermission.FullAccess;
+        cd.resultsAccessPolicy.afterContestPermission = ResultsAccessPolicy.AccessPermission.FullAccess;
+        cd.resultsAccessPolicy.contestEndingPermission = ResultsAccessPolicy.AccessPermission.FullAccess;
 
         boolean setstatus = Controller.addContest(cd);
 
@@ -371,7 +381,7 @@ public class CreateContestPlugin extends JPanel implements AdminPlugin {
    */
   private void $$$setupUI$$$() {
     createUIComponents();
-    drawPanel.setLayout(new FormLayout("fill:max(d;4px):noGrow,fill:4dlu:noGrow,fill:92dlu:noGrow,left:4dlu:noGrow,fill:80dlu:grow,left:4dlu:noGrow,fill:80dlu:grow,left:4dlu:noGrow,fill:max(d;4px):noGrow", "center:max(d;4px):noGrow,top:12dlu:noGrow,center:max(d;4px):noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:noGrow,top:4dlu:noGrow,center:60dlu:grow,top:0dlu:noGrow,top:4dlu:noGrow,center:d:grow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:grow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:23dlu:noGrow,top:4dlu:noGrow,top:4dlu:noGrow,center:d:grow,center:16dlu:noGrow,center:max(d;4px):noGrow"));
+    drawPanel.setLayout(new FormLayout("fill:max(d;4px):noGrow,fill:4dlu:noGrow,fill:92dlu:noGrow,left:4dlu:noGrow,fill:max(p;10dlu):grow,left:4dlu:noGrow,fill:80dlu:grow,left:4dlu:noGrow,fill:max(d;4px):noGrow", "center:max(d;4px):noGrow,top:12dlu:noGrow,center:max(d;4px):noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:noGrow,top:4dlu:noGrow,center:60dlu:grow,top:0dlu:noGrow,top:4dlu:noGrow,center:d:grow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:d:grow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:23dlu:noGrow,top:4dlu:noGrow,top:4dlu:noGrow,center:d:grow,center:16dlu:noGrow,center:max(d;4px):noGrow"));
     contestName = new JTextField();
     CellConstraints cc = new CellConstraints();
     drawPanel.add(contestName, cc.xyw(5, 5, 3, CellConstraints.FILL, CellConstraints.DEFAULT));

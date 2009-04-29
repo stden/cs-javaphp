@@ -38,17 +38,14 @@
 г: CommunicationFailedException, //ServerProxy не понимает, что идет от Server
 //д: ServerReturn //Server возвращает осмысленную ошибку (предусмотренную логикой проведения контестов)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Full debug sequence
+ 1. copy .php to server
+    (SuperAdmin)
+ 2. create contest with ContestData
+    (SuperAdmin)
+ 2. create the problem with debugged client-plugin and server-plugin, submit statement and answer data
+    (ContestAdmin)
+ 3. create an ordinary participant
+    (ContestAdmin)
+ 4. connect as a participant, start test
+ 5. watch results as a participant / as an admin
