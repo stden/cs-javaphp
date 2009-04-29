@@ -1,4 +1,4 @@
-package ru.ipo.dces.client;
+package ru.ipo.dces.server.http;
 
 import java.io.InputStream;
 import java.io.IOException;
@@ -9,7 +9,7 @@ import java.io.IOException;
  * Date: 23.11.2008
  * Time: 18:02:19
  */
-public class StreamTokenizer {
+class StreamTokenizer {
 
   private final InputStream in;
 

@@ -34,7 +34,7 @@ public class Main extends JPanel implements Plugin {
 
   public Main(PluginEnvironment pluginEnvironment) {
     env = pluginEnvironment;
-    env.setTitle(pluginEnvironment.getProblemName());
+    env.setTitle(env.getProblemName());
 
     $$$setupUI$$$();
     addListeners();

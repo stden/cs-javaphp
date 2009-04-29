@@ -7,6 +7,8 @@ import ru.ipo.dces.pluginapi.PluginEnvironment;
 import ru.ipo.dces.plugins.admin.*;
 import ru.ipo.dces.exceptions.ServerReturnedError;
 import ru.ipo.dces.exceptions.GeneralRequestFailureException;
+import ru.ipo.dces.server.ServerFacade;
+import ru.ipo.dces.server.http.HttpServer;
 
 import javax.swing.*;
 import java.io.*;
@@ -22,7 +24,7 @@ import java.text.DateFormat;
  * выполнять стандартные действия с сервером
  */
 public class Controller {
-  private static ServerFacade       server;
+  private static ServerFacade server;
   private static String             sessionID;
   private static ClientDialog       clientDialog;
   private static UserDescription.UserType userType;
@@ -30,6 +32,8 @@ public class Controller {
   
   private static ContestChoosingPanel contestChooserPanel;
   private static Plugin currentPlugin;
+
+  private static LogoutPlugin logoutPlugin;
 
   public static void log(ServerReturnedError err) {
     getLogger().log(err.getMessage(), LogMessageType.Error, Localization.LOGGER_NAME);
@@ -63,16 +67,19 @@ public class Controller {
 
   /** Добавление Plugin'а в клиент
    * @param pluginClass class of new Plugin
+   * @return added plugin
    */
-  public static void addAdminPlugin(Class<? extends AdminPlugin> pluginClass) {
+  public static AdminPlugin addAdminPlugin(Class<? extends AdminPlugin> pluginClass) {
     try {
       PluginEnvironmentImpl pe = new PluginEnvironmentImpl(Localization.getAdminPluginName(pluginClass));
-      final Constructor<? extends Plugin> constructor = pluginClass.getConstructor(PluginEnvironment.class);
-      Plugin p = constructor.newInstance(pe);
+      final Constructor<? extends AdminPlugin> constructor = pluginClass.getConstructor(PluginEnvironment.class);
+      AdminPlugin p = constructor.newInstance(pe);
       clientDialog.addPluginToForm(pe.getView(), p);
+      return p;
     } catch (Exception e) {
       System.out.println("Admin plugin " + pluginClass.getSimpleName() + " has no constuctor(PluginEnvironment)");
       System.exit(1); //it should not occur
+      return null;
     }
   }
 
@@ -90,13 +97,25 @@ public class Controller {
       Controller.sessionID = res.sessionID;
 
       //show message - 'ok, connected, finish is at...'
-      Date now = new Date();
       String leftTimeMessage;
-      if (now.before(res.finishTime))
-        //TODO format only time if the finish is today
-        leftTimeMessage = "Окончание соревнования в " + DateFormat.getInstance().format(res.finishTime);
-      else
-        leftTimeMessage = "Соревнование уже закончилось";
+      switch (res.user.userType) {
+        case SuperAdmin:
+          leftTimeMessage = "Суперадминистратор";
+          break;
+        case ContestAdmin:
+          leftTimeMessage = "Администратор соревнования";
+          break;
+        case Participant:
+          Date now = new Date();
+          if (now.before(res.finishTime))
+            //TODO format only time if the finish is today
+            leftTimeMessage = "Окончание соревнования в " + DateFormat.getInstance().format(res.finishTime);
+          else
+            leftTimeMessage = "Соревнование уже закончилось";
+          break;
+        default:
+          leftTimeMessage = "?? Неизвестный тип пользователя";
+      }
 
       getLogger().log(
               "Успешное подключение к соревнованию. " + leftTimeMessage,
@@ -116,7 +135,7 @@ public class Controller {
           addAdminPlugin(AdjustContestsPlugin.class);
           addAdminPlugin(ManageUsersPlugin.class);
           addAdminPlugin(ResultsPlugin.class);
-          addAdminPlugin(LogoutPlugin.class);
+          setLogoutPlugin((LogoutPlugin) addAdminPlugin(LogoutPlugin.class));
           break;
         case SuperAdmin:
           contestChooserPanel.setChooserVisible(true);
@@ -125,18 +144,17 @@ public class Controller {
           addAdminPlugin(ManageUsersPlugin.class);
           addAdminPlugin(PluginsManagementPlugin.class);
           addAdminPlugin(ResultsPlugin.class);
-          addAdminPlugin(LogoutPlugin.class);
+          setLogoutPlugin((LogoutPlugin) addAdminPlugin(LogoutPlugin.class));
           break;
         case Participant:
           contestChooserPanel.setChooserVisible(false);
           // Получаем данные о задачах
           refreshParticipantInfo(false, false);
       }
+
     } catch (ServerReturnedError e) {
       Controller.log(e);
       clientDialog.initialState();
-    //} catch (IOException e) {
-    //  e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
     } catch (GeneralRequestFailureException e) {
       //log nothing
       clientDialog.initialState();
@@ -144,6 +162,12 @@ public class Controller {
       Controller.getLogger().log("Не удалось загрузить плагины", LogMessageType.Error, Localization.LOGGER_NAME);
       clientDialog.initialState();
     }
+  }
+
+  private static void setLogoutPlugin(LogoutPlugin logoutPlugin) {
+    Controller.logoutPlugin = logoutPlugin;
+    if (logoutPlugin != null)
+      logoutPlugin.setStopContestControlsVisible(getContestDescription().contestTiming.selfContestStart);
   }
 
   public static void refreshParticipantInfo(boolean refreshProblems, boolean refreshPlugins) throws ServerReturnedError, GeneralRequestFailureException, IOException {
@@ -189,7 +213,7 @@ public class Controller {
     }
 
     addAdminPlugin(ResultsPlugin.class);
-    addAdminPlugin(LogoutPlugin.class);
+    setLogoutPlugin((LogoutPlugin) addAdminPlugin(LogoutPlugin.class));
   }
 
   //TODO test this method to work with directories inside an archive
@@ -264,7 +288,7 @@ public class Controller {
       System.exit(1);
     }
 
-    server = new RealServer(Settings.getInstance().getHost());
+    server = new HttpServer(Settings.getInstance().getHost());
 
     processArgs(args);
 
@@ -574,5 +598,17 @@ public class Controller {
 
   public static Plugin getCurrentPlugin() {
     return currentPlugin;
+  }
+
+  public static void stopContest() {
+    StopContestRequest r = new StopContestRequest();
+    try {
+      server.doRequest(r);
+      getLogger().log("Соревнование остановлено", LogMessageType.OK, Localization.LOGGER_NAME);
+    } catch (ServerReturnedError e) {
+      log(e);
+    } catch (GeneralRequestFailureException e) {
+      //do nothing - everything already logged
+    }
   }
 }

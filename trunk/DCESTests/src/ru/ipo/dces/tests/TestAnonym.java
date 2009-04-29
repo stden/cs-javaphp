@@ -1,7 +1,7 @@
 package ru.ipo.dces.tests;
 
 import ru.ipo.dces.clientservercommunication.*;
-import ru.ipo.dces.client.RealServer;
+import ru.ipo.dces.server.http.HttpServer;
 import ru.ipo.dces.client.Settings;
 
 import static org.junit.Assert.*;
@@ -11,19 +11,19 @@ import org.junit.Test;
 /** Работа анонимного пользователя */
 public class TestAnonym {
 
-  RealServer                  server;
+  HttpServer server;
 
   private static final String msg_Expected_wrong_SessionID = "Должно быть исключение: Неверный sessionID";
 
   @Before
   public void setUp() throws Exception {
-    server = new RealServer(Settings.getInstance().getHost());
+    server = new HttpServer(Settings.getInstance().getHost());
   }
 
   /** Отправляем все виды сообщений и проверяем реакцию сервера */
   @Test
   public void testAnonymUser() {
-    server = new RealServer(Settings.getInstance().getHost());
+    server = new HttpServer(Settings.getInstance().getHost());
 
     try {
       server.doRequest(new AdjustContestRequest());

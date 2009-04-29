@@ -15,7 +15,7 @@
     $prfx = $GLOBALS['dces_mysql_prefix'];    
 
     //get user_id or die, if session is invalid
-    $userRow = testSession($request->sessionID);
+    $userRow = RequestUtils::testSession($request->sessionID);
     $user_id = $userRow['id'];
 
     //authorize user for this operation

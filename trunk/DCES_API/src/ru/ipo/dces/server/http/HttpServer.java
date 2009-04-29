@@ -1,4 +1,4 @@
-package ru.ipo.dces.client;
+package ru.ipo.dces.server.http;
 
 import java.io.OutputStream;
 import java.io.InputStream;
@@ -10,17 +10,20 @@ import java.util.Arrays;
 import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.exceptions.ServerReturnedError;
 import ru.ipo.dces.exceptions.GeneralRequestFailureException;
+import ru.ipo.dces.client.LoggerFactory;
+import ru.ipo.dces.client.LogMessageType;
+import ru.ipo.dces.server.ServerFacade;
 
-public class RealServer implements ServerFacade {
+public class HttpServer implements ServerFacade {
 
     private final String              URL_string;
     private final byte[] REQUEST_VAR = "x=".getBytes(PHP.SERVER_CHARSET);    
 
-    public RealServer(String URL_string) {
+    public HttpServer(String URL_string) {
         this.URL_string = URL_string;
     }
 
-    public InputStream doPost(Object sendToServer) throws Exception {
+  public InputStream doPost(Object sendToServer) throws Exception {
         HttpURLConnection con = (HttpURLConnection) new URL(URL_string)
                 .openConnection();
         con.setDoInput(true);
@@ -65,15 +68,12 @@ public class RealServer implements ServerFacade {
         RequestFailedResponse failedResponse;
 
         try {
-            Controller.setFreeze(true);
             input = doPost(obj);
             input = new BufferedInputStream(input, 4096);
             input.mark(4096);          
         } catch (Exception e) {
-            Controller.getLogger().log("Не удалось соединиться с сервером", LogMessageType.Error, Localization.LOGGER_NAME);
+            LoggerFactory.getLogger().log("Не удалось соединиться с сервером", LogMessageType.Error, null);
             throw new GeneralRequestFailureException();
-        } finally {
-            Controller.setFreeze(false);
         }
 
         try {
@@ -81,7 +81,7 @@ public class RealServer implements ServerFacade {
           if (failedResponse == null)
             return PHP.unserialize(cls, input);
         } catch (Exception e) {
-          Controller.getLogger().log("Произошла ошибка связи с сервером", LogMessageType.Error, Localization.LOGGER_NAME);
+          LoggerFactory.getLogger().log("Произошла ошибка связи с сервером", LogMessageType.Error, null);
           try {
             byte[] actualAnswer;
             input.reset();
@@ -97,26 +97,26 @@ public class RealServer implements ServerFacade {
         //now failedResponse != null
         switch (failedResponse.failReason) {
           case BrokenServerError:
-            Controller.getLogger().log(
+            LoggerFactory.getLogger().log(
                     "Ошибка на стороне сервера №" + failedResponse.failErrNo +
                             (failedResponse.extendedInfo == null ? "" : ". " + failedResponse.extendedInfo),
                     LogMessageType.Error,
-                    Localization.LOGGER_NAME
+                    null
             );
             throw new GeneralRequestFailureException();
           case BrokenServerPluginError:
-            Controller.getLogger().log(
+            LoggerFactory.getLogger().log(
                     "Ошибка на стороне сервера №" + failedResponse.failErrNo +
                             (failedResponse.extendedInfo == null ? "" : ". " + failedResponse.extendedInfo),
                     LogMessageType.Error,
-                    Localization.LOGGER_NAME
+                    null
             );
             throw new GeneralRequestFailureException();
           case BusinessLogicError:
             throw new ServerReturnedError(failedResponse.failErrNo,  failedResponse.extendedInfo);
         }
 
-      Controller.getLogger().log("Неизвестная ошибка при попытке связи с сервером", LogMessageType.Error, Localization.LOGGER_NAME);
+      LoggerFactory.getLogger().log("Неизвестная ошибка при попытке связи с сервером", LogMessageType.Error, null);
       throw new GeneralRequestFailureException();
     }
 
@@ -208,5 +208,9 @@ public class RealServer implements ServerFacade {
 
     public GetContestResultsResponse doRequest(GetContestResultsRequest r) throws ServerReturnedError, GeneralRequestFailureException {
         return doRequest(GetContestResultsResponse.class,  r);
+    }
+
+    public AcceptedResponse doRequest(StopContestRequest r) throws ServerReturnedError, GeneralRequestFailureException {
+        return doRequest(AcceptedResponse.class, r);
     }
 }

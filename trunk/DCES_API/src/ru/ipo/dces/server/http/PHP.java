@@ -1,4 +1,4 @@
-package ru.ipo.dces.client;
+package ru.ipo.dces.server.http;
 
 import java.lang.reflect.*;
 import java.util.HashMap;
@@ -9,7 +9,7 @@ import java.io.OutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class PHP {
+class PHP {
 
   static HashMap<Class<?>, Class<?>> types = new HashMap<Class<?>, Class<?>>();
   public static final Charset SERVER_CHARSET = Charset.forName("UTF-8");
@@ -179,14 +179,7 @@ public class PHP {
   static <T> T unserialize(Class<T> cls, StreamTokenizer st)
           throws InstantiationException, IllegalAccessException, SecurityException,
           NoSuchFieldException, IllegalClassException, IOException {
-    String nextToken = st.readToken(':',';');
-
-    /*
-    //TODO get rid of this temporary solution
-    //remove UTF-8 markers if any
-    if (nextToken.length() > 1)
-      nextToken = nextToken.substring(nextToken.length() - 1);
-    */
+    String nextToken = st.readToken(':',';');    
 
     //TODO think of 'charAt()'. The string should have only one symbol
     switch (nextToken.charAt(0)) {

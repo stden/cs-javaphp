@@ -1,19 +1,17 @@
 package ru.ipo.dces.plugins.admin;
 
-import ru.ipo.dces.pluginapi.Plugin;
-import ru.ipo.dces.pluginapi.PluginEnvironment;
-import ru.ipo.dces.client.Controller;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import ru.ipo.dces.client.AdminPlugin;
+import ru.ipo.dces.client.Controller;
 import ru.ipo.dces.client.Localization;
-import ru.ipo.dces.clientservercommunication.*;
+import ru.ipo.dces.clientservercommunication.ContestDescription;
+import ru.ipo.dces.clientservercommunication.UserDescription;
+import ru.ipo.dces.pluginapi.PluginEnvironment;
 
 import javax.swing.*;
-
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.CellConstraints;
-
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Created by IntelliJ IDEA.
@@ -26,6 +24,9 @@ public class LogoutPlugin extends JPanel implements AdminPlugin {
   private JPanel mainPanel;
   private JButton refreshProblemsButton;
   private JButton refreshPluginsButton;
+  private JSeparator stopContestSeparator;
+  private JLabel stopContestLabel;
+  private JButton stopContestButton;
 
   /**
    * Инициализация plugin'а
@@ -79,6 +80,19 @@ public class LogoutPlugin extends JPanel implements AdminPlugin {
         }
       }
     });
+    stopContestButton.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        if (JOptionPane.showConfirmDialog(null, "Действительно выйти?", "Подтверждение",
+                JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+          Controller.stopContest();
+      }
+    });
+  }
+
+  public void setStopContestControlsVisible(boolean visible) {
+    stopContestSeparator.setVisible(visible);
+    stopContestLabel.setVisible(visible);
+    stopContestButton.setVisible(visible);
   }
 
   private void createUIComponents() {
@@ -98,7 +112,7 @@ public class LogoutPlugin extends JPanel implements AdminPlugin {
   }
 
   public void contestSelected(ContestDescription contest) {
-    //To change body of implemented methods use File | Settings | File Templates.
+    //do nothing
   }
 
   /**
@@ -110,7 +124,7 @@ public class LogoutPlugin extends JPanel implements AdminPlugin {
    */
   private void $$$setupUI$$$() {
     createUIComponents();
-    mainPanel.setLayout(new FormLayout("fill:max(d;4px):grow,left:4dlu:noGrow,fill:160dlu:noGrow,left:4dlu:noGrow,fill:80dlu:noGrow,left:4dlu:noGrow,fill:max(d;4px):grow", "center:12dlu:noGrow,top:4dlu:noGrow,center:20dlu:noGrow,top:8dlu:noGrow,center:20dlu:noGrow,top:8dlu:noGrow,center:8dlu:noGrow,top:4dlu:noGrow,center:8dlu:noGrow,top:8dlu:noGrow,center:20dlu:noGrow,top:4dlu:noGrow,center:10dlu:noGrow"));
+    mainPanel.setLayout(new FormLayout("fill:max(d;4px):grow,left:4dlu:noGrow,fill:160dlu:noGrow,left:4dlu:noGrow,fill:80dlu:noGrow,left:4dlu:noGrow,fill:max(d;4px):grow", "center:12dlu:noGrow,top:4dlu:noGrow,center:20dlu:noGrow,top:8dlu:noGrow,center:20dlu:noGrow,top:8dlu:noGrow,center:8dlu:noGrow,top:4dlu:noGrow,center:8dlu:noGrow,top:8dlu:noGrow,center:20dlu:noGrow,top:4dlu:noGrow,center:20dlu:noGrow,top:4dlu:noGrow,center:20dlu:noGrow,top:4dlu:noGrow,center:10dlu:noGrow"));
     final JLabel label1 = new JLabel();
     label1.setText("Перейти к другому соревнованию");
     CellConstraints cc = new CellConstraints();
@@ -132,6 +146,14 @@ public class LogoutPlugin extends JPanel implements AdminPlugin {
     logoutButton = new JButton();
     logoutButton.setText("Выход");
     mainPanel.add(logoutButton, cc.xy(5, 11));
+    stopContestLabel = new JLabel();
+    stopContestLabel.setText("Закончить соревнование досрочно");
+    mainPanel.add(stopContestLabel, cc.xy(3, 15));
+    stopContestButton = new JButton();
+    stopContestButton.setText("Закончить");
+    mainPanel.add(stopContestButton, cc.xy(5, 15));
+    stopContestSeparator = new JSeparator();
+    mainPanel.add(stopContestSeparator, cc.xyw(3, 13, 3, CellConstraints.FILL, CellConstraints.CENTER));
   }
 
   /**
