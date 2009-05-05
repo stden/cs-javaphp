@@ -2,7 +2,9 @@
 // Registered message types
 class AcceptedResponse{};
 class AdjustContestRequest{};
+class AdjustContestResponse{};
 class AdjustClientPluginRequest{};
+class AdjustServerPluginRequest{};
 class AvailableContestsRequest{};
 class AvailableContestsResponse{};
 class ChangePasswordRequest{};
@@ -35,4 +37,5 @@ class UserDataField{};
 class SubmissionPolicy{};
 class GetContestResultsRequest{};
 class GetContestResultsResponse{};
+class CreateContestResponse{};
 ?>

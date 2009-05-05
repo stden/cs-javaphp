@@ -1,5 +1,8 @@
 package ru.ipo.dces.client;
 
+import ru.ipo.dces.log.LogMessageType;
+import ru.ipo.dces.log.UserMessagesLogger;
+
 import javax.swing.*;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;

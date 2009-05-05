@@ -1,17 +1,19 @@
 package ru.ipo.dces.debug;
 
 import ru.ipo.dces.exceptions.GeneralRequestFailureException;
+import ru.ipo.dces.exceptions.ServerReturnedError;
 import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
-import ru.ipo.dces.client.LogMessageType;
-import ru.ipo.dces.client.LoggerFactory;
-import ru.ipo.dces.client.UserMessagesLogger;
+import ru.ipo.dces.log.LogMessageType;
+import ru.ipo.dces.log.LoggerFactory;
+import ru.ipo.dces.log.UserMessagesLogger;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -58,16 +60,29 @@ public class PluginBox extends JFrame {
     otherPlugin = new OtherPlugin(null);
 
     this.serverEmulator = serverEmulator;
-    final PluginEnvironmentImpl pluginEnvironment = new PluginEnvironmentImpl();
-    pluginEnvironment.problemName = problemName;
+    
+    final PluginEnvironmentImpl pluginEnvironment;
     try {
+      pluginEnvironment = new PluginEnvironmentImpl();
+
+      pluginEnvironment.problemName = problemName;
       final Constructor<? extends Plugin> PluginConstructor = pluginClass.getConstructor(PluginEnvironment.class);
       plugin = PluginConstructor.newInstance(pluginEnvironment);
     } catch (InvocationTargetException e) {
-      System.err.println("plugin throws exception in constrctor:");
+      LoggerFactory.getLogger().log(
+              "plugin throws exception in constrctor (see stack trace)",
+              LogMessageType.Error,
+              null
+      );
       e.getCause().printStackTrace();
       setErrorPlugin();
     } catch (Exception e) {
+      LoggerFactory.getLogger().log(
+              "exception while initializing plugin (see stack trace)",
+              LogMessageType.Error,
+              null
+      );
+      e.printStackTrace();
       setErrorPlugin();
     }
 
@@ -184,7 +199,7 @@ public class PluginBox extends JFrame {
     public String problemName;
     private final File problemFolder;
 
-    private PluginEnvironmentImpl() {
+    private PluginEnvironmentImpl() throws IOException, GeneralRequestFailureException, ServerReturnedError {
       problemFolder = serverEmulator.getStatement();
     }
 
@@ -194,7 +209,7 @@ public class PluginBox extends JFrame {
 
     public HashMap<String, String> submitSolution(HashMap<String, String> solution) throws GeneralRequestFailureException {
       HashMap<String, String> result = new HashMap<String, String>();
-      problemState = serverEmulator.checkSolution(solution, result, problemState);
+      problemState = serverEmulator.checkSolution(solution, result, problemState);      
       return result;
     }
 

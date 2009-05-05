@@ -17,8 +17,11 @@ function processCreateContestRequest($request) {
   $col_value = array('settings' => serialize($request->contest));
 
   mysql_query(composeInsertQuery('contest', $col_value)) or throwServerProblem(5, mysql_error());
+  $id = mysql_insert_id();
 
-  return new AcceptedResponse();
+  $ccr = new CreateContestResponse();
+  $ccr->createdContestID = $id;
+  return $ccr;
 }
 
 ?>

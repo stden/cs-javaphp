@@ -11,10 +11,7 @@ public class ContestDescription {
     /** можно регистрироваться самому с помощью Клиента */
     Self,
     /** регистриуют только администраторы */
-    ByAdmins,
-    //TODO implement participation without registration
-    /** участие возможно без регистрации */
-    NoRegistration,
+    ByAdmins,    
   }
 
   /** ID контеста */

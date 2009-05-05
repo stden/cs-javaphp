@@ -48,21 +48,26 @@
     if (!is_null($c->resultsAccessPolicy)) {
       if (!is_null($c->resultsAccessPolicy->contestPermission))
         $settings->resultsAccessPolicy->contestPermission = $c->resultsAccessPolicy->contestPermission;
+
       if (!is_null($c->resultsAccessPolicy->contestEndingPermission))
         $settings->resultsAccessPolicy->contestEndingPermission = $c->resultsAccessPolicy->contestEndingPermission;
+
       if (!is_null($c->resultsAccessPolicy->afterContestPermission))
         $settings->resultsAccessPolicy->afterContestPermission = $c->resultsAccessPolicy->afterContestPermission;
-      if ($c->resultsAccessPolicy->contestEndingDuration !== -1)
-        $settings->resultsAccessPolicy->contestEndingDuration = $c->resultsAccessPolicy->contestEndingDuration;
-      if ($c->resultsAccessPolicy->contestEndingStart !== -1)
-        $settings->resultsAccessPolicy->contestEndingStart = $c->resultsAccessPolicy->contestEndingStart;
     }
 
     //adjust submission policy
-    if (!is_null($c->submissionPolicy)) {
-      $settings->submissionPolicy->selfContestStart = $c->submissionPolicy->selfContestStart;
-      if ($c->submissionPolicy->maxContestDuration !== -1)
-        $settings->submissionPolicy->maxContestDuration = $c->submissionPolicy->maxContestDuration;                
+    if (!is_null($c->contestTiming)) {
+      $settings->contestTiming->selfContestStart = $c->contestTiming->selfContestStart;
+
+      if ($c->contestTiming->maxContestDuration !== -1)
+        $settings->contestTiming->maxContestDuration = $c->contestTiming->maxContestDuration;
+
+      if ($c->contestTiming->contestEndingDuration !== -1)
+        $settings->contestTiming->contestEndingFinish = $c->contestTiming->contestEndingFinish;
+
+      if ($c->contestTiming->contestEndingStart !== -1)
+        $settings->contestTiming->contestEndingStart = $c->contestTiming->contestEndingStart;                  
     }
 
     $col_value = array('settings' => @serialize($settings));
@@ -230,6 +235,11 @@
     foreach ($queries_2 as $q)
       $queries[] = $q;
 
+    $responseIDs = array();
+    foreach ($request->problems as $p)
+      $responseIDs[] = $p->id;
+    $skipped_index = 0;
+
     //run transaction
     if (count($queries) != 0) {
       $inserted_ids = array();
@@ -250,11 +260,19 @@
         @rename($temp_dir, $GLOBALS['dces_dir_problems'] . "/${inserted_id}") /*or do nothing*/;
         @rename($stat_zip, $GLOBALS['dces_dir_problems'] . "/${inserted_id}_statement.zip") /*or do nothing*/;
         @rename($ans_zip,  $GLOBALS['dces_dir_problems'] . "/${inserted_id}_answer.zip") /*or do nothing*/;
+
+        //insert index into new problem ids list
+        while ($skipped_index < count($responseIDs) && $responseIDs[$skipped_index] != -1)
+            $skipped_index ++;
+        if ($skipped_index >= count($responseIDs)) throwServerProblem(159);
+        $responseIDs[$skipped_index] = $inserted_id;
       }
     }
     else
       throwBusinessLogicError(11);
 
-    return new AcceptedResponse();
+    $response = new AdjustContestResponse();
+    $response->problemIDs = $responseIDs;
+    return $response;
   }
 ?>

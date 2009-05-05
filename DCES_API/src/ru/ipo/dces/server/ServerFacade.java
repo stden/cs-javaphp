@@ -6,7 +6,7 @@ import ru.ipo.dces.exceptions.GeneralRequestFailureException;
 
 public interface ServerFacade {
 
-  public AcceptedResponse doRequest(AdjustContestRequest r)
+  public AdjustContestResponse doRequest(AdjustContestRequest r)
       throws ServerReturnedError, GeneralRequestFailureException;
 
   public AvailableContestsResponse doRequest(AvailableContestsRequest r)
@@ -18,7 +18,7 @@ public interface ServerFacade {
   public ConnectToContestResponse doRequest(ConnectToContestRequest r)
       throws ServerReturnedError, GeneralRequestFailureException;
 
-  public AcceptedResponse doRequest(CreateContestRequest r)
+  public CreateContestResponse doRequest(CreateContestRequest r)
       throws ServerReturnedError, GeneralRequestFailureException;  
 
   public AcceptedResponse doRequest(DisconnectRequest r)
@@ -58,6 +58,9 @@ public interface ServerFacade {
       throws ServerReturnedError, GeneralRequestFailureException;
 
   public AcceptedResponse doRequest(AdjustClientPluginRequest r)
+      throws ServerReturnedError, GeneralRequestFailureException;
+
+  public AcceptedResponse doRequest(AdjustServerPluginRequest r)
       throws ServerReturnedError, GeneralRequestFailureException;
 
   public GetContestResultsResponse doRequest(GetContestResultsRequest r)

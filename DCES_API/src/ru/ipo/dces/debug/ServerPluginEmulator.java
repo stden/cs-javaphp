@@ -1,7 +1,10 @@
 package ru.ipo.dces.debug;
 
+import ru.ipo.dces.exceptions.GeneralRequestFailureException;
+
 import java.util.HashMap;
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -28,8 +31,10 @@ public interface ServerPluginEmulator {
    * @param result изначально пустой <tt>HashMap</tt>, который необходимо заполнить результатом проверки
    * @param state состояние задачи для данного участника. При первом вызове проверки решения равен null
    * @return новое состояние решения
+   * @throws ru.ipo.dces.exceptions.GeneralRequestFailureException if communication with a server failed
    */
-  public Object checkSolution(HashMap<String, String> solution, HashMap<String, String> result, Object state);
+  public Object checkSolution(HashMap<String, String> solution, HashMap<String, String> result, Object state)
+          throws GeneralRequestFailureException;
 
   /**
    * <p>Метод возвращает каталог, где хранится условие задачи. Плагин стороны клиента должен сам знать,
@@ -38,7 +43,9 @@ public interface ServerPluginEmulator {
    * давать разные условия задач, метод может сначала создавать случайное условие, а потом возвращать каталог,
    * в котором оно лежит. 
    * @return каталог с условием задачи
+   * @throws ru.ipo.dces.exceptions.GeneralRequestFailureException if communication with a server failed
+   * @throws java.io.IOException if failed to write folder with statement
    */
-  public File getStatement();
+  public File getStatement() throws GeneralRequestFailureException, IOException;
 
 }

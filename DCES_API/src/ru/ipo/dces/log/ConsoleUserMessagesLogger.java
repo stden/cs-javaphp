@@ -1,4 +1,4 @@
-package ru.ipo.dces.client;
+package ru.ipo.dces.log;
 
 public class ConsoleUserMessagesLogger implements UserMessagesLogger {
 

@@ -10,6 +10,7 @@ import javax.swing.*;
 import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.plugins.admin.LoginPluginV2;
 import ru.ipo.dces.plugins.admin.ResultsPlugin;
+import ru.ipo.dces.log.LogMessageType;
 import info.clearthought.layout.TableLayout;
 
 public class ClientDialog extends JFrame {

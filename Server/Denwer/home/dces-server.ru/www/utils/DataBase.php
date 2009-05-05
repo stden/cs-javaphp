@@ -25,7 +25,7 @@ class Data {
     public static function getNextRow($rows) {
         return mysql_fetch_array($rows);
     }
-
+         
     public static function getRow($query, $assert_the_only_row = false) {
         $rows = Data::getRows($query);
         $row = Data::getNextRow($rows);

@@ -4,6 +4,7 @@ import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
 import ru.ipo.dces.exceptions.ServerReturnedError;
 import ru.ipo.dces.exceptions.GeneralRequestFailureException;
+import ru.ipo.dces.log.LogMessageType;
 
 import java.util.HashMap;
 import java.io.File;
