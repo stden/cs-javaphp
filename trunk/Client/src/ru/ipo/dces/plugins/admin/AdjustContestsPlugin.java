@@ -2,13 +2,14 @@ package ru.ipo.dces.plugins.admin;
 
 import com.jgoodies.forms.layout.*;
 import ru.ipo.dces.client.Controller;
-import ru.ipo.dces.client.LogMessageType;
+import ru.ipo.dces.log.LogMessageType;
 import ru.ipo.dces.client.AdminPlugin;
 import ru.ipo.dces.client.Localization;
 import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
 import ru.ipo.dces.plugins.admin.beans.ProblemsBean;
 import ru.ipo.dces.plugins.admin.beans.AdjustContestsPluginBean;
+import ru.ipo.dces.utils.ZipUtils;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -19,8 +20,6 @@ import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 public class AdjustContestsPlugin extends JPanel implements AdminPlugin {
   private JPanel drawPanel;
@@ -49,7 +48,6 @@ public class AdjustContestsPlugin extends JPanel implements AdminPlugin {
 
   private AdjustContestsPluginBean initialBean = new AdjustContestsPluginBean();
   private AdjustContestsPluginBean updatedBean = new AdjustContestsPluginBean();
-  private static final int BUFFER = 4096;
 
   private DefaultListModel problemsListModel = new DefaultListModel();
   private JFileChooser chooseFileDialog = new JFileChooser();
@@ -445,31 +443,22 @@ public class AdjustContestsPlugin extends JPanel implements AdminPlugin {
             return;
 
           File res = new File(e.getDocument() == problemAnswer.getDocument() ? problemAnswer.getText() : problemStatement.getText());
-          ByteArrayOutputStream baos = new ByteArrayOutputStream();
-          ZipOutputStream zipOS = new ZipOutputStream(baos);
 
           try {
-            if (res.isFile()) {
-              doZipFile(zipOS, "", res);
-            } else
-              archiveCatalog(res, zipOS, "");
+            if (e.getDocument() == problemAnswer.getDocument())
+              pb.getDescription().answerData = ZipUtils.zip(res);
+            else
+              pb.getDescription().statementData = ZipUtils.zip(res);
+
           } catch (IOException e1) {
             environment.log("Ќе удалось запаковать условие задачи", LogMessageType.Error);
-          }
 
-          try {
-            zipOS.close();
-          } catch (IOException e1) {
             if (e.getDocument() == problemAnswer.getDocument())
               pb.getDescription().answerData = null;
             else
               pb.getDescription().statementData = null;
           }
 
-          if (e.getDocument() == problemAnswer.getDocument())
-            pb.getDescription().answerData = baos.toByteArray();
-          else
-            pb.getDescription().statementData = baos.toByteArray();
         } else if (e.getDocument() == problemName.getDocument()) {
           int i = problemsList.getSelectedIndex();
           if (i == -1) return;
@@ -507,41 +496,6 @@ public class AdjustContestsPlugin extends JPanel implements AdminPlugin {
 
   public void deactivate() {
     //do nothing
-  }
-
-  private void archiveCatalog(File dir, ZipOutputStream zipOS, String zipPath) throws IOException {
-    String[] files = dir.list();
-
-    if (files == null) return;
-
-    for (String fileName : files) {
-
-      File file = new File(dir.getAbsolutePath() + "/" + fileName);
-
-      if (file.isDirectory()) {
-        archiveCatalog(file, zipOS, zipPath + fileName + "/");
-      } else {
-        doZipFile(zipOS, zipPath, file);
-      }
-    }
-  }
-
-  private void doZipFile(ZipOutputStream zipOS, String zipPath, File file) throws IOException {
-    String fileName = file.getName();
-    byte[] data = new byte[BUFFER];
-
-    BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
-    zipOS.putNextEntry(new ZipEntry(zipPath + fileName));
-
-    int count;
-
-    while ((count = bis.read(data, 0, BUFFER)) != -1) {
-      zipOS.write(data, 0, count);
-    }
-
-    zipOS.closeEntry();
-
-    bis.close();
   }
 
   private ProblemDescription cloneProblemDescription(ProblemDescription pd) {

@@ -17,7 +17,6 @@ public class Settings {
   private static final String SETTINGS_FILE_NAME = "dces-settings.txt";
   private static String WORKING_DIRECTORY;
   private String PLUGINS_DIRECTORY;
-  private String PLUGINS_TEMP_DIRECTORY;
 
   private static String PROBLEMS_DIRECTORY;
   private String host = "";
@@ -33,11 +32,9 @@ public class Settings {
       WORKING_DIRECTORY = workDir.getCanonicalPath();
       PROBLEMS_DIRECTORY = WORKING_DIRECTORY + "/problems";
       PLUGINS_DIRECTORY = WORKING_DIRECTORY + "/plugins";
-      PLUGINS_TEMP_DIRECTORY = WORKING_DIRECTORY + "/plugins-temp";
 
       new File(PROBLEMS_DIRECTORY).mkdir();
       new File(PLUGINS_DIRECTORY).mkdir();
-      new File(PLUGINS_TEMP_DIRECTORY).mkdir();
 
     } catch (IOException e) {
       JOptionPane.showMessageDialog(null, "Failed to get current directory\nError : " + e.getMessage());
@@ -98,7 +95,4 @@ public class Settings {
     return PLUGINS_DIRECTORY;
   }
 
-  public String getPluginsTempDirectory() {
-    return PLUGINS_TEMP_DIRECTORY;
-  }
 }

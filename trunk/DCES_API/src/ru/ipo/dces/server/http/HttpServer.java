@@ -10,8 +10,8 @@ import java.util.Arrays;
 import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.exceptions.ServerReturnedError;
 import ru.ipo.dces.exceptions.GeneralRequestFailureException;
-import ru.ipo.dces.client.LoggerFactory;
-import ru.ipo.dces.client.LogMessageType;
+import ru.ipo.dces.log.LoggerFactory;
+import ru.ipo.dces.log.LogMessageType;
 import ru.ipo.dces.server.ServerFacade;
 
 public class HttpServer implements ServerFacade {
@@ -46,9 +46,9 @@ public class HttpServer implements ServerFacade {
         return in;
     }
 
-    public AcceptedResponse doRequest(AdjustContestRequest r)
+    public AdjustContestResponse doRequest(AdjustContestRequest r)
             throws ServerReturnedError, GeneralRequestFailureException {
-        return doRequest(AcceptedResponse.class, r);
+        return doRequest(AdjustContestResponse.class, r);
     }
 
     public AvailableContestsResponse doRequest(AvailableContestsRequest r)
@@ -72,7 +72,8 @@ public class HttpServer implements ServerFacade {
             input = new BufferedInputStream(input, 4096);
             input.mark(4096);          
         } catch (Exception e) {
-            LoggerFactory.getLogger().log("Не удалось соединиться с сервером", LogMessageType.Error, null);
+            LoggerFactory.getLogger().log("Не удалось соединиться с сервером (ошибка в system.err)", LogMessageType.Error, null);
+            e.printStackTrace();
             throw new GeneralRequestFailureException();
         }
 
@@ -86,9 +87,9 @@ public class HttpServer implements ServerFacade {
             byte[] actualAnswer;
             input.reset();
             actualAnswer = inputStreamToByteArray(0, input);
-            System.out.println("actual server answer: " + new String(actualAnswer, PHP.SERVER_CHARSET));
+            System.err.println("actual server answer: " + new String(actualAnswer, PHP.SERVER_CHARSET));
           } catch (IOException ioe) {
-            System.out.println("failed to get actual server answer");
+            System.err.println("failed to get actual server answer");
           }
 
           throw new GeneralRequestFailureException();
@@ -140,9 +141,9 @@ public class HttpServer implements ServerFacade {
         return doRequest(ConnectToContestResponse.class, r);
     }
 
-    public AcceptedResponse doRequest(CreateContestRequest r)
+    public CreateContestResponse doRequest(CreateContestRequest r)
             throws ServerReturnedError, GeneralRequestFailureException {
-        return doRequest(AcceptedResponse.class, r);
+        return doRequest(CreateContestResponse.class, r);
     }
 
     public AcceptedResponse doRequest(DisconnectRequest r)
@@ -206,7 +207,11 @@ public class HttpServer implements ServerFacade {
         return doRequest(AcceptedResponse.class, r);
     }
 
-    public GetContestResultsResponse doRequest(GetContestResultsRequest r) throws ServerReturnedError, GeneralRequestFailureException {
+    public AcceptedResponse doRequest(AdjustServerPluginRequest r) throws ServerReturnedError, GeneralRequestFailureException {
+        return doRequest(AcceptedResponse.class, r);
+    }
+
+  public GetContestResultsResponse doRequest(GetContestResultsRequest r) throws ServerReturnedError, GeneralRequestFailureException {
         return doRequest(GetContestResultsResponse.class,  r);
     }
 

@@ -3,7 +3,7 @@ package ru.ipo.dces.plugins.admin;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import ru.ipo.dces.client.Controller;
-import ru.ipo.dces.client.LogMessageType;
+import ru.ipo.dces.log.LogMessageType;
 import ru.ipo.dces.client.AdminPlugin;
 import ru.ipo.dces.client.Localization;
 import ru.ipo.dces.clientservercommunication.ContestDescription;

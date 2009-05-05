@@ -9,12 +9,15 @@ import ru.ipo.dces.exceptions.ServerReturnedError;
 import ru.ipo.dces.exceptions.GeneralRequestFailureException;
 import ru.ipo.dces.server.ServerFacade;
 import ru.ipo.dces.server.http.HttpServer;
+import ru.ipo.dces.log.ConsoleUserMessagesLogger;
+import ru.ipo.dces.log.LogMessageType;
+import ru.ipo.dces.log.UserMessagesLogger;
+import ru.ipo.dces.utils.FileSystemUtils;
+import ru.ipo.dces.utils.ZipUtils;
 
 import javax.swing.*;
 import java.io.*;
 import java.lang.reflect.Constructor;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 import java.util.HashSet;
 import java.util.Date;
 import java.text.DateFormat;
@@ -207,41 +210,13 @@ public class Controller {
       else
         problemFolder.mkdirs();
 
-      unzip(pd.statement, problemFolder);
+      ZipUtils.unzip(pd.statement, problemFolder);
 
       addPlugin(pd);
     }
 
     addAdminPlugin(ResultsPlugin.class);
     setLogoutPlugin((LogoutPlugin) addAdminPlugin(LogoutPlugin.class));
-  }
-
-  //TODO test this method to work with directories inside an archive
-  public static void unzip(byte[] zip, File folder) throws IOException {
-    int BUFFER = 4096;
-    BufferedOutputStream dest;
-    ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(zip));
-    ZipEntry entry;
-    while ((entry = zis.getNextEntry()) != null) {
-      int count;
-      byte data[] = new byte[BUFFER];
-      if (entry.isDirectory()) {
-        (new File(entry.getName())).mkdirs();
-        continue;
-      }
-
-      // write the files to the disk
-      File fout = new File(folder.getCanonicalPath() + '/' + entry.getName());
-      FileSystemUtils.ensureFileHasPath(fout);
-      FileOutputStream fos = new FileOutputStream(fout);
-      dest = new BufferedOutputStream(fos, BUFFER);
-      while ((count = zis.read(data, 0, BUFFER)) != -1) {
-        dest.write(data, 0, count);
-      }
-      dest.flush();
-      dest.close();
-    }
-    zis.close();
   }
 
   /** Завершение сессии пользователя */

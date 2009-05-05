@@ -8,18 +8,24 @@
     //get db connection
     $con = connectToDB();
 
-    //get user_id or die, if session is invalid
-    $userRow = RequestUtils::testSession($request->sessionID);
-    $user_id = $userRow['id']; 
+    $is_anonymous = is_null($request->sessionID);
+    if (!$is_anonymous) {
+        //get user_id or die, if session is invalid
+        $userRow = RequestUtils::testSession($request->sessionID);
+        $user_id = $userRow['id'];
 
-    //authorize user for this operation
-    // get contest ID
-    $user_type = $userRow['user_type'];
+        //authorize user for this operation
+        // get contest ID
+        $user_type = $userRow['user_type'];
 
-    //compare requested contest and user contest
-    $contest_id = RequestUtils::getRequestedContest($request->contestID, $userRow['contest_id'], $user_type);
-
-    if ($contest_id < 0) throwBusinessLogicError(0);
+        //compare requested contest and user contest
+        $contest_id = RequestUtils::getRequestedContest($request->contestID, $userRow['contest_id'], $user_type);
+    }
+    else
+    {
+        $contest_id = $request->contestID;
+    }
+    if ($contest_id <= 0) throwBusinessLogicError(0);
 
     //create response
     $res = new GetContestDataResponse();
@@ -39,6 +45,9 @@
 
     //fill problem data
     $res->problems = array();
+
+    if ($is_anonymous) return $res;
+                                  
     //get type of requested data
     $info_type = $request->infoType;
     $extended_data = $request->extendedData;
@@ -64,7 +73,7 @@
       $plugin = new $p->serverPluginAlias ($GLOBALS['dces_dir_problems'] . "/$p->id");
 
       //fill extended data: statement or statementData and answerData
-      if (is_null($extended_data) || in_array($p->id,$extended_data)) {
+      if (!is_null($extended_data) && in_array($p->id, $extended_data)) {
         if ($info_type === "ParticipantInfo") {
           $statement = Data::_unserialize($row['statement']);
           //TODO process error: statement not found and return correct error info

@@ -1,6 +1,4 @@
-package ru.ipo.dces.client;
-
-import ru.ipo.dces.client.LogMessageType;
+package ru.ipo.dces.log;
 
 public interface UserMessagesLogger {    
 

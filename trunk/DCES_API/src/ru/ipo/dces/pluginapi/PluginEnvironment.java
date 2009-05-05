@@ -1,7 +1,8 @@
 package ru.ipo.dces.pluginapi;
 
 import ru.ipo.dces.exceptions.GeneralRequestFailureException;
-import ru.ipo.dces.client.LogMessageType;
+import ru.ipo.dces.exceptions.ServerReturnedError;
+import ru.ipo.dces.log.LogMessageType;
 
 import java.util.HashMap;
 import java.io.File;

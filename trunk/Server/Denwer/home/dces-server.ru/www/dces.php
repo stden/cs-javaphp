@@ -96,8 +96,13 @@ switch(get_class($request)) {
 	  break;
 
 	case 'AdjustClientPluginRequest':
-	  require("requests/AdjustClientPlugin.php");
-	  $result = processAdjustClientPluginRequest($request);
+	  require("requests/AdjustPlugin.php");
+	  $result = processAdjustPluginRequest($request, 'client');
+	  break;
+
+	case 'AdjustServerPluginRequest':
+	  require("requests/AdjustPlugin.php");
+	  $result = processAdjustPluginRequest($request, 'server');
 	  break;
 
 	case 'RemoveClientPluginRequest':
@@ -111,7 +116,7 @@ switch(get_class($request)) {
 	  break;
 
   default:
-      throwBusinessLogicError(15, get_class($request));      	  
+      throwBusinessLogicError(15, get_class($request));
 };
 
 Data::execPendingQueries();

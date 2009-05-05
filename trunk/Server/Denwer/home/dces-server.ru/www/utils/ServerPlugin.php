@@ -1,5 +1,6 @@
 <?php
 
+  //TODO when one includes ServerPlugins, it name should be uniqe, otherwise php error occurs, this error is to be caught somehow
   /*abstract*/ class ServerPlugin {
 
     //plugin folder

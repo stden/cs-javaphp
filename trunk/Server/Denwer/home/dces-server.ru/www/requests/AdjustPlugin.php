@@ -1,6 +1,6 @@
 <?php
 
-  function processAdjustClientPluginRequest($request) {
+  function processAdjustPluginRequest($request, $plugin_type) {
     $prfx = $GLOBALS['dces_mysql_prefix'];
 
     $con = connectToDB();
@@ -12,7 +12,7 @@
 
     //test if there already is such plugin
     $where_clause = sprintf("alias=%s", Data::quote_smart($request->pluginAlias));
-    $find_rows = mysql_query("SELECT * FROM ${prfx}client_plugin WHERE $where_clause", $con)
+    $find_rows = mysql_query("SELECT * FROM ${prfx}${plugin_type}_plugin WHERE $where_clause", $con)
                    or throwServerProblem(39, mysql_error());
 
     if (mysql_fetch_array($find_rows))
@@ -20,32 +20,41 @@
     else
       $modify = false;
 
-    if (!$modify && (is_null($request->pluginData) || is_null($request->pluginData)))
+    //test all parameters specified
+    if (!$modify && is_null($request->description))
+      $request->description = "";
+    if (!$modify && (is_null($request->pluginData) || is_null($request->description)))
       throwBusinessLogicError(1);
 
     //TODO test pluginAlias to be secure
+
+    if ($plugin_type === 'client')
+        $ext = '.jar';
+    else
+        $ext = '.php';
+
     //set file data                                    
     if (!is_null($request->pluginData)) {
       file_put_contents(
-        $GLOBALS['dces_dir_client_plugins'] . '/' . $request->pluginAlias . '.jar',
+        $GLOBALS["dces_dir_${plugin_type}_plugins"] . '/' . $request->pluginAlias . $ext,
         $request->pluginData
       );
     }
 
-    //prepare set description plugin
+    //prepare set plugin description
     $col_value = array();
     if (!is_null($request->description))
       $col_value['description'] = $request->description;
 
     if ($modify)
       $query = composeUpdateQuery(
-                 'client_plugin',
+                 "${plugin_type}_plugin",
                  $col_value,
                  $where_clause
                );
     else {
       $col_value['alias'] = $request->pluginAlias;
-      $query = composeInsertQuery('client_plugin', $col_value);
+      $query = composeInsertQuery("${plugin_type}_plugin", $col_value);
     }
 
     mysql_query($query, $con) or throwServerProblem(51, mysql_error());
