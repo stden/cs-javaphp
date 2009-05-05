@@ -4,7 +4,7 @@
     <defaultAnt bundledAnt="true" />
   </component>
   <component name="BuildJarProjectSettings">
-    <option name="BUILD_JARS_ON_MAKE" value="false" />
+    <option name="BUILD_JARS_ON_MAKE" value="true" />
   </component>
   <component name="CodeStyleProjectProfileManger">
     <option name="PROJECT_PROFILE" />
@@ -303,6 +303,7 @@
       <module fileurl="file://$PROJECT_DIR$/Client/Client.iml" filepath="$PROJECT_DIR$/Client/Client.iml" />
       <module fileurl="file://$PROJECT_DIR$/DCESTests/DCESTests.iml" filepath="$PROJECT_DIR$/DCESTests/DCESTests.iml" />
       <module fileurl="file://$PROJECT_DIR$/DCES_API/DCES_API.iml" filepath="$PROJECT_DIR$/DCES_API/DCES_API.iml" />
+      <module fileurl="file://$PROJECT_DIR$/RyzhikTest/RyzhikTest.iml" filepath="$PROJECT_DIR$/RyzhikTest/RyzhikTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/SamplePlugin/SamplePlugin.iml" filepath="$PROJECT_DIR$/SamplePlugin/SamplePlugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/Server/Server.iml" filepath="$PROJECT_DIR$/Server/Server.iml" />
       <module fileurl="file://$PROJECT_DIR$/wiki/wiki.iml" filepath="$PROJECT_DIR$/wiki/wiki.iml" />
@@ -351,6 +352,26 @@
     <mapping directory="" vcs="svn" />
   </component>
   <component name="WebServicesPlugin" addRequiredLibraries="true" />
+  <component name="libraryTable">
+    <library name="FormLayout">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/libs/forms.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$PROJECT_DIR$/libs/forms-javadoc.zip!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$PROJECT_DIR$/libs/forms-src.zip!/" />
+      </SOURCES>
+    </library>
+    <library name="TableLayout">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/libs/TableLayout.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+  </component>
   <component name="uidesigner-configuration">
     <option name="INSTRUMENT_CLASSES" value="false" />
     <option name="COPY_FORMS_RUNTIME_TO_OUTPUT" value="false" />

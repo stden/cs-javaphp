@@ -121,6 +121,13 @@ public class ServerPluginProxy implements ServerPluginEmulator {
     selectStatementFolder();
   }
 
+  public ServerPluginProxy(ServerFacade server, String sessionID, int contestID, int problemID) {
+    this.server = server;
+    this.sessionID = sessionID;
+    this.contestID = contestID;
+    this.problemID = problemID;
+  }
+
   public void selectContest(int contestID) throws GeneralRequestFailureException, ServerReturnedError {
     if (!isSuperAdmin)
       connectToContest(contestID);
@@ -303,5 +310,17 @@ public class ServerPluginProxy implements ServerPluginEmulator {
 
     statementFolder.mkdirs();
     return statementFolder;
+  }
+
+  public ServerFacade getServer() {
+    return server;
+  }
+
+  public String getSessionID() {
+    return sessionID;
+  }
+
+  public int getProblemID() {
+    return problemID;
   }
 }

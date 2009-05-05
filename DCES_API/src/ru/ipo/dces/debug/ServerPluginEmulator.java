@@ -33,7 +33,7 @@ public interface ServerPluginEmulator {
    * @return новое состояние решения
    * @throws ru.ipo.dces.exceptions.GeneralRequestFailureException if communication with a server failed
    */
-  public Object checkSolution(HashMap<String, String> solution, HashMap<String, String> result, Object state)
+  public abstract Object checkSolution(HashMap<String, String> solution, HashMap<String, String> result, Object state)
           throws GeneralRequestFailureException;
 
   /**
@@ -46,6 +46,6 @@ public interface ServerPluginEmulator {
    * @throws ru.ipo.dces.exceptions.GeneralRequestFailureException if communication with a server failed
    * @throws java.io.IOException if failed to write folder with statement
    */
-  public File getStatement() throws GeneralRequestFailureException, IOException;
+  public abstract File getStatement() throws GeneralRequestFailureException, IOException;
 
 }
