@@ -19,6 +19,9 @@ public class ZipUtils {
   }
 
   public static byte[] zip(File file) throws IOException {
+    if (!file.exists())
+      throw new FileNotFoundException("file or folder not found: " + file.getCanonicalPath());
+
     ByteArrayOutputStream out = new ByteArrayOutputStream();
 
     ZipOutputStream zipOS = new ZipOutputStream(out);
@@ -28,7 +31,7 @@ public class ZipUtils {
     else
       archiveCatalog(file, zipOS, "");
 
-    zipOS.close();
+    zipOS.close();    
 
     return out.toByteArray();
   }

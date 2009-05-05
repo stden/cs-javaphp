@@ -12,6 +12,7 @@ import ru.ipo.dces.server.http.HttpServer;
 import ru.ipo.dces.log.ConsoleUserMessagesLogger;
 import ru.ipo.dces.log.LogMessageType;
 import ru.ipo.dces.log.UserMessagesLogger;
+import ru.ipo.dces.log.LoggerFactory;
 import ru.ipo.dces.utils.FileSystemUtils;
 import ru.ipo.dces.utils.ZipUtils;
 
@@ -451,7 +452,7 @@ public class Controller {
 
     //run debug
     final Class<? extends Plugin> pluginClass = PluginLoader.getPluginClass(problem.clientPluginAlias);
-    PluginBox box = new PluginBox(pluginClass, new ServerPluginProxy(problem), problem.name);
+    PluginBox box = new PluginBox(pluginClass, new ServerPluginProxyOld(problem), problem.name);
     box.setVisible(true);    
   }
 
@@ -586,4 +587,17 @@ public class Controller {
       //do nothing - everything already logged
     }
   }
+
+  /*public static String[][] getResults() throws GeneralRequestFailureException {
+    try {
+      GetContestResultsRequest r = new GetContestResultsRequest();
+      r.sessionID = sessionID;
+      r.contestID = getContestID();
+      GetContestResultsResponse response = server.doRequest(r);
+      return response.table[response.userLine];
+    } catch (ServerReturnedError serverReturnedError) {
+      LoggerFactory.getLogger().log(serverReturnedError.getMessage(), LogMessageType.Error, null);
+      throw new GeneralRequestFailureException();
+    }
+  }*/
 }

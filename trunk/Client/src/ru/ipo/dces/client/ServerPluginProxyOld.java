@@ -19,11 +19,12 @@ import java.io.IOException;
  * Date: 17.12.2008
  * Time: 13:50:33
  */
-public class ServerPluginProxy implements ServerPluginEmulator {
+//TODO use ServerPluginProxy from API and make use of its features
+public class ServerPluginProxyOld implements ServerPluginEmulator {
 
   private final ProblemDescription problem;
 
-  public ServerPluginProxy(ProblemDescription problem) {
+  public ServerPluginProxyOld(ProblemDescription problem) {
     this.problem = problem;
   }
 

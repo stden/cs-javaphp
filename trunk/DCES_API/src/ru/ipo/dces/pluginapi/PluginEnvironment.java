@@ -3,6 +3,7 @@ package ru.ipo.dces.pluginapi;
 import ru.ipo.dces.exceptions.GeneralRequestFailureException;
 import ru.ipo.dces.exceptions.ServerReturnedError;
 import ru.ipo.dces.log.LogMessageType;
+import ru.ipo.dces.server.ServerFacade;
 
 import java.util.HashMap;
 import java.io.File;
@@ -29,8 +30,7 @@ public interface PluginEnvironment {
    * @return recieved information. May return RequestFailedResponse
    * @throws ru.ipo.dces.exceptions.GeneralRequestFailureException if the serever is inaccessible
    */
-  public HashMap<String, String> submitSolution(HashMap<String, String> solution) throws GeneralRequestFailureException;
-
+  public HashMap<String, String> submitSolution(HashMap<String, String> solution) throws GeneralRequestFailureException; 
 
   /**
    * Get folder that contains data to create problem statement 
@@ -41,5 +41,11 @@ public interface PluginEnvironment {
   public String getProblemName();
 
   public void log(String message, LogMessageType type);
+
+  public ServerFacade getServer();
+
+  public String getSessionID();
+
+  public int getProblemID();
 
 }

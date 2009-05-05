@@ -5,6 +5,7 @@ import ru.ipo.dces.pluginapi.PluginEnvironment;
 import ru.ipo.dces.exceptions.ServerReturnedError;
 import ru.ipo.dces.exceptions.GeneralRequestFailureException;
 import ru.ipo.dces.log.LogMessageType;
+import ru.ipo.dces.server.ServerFacade;
 
 import java.util.HashMap;
 import java.io.File;
@@ -65,5 +66,17 @@ public class PluginEnvironmentImpl implements PluginEnvironment {
             type,
             getProblemName()
     );
+  }
+
+  public ServerFacade getServer() {
+    return Controller.getServer();
+  }
+
+  public String getSessionID() {
+    return Controller.getSessionID();
+  }
+
+  public int getProblemID() {
+    return pd.id;
   }
 }

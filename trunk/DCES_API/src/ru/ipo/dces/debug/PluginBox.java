@@ -7,6 +7,7 @@ import ru.ipo.dces.pluginapi.PluginEnvironment;
 import ru.ipo.dces.log.LogMessageType;
 import ru.ipo.dces.log.LoggerFactory;
 import ru.ipo.dces.log.UserMessagesLogger;
+import ru.ipo.dces.server.ServerFacade;
 
 import javax.swing.*;
 import java.awt.*;
@@ -224,6 +225,28 @@ public class PluginBox extends JFrame {
     public void log(String message, LogMessageType type) {
       logger.log(message, type, problemName);
     }
+
+    public ServerFacade getServer() {
+      if (serverEmulator instanceof ServerPluginProxy)
+        return ((ServerPluginProxy)serverEmulator).getServer();
+      else
+        return null;
+    }
+
+    public String getSessionID() {
+      if (serverEmulator instanceof ServerPluginProxy)
+        return ((ServerPluginProxy)serverEmulator).getSessionID();
+      else
+        return null;
+    }
+
+    public int getProblemID() {
+      if (serverEmulator instanceof ServerPluginProxy)
+        return ((ServerPluginProxy)serverEmulator).getProblemID();
+      else
+        return 0;
+    }
+
   }
 
 }
