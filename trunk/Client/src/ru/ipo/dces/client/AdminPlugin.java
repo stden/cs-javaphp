@@ -5,7 +5,7 @@ import ru.ipo.dces.clientservercommunication.ContestDescription;
 
 /**
  * Created by IntelliJ IDEA.
- * User: Посетитель
+ * User: I. Posov
  * Date: 13.04.2009
  * Time: 16:07:02
  */

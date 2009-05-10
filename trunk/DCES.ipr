@@ -304,6 +304,7 @@
       <module fileurl="file://$PROJECT_DIR$/DCESTests/DCESTests.iml" filepath="$PROJECT_DIR$/DCESTests/DCESTests.iml" />
       <module fileurl="file://$PROJECT_DIR$/DCES_API/DCES_API.iml" filepath="$PROJECT_DIR$/DCES_API/DCES_API.iml" />
       <module fileurl="file://$PROJECT_DIR$/Resources.iml" filepath="$PROJECT_DIR$/Resources.iml" />
+      <module fileurl="file://$PROJECT_DIR$/RyzhikResuts/RyzhikResults.iml" filepath="$PROJECT_DIR$/RyzhikResuts/RyzhikResults.iml" />
       <module fileurl="file://$PROJECT_DIR$/RyzhikTest/RyzhikTest.iml" filepath="$PROJECT_DIR$/RyzhikTest/RyzhikTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/SamplePlugin/SamplePlugin.iml" filepath="$PROJECT_DIR$/SamplePlugin/SamplePlugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/Server/Server.iml" filepath="$PROJECT_DIR$/Server/Server.iml" />

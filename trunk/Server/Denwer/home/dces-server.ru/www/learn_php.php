@@ -1,17 +1,15 @@
 <?php
 
-  $a = array('a', 'b', 'c', 'd');
-  var_dump($a);
-  $b = $a;
-  $b[] = 'e';
-  var_dump($a);
-  var_dump($b);
+  class A{};
+  $a = new A();
+  $a->b = new A();
+  $a->b->c = "42";
 
-  die();  
+  var_dump($a);
+  var_dump($a->b);
+  var_dump($a->b->c);
 
-  $new_results = Data::_unserialize('a:0:{}');
-  if (!is_array($new_results)) die('asdf');
-  die('x');
+  die();
 
   require("utils/DataBase.php");
   $dces_mysql_host = "localhost:3306";

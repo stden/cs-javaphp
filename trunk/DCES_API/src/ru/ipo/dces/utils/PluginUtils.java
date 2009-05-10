@@ -26,6 +26,11 @@ public class PluginUtils {
 
   /**
    * Gets plugin's class by plugin's alias. Downloads plugin from server if needed.
+   * Plugins folder is a folder whith already downloaded plugins. The method serches a plugin there first, and
+   * then downloads it from server, if there is no such plugin.
+   * Plugins folder may be null, in this case method always downloads a plugin from server.
+   * Class is always loaded from a temporary copy of a pluginjar file, so files in the plugin folder
+   * may always be overriden and even deleted
    * @param server server to get plugin from
    * @param plugin_alias alias of the plugin
    * @param pluginsFolder folder to search for plugin, and write plugin there if it was not there
