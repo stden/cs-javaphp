@@ -13,7 +13,7 @@
   //returns
   //array:['interval'] = 'before' 'contest' 'after'
   //      ['is_ending'] = true false
-  function getCurrentContestTime($contest_settings, $user_start_time) {
+  function getCurrentContestTime($contest_settings, $user_start_time, $user_finish_time) {
     if (is_null($contest_settings))
         return array('interval'=>'before', 'is_ending'=>false);
 
@@ -25,7 +25,10 @@
     {
       if (is_null($user_start_time)) return array('interval'=>'before', 'is_ending'=>false);
       $start = $user_start_time;
-      $finish = $start + $contest_settings->contestTiming->maxContestDuration * 60;
+      if (!is_null($user_finish_time) && $user_finish_time < $now)
+        $finish = $user_finish_time;
+      else
+        $finish = $start + $contest_settings->contestTiming->maxContestDuration * 60;
 
       $ending_start = $finish;
       $ending_finish = $finish;

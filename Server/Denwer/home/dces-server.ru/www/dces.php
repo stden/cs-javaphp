@@ -110,9 +110,14 @@ switch(get_class($request)) {
 	  $result = processRemoveClientPluginRequest($request);
 	  break;
 
-   case 'GetContestResultsRequest':
+    case 'GetContestResultsRequest':
 	  require("requests/GetContestResults.php");
 	  $result = processGetContestResultsRequest($request);
+	  break;
+
+	case 'StopContestRequest':
+	  require("requests/StopContest.php");
+	  processStopContestRequest($request);
 	  break;
 
   default:

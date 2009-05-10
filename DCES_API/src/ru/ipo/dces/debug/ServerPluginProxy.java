@@ -126,6 +126,7 @@ public class ServerPluginProxy implements ServerPluginEmulator {
     this.sessionID = sessionID;
     this.contestID = contestID;
     this.problemID = problemID;
+    selectStatementFolder();
   }
 
   public void selectContest(int contestID) throws GeneralRequestFailureException, ServerReturnedError {
@@ -253,6 +254,8 @@ public class ServerPluginProxy implements ServerPluginEmulator {
 
   public void setStatementFolder(File statementFolder) {
     this.statementFolder = statementFolder;
+    //noinspection ResultOfMethodCallIgnored
+    statementFolder.mkdirs();
   }
 
   public Object checkSolution(HashMap<String, String> solution, HashMap<String, String> result, Object state) throws GeneralRequestFailureException {
@@ -305,10 +308,9 @@ public class ServerPluginProxy implements ServerPluginEmulator {
       LoggerFactory.getLogger().log("failed to get problem statement", LogMessageType.Error, null);
       throw new GeneralRequestFailureException();
     }
-
+    
     ZipUtils.unzip(statement, statementFolder);
 
-    statementFolder.mkdirs();
     return statementFolder;
   }
 
@@ -323,4 +325,17 @@ public class ServerPluginProxy implements ServerPluginEmulator {
   public int getProblemID() {
     return problemID;
   }
+
+  public String getLogin() {
+    return login;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public int getContestID() {
+    return contestID;
+  }
+
 }

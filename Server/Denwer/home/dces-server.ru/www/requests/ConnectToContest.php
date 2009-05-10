@@ -17,7 +17,7 @@ function processConnectToContestRequest($request) {
 
   //test if there is at least one user
   if ( !$row )
-      throwBusinessLogicError(12);
+      throBusinessLogicError(12);
 
   //test password
   if ($row['password'] !== $request->password)
@@ -25,17 +25,6 @@ function processConnectToContestRequest($request) {
 
   //get contest settings and contest time
   $settings = Data::_unserialize($row['settings'], null);
-  $contest_time = getCurrentContestTime(
-    $settings,
-    DateMySQLToPHP($row['contest_start']),
-    DateMySQLToPHP($row['contest_finish'])
-  );
-
-  if ($contest_time['interval'] === 'before' && $row['user_type'] === 'Participant')
-    throwBusinessLogicError(19);
-
-  //start new session
-  $session_id = RequestUtils::createSession($row['id']);
 
   if (is_null($row['contest_start'])) {
     $now = getdate();
@@ -47,7 +36,21 @@ function processConnectToContestRequest($request) {
             "id=${row['id']}"
          );
     Data::submitModificationQuery($q);
+
+    $row['contest_start'] = $now;
   }
+
+  $contest_time = getCurrentContestTime(
+    $settings,
+    DateMySQLToPHP($row['contest_start']),
+    DateMySQLToPHP($row['contest_finish'])
+  );
+
+  if ($contest_time['interval'] === 'before' && $row['user_type'] === 'Participant')
+    throwBusinessLogicError(19);
+
+  //start new session
+  $session_id = RequestUtils::createSession($row['id']);
 
   //get finish time
   if ($settings->contestTiming->selfContestStart)

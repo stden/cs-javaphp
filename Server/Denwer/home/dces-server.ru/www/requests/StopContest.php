@@ -30,10 +30,10 @@ function processStopContestRequest($request) {
         DateMySQLToPHP($user_row['contest_finish'])
     );
     
-    if ($time['interval'] !== 'before')
+    if ($time['interval'] === 'before')
         throwBusinessLogicError(19);
 
-    if ($time['interval'] !== 'before')
+    if ($time['interval'] === 'after')
         throwBusinessLogicError(20);
 
     $now = getdate();

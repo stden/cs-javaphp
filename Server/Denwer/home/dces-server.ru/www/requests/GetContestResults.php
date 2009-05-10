@@ -91,15 +91,15 @@ function processGetContestResultsRequest($request) {
 
     //get $permission
     $ctime = getCurrentContestTime($contest_settings, $user_contest_start_time, $user_contest_finish_time);
-    if (!is_admin) {
+    if (!$is_admin) {
         if ($ctime['interval'] === 'before') throwBusinessLogicError(19);
 
         if ($ctime['interval'] === 'contest' && !$ctime['is_ending'])
-            $permission = $contest_settings->resultAcessPolicy->contestPermission;
+            $permission = $contest_settings->resultsAccessPolicy->contestPermission;
         else if ($ctime['is_ending'])
-            $permission = $contest_settings->resultAcessPolicy->contestEndingPermission;
+            $permission = $contest_settings->resultsAccessPolicy->contestEndingPermission;
         else if ($ctime['interval'] === 'after' && !$ctime['is_ending'])
-            $permission = $contest_settings->resultAcessPolicy->afterContestPermission;
+            $permission = $contest_settings->resultsAccessPolicy->afterContestPermission;
     }
     else
         $permission = 'FullAccess';
@@ -114,7 +114,7 @@ function processGetContestResultsRequest($request) {
                                     FROM ${prfx}problem
                                     WHERE ${prfx}problem.contest_id=%s
                                     ORDER BY ${prfx}problem.contest_pos ASC",
-                                    Data::quote_smart($request->contestID))
+                                    Data::quote_smart($contest_id))
                          );
 
     //get users rows
@@ -123,10 +123,10 @@ function processGetContestResultsRequest($request) {
                             sprintf("SELECT *
                                      FROM ${prfx}user
                                      WHERE contest_id=%s"
-                                    , Data::quote_smart($request->contestID))
+                                    , Data::quote_smart($contest_id))
                           );
     else /* if $permission === 'OnlySelfResults'*/
-        $all_users_rows = $user_contest_row;               
+        $all_users_rows = $user_contest_row;
 
     //create result
     $result = new GetContestResultsResponse();
@@ -136,11 +136,11 @@ function processGetContestResultsRequest($request) {
     $result->minorHeaders = array();
     //the first column with 'user_id' and 'login'
     if ($is_admin) {
-        $result->headers[] = '';
+        $result->headers[] = 'admin info';
         $result->minorHeaders[] = array('id', 'login');
     }
     //column with participant data
-    $result->headers[] = 'Participant';
+    $result->headers[] = 'participant';
     //get participant subcolumns
     $data_subs = array();
     foreach ($contest_settings->data as $df)

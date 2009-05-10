@@ -34,8 +34,9 @@ class UserDescription{};
 class CreateDataBaseRequest{};
 class ResultsAccessPolicy{};
 class UserDataField{};
-class SubmissionPolicy{};
 class GetContestResultsRequest{};
 class GetContestResultsResponse{};
 class CreateContestResponse{};
+class StopContestRequest{};
+class ContestTiming{};
 ?>
