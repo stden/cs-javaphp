@@ -15,12 +15,20 @@
       $row = RequestUtils::getSessionUserRow();
       $contest_start = DateMySQLToPHP($row['contest_start']);
       $contest_finish = DateMySQLToPHP($row['contest_finish']);
-      $time = getCurrentContestTime($row['settings'], $contest_start, $contest_finish);
+      $settings = Data::_unserialize($row['settings']);
+      $time = getCurrentContestTime($settings, $contest_start, $contest_finish);
 
       if ($time['interval'] === 'before')
-        throwBuisnessLogicError(19);
+        throwBusinessLogicError(19);
       if ($time['interval'] === 'after')
-        throwBuisnessLogicError(20);
+        throwBusinessLogicError(20);
+    }
+
+    protected function getTime() {
+      $row = RequestUtils::getSessionUserRow();
+      $contest_start = DateMySQLToPHP($row['contest_start']);
+      $now = getdate();
+      return $now[0] - $contest_start;
     }
 
     //returns submission result

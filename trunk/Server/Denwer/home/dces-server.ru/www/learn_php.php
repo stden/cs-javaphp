@@ -1,5 +1,8 @@
 <?php
 
+  var_dump("" . 42);
+  die();
+
   class A{};
   $a = new A();
   $a->b = new A();

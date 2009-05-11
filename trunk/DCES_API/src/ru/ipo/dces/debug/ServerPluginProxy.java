@@ -192,6 +192,23 @@ public class ServerPluginProxy implements ServerPluginEmulator {
     server.doRequest(aspr);
   }
 
+  public void uploadClientPlugin(String alias, File jarPluginFile) throws IOException, GeneralRequestFailureException, ServerReturnedError {
+    //fill request
+    AdjustClientPluginRequest aspr = new AdjustClientPluginRequest();
+    aspr.description = null;
+    aspr.pluginAlias = alias;
+    aspr.sessionID = sessionID;
+    //load plugin data from file
+    aspr.pluginData = new byte[(int)jarPluginFile.length()];
+    FileInputStream in = new FileInputStream(jarPluginFile);
+    int read = in.read(aspr.pluginData);
+    if (read != aspr.pluginData.length)
+      throw new IOException("Failed to read jar file with plugin");
+
+    //do request
+    server.doRequest(aspr);
+  }
+
   public void selectProblem(int problemID) {
     this.problemID = problemID;
   }

@@ -40,7 +40,7 @@ public class RyzhikPlugin implements Plugin {
               SubmissionUtils.setAction("init", new HashMap<String, String>())
       );
     } catch (GeneralRequestFailureException e) {
-      //TODO to think what to do!!!
+      //TODO to think what to do if failed to send init request!!!
     }
   }
 
@@ -64,6 +64,8 @@ public class RyzhikPlugin implements Plugin {
     JPanel warningPanel = new JPanel();
     JPanel selectionPanel = new JPanel();
     mainPanel = new JPanel();
+
+    warningPanel.setVisible(false);
 
     //set layout for panels
     mainPanel.setLayout(new BorderLayout());

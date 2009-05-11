@@ -25,7 +25,7 @@
     {
       if (is_null($user_start_time)) return array('interval'=>'before', 'is_ending'=>false);
       $start = $user_start_time;
-      if (!is_null($user_finish_time) && $user_finish_time < $now)
+      if (!is_null($user_finish_time) /*&& $user_finish_time <= $now*/)
         $finish = $user_finish_time;
       else
         $finish = $start + $contest_settings->contestTiming->maxContestDuration * 60;

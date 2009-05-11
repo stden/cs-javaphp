@@ -6,8 +6,11 @@
  */
 package ru.ipo.dces.client;
 
+import ru.ipo.dces.log.LoggerFactory;
+
 import javax.swing.*;
 import java.util.Scanner;
+import java.util.Properties;
 import java.io.FileInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -19,7 +22,8 @@ public class Settings {
   private String PLUGINS_DIRECTORY;
 
   private static String PROBLEMS_DIRECTORY;
-  private String host = "";
+
+  private Properties properties;
 
   public static Settings getInstance() {
     return ourInstance;
@@ -41,46 +45,19 @@ public class Settings {
       System.exit(1);
     }
 
-    Scanner s = null;
     try {
-      s = new Scanner(new FileInputStream(WORKING_DIRECTORY + '/' + SETTINGS_FILE_NAME));
-
-      int lineNo = 0;
-      while (s.hasNextLine()) {
-        String line = s.nextLine();
-        lineNo ++;
-        int pos;
-        if ((pos=line.indexOf(';')) != -1)
-          line = line.substring(0, pos);
-
-        pos = line.indexOf('=');
-        if (pos == -1)
-          if (line.trim().equals(""))
-            continue;
-          else
-            throw new Exception("No '=' found in line " + lineNo);
-        String name = line.substring(0, pos-1).trim();
-        String value = line.substring(pos+1).trim();
-
-        if (name.compareToIgnoreCase("contest server") == 0) {
-          if (value.equals("")) throw new Exception("Empty value in line " + lineNo);
-          if (value.charAt(value.length() - 1) != '/') value += '/';
-          value += "dces.php";
-          host = value;
-        } //else if...
-        else throw new Exception("Unknown parameter name '" + name + "' in line " + lineNo);
-      }
+      properties = new Properties();
+      properties.load(new FileInputStream(WORKING_DIRECTORY + '/' + SETTINGS_FILE_NAME));
     } catch (Exception e) {
+      e.printStackTrace();
       JOptionPane.showMessageDialog(null, "Failed to read settings from file 'dces-settings.txt'\nError : " + e.getMessage());      
       System.exit(1);
-    }
-    finally {
-      s.close();
     }
   }
 
   public String getHost() {
-    return host;
+    //return properties.getProperty("contest server");
+    return "http://ipo.spb.ru/dces/test/dces.php";
   }
 
   public String getWorkingDirectory() {

@@ -201,7 +201,7 @@
           <forms defaultalign-horz="false" defaultalign-vert="false"/>
         </constraints>
         <properties>
-          <editable value="false"/>
+          <editable value="true"/>
           <enabled value="true"/>
         </properties>
       </component>
@@ -231,7 +231,7 @@
           <forms defaultalign-horz="false" defaultalign-vert="false"/>
         </constraints>
         <properties>
-          <editable value="false"/>
+          <editable value="true"/>
           <enabled value="true"/>
           <text value=""/>
         </properties>
