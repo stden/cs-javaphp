@@ -7,8 +7,8 @@ import ru.ipo.dces.clientservercommunication.ContestDescription;
 import ru.ipo.dces.clientservercommunication.UserDataField;
 import ru.ipo.dces.clientservercommunication.ContestTiming;
 import ru.ipo.dces.clientservercommunication.ResultsAccessPolicy;
-import ru.ipo.dces.plugins.RyzhikPlugin;
 import ru.ipo.dces.plugins.RyzhikResults;
+import ru.ipo.dces.plugins.RyzhikPlugin;
 
 import javax.swing.*;
 import java.io.File;
@@ -31,6 +31,7 @@ public class TestRyzhikWithResults {
     problemProxy.createContest(newDescription());
     problemProxy.uploadServerPlugin("RyzhikChecker", new File("RyzhikTest/debug/RyzhikChecker.php"));
     problemProxy.uploadServerPlugin("EmptyPlugin", new File("RyzhikResults/debug/EmptyPlugin.php"));
+    //problemProxy.uploadClientPlugin("RyzhikTest", new File("C:\\Users\\Илья\\IdeaProjects\\DCES\\RyzhikTest\\RyzhikTest.jar"));
     int contestID = problemProxy.getContestID();
     File statementFolder = new File("RyzhikTest/debug/debug-statement");
     problemProxy.setStatementFolder(statementFolder);
@@ -48,6 +49,7 @@ public class TestRyzhikWithResults {
     ServerPluginProxy resultsProxy = new ServerPluginProxy(server, sessionID, contestID, resultsID);
     resultsProxy.setStatementFolder(statementFolder);    
 
+    //PluginBox pbProblem = new PluginBox(problemProxy.getClientPlugin("RyzhikTest"), problemProxy);
     PluginBox pbProblem = new PluginBox(RyzhikPlugin.class, problemProxy);
     PluginBox pbResults = new PluginBox(RyzhikResults.class, resultsProxy);
 

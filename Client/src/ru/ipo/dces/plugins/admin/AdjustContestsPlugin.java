@@ -569,7 +569,7 @@ public class AdjustContestsPlugin extends JPanel implements AdminPlugin {
     label6.setText("Ответ");
     drawPanel.add(label6, cc.xy(3, 42));
     problemAnswer = new JTextField();
-    problemAnswer.setEditable(false);
+    problemAnswer.setEditable(true);
     problemAnswer.setEnabled(true);
     drawPanel.add(problemAnswer, cc.xyw(5, 42, 5, CellConstraints.FILL, CellConstraints.FILL));
     changeAnswerButton = new JButton();
@@ -579,7 +579,7 @@ public class AdjustContestsPlugin extends JPanel implements AdminPlugin {
     label7.setText("Условие");
     drawPanel.add(label7, cc.xy(3, 40));
     problemStatement = new JTextField();
-    problemStatement.setEditable(false);
+    problemStatement.setEditable(true);
     problemStatement.setEnabled(true);
     problemStatement.setText("");
     drawPanel.add(problemStatement, cc.xyw(5, 40, 5, CellConstraints.FILL, CellConstraints.FILL));

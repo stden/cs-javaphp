@@ -12,7 +12,6 @@ import ru.ipo.dces.clientservercommunication.GetContestResultsResponse;
 import ru.ipo.dces.clientservercommunication.StopContestRequest;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.Arrays;
@@ -42,7 +41,7 @@ public class RyzhikResults implements Plugin {
     mainPanel = new JPanel();            
   }
 
-  private void getResultsAndSetInterface() {
+  private InterfaceView getNeededInterfaceView() {
     ServerFacade server = environment.getServer();
 
     InterfaceView interfaceView;
@@ -65,8 +64,7 @@ public class RyzhikResults implements Plugin {
     } catch (GeneralRequestFailureException ignored) {
       interfaceView = InterfaceView.NoResults;
     }
-
-    setInterface(interfaceView);
+    return interfaceView;
   }
 
   private void setInterface(InterfaceView interfaceView) {
@@ -83,32 +81,41 @@ public class RyzhikResults implements Plugin {
     }
 
     if (interfaceView == InterfaceView.NoResults)
-    {
-      JLabel label = new JLabel("Результаты соревнования можно посмотреть только после окончания соревнования.");
-      JButton button = new JButton("Завершить досрочно");
-      mainPanel.add(label);
-      mainPanel.add(button);
-
-      button.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          stopContest();
-        }
-      });
-    }
+      setInterfaceDuringContest();
     else
-    {
-      JLabel label = new JLabel(getResultsText());
-      mainPanel.add(label);
-    }
+      setInterfaceWithResults();    
+  }
 
-    mainPanel.setLayout(new FlowLayout());
+  private void setInterfaceWithResults() {
+    //TODO нарисовать интферфейс с результатом
+    //Метод getResultsTest() как бы выдает результаты (сейчас текстом)
+    //mainPanel - панель, положить весь интерфейс на нее
+    JLabel label = new JLabel(getResultsText());
+    mainPanel.add(label);
+  }
+
+  private void setInterfaceDuringContest() {
+    //TODO нарисовать инферфейс плагина результатов во время соревнования.
+    //mainPanel - панель, положить весь интерфейс на неё
+    //чтобы завершить соревнование, пользоваться методом stopContest();
+    JLabel label = new JLabel("Результаты соревнования можно посмотреть только после окончания соревнования.");
+    JButton button = new JButton("Завершить досрочно");
+    mainPanel.add(label);
+    mainPanel.add(button);
+
+    button.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        stopContest();
+      }
+    });
   }
 
   private String getResultsText() {
+    //TODO use variable results and set text
     String ans = "";
     int i = 1;
     for (String[] result : results) {
-      ans += i + ": " + Arrays.toString(results[i-1]);
+      ans += i + ": " + Arrays.toString(result);
       i++;
     }
     return ans;
@@ -125,7 +132,9 @@ public class RyzhikResults implements Plugin {
       environment.log("failed to stop contest: " + e.getMessage(), LogMessageType.Error);
     }
 
-    getResultsAndSetInterface();
+    setInterface(getNeededInterfaceView());
+    mainPanel.repaint();
+    mainPanel.doLayout();
   }
 
   public JPanel getPanel() {
@@ -133,7 +142,9 @@ public class RyzhikResults implements Plugin {
   }
 
   public void activate() {
-    getResultsAndSetInterface();    
+    if (this.interfaceView == InterfaceView.Results) return;
+    InterfaceView interfaceView = getNeededInterfaceView();
+    setInterface(interfaceView);
   }
 
   public void deactivate() {

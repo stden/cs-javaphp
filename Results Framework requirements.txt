@@ -1,5 +1,3 @@
-//TODO сделать возможность настраивать ResultAccessPolicy для контеста. Пока что это policy - выдавать результаты всегда
-
 1. jar
 2. exceptions
 3. results framework
@@ -16,8 +14,6 @@
 
 1. Администратору не нужно настраивать RAP, он и так получает AccessiblePart совпадающий с ContestResult
 2. Пользователю нужно только настраивать время, в течение которого он видит Results, MyResults. MySolution он видит всегда, OtherSolutions не видит никогда.
-
-//TODO relate ContestStatus to Participants, ParticipantSolutions, ResultsAccessPolicy, etc.
 
 1. [Default]
 Участник посылает строку символов в качестве результата. Результат проверки - это "Да/Нет". 

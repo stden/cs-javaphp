@@ -73,7 +73,7 @@
       $plugin = new $p->serverPluginAlias ($GLOBALS['dces_dir_problems'] . "/$p->id");
 
       //fill extended data: statement or statementData and answerData
-      if (!is_null($extended_data) && in_array($p->id, $extended_data)) {
+      if ((!is_null($extended_data) && in_array($p->id, $extended_data)) || is_null($extended_data)) {
         if ($info_type === "ParticipantInfo") {
           $statement = Data::_unserialize($row['statement']);
           //TODO process error: statement not found and return correct error info

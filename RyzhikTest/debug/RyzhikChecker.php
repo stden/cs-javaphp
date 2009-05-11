@@ -25,6 +25,7 @@ class RyzhikChecker extends ServerPlugin {
         //everything is already done
     }
     elseif ($solution['action'] === 'answer') {
+        $this->testTime();
         $q = $solution['question'] - 1;
         if (!is_numeric($q)) return array();
         if ($q < 0 || $q > 4) return array();
@@ -33,6 +34,7 @@ class RyzhikChecker extends ServerPlugin {
         $table_cols = $this->setCols($current_result, $answer_data);
     }
     elseif ($solution['action'] === 'answers') {
+        $this->testTime();
         $ans = $solution['answers'];
         if (!is_string($ans)) return;
         if (strlen($ans) != 5) return;
