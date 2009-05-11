@@ -236,8 +236,10 @@
       $queries[] = $q;
 
     $responseIDs = array();
-    foreach ($request->problems as $p)
-      $responseIDs[] = $p->id;
+    //TODO make this code right
+    if (!is_null($request->problems))
+        foreach ($request->problems as $p)
+            $responseIDs[] = $p->id;
     $skipped_index = 0;
 
     //run transaction

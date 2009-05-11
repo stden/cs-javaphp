@@ -14,6 +14,7 @@ public class PluginInt implements Plugin{
 	public PluginInt(PluginEnvironment pe){
 		PluginInt.pe=pe;
     mapanel = new MathkitAppletPanel();
+    pe.setTitle(pe.getProblemName());
   }
 	
   public void activate() {
@@ -21,8 +22,7 @@ public class PluginInt implements Plugin{
 	}
 
 	public void deactivate() {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub		
 	}
 
 	public JPanel getPanel() {

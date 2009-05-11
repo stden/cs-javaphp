@@ -22,7 +22,19 @@ import java.util.Date;
  */
 public class TestMathKitPlugin {
 
+
+
   public static void main(String[] args) throws ServerReturnedError, GeneralRequestFailureException, IOException {
+    HttpServer server = new HttpServer("http://dces-server.ru:423/dces.php");
+
+    ServerPluginProxy problemProxy = new ServerPluginProxy(server, "admin", "pass", true);
+    problemProxy.selectContest(2);
+    ContestDescription cd = newDescription();
+    cd.resultsAccessPolicy.contestPermission = ResultsAccessPolicy.AccessPermission.OnlySelfResults;
+    problemProxy.adjustContest(cd);
+  }
+
+  public static void main1(String[] args) throws ServerReturnedError, GeneralRequestFailureException, IOException {
     HttpServer server = new HttpServer("http://dces-server.ru:423/dces.php");
 
     ServerPluginProxy problemProxy = new ServerPluginProxy(server, "admin", "pass", true);

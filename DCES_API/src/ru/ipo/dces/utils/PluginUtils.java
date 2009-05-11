@@ -95,7 +95,7 @@ public class PluginUtils {
       String jarName = jarEntry.getName();
 
       if (jarName.startsWith("dependencies/") && jarName.endsWith(".jar")) {
-        urls.add(new URL("jar:jarjar:" + pluginURL + "^/" + jarName + "!/"));
+        urls.add(new URL("jar:jarjar:" + pluginURL + "%/" + jarName + "!/"));
       }
     }
 
