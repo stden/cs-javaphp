@@ -11,7 +11,16 @@
         <attribute name="URI" value="/" />
       </containerElement>
       <containerElement type="library" name="FormLayout" level="project">
-        <attribute name="method" value="1" />
+        <attribute name="method" value="2" />
+        <attribute name="URI" value="/" />
+      </containerElement>
+      <containerElement type="library" level="module">
+        <attribute name="method" value="2" />
+        <attribute name="URI" value="/" />
+        <url>jar://$JUNIT_HOME$!/</url>
+      </containerElement>
+      <containerElement type="library" name="TableLayout" level="project">
+        <attribute name="method" value="2" />
         <attribute name="URI" value="/" />
       </containerElement>
     </containerInfo>

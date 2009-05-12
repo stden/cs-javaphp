@@ -15,6 +15,7 @@ public class PluginInt implements Plugin{
 		PluginInt.pe=pe;
     mapanel = new MathkitAppletPanel();
     pe.setTitle(pe.getProblemName());
+    System.out.println("pe.getProblemName() = " + pe.getProblemName());
   }
 	
   public void activate() {

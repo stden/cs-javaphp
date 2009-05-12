@@ -24,7 +24,7 @@ public class TestMathKitPlugin {
 
 
 
-  public static void main(String[] args) throws ServerReturnedError, GeneralRequestFailureException, IOException {
+  public static void main1(String[] args) throws ServerReturnedError, GeneralRequestFailureException, IOException {
     HttpServer server = new HttpServer("http://dces-server.ru:423/dces.php");
 
     ServerPluginProxy problemProxy = new ServerPluginProxy(server, "admin", "pass", true);
@@ -34,24 +34,40 @@ public class TestMathKitPlugin {
     problemProxy.adjustContest(cd);
   }
 
-  public static void main1(String[] args) throws ServerReturnedError, GeneralRequestFailureException, IOException {
-    HttpServer server = new HttpServer("http://dces-server.ru:423/dces.php");
+  public static void main(String[] args) throws ServerReturnedError, GeneralRequestFailureException, IOException {
+    HttpServer server = new HttpServer("http://ipo.spb.ru/dces/test/dces.php");
 
+    //connect to the server as a superadmin
     ServerPluginProxy problemProxy = new ServerPluginProxy(server, "admin", "pass", true);
-    problemProxy.createContest(newDescription());
-    problemProxy.uploadServerPlugin("MathKitChecker", new File("MathKitPlugin/debug/MathKitChecker.php"));
-    problemProxy.uploadClientPlugin("MathKitPlugin", new File("MathKitPlugin/MathKitPlugin.jar"));
+
+    //create contest (unnecessary)
+    //problemProxy.createContest(newDescription());
+
+    //select the second contest (the contest created exactly for this debug)
+    problemProxy.selectContest(3);
+
+    //upload server plugin to the server. Skip this step, server plugin doesn't change
+    //problemProxy.uploadServerPlugin("MathKitChecker", new File("MathKitPlugin/debug/MathKitChecker.php"));
+
+    //upload server plugin to the server. Skip this step, will use local copy of the plugin
+    //problemProxy.uploadClientPlugin("MathKitPlugin", new File("MathKitPlugin/MathKitPlugin.jar"));
+
+    //set folder to store downloaded statement
     problemProxy.setStatementFolder(new File("MathKitPlugin/debug/debug-statement"));
 
+    //create problem to debug, specify statement for the problem
     problemProxy.createProblem("MathKitPlugin", "MathKitChecker", new File("MathKitPlugin/debug/c1"), new File("MathKitPlugin/debug/empty-answer.txt"));
 
+    //create new participant for the contest, debug in the name of this new participant
     problemProxy.newParticipant();
 
-    //PluginBox pbox = new PluginBox(PluginInt.class, problemProxy);
-    PluginBox pbox = new PluginBox(problemProxy.getClientPlugin("MathKitPlugin"), problemProxy);
+    //create plugin box to debug the plugin. There are two variants - debug local plugin or the downloaded plugin
+    PluginBox pbox = new PluginBox(PluginInt.class, problemProxy);
+    //PluginBox pbox = new PluginBox(problemProxy.getClientPlugin("MathKitPlugin"), problemProxy);
 
+    //set up and show the plugin box
     pbox.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    pbox.setVisible(true);
+    pbox.setVisible(true);    
   }
 
   private static ContestDescription newDescription() {

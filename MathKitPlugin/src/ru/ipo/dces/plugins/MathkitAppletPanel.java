@@ -30,11 +30,10 @@ public class MathkitAppletPanel extends JPanel {
   private void init() {
     this.setLayout(borderLayout1);
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    this.setPreferredSize(new Dimension(screenSize.width * 8 / 10,
-            screenSize.height * 9 / 10));
+    this.setPreferredSize(new Dimension(660,550));
     ToolTipManager.sharedInstance().setLightWeightPopupEnabled(false);
     mathkitapplet = new MathkitApplet();
-    this.add(mathkitapplet, BorderLayout.CENTER);
+    this.add(mathkitapplet, BorderLayout.WEST);
   }
 
   public void setApplet() throws IOException {
