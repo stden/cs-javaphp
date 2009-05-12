@@ -56,8 +56,7 @@ public class Settings {
   }
 
   public String getHost() {
-    //return properties.getProperty("contest server");
-    return "http://ipo.spb.ru/dces/test/dces.php";
+    return properties.getProperty("contest_server") + "dces.php";    
   }
 
   public String getWorkingDirectory() {

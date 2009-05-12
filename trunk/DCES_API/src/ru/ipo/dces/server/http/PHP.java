@@ -197,6 +197,8 @@ class PHP {
           return cls.cast(Long.parseLong(intNum));
         if (cls == Date.class)
           return cls.cast(new Date(Long.parseLong(intNum) * 1000));
+        if (cls == String.class)
+          return cls.cast(intNum);
         throw new IllegalArgumentException("Expected integer type, found: "
             + cls.getCanonicalName());
       case 'd':

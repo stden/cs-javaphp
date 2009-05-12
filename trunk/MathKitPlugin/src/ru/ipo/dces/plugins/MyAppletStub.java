@@ -40,7 +40,7 @@ public class MyAppletStub implements AppletStub{
         try {
             String db=(String)parameters.get("documentBase");
             File file = new File(db);
-            url = file.toURL();
+            url = file.toURI().toURL();
         } catch (MalformedURLException e){
             System.out.println("Bad URL");
             url = null;
@@ -53,7 +53,7 @@ public class MyAppletStub implements AppletStub{
         try {
             String db=(String)parameters.get("documentBase");
             File file = new File(db);
-            url = file.toURL();
+            url = file.toURI().toURL();
         } catch (MalformedURLException e){
             System.out.println("Bad URL");
             url = null;
@@ -73,9 +73,7 @@ public class MyAppletStub implements AppletStub{
 
     public void appletResize(int width, int height) {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        applet.setPreferredSize(new Dimension(screenSize.width*8/10,
-                screenSize.height*9/10));
-
+        applet.setPreferredSize(new Dimension(660, 550));
     }
 
 
