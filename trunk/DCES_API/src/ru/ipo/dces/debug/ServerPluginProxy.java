@@ -6,6 +6,7 @@ import ru.ipo.dces.exceptions.ServerReturnedError;
 import ru.ipo.dces.server.ServerFacade;
 import ru.ipo.dces.utils.ZipUtils;
 import ru.ipo.dces.utils.PluginUtils;
+import ru.ipo.dces.utils.FileSystemUtils;
 import ru.ipo.dces.log.LoggerFactory;
 import ru.ipo.dces.log.LogMessageType;
 import ru.ipo.dces.pluginapi.Plugin;
@@ -271,6 +272,7 @@ public class ServerPluginProxy implements ServerPluginEmulator {
 
   public void setStatementFolder(File statementFolder) {
     this.statementFolder = statementFolder;
+    FileSystemUtils.deleteDir(statementFolder);
     //noinspection ResultOfMethodCallIgnored
     statementFolder.mkdirs();
   }

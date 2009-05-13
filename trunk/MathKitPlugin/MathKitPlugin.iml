@@ -24,7 +24,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="DCES_API" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
@@ -34,6 +33,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module" module-name="Api" />
   </component>
 </module>
 
