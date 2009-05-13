@@ -151,7 +151,7 @@ public class MathkitApplet extends JPanel implements Runnable, AppletContext, JS
       File MATHKIT_APPLET_ROOT = e.getProblemFolder();
       try {
         FileFilter filter = new NameFilter(".mkz");
-        APPLET_ROOT = getProblemFolder(MATHKIT_APPLET_ROOT, filter);
+        APPLET_ROOT = MATHKIT_APPLET_ROOT;//getProblemFolder(MATHKIT_APPLET_ROOT, filter);
       } catch (Exception e) {
         e.printStackTrace();
       }
