@@ -33,7 +33,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module" module-name="Api" />
+    <orderEntry type="module" module-name="DCES_API" />
   </component>
 </module>
 
