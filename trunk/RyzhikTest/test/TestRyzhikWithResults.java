@@ -1,4 +1,3 @@
-import ru.ipo.dces.debug.PluginBox;
 import ru.ipo.dces.debug.ServerPluginProxy;
 import ru.ipo.dces.server.http.HttpServer;
 import ru.ipo.dces.exceptions.ServerReturnedError;
@@ -7,11 +6,9 @@ import ru.ipo.dces.clientservercommunication.ContestDescription;
 import ru.ipo.dces.clientservercommunication.UserDataField;
 import ru.ipo.dces.clientservercommunication.ContestTiming;
 import ru.ipo.dces.clientservercommunication.ResultsAccessPolicy;
-import ru.ipo.dces.plugins.RyzhikResults;
-import ru.ipo.dces.plugins.RyzhikPlugin;
 import ru.ipo.dces.client.Controller;
+import ru.ipo.dces.utils.FileSystemUtils;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
@@ -60,14 +57,16 @@ public class TestRyzhikWithResults {
               new File("RyzhikTest/debug/" + i + ".gif"), //файл с картинкой
               new File("RyzhikTest/debug/" + i + ".txt")  //файл с ответом
       );
+
+      FileSystemUtils.deleteDir(new File("problems/" + (290 + i)));
     }
 
     problemProxy.selectProblem(297);
     problemProxy.adjustProblem(
               "RyzhikResults",
               "EmptyPlugin",
-              new File("RyzhikTest/debug/1.gif"), //файл с картинкой
-              new File("RyzhikTest/debug/1.txt")  //файл с ответом
+              new File("RyzhikTest/debug/1.gif"),
+              new File("RyzhikTest/debug/1.txt")
     );
 
     int pid = 0;

@@ -33,7 +33,7 @@ public class RyzhikPlugin implements Plugin {
 
   public RyzhikPlugin(PluginEnvironment pe) {
     myEnvironment = pe;
-    myEnvironment.setTitle(pe.getProblemName());
+    myEnvironment.setTitle(/*pe.getProblemName()*/"Задача");
     mainPanel = new JPanel();
 
     //send 'init'
