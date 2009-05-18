@@ -18,7 +18,7 @@
     //get current contest settings
     $prfx = $GLOBALS['dces_mysql_prefix'];
     $rows = mysql_query("SELECT settings FROM ${prfx}contest WHERE id=$contest_id", $con) or throwServerProblem(84, mysql_error());
-    $row = mysql_fetch_array($rows, $con) or throwBusinessLogicError(14);
+    $row = mysql_fetch_array($rows) or throwBusinessLogicError(14);    
     $settings = Data::_unserialize($row['settings']);
 
     //TODO make normal copy of settings
@@ -221,7 +221,7 @@
     //get elements to adjust
     $queries = array();
 
-    //adjust contest description
+    //adjust contest description    
     $query_1 = queryForContestDescription($request->contest, $contest_id, $con);    
     if ($query_1 != "")
         $queries[] = $query_1;

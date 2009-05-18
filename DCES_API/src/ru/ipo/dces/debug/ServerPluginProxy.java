@@ -73,6 +73,10 @@ public class ServerPluginProxy implements ServerPluginEmulator {
   }
 
   private UserDescription registerParticipant() throws ServerReturnedError, GeneralRequestFailureException {
+    return registerParticipant(randomDebugString(10), randomDebugString(10));
+  }
+
+  private UserDescription registerParticipant(String login, String password) throws ServerReturnedError, GeneralRequestFailureException {
     //first get contest description
     GetContestDataRequest contestDataRequest = new GetContestDataRequest();
     contestDataRequest.sessionID = sessionID;
@@ -82,10 +86,10 @@ public class ServerPluginProxy implements ServerPluginEmulator {
 
     UserDescription newUser = new UserDescription();
     //fill user
-    newUser.login = randomDebugString(10);
-    newUser.password = randomDebugString(10);
-    this.login = newUser.login;
-    this.password = newUser.password;
+    newUser.login = login;
+    newUser.password = password;
+    this.login = login;
+    this.password = password;
     newUser.dataValue = new String[contestDataResponse.contest.data.length];
     for (int i = 0; i < newUser.dataValue.length; i++)
       newUser.dataValue[i] = randomDebugString(5);
@@ -252,6 +256,41 @@ public class ServerPluginProxy implements ServerPluginEmulator {
     problemID = response.problemIDs[response.problemIDs.length - 1];
   }
 
+  public void adjustProblem(String clientPlugin, String serverPlugin, File statement, File answer)
+          throws GeneralRequestFailureException, ServerReturnedError, IOException {
+    //get contest data
+    GetContestDataRequest gcdr = new GetContestDataRequest();
+    gcdr.contestID = contestID;
+    gcdr.extendedData = null;
+    gcdr.infoType = GetContestDataRequest.InformationType.NoInfo;
+    gcdr.sessionID = sessionID;
+
+    GetContestDataResponse gcdResponse = server.doRequest(gcdr);
+
+    //set new contest data
+    AdjustContestRequest acr = new AdjustContestRequest();
+    acr.contest = new ContestDescription();
+    acr.contest.contestID = contestID;
+    acr.sessionID = sessionID;
+    //copy old problems ids
+    acr.problems = new ProblemDescription[gcdResponse.problems.length];
+    for (int i = 0; i < gcdResponse.problems.length; i++) {
+      ProblemDescription problem = gcdResponse.problems[i];
+      acr.problems[i] = new ProblemDescription();
+      acr.problems[i].id = problem.id;
+
+      if (problem.id == problemID) {
+        problem.name = randomDebugString(10);
+        problem.statementData = ZipUtils.zip(statement);
+        problem.answerData = ZipUtils.zip(answer);
+        problem.clientPluginAlias = clientPlugin;
+        problem.serverPluginAlias = serverPlugin;
+      }
+    }
+
+    /*AdjustContestResponse response = */server.doRequest(acr);
+  }
+
   public void selectParticipant(String login, String password) throws GeneralRequestFailureException, ServerReturnedError {
     DisconnectRequest dr = new DisconnectRequest();
     dr.sessionID = sessionID;
@@ -266,6 +305,13 @@ public class ServerPluginProxy implements ServerPluginEmulator {
   public void newParticipant() throws GeneralRequestFailureException, ServerReturnedError {
     //create a participant
     registerParticipant();
+    
+    selectParticipant(login, password);
+  }
+
+  public void newParticipant(String login, String password) throws GeneralRequestFailureException, ServerReturnedError {
+    //create a participant
+    registerParticipant(login, password);
 
     selectParticipant(login, password);
   }

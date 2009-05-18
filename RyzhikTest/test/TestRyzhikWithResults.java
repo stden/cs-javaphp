@@ -9,6 +9,7 @@ import ru.ipo.dces.clientservercommunication.ContestTiming;
 import ru.ipo.dces.clientservercommunication.ResultsAccessPolicy;
 import ru.ipo.dces.plugins.RyzhikResults;
 import ru.ipo.dces.plugins.RyzhikPlugin;
+import ru.ipo.dces.client.Controller;
 
 import javax.swing.*;
 import java.io.File;
@@ -23,40 +24,68 @@ import java.util.Date;
  */
 public class TestRyzhikWithResults {
 
-  public static void main(String[] args) throws IOException, ServerReturnedError, GeneralRequestFailureException {
-
-    HttpServer server = new HttpServer("http://dces-server.ru:423/dces.php");
+  public static void main_create_initial_contest(String[] args) throws ServerReturnedError, GeneralRequestFailureException, IOException {
+    HttpServer server = new HttpServer("http://ipo.spb.ru/dces/test/dces.php");
 
     ServerPluginProxy problemProxy = new ServerPluginProxy(server, "admin", "pass", true);
+
     problemProxy.createContest(newDescription());
+
+    for (int i = 0; i < 6; i++)
+      if (i % 2 == 0)
+        problemProxy.createProblem("RyzhikTest", "RyzhikChecker", new File("RyzhikTest/debug/1.gif"), new File("RyzhikTest/debug/1.txt"));
+      else
+        problemProxy.createProblem("RyzhikTest", "RyzhikChecker", new File("RyzhikTest/debug/2.gif"), new File("RyzhikTest/debug/2.txt"));
+
+    problemProxy.createProblem("RyzhikResults", "EmptyPlugin", new File("RyzhikTest/debug/1.gif"), new File("RyzhikTest/debug/1.txt"));
+  }
+
+  public static void main(String[] args) throws IOException, ServerReturnedError, GeneralRequestFailureException {
+
+    HttpServer server = new HttpServer("http://ipo.spb.ru/dces/test/dces.php");
+
+    ServerPluginProxy problemProxy = new ServerPluginProxy(server, "admin", "pass", true);
+    
+    problemProxy.selectContest(4);
+
     problemProxy.uploadServerPlugin("RyzhikChecker", new File("RyzhikTest/debug/RyzhikChecker.php"));
     problemProxy.uploadServerPlugin("EmptyPlugin", new File("RyzhikResults/debug/EmptyPlugin.php"));
-    //problemProxy.uploadClientPlugin("RyzhikTest", new File("C:\\Users\\Илья\\IdeaProjects\\DCES\\RyzhikTest\\RyzhikTest.jar"));
-    int contestID = problemProxy.getContestID();
-    File statementFolder = new File("RyzhikTest/debug/debug-statement");
-    problemProxy.setStatementFolder(statementFolder);
 
-    problemProxy.createProblem("", "RyzhikChecker", new File("RyzhikTest/debug/1.gif"), new File("RyzhikTest/debug/1.txt"));
-    int problemID = problemProxy.getProblemID();
-    problemProxy.createProblem("", "EmptyPlugin", new File("RyzhikTest/debug/1.gif"), new File("RyzhikTest/debug/1.txt"));
-    int resultsID = problemProxy.getProblemID();
+    //загрузить условия задач
+    for (int i = 1; i <= 6; i++) {
+      problemProxy.selectProblem(290 + i);
+      problemProxy.adjustProblem(
+              "RyzhikChecker",
+              "RyzhikChecker",
+              new File("RyzhikTest/debug/" + i + ".gif"), //файл с картинкой
+              new File("RyzhikTest/debug/" + i + ".txt")  //файл с ответом
+      );
+    }
 
-    problemProxy.selectProblem(problemID);
+    problemProxy.selectProblem(297);
+    problemProxy.adjustProblem(
+              "RyzhikResults",
+              "EmptyPlugin",
+              new File("RyzhikTest/debug/1.gif"), //файл с картинкой
+              new File("RyzhikTest/debug/1.txt")  //файл с ответом
+    );
 
-    problemProxy.newParticipant();
-    String sessionID = problemProxy.getSessionID();
+    int pid = 0;
+    for (int i = 0; i < 10000; i++) {
+      try {
+        problemProxy.newParticipant("p" + i, "pass");
+      } catch (ServerReturnedError e) {
+        if (e.getErrNo() == 17) continue;
+        else throw e;
+      }
 
-    ServerPluginProxy resultsProxy = new ServerPluginProxy(server, sessionID, contestID, resultsID);
-    resultsProxy.setStatementFolder(statementFolder);    
+      pid = i;
+      break;
+    }
 
-    //PluginBox pbProblem = new PluginBox(problemProxy.getClientPlugin("RyzhikTest"), problemProxy);
-    PluginBox pbProblem = new PluginBox(RyzhikPlugin.class, problemProxy);
-    PluginBox pbResults = new PluginBox(RyzhikResults.class, resultsProxy);
+    System.out.println("Заходите от пользователя p" + pid + " пароль pass");
 
-    pbProblem.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    pbResults.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    pbProblem.setVisible(true);
-    pbResults.setVisible(true);
+    Controller.main(new String[0]);
   }
 
   private static ContestDescription newDescription() {
@@ -68,16 +97,16 @@ public class TestRyzhikWithResults {
     res.contestID = -1;
     res.start = now;
     res.data = new UserDataField[]{};
-    res.description = "debug ryzhik contest";
+    res.description = "Отладка плагинов RyzhikTest RyzhikResults";
     res.finish = new Date(now.getTime() + ((long)1000)*60*60*24*100); //100 days
-    res.name = "Debug Ryzhik Contest";
-    res.registrationType = ContestDescription.RegistrationType.ByAdmins;
+    res.name = "Отладка 'Тесты Рыжика'";
+    res.registrationType = ContestDescription.RegistrationType.Self;
     res.resultsAccessPolicy = new ResultsAccessPolicy();
 
     res.contestTiming.selfContestStart = true;
     res.contestTiming.contestEndingStart = 0;
     res.contestTiming.contestEndingFinish = 0;
-    res.contestTiming.maxContestDuration = 10;
+    res.contestTiming.maxContestDuration = 60;
 
     res.resultsAccessPolicy.afterContestPermission = ResultsAccessPolicy.AccessPermission.OnlySelfResults;
     res.resultsAccessPolicy.contestEndingPermission = ResultsAccessPolicy.AccessPermission.NoAccess;
