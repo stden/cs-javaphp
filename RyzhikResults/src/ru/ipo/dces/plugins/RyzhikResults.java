@@ -22,6 +22,8 @@ import java.util.Arrays;
 import java.io.StringReader;
 import java.io.IOException;
 
+import info.clearthought.layout.TableLayout;
+
 /**
  * Created by IntelliJ IDEA.
  * User: I. Posov
@@ -46,7 +48,7 @@ public class RyzhikResults implements Plugin {
 
     environment.setTitle("Резюме");
 
-    mainPanel = new JPanel();            
+    mainPanel = new JPanel();
   }
 
   private InterfaceView getNeededInterfaceView() {
@@ -91,48 +93,62 @@ public class RyzhikResults implements Plugin {
     if (interfaceView == InterfaceView.NoResults)
       setInterfaceDuringContest();
     else
-      setInterfaceWithResults();    
+      setInterfaceWithResults();
   }
 
   private void setInterfaceWithResults() {
     //TODO нарисовать интферфейс с результатом
     //Метод getResultsTest() как бы выдает результаты (сейчас текстом)
     //mainPanel - панель, положить весь интерфейс на нее
+    StyledDocument doc = new DefaultStyledDocument();
 
-    /*JTextPane resultsText = new JTextPane();
+    JTextPane resultsText = new JTextPane(doc);
     try {
-      resultsText.setContentType("text/html");
-      resultsText.read(new StringReader(getResultsText()), null);
-      resultsText.setPage("http://localhost");
+      //resultsText.setContentType("html");
+      resultsText.read(new StringReader(
+                "<html>" +
+                        "<head>" +
+                        "<meta http-equiv=\"Content-Type\" content=\"text/html\">" +
+                        "<title>" + "" + "</title>" +
+                        "</head>" +
+                        "<body>" +
+                        "<base href=D:\\Полька\\документы\\1.html>" +
+                             
+                        "</body>" +
+                        "</html>"), null);
+             // (new StringReader(getResultsText()), null);
+      resultsText.setPage("D:\\Полька\\документы\\1.html");
     } catch (IOException e) {
       //do nothing
-    }*/
+    }
 
-    JTextArea resultsText = new JTextArea(getResultsText());
+    //   JTextArea resultsText = new JTextArea(getResultsText());
 
     resultsText.setEditable(false);
-    resultsText.setFont(resultsText.getFont().deriveFont((float)14));
+    // resultsText.setFont(resultsText.getFont().deriveFont((float)14));
     JScrollPane scroll = new JScrollPane(resultsText);
-    mainPanel.setLayout(new GridLayout(1,1));
+
+    mainPanel.setLayout(new GridLayout(1, 1));
     mainPanel.add(scroll);
-    
+
     mainPanel.validate();
   }
 
   private void setInterfaceDuringContest() {
-    //TODO нарисовать инферфейс плагина результатов во время соревнования.
-    //mainPanel - панель, положить весь интерфейс на неё
-    //чтобы завершить соревнование, пользоваться методом stopContest();
+
     JLabel label = new JLabel("Результаты соревнования можно посмотреть только после окончания соревнования.");
     JButton button = new JButton("Завершить досрочно");
-    mainPanel.setLayout(new BorderLayout());
-    mainPanel.add(label, BorderLayout.CENTER);
-    mainPanel.add(button, BorderLayout.SOUTH);
+    int border = 50;
+    double size[][] = {{border, 50, 400, 50, border, TableLayout.FILL},
+            {border, 30, border, 30, TableLayout.FILL}};
+    TableLayout tbl = new TableLayout(size);
+    mainPanel.setLayout(tbl);
+    mainPanel.add(label, "1, 1, 3, 1");
+    mainPanel.add(button, "2, 2, c, c");
 
     button.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        //TODO отладить вывод подтверждения
-        if (JOptionPane.showConfirmDialog(null, "точно?", "заголовок", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION)
+        if (JOptionPane.showConfirmDialog(null, "После завершения соревнования Вы не сможете изменить Ваши ответы. Вы уверены, что хотите завершить соревнование досрочно?", "Подтверждение досрочного завершения", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION)
           stopContest();
       }
     });
@@ -192,12 +208,12 @@ public class RyzhikResults implements Plugin {
     }
 
     String ball[] = {" баллов", " балл", " балла", " балла", " балла", " баллов", " баллов", " баллов", " баллов", " баллов", " баллов"};
-    String text = "";/*"<html>" +
+    String text = "<html>" +
             "<head>" +
-            "<meta http-equiv=\"Content-Type\" content=\"text/html\">" +
+            // "<meta http-equiv=\"Content-Type\" content=\"text/html\">" +
             "<title>" + "результаты" + "</title>" +
             "</head>" +
-    "<body><h1>Результаты</h1>";*/
+            "<body><h1>Результаты</h1>";
     text += "по теме Числа Вы набрали: " + (r1 - w1) + ball[Math.abs(r1 - w1)] + ".<br/>";
     text += "по теме Функции Вы набрали: " + (r2 - w2) + ball[Math.abs(r2 - w2)] + ".<br/>";
     text += "по теме Фигуры Вы набрали: " + (r3 - w3) + ball[Math.abs(r3 - w3)] + ".<br/>";
@@ -219,14 +235,14 @@ public class RyzhikResults implements Plugin {
             {"По теме ", "По темам ", " знания неустойчивые.", " знания неустойчивые. "}};
 //if text numbers are different
     if (((t1 != t2) & (t2 != t3)) & (t1 != t3)) {
-      text += SecText[t1 - 1][0] + "Числа" + SecText[t1][2];
-      text += SecText[t2 - 1][0] + "Функции" + SecText[t2][2];
-      text += SecText[t3 - 1][0] + "Фигуры" + SecText[t3][2];
+      text += SecText[t1 - 1][0] + " Числа" + SecText[t1][2];
+      text += SecText[t2 - 1][0] + " Функции" + SecText[t2][2];
+      text += SecText[t3 - 1][0] + " Фигуры" + SecText[t3][2];
     }
 
 //if text numbers are not different
     else {
-      if ((t1 == t2) & (t1 == t3)) text += SecText[t1 - 1][1] + "Числа, Функции, Фигуры" + SecText[t1 - 1][3];
+      if ((t1 == t2) & (t1 == t3)) text += SecText[t1 - 1][1] + " Числа, Функции, Фигуры " + SecText[t1 - 1][3];
       else {
         if (t1 == t2)
           text += SecText[t1 - 1][1] + "Числа, Функции" + SecText[t1 - 1][3] + SecText[t3 - 1][0] + "Фигуры" + SecText[t3 - 1][2];
@@ -259,11 +275,11 @@ public class RyzhikResults implements Plugin {
       }
     }
 
-    String param[] = {"умением оперировать фактами",
-            "вычислительными умениями",
-            "приемами оперирования визуальными представлениями знаний",
-            "умением переформулировать задачи и переходить от одной формы представления знаний к другой",
-            "умением строить логические суждения и выводы "};
+    String param[] = {" умением оперировать фактами",
+            " вычислительными умениями",
+            " приемами оперирования визуальными представлениями знаний",
+            " умением переформулировать задачи и переходить от одной формы представления знаний к другой",
+            " умением строить логические суждения и выводы "};
 
     String paramText[] = {"Вы в совершенстве владеете",
             "Вы хорошо владеете",
@@ -271,8 +287,8 @@ public class RyzhikResults implements Plugin {
             "Вероятнее всего, Вы не очень хорошо владеете",
             "Вероятнее всего, Вы на удовлетворительном уровне владеете",
             "Вероятнее всего, Вы на низком уровне владеете",
-            "Показали на низком уровне владение",
-            "Не владеете "};
+            "Вы показали на низком уровне владение",
+            "Вы не владеете "};
     int t[] = {0, 0, 0, 0, 0};
     for (int k = 0; k < 5; k++) {
       e[k] = Math.round((e[k] / e0[k]) * 100);
@@ -280,21 +296,41 @@ public class RyzhikResults implements Plugin {
       t[k] = Functions.getParamText(e[k], p[k]);
       text += "Владение " + param[k] + ": " + e[k] + "%<br/><br/>";
     }
-
+    //для объединения случаев, где вариант текста совпал, проводим сравнение вариантов текста
+    //запоминаем, сколько для каждого варианта повторений и на каких они местах
+    //строковый массив n[]
+    int n[] = {0, 0, 0, 0, 0};
     boolean condition[] = {true, true, true, true, true};
-    for (int i = 0; i < 5; i++) {
-      for (int j = i + 1; j < 5; j++) {
-        if (t[i] == t[j]) {
-          condition[i] = false;
-          condition[j] = false;
-        }
+    for (int i = 0; i < n.length; i++) {
+      for (int j = i + 1; j < n.length; j++) {
+        if (t[i] == t[j]) n[i] = j;
+
       }
     }
-    for (int k = 0; k < 5; k++) {
-      text += paramText[t[k] - 1] + " ";
-      if (condition[k]) text += param[k] + ". ";
-//     else text+=
+    text += " ";
+    for (int k = 0; k < param.length; k++) {
+      if (condition[k]) {
+        text += paramText[t[k] - 1];
+        if (n[k] == 0) {
+          text += " " + param[k] + ". И ";
+          condition[k] = false;
+        } else {
+          if (condition[k]) {
+            text += " " + param[k] + ", и " + param[n[k]] + ", ";
+            condition[n[k]] = false;
+            condition[k] = false;
+            if (condition[n[k]]) {
+              text += " " + param[n[k]] + ", ";
+              condition[n[k]] = false;
+            }
+          }
+
+
+        }
+
+      }
     }
+
     return text + "</body></html>";
   }
 
@@ -314,17 +350,20 @@ public class RyzhikResults implements Plugin {
     mainPanel.doLayout();
   }
 
-  public JPanel getPanel() {
+  public JPanel getPanel
+          () {
     return mainPanel;
   }
 
-  public void activate() {
+  public void activate
+          () {
     if (this.interfaceView == InterfaceView.Results) return;
     InterfaceView interfaceView = getNeededInterfaceView();
     setInterface(interfaceView);
   }
 
-  public void deactivate() {
+  public void deactivate
+          () {
     //do nothing
   }
 }
