@@ -73,7 +73,7 @@ public class MyAppletStub implements AppletStub{
 
     public void appletResize(int width, int height) {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        applet.setPreferredSize(new Dimension(660, 550));
+        applet.setPreferredSize(new Dimension(660, 500));
     }
 
 

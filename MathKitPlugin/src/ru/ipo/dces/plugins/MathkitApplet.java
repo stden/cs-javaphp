@@ -38,8 +38,7 @@ public class MathkitApplet extends JPanel implements Runnable, AppletContext, JS
   DCESJSObject obj = new DCESJSObject();
   PluginEnvironment e;
   HashMap<String, String> solution = new HashMap<String, String>();
-  File MATHKIT_APPLET_ROOT = null;
-
+ 
 
   class DCESJSObject extends JSObject {
 
@@ -73,7 +72,7 @@ public class MathkitApplet extends JPanel implements Runnable, AppletContext, JS
       s.getChars(i, s.length(), args, 0);
 
       for (char arg : args) {
-        if (arg != '(' && arg != ')' && arg != ' ') {
+        if (arg != '(' && arg != ')') {
 
           if (arg == ',') {
             arg1 = arg2;
@@ -83,9 +82,11 @@ public class MathkitApplet extends JPanel implements Runnable, AppletContext, JS
           }
         }
       }
-      if (arg1.endsWith("'") && arg1.startsWith("'")) arg1 = arg1.substring(1, arg1.length() - 1);
-      if (arg2.endsWith("'") && arg2.startsWith("'")) arg2 = arg2.substring(1, arg2.length() - 1);
-      if (m.equals("SCORM.setDataValue")) {
+      arg1=arg1.trim();
+      arg2=arg2.trim();
+      if(arg1.endsWith("'") && arg1.startsWith("'"))arg1=(arg1.substring(1,arg1.length()-1));
+      if(arg2.endsWith("'") && arg2.startsWith("'"))arg2=(arg2.substring(1,arg2.length()-1));
+  	  if (m.equals("SCORM.setDataValue")) {
         solution.put(arg1, arg2);
 
       } else if (m.equals("SCORM.commitData")) {
@@ -146,16 +147,7 @@ public class MathkitApplet extends JPanel implements Runnable, AppletContext, JS
     try {
       Class<?> c;
       e = PluginInt.pe;
-      File APPLET_ROOT = null;
-
-      File MATHKIT_APPLET_ROOT = e.getProblemFolder();
-      try {
-        FileFilter filter = new NameFilter(".mkz");
-        APPLET_ROOT = MATHKIT_APPLET_ROOT;//getProblemFolder(MATHKIT_APPLET_ROOT, filter);
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-
+      File APPLET_ROOT = e.getProblemFolder();  
       AppletParameters ap = new AppletParameters(APPLET_ROOT);
 
       c = Class.forName("rus.sketchpad.gui.SketchpadApplet");
