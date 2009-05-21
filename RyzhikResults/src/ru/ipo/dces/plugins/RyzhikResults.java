@@ -174,15 +174,10 @@ public class RyzhikResults implements Plugin {
     }
 
     String ball[] = {" баллов", " балл", " балла", " балла", " балла", " баллов", " баллов", " баллов", " баллов", " баллов", " баллов"};
-    String text = "<html>" +
-            "<head>" +
-
-            "<title>" + "результаты" + "</title>" +
-            "</head>" +
-            "<body><h1>Результаты</h1>";
+    String text = "<html>" +"<body><h3>Здравствуйте! Ознакомьтесь, пожалуйста, с Вашими результатами.:</h3>";
     text += "по теме <b>Числа</b> Вы набрали: " + (r1 - w1) + ball[Math.abs(r1 - w1)] + ".<br/>";
-    text += "по теме Функции Вы набрали: " + (r2 - w2) + ball[Math.abs(r2 - w2)] + ".<br/>";
-    text += "по теме Фигуры Вы набрали: " + (r3 - w3) + ball[Math.abs(r3 - w3)] + ".<br/>";
+    text += "по теме <b>Функции</b> Вы набрали: " + (r2 - w2) + ball[Math.abs(r2 - w2)] + ".<br/>";
+    text += "по теме <b>Фигуры</b> Вы набрали: " + (r3 - w3) + ball[Math.abs(r3 - w3)] + ".<br/>";
 
     int t1, t2, t3;
     t1 = Functions.getSecText(w1, r1, d1);   //text number for "Числа"
@@ -201,23 +196,25 @@ public class RyzhikResults implements Plugin {
             {"По теме ", "По темам ", " знания неустойчивые.", " знания неустойчивые. "}};
 //if text numbers are different
     if (((t1 != t2) & (t2 != t3)) & (t1 != t3)) {
-      text += SecText[t1 - 1][0] + " Числа" + SecText[t1][2];
-      text += SecText[t2 - 1][0] + " Функции" + SecText[t2][2];
-      text += SecText[t3 - 1][0] + " Фигуры" + SecText[t3][2];
+      text += SecText[t1 - 1][0] + " <b>Числа</b>" + SecText[t1][2];
+      text += SecText[t2 - 1][0] + " <b>Функции</b>" + SecText[t2][2];
+      text += SecText[t3 - 1][0] + " <b>Фигуры</b>" + SecText[t3][2];
     }
 
 //if text numbers are not different
     else {
-      if ((t1 == t2) & (t1 == t3)) text += SecText[t1 - 1][1] + " Числа, Функции, Фигуры " + SecText[t1 - 1][3];
+      if ((t1 == t2) & (t1 == t3)) text += SecText[t1 - 1][1] + " <b>Числа, Функции, Фигуры</b>" + SecText[t1 - 1][3];
       else {
         if (t1 == t2)
-          text += SecText[t1 - 1][1] + "Числа, Функции" + SecText[t1 - 1][3] + SecText[t3 - 1][0] + "Фигуры" + SecText[t3 - 1][2];
+          text += SecText[t1 - 1][1] + "<b>Числа, Функции</b>" + SecText[t1 - 1][3] + SecText[t3 - 1][0] + "<b>Фигуры</b>" + SecText[t3 - 1][2];
         if (t1 == t3)
-          text += SecText[t1 - 1][1] + "Числа, Фигуры" + SecText[t1 - 1][3] + SecText[t2 - 1][0] + "Функции" + SecText[t2 - 1][2];
+          text += SecText[t1 - 1][1] + "<b>Числа, Фигуры</b>" + SecText[t1 - 1][3] + SecText[t2 - 1][0] + "<b>Функции</b>" + SecText[t2 - 1][2];
         if (t2 == t3)
-          text += SecText[t2 - 1][1] + "Функции, Фигуры" + SecText[t2 - 1][3] + SecText[t1 - 1][0] + "Числа" + SecText[t1 - 1][2];
+          text += SecText[t2 - 1][1] + "<b>Функции, Фигуры</b>" + SecText[t2 - 1][3] + SecText[t1 - 1][0] + "<b>Числа</b>" + SecText[t1 - 1][2];
       }
     }
+
+    text+=".<br/>";
 
     float e[] = {0, 0, 0, 0, 0};
     float p[] = {0, 0, 0, 0, 0};
@@ -243,7 +240,7 @@ public class RyzhikResults implements Plugin {
 
     String param[] = {" умением оперировать фактами",
             " вычислительными умениями",
-            " приемами оперирования визуальными представлениями знаний",
+            " приемами визуального представления знаний",
             " умением переформулировать задачи и переходить от одной формы представления знаний к другой",
             " умением строить логические суждения и выводы "};
 
@@ -256,7 +253,7 @@ public class RyzhikResults implements Plugin {
             "Вы показали на низком уровне владение",
             "Вы не владеете "};
     int t[] = {0, 0, 0, 0, 0};
-    for (int k = 0; k < 5; k++) {
+    for (int k = 0; k < param.length; k++) {
       e[k] = Math.round((e[k] / e0[k]) * 100);
       p[k] = Math.round((p[k] / p0[k]) * 100);
       t[k] = Functions.getParamText(e[k], p[k]);
@@ -265,37 +262,20 @@ public class RyzhikResults implements Plugin {
     //для объединения случаев, где вариант текста совпал, проводим сравнение вариантов текста
     //запоминаем, сколько для каждого варианта повторений и на каких они местах
     //строковый массив n[]
-    int n[] = {0, 0, 0, 0, 0};
-    boolean condition[] = {true, true, true, true, true};
-    for (int i = 0; i < n.length; i++) {
-      for (int j = i + 1; j < n.length; j++) {
-        if (t[i] == t[j]) n[i] = j;
 
+    for (int i = 0; i < t.length; i++) {
+      for (int j = i + 1; j < t.length; j++) {
+        if (t[i] == t[j]) {
+          if (!param[j].equals(""))
+          {param[i] += ", " + param[j];
+           param[j] = "";  }
+        }
       }
     }
     text += " ";
     for (int k = 0; k < param.length; k++) {
-      if (condition[k]) {
-        text += paramText[t[k] - 1];
-        if (n[k] == 0) {
-          text += " " + param[k] + ". И ";
-          condition[k] = false;
-        } else {
-          if (condition[k]) {
-            text += " " + param[k] + ", и " + param[n[k]] + ", ";
-            condition[n[k]] = false;
-            condition[k] = false;
-            if (condition[n[k]]) {
-              text += " " + param[n[k]] + ", ";
-              condition[n[k]] = false;
-            }
-          }
-
-
-        }
-
+      if (!param[k].equals("")) text +=" "+ paramText[t[k] - 1] + " " + param[k];
       }
-    }
 
     return text + "</body></html>";
   }
