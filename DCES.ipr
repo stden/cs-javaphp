@@ -60,6 +60,15 @@
           <option name="LABEL_INDENT_SIZE" value="0" />
           <option name="LABEL_INDENT_ABSOLUTE" value="false" />
         </ADDITIONAL_INDENT_OPTIONS>
+        <ADDITIONAL_INDENT_OPTIONS fileType="jsp">
+          <option name="INDENT_SIZE" value="4" />
+          <option name="CONTINUATION_INDENT_SIZE" value="8" />
+          <option name="TAB_SIZE" value="4" />
+          <option name="USE_TAB_CHARACTER" value="false" />
+          <option name="SMART_TABS" value="false" />
+          <option name="LABEL_INDENT_SIZE" value="0" />
+          <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+        </ADDITIONAL_INDENT_OPTIONS>
         <ADDITIONAL_INDENT_OPTIONS fileType="sql">
           <option name="INDENT_SIZE" value="2" />
           <option name="CONTINUATION_INDENT_SIZE" value="8" />
@@ -298,21 +307,21 @@
     <option name="projectName" value="DCES" />
   </component>
   <component name="ProjectFileVersion" converted="true" />
+  <component name="ProjectKey">
+    <option name="state" value="https://cs-javaphp.googlecode.com/svn/trunk/DCES.ipr" />
+  </component>
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Client/Client.iml" filepath="$PROJECT_DIR$/Client/Client.iml" />
       <module fileurl="file://$PROJECT_DIR$/DCESTests/DCESTests.iml" filepath="$PROJECT_DIR$/DCESTests/DCESTests.iml" />
       <module fileurl="file://$PROJECT_DIR$/DCES_API/DCES_API.iml" filepath="$PROJECT_DIR$/DCES_API/DCES_API.iml" />
       <module fileurl="file://$PROJECT_DIR$/MathKitPlugin/MathKitPlugin.iml" filepath="$PROJECT_DIR$/MathKitPlugin/MathKitPlugin.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Resources.iml" filepath="$PROJECT_DIR$/Resources.iml" />
       <module fileurl="file://$PROJECT_DIR$/RyzhikResults/RyzhikResults.iml" filepath="$PROJECT_DIR$/RyzhikResults/RyzhikResults.iml" />
       <module fileurl="file://$PROJECT_DIR$/RyzhikTest/RyzhikTest.iml" filepath="$PROJECT_DIR$/RyzhikTest/RyzhikTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/SamplePlugin/SamplePlugin.iml" filepath="$PROJECT_DIR$/SamplePlugin/SamplePlugin.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Server/Server.iml" filepath="$PROJECT_DIR$/Server/Server.iml" />
-      <module fileurl="file://$PROJECT_DIR$/wiki/wiki.iml" filepath="$PROJECT_DIR$/wiki/wiki.iml" />
     </modules>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_5" assert-keyword="true" jdk-15="true" project-jdk-name="1.6" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_5" assert-keyword="true" jdk-15="true" project-jdk-name="1.7" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="ResourceManagerContainer">
