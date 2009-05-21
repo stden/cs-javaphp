@@ -13,14 +13,10 @@ import ru.ipo.dces.clientservercommunication.StopContestRequest;
 
 import javax.swing.*;
 import javax.swing.text.*;
-import javax.swing.text.html.HTMLDocument;
-import javax.swing.text.html.StyleSheet;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.*;
-import java.util.Arrays;
-import java.io.StringReader;
-import java.io.IOException;
 
 import info.clearthought.layout.TableLayout;
 
@@ -97,36 +93,13 @@ public class RyzhikResults implements Plugin {
   }
 
   private void setInterfaceWithResults() {
-    //TODO нарисовать интферфейс с результатом
-    //Метод getResultsTest() как бы выдает результаты (сейчас текстом)
-    //mainPanel - панель, положить весь интерфейс на нее
-    StyledDocument doc = new DefaultStyledDocument();
 
-    JTextPane resultsText = new JTextPane(doc);
-    try {
-      //resultsText.setContentType("html");
-      resultsText.read(new StringReader(
-                "<html>" +
-                        "<head>" +
-                        "<meta http-equiv=\"Content-Type\" content=\"text/html\">" +
-                        "<title>" + "" + "</title>" +
-                        "</head>" +
-                        "<body>" +
-                        "<base href=D:\\Полька\\документы\\1.html>" +
-                             
-                        "</body>" +
-                        "</html>"), null);
-             // (new StringReader(getResultsText()), null);
-      resultsText.setPage("D:\\Полька\\документы\\1.html");
-    } catch (IOException e) {
-      //do nothing
-    }
+    JTextPane textPane = new JTextPane();
+    //StyledDocument doc = textPane.getStyledDocument();
+    textPane.setContentType("text/html");
+    textPane.setText(getResultsText());
 
-    //   JTextArea resultsText = new JTextArea(getResultsText());
-
-    resultsText.setEditable(false);
-    // resultsText.setFont(resultsText.getFont().deriveFont((float)14));
-    JScrollPane scroll = new JScrollPane(resultsText);
+    JScrollPane scroll = new JScrollPane(textPane);
 
     mainPanel.setLayout(new GridLayout(1, 1));
     mainPanel.add(scroll);
@@ -157,14 +130,7 @@ public class RyzhikResults implements Plugin {
   }
 
   private String getResultsText() {
-    /*String results[][] = {
-            {"++ ++?--", "+- ?-++?", "-- +-+-?", "?? +-+-?", "!0 +-++?"},
-            {"-0 ++-??", "+0 ++-+?", "++ --?++", "+- ++-?+", "-- +++??"},
-            {"++ ++?--", "+- ?-++?", "-- +-+-?", "?? +-+-?", "!0 +-++?"},
-            {"-0 ++-??", "+0 ++-+?", "++ --?++", "+- ++-?+", "-- +++??"},
-            {"++ ?+?--", "-- ?-++?", "-- +-+-?", "?? ?-+-?", "!0 +-++?"},
-            {"-0 ++-??", "+0 ++-+?", "++ --?++", "++ ?+-?+", "-- +++??"},
-    };*/
+
     int d1, r1, w1;
     d1 = 0;
     r1 = 0;
@@ -210,11 +176,11 @@ public class RyzhikResults implements Plugin {
     String ball[] = {" баллов", " балл", " балла", " балла", " балла", " баллов", " баллов", " баллов", " баллов", " баллов", " баллов"};
     String text = "<html>" +
             "<head>" +
-            // "<meta http-equiv=\"Content-Type\" content=\"text/html\">" +
+
             "<title>" + "результаты" + "</title>" +
             "</head>" +
             "<body><h1>Результаты</h1>";
-    text += "по теме Числа Вы набрали: " + (r1 - w1) + ball[Math.abs(r1 - w1)] + ".<br/>";
+    text += "по теме <b>Числа</b> Вы набрали: " + (r1 - w1) + ball[Math.abs(r1 - w1)] + ".<br/>";
     text += "по теме Функции Вы набрали: " + (r2 - w2) + ball[Math.abs(r2 - w2)] + ".<br/>";
     text += "по теме Фигуры Вы набрали: " + (r3 - w3) + ball[Math.abs(r3 - w3)] + ".<br/>";
 
