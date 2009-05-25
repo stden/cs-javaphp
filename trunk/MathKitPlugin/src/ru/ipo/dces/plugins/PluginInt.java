@@ -1,7 +1,7 @@
 package ru.ipo.dces.plugins;
 
 
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import ru.ipo.dces.pluginapi.DCESPluginLoadable;
 import ru.ipo.dces.pluginapi.Plugin;
@@ -12,6 +12,7 @@ public class PluginInt implements Plugin{
 	  static PluginEnvironment pe;
 	  
 	public PluginInt(PluginEnvironment pe){
+    System.out.println("@#$ MathKit Plugin Created 4");
 		PluginInt.pe=pe;
     mapanel = new MathkitAppletPanel();
     pe.setTitle(pe.getProblemName());

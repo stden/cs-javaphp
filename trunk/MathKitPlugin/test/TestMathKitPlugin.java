@@ -1,6 +1,7 @@
 import ru.ipo.dces.server.http.HttpServer;
 import ru.ipo.dces.debug.ServerPluginProxy;
 import ru.ipo.dces.debug.PluginBox;
+import ru.ipo.dces.debug.ServerPluginEmulator;
 import ru.ipo.dces.clientservercommunication.ContestDescription;
 import ru.ipo.dces.clientservercommunication.ContestTiming;
 import ru.ipo.dces.clientservercommunication.UserDataField;
@@ -13,6 +14,7 @@ import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Created by IntelliJ IDEA.
@@ -22,7 +24,23 @@ import java.util.Date;
  */
 public class TestMathKitPlugin {
 
+  public static void main(String[] args) {
 
+    ServerPluginEmulator spe = new ServerPluginEmulator() {
+      public Object checkSolution(HashMap<String, String> solution, HashMap<String, String> result, Object state) throws GeneralRequestFailureException {
+        System.out.println("SOLUTION = " + solution.toString());
+        return null;
+      }
+
+      public File getStatement() throws GeneralRequestFailureException, IOException {
+        return new File("MathKitPlugin/debug/c1");
+      }
+    };
+
+    PluginBox pb = new PluginBox(PluginInt.class, spe);
+    pb.setVisible(true);
+    pb.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+  }
 
   public static void main1(String[] args) throws ServerReturnedError, GeneralRequestFailureException, IOException {
     HttpServer server = new HttpServer("http://dces-server.ru:423/dces.php");
@@ -34,7 +52,7 @@ public class TestMathKitPlugin {
     problemProxy.adjustContest(cd);
   }
 
-  public static void main(String[] args) throws ServerReturnedError, GeneralRequestFailureException, IOException {
+  public static void main2(String[] args) throws ServerReturnedError, GeneralRequestFailureException, IOException {
     HttpServer server = new HttpServer("http://ipo.spb.ru/dces/test/dces.php");
 
     //connect to the server as a superadmin

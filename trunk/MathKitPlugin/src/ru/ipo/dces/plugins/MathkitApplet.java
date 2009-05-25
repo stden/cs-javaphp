@@ -14,6 +14,7 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,6 +44,7 @@ public class MathkitApplet extends JPanel implements Runnable, AppletContext, JS
   class DCESJSObject extends JSObject {
 
     public Object getMember(String name) {
+      System.out.println("@#$% @#$^ get member: ");
       return new Object();
     }
 
@@ -60,10 +62,13 @@ public class MathkitApplet extends JPanel implements Runnable, AppletContext, JS
     }
 
     public Object call(String methodName, Object args[]) {
+      System.out.println("@#$% @#$^ calling: " + methodName + Arrays.toString(args));
       return new Object();
     }
 
     public Object eval(String s) {
+      System.out.println("@#$% @#$^ calling: " + s);
+      
       int i = s.indexOf("(");
       String m = s.substring(0, i);
       char args[] = new char[s.length() - i];
@@ -92,12 +97,14 @@ public class MathkitApplet extends JPanel implements Runnable, AppletContext, JS
       } else if (m.equals("SCORM.commitData")) {
         //System.out.println("commitData"+solution);
         //solution=new HashMap();
-        try {
-          System.out.println("solution.toString() = " + solution.toString());
-          e.submitSolution(solution);
-          JOptionPane.showMessageDialog(null, "Решение удачно отослано");
-        } catch (GeneralRequestFailureException e) {
-          JOptionPane.showMessageDialog(null, "Решение не послано всвязи с проблемами со связью");
+        if (JOptionPane.showConfirmDialog(null, "Подтвердите отсылку решения") == JOptionPane.YES_OPTION) {
+          try {
+            System.out.println("solution.toString() = " + solution.toString());
+            e.submitSolution(solution);
+            JOptionPane.showMessageDialog(null, "Решение удачно отослано");
+          } catch (GeneralRequestFailureException e) {
+            JOptionPane.showMessageDialog(null, "Решение не послано всвязи с проблемами со связью");
+          }
         }
         solution = new HashMap<String, String>();
       }
@@ -225,6 +232,13 @@ public class MathkitApplet extends JPanel implements Runnable, AppletContext, JS
   }
 
   public JSObject getJSObject() {
+    System.out.println("@#$ get js object");
+    try {
+      throw new Exception("get js object");
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+        
     return obj;
   }
 }
