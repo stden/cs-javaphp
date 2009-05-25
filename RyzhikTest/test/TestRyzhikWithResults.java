@@ -22,7 +22,7 @@ import java.util.Date;
 public class TestRyzhikWithResults {
 
   public static void main_create_initial_contest(String[] args) throws ServerReturnedError, GeneralRequestFailureException, IOException {
-    HttpServer server = new HttpServer("http://ipo.spb.ru/dces/test/dces.php");
+    HttpServer server = new HttpServer("http://vm-2.spb.ru/dces/dces.php");
 
     ServerPluginProxy problemProxy = new ServerPluginProxy(server, "admin", "pass", true);
 
@@ -37,7 +37,7 @@ public class TestRyzhikWithResults {
     problemProxy.createProblem("RyzhikResults", "EmptyPlugin", new File("RyzhikTest/debug/1.gif"), new File("RyzhikTest/debug/1.txt"));
   }
 
-  public static void main(String[] args) throws IOException, ServerReturnedError, GeneralRequestFailureException {
+  public static void main1(String[] args) throws IOException, ServerReturnedError, GeneralRequestFailureException {
 
     HttpServer server = new HttpServer("http://ipo.spb.ru/dces/test/dces.php");
 
@@ -92,13 +92,22 @@ public class TestRyzhikWithResults {
 
     Date now = new Date();
 
+    UserDataField field1 = new UserDataField();
+    field1.compulsory = true;
+    field1.data = "Имя";
+    field1.showInResult = true;
+    UserDataField field2 = new UserDataField();
+    field2.compulsory = false;
+    field2.data = "Класс";
+    field2.showInResult = false;
+
     res.contestTiming = new ContestTiming();
     res.contestID = -1;
     res.start = now;
-    res.data = new UserDataField[]{};
-    res.description = "Отладка плагинов RyzhikTest RyzhikResults";
+    res.data = new UserDataField[]{field1, field2};
+    res.description = "Пример соревнования на тесты рыжика. Регистрация по желанию";
     res.finish = new Date(now.getTime() + ((long)1000)*60*60*24*100); //100 days
-    res.name = "Отладка 'Тесты Рыжика'";
+    res.name = "Тесты Рыжика. Пример";
     res.registrationType = ContestDescription.RegistrationType.Self;
     res.resultsAccessPolicy = new ResultsAccessPolicy();
 

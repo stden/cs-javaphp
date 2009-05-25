@@ -33,7 +33,7 @@ public class RyzhikPlugin implements Plugin {
 
   public RyzhikPlugin(PluginEnvironment pe) {
     myEnvironment = pe;
-    myEnvironment.setTitle(/*pe.getProblemName()*/"Задача");
+    myEnvironment.setTitle(pe.getProblemName());
     mainPanel = new JPanel();
 
     //send 'init'
@@ -68,6 +68,8 @@ public class RyzhikPlugin implements Plugin {
         mainPanel.add(radioButton[j], "" + (2 * j + 3) + ", " + (2 * i + 1));
         bg.add(radioButton[j]);
         radioButton[j].addActionListener(new RadioButtonActionListener(i, radioButton[j], myEnvironment));
+        if (symbol[j].equals("0"))
+          radioButton[j].setSelected(true);
       }
     }
   }

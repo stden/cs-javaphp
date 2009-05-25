@@ -12,7 +12,7 @@
         <url>jar://$MODULE_DIR$/mathkit-applet.jar!/</url>
       </containerElement>
     </containerInfo>
-    <setting name="jarUrl" value="file://$MODULE_DIR$/MathKitPlugin.jar" />
+    <setting name="jarUrl" value="file://$MODULE_DIR$/../plugins/MathKitPlugin.jar" />
     <setting name="buildJar" value="true" />
     <setting name="mainClass" value="" />
   </component>

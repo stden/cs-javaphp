@@ -112,7 +112,7 @@
         $rows = mysql_query(
                   sprintf("SELECT server_plugin_alias FROM ${prfx}problem WHERE id=%s", Data::quote_smart($p->id))
                 , $con) or throwServerProblem(12, mysql_error());
-        $row = mysql_fetch_array($rows, $con) or throwBusinessLogicError(4);        
+        $row = mysql_fetch_array($rows) or throwBusinessLogicError(4);
         $plugin_alias = $row['server_plugin_alias'];
       }
       elseif ($p->id == -1 && is_null($p->serverPluginAlias))

@@ -35,6 +35,7 @@ public class ResultsPlugin implements AdminPlugin {
     env.setTitle(Localization.getAdminPluginName(ResultsPlugin.class));
 
     JScrollPane scroll = new JScrollPane(table);
+    mainPanel.setLayout(new GridLayout(1,1));
     mainPanel.add(scroll);
     table.setModel(new DefaultTableModel());
   }
