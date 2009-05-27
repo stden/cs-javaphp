@@ -98,7 +98,7 @@ public class RyzhikResults implements Plugin {
     //StyledDocument doc = textPane.getStyledDocument();
     textPane.setContentType("text/html");
     textPane.setText(getResultsText());
-
+    textPane.setEditable(false);
     JScrollPane scroll = new JScrollPane(textPane);
 
     mainPanel.setLayout(new GridLayout(1, 1));
@@ -137,9 +137,9 @@ public class RyzhikResults implements Plugin {
     w1 = 0;
     for (int i = 0; i < 2; i++) {
       for (int j = 0; j < 5; j++) {
-        if (results[i][j].charAt(1) == '0') d1++;
+        if (results[i][j].charAt(0) == '0') d1++;
         else {
-          if (results[i][j].charAt(1) == results[i][j].charAt(0)) r1++;
+          if (results[i][j].charAt(0) == results[i][j].charAt(1)) r1++;
           else w1++;
         }
       }
@@ -151,9 +151,9 @@ public class RyzhikResults implements Plugin {
     w2 = 0;
     for (int i = 2; i < 4; i++) {
       for (int j = 0; j < 5; j++) {
-        if (results[i][j].charAt(1) == '0') d2++;
+        if (results[i][j].charAt(0) == '0') d2++;
         else {
-          if (results[i][j].charAt(1) == results[i][j].charAt(0)) r2++;
+          if (results[i][j].charAt(0) == results[i][j].charAt(1)) r2++;
           else w2++;
         }
       }
@@ -165,16 +165,17 @@ public class RyzhikResults implements Plugin {
     w3 = 0;
     for (int i = 4; i < 6; i++) {
       for (int j = 0; j < 5; j++) {
-        if (results[i][j].charAt(1) == '0') d3++;
+        if (results[i][j].charAt(0) == '0') d3++;
         else {
-          if (results[i][j].charAt(1) == results[i][j].charAt(0)) r3++;
+          if (results[i][j].charAt(0) == results[i][j].charAt(1)) r3++;
           else w3++;
         }
       }
     }
 
     String ball[] = {" баллов", " балл", " балла", " балла", " балла", " баллов", " баллов", " баллов", " баллов", " баллов", " баллов"};
-    String text = "<html>" +"<body><h3>Здравствуйте! Ознакомьтесь, пожалуйста, с Вашими результатами.:</h3>";
+    String text = "<html>" + "<body><h3>Здравствуйте! Ознакомьтесь, пожалуйста, с Вашими результатами:</h3>";
+    text += "Сумма Ваших баллов: " + (r1 + r2 + r3 - w1 - w2 - w3) + "<br>";
     text += "по теме <b>Числа</b> Вы набрали: " + (r1 - w1) + ball[Math.abs(r1 - w1)] + ".<br/>";
     text += "по теме <b>Функции</b> Вы набрали: " + (r2 - w2) + ball[Math.abs(r2 - w2)] + ".<br/>";
     text += "по теме <b>Фигуры</b> Вы набрали: " + (r3 - w3) + ball[Math.abs(r3 - w3)] + ".<br/>";
@@ -203,18 +204,19 @@ public class RyzhikResults implements Plugin {
 
 //if text numbers are not different
     else {
-      if ((t1 == t2) & (t1 == t3)) text += SecText[t1 - 1][1] + " <b>Числа, Функции, Фигуры</b>" + SecText[t1 - 1][3];
+      if ((t1 == t2) & (t1 == t3))
+        text += SecText[t1 - 1][1] + " <b>Числа, Функции, Фигуры</b>" + SecText[t1 - 1][3] + "<br>";
       else {
         if (t1 == t2)
-          text += SecText[t1 - 1][1] + "<b>Числа, Функции</b>" + SecText[t1 - 1][3] + SecText[t3 - 1][0] + "<b>Фигуры</b>" + SecText[t3 - 1][2];
+          text += SecText[t1 - 1][1] + "<b>Числа, Функции</b>" + SecText[t1 - 1][3] + SecText[t3 - 1][0] + "<b>Фигуры</b>" + SecText[t3 - 1][2] + "<br>";
         if (t1 == t3)
-          text += SecText[t1 - 1][1] + "<b>Числа, Фигуры</b>" + SecText[t1 - 1][3] + SecText[t2 - 1][0] + "<b>Функции</b>" + SecText[t2 - 1][2];
+          text += SecText[t1 - 1][1] + "<b>Числа, Фигуры</b>" + SecText[t1 - 1][3] + SecText[t2 - 1][0] + "<b>Функции</b>" + SecText[t2 - 1][2] + "<br>";
         if (t2 == t3)
-          text += SecText[t2 - 1][1] + "<b>Функции, Фигуры</b>" + SecText[t2 - 1][3] + SecText[t1 - 1][0] + "<b>Числа</b>" + SecText[t1 - 1][2];
+          text += SecText[t2 - 1][1] + "<b>Функции, Фигуры</b>" + SecText[t2 - 1][3] + SecText[t1 - 1][0] + "<b>Числа</b>" + SecText[t1 - 1][2] + "<br>";
       }
     }
 
-    text+=".<br/>";
+    text += "<br/>";
 
     float e[] = {0, 0, 0, 0, 0};
     float p[] = {0, 0, 0, 0, 0};
@@ -251,7 +253,7 @@ public class RyzhikResults implements Plugin {
             "Вероятнее всего, Вы на удовлетворительном уровне владеете",
             "Вероятнее всего, Вы на низком уровне владеете",
             "Вы показали на низком уровне владение",
-            "Вы не владеете "};
+    };
     int t[] = {0, 0, 0, 0, 0};
     for (int k = 0; k < param.length; k++) {
       e[k] = Math.round((e[k] / e0[k]) * 100);
@@ -266,16 +268,17 @@ public class RyzhikResults implements Plugin {
     for (int i = 0; i < t.length; i++) {
       for (int j = i + 1; j < t.length; j++) {
         if (t[i] == t[j]) {
-          if (!param[j].equals(""))
-          {param[i] += ", " + param[j];
-           param[j] = "";  }
+          if (!param[j].equals("")) {
+            param[i] += ", " + param[j];
+            param[j] = "";
+          }
         }
       }
     }
     text += " ";
     for (int k = 0; k < param.length; k++) {
-      if (!param[k].equals("")) text +=" "+ paramText[t[k] - 1] + " " + param[k];
-      }
+      if ((!param[k].equals("")) & (t[k] != 8)) text += " " + paramText[t[k] - 1] + " " + param[k];
+    }
 
     return text + "</body></html>";
   }
