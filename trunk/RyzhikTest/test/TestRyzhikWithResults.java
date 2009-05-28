@@ -37,7 +37,7 @@ public class TestRyzhikWithResults {
     problemProxy.createProblem("RyzhikResults", "EmptyPlugin", new File("RyzhikTest/debug/1.gif"), new File("RyzhikTest/debug/1.txt"));
   }
 
-  public static void main1(String[] args) throws IOException, ServerReturnedError, GeneralRequestFailureException {
+  public static void main(String[] args) throws IOException, ServerReturnedError, GeneralRequestFailureException {
 
     HttpServer server = new HttpServer("http://ipo.spb.ru/dces/test/dces.php");
 
@@ -52,7 +52,7 @@ public class TestRyzhikWithResults {
     for (int i = 1; i <= 6; i++) {
       problemProxy.selectProblem(290 + i);
       problemProxy.adjustProblem(
-              "RyzhikChecker",
+              "RyzhikTest",
               "RyzhikChecker",
               new File("RyzhikTest/debug/" + i + ".gif"), //файл с картинкой
               new File("RyzhikTest/debug/" + i + ".txt")  //файл с ответом
@@ -70,7 +70,7 @@ public class TestRyzhikWithResults {
     );
 
     int pid = 0;
-    for (int i = 0; i < 10000; i++) {
+    for (int i = 72; i < 10000; i++) {
       try {
         problemProxy.newParticipant("p" + i, "pass");
       } catch (ServerReturnedError e) {

@@ -17,7 +17,7 @@ function processConnectToContestRequest($request) {
 
   //test if there is at least one user
   if ( !$row )
-      throBusinessLogicError(12);
+      throwBusinessLogicError(12);
 
   //test password
   if ($row['password'] !== $request->password)

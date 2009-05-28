@@ -276,7 +276,7 @@ public class ServerPluginProxy implements ServerPluginEmulator {
     acr.problems = new ProblemDescription[gcdResponse.problems.length];
     for (int i = 0; i < gcdResponse.problems.length; i++) {
       ProblemDescription problem = gcdResponse.problems[i];
-      acr.problems[i] = new ProblemDescription();
+      acr.problems[i] = problem;//new ProblemDescription();
       acr.problems[i].id = problem.id;
 
       if (problem.id == problemID) {
