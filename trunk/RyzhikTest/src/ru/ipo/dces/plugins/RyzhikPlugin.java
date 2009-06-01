@@ -60,7 +60,7 @@ public class RyzhikPlugin implements Plugin {
     statement = new JLabel();
     statement.setLayout(new GridLayout(1,1));
     statement.setIcon(new ImageIcon(getStatementGif()));
-    statement.setBackground(Color.PINK);
+    
     JPanel butPanel = new JPanel();
     butPanel.setBorder(BorderFactory.createMatteBorder(1, 2, 1, 2, Color.BLUE));
     statement.setBorder(BorderFactory.createMatteBorder(1, 2, 1, 2, Color.BLUE));
