@@ -15,18 +15,18 @@ public class Functions {
     if (r == 10) t = 2;
     if (d == 10) t = 3;
     if (w > 2 & w < 10) {
-      if (r >= 5) t = 4;
+      if (r >= 7) t = 4;
       else {
         if (d >= 2) t = 5;
         else t = 6;
       }
     }
     if (w == 0) {
-      if (r >= 5) t = 7;
+      if (r >= 7) t = 7;
       else t = 8;
     }
     if (w > 0 & w <= 2) {
-      if (r >= 5) t = 9;
+      if (r >= 7) t = 9;
       else t = 10;
     }
     return t;
@@ -54,5 +54,31 @@ public class Functions {
     }
     return t;
 
+  }
+
+  public static int getText(int w, int r, int d ){
+    int t = 0;
+    if (w == 30) t = 1;
+    if (r == 30) t = 2;
+    if (d == 30) t = 3;
+    if (r<=w) t=1;
+    else {
+    if (w > 6 & w < 30) {
+      if (r >= 21) t = 4;
+      else {
+
+        if (d >= 6) t = 5;
+        else t = 6;
+      }
+    }
+    if (w == 0) {
+      if (r >= 21) t = 7;
+      else t = 8;
+    }
+    if (w > 0 & w <= 6) {
+      if (r >= 21) t = 9;
+      else t = 10;
+    } }
+    return t;
   }
 }

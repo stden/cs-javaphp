@@ -173,9 +173,23 @@ public class RyzhikResults implements Plugin {
       }
     }
 
+    int w = w1+w2+w3;
+    int r = r1+r2+r3;
+    int d = d1+d2+d3;
     String ball[] = {" баллов", " балл", " балла", " балла", " балла", " баллов", " баллов", " баллов", " баллов", " баллов", " баллов"};
     String text = "<html>" + "<body><h3>Здравствуйте! Ознакомьтесь, пожалуйста, с Вашими результатами:</h3>";
-    text += "Сумма Ваших баллов: " + (r1 + r2 + r3 - w1 - w2 - w3) + "<br>";
+    String testText[]={"Тест не пройден. Ваши результаты аналогичны результатам, полученным случайно. ",
+            "Тест пройден на высшем уровне. ",
+            "Тест не пройден. ",
+            "Тест пройден, но зафиксированы пробелы в знаниях. ",
+            "Тест пройден, но слабые места есть и Вы их знаете. ",
+            "Тест пройден плохо. ",
+            "Тест пройден очень хорошо. ",
+            "Тест пройден хорошо, но слабые места есть и Вы их знаете.",
+            "Тест пройден, но зафиксированы некоторые пробелы в знаниях. ",
+            "Тест пройден, но есть много слабых мест. "};
+    text += "Сумма Ваших баллов: " + (r - w) + "<br>";
+    text += ""+testText[Functions.getText(w,r,d)-1]+"<br>";
     text += "по теме <b>Числа</b> Вы набрали: " + (r1 - w1) + ball[Math.abs(r1 - w1)] + ".<br/>";
     text += "по теме <b>Функции</b> Вы набрали: " + (r2 - w2) + ball[Math.abs(r2 - w2)] + ".<br/>";
     text += "по теме <b>Фигуры</b> Вы набрали: " + (r3 - w3) + ball[Math.abs(r3 - w3)] + ".<br/>";
@@ -222,6 +236,8 @@ public class RyzhikResults implements Plugin {
     float p[] = {0, 0, 0, 0, 0};
     float e0[] = {0, 0, 0, 0, 0};
     float p0[] = {0, 0, 0, 0, 0};
+    float s[] = {0, 0, 0, 0, 0};
+    float s0[] = {0, 0, 0, 0, 0};
 
     for (int i = 0; i < 6; i++) {
 
@@ -229,12 +245,16 @@ public class RyzhikResults implements Plugin {
 
         for (int k = 0; k < 5; k++) {
           if (results[i][j].charAt(3 + k) == '+') {
-            e0[k]++;
-            if (results[i][j].charAt(1) == results[i][j].charAt(0)) e[k]++;
+             e0[k]++;
+             s0[k]++;
+
+            if (results[i][j].charAt(1) == results[i][j].charAt(0)) {e[k]++; s[k]++;}
           }
           if (results[i][j].charAt(3 + k) == '?') {
-            p0[k]++;
-            if (results[i][j].charAt(1) == results[i][j].charAt(0)) p[k]++;
+             p0[k]++;
+             s0[k]+=0.5;
+
+            if (results[i][j].charAt(1) == results[i][j].charAt(0)) {p[k]++;s[k]+=0.5;}
           }
         }
       }
@@ -258,9 +278,12 @@ public class RyzhikResults implements Plugin {
     for (int k = 0; k < param.length; k++) {
       e[k] = Math.round((e[k] / e0[k]) * 100);
       p[k] = Math.round((p[k] / p0[k]) * 100);
+      s[k] = Math.round((s[k] / s0[k]) * 100);
       t[k] = Functions.getParamText(e[k], p[k]);
-      text += "Владение " + param[k] + ": " + e[k] + "%<br/>";
+      text += "Владение " + param[k] + ": " + e[k]+"%. " +" Или "+ s[k]+ "%<br/>";
     }
+
+    
     //для объединения случаев, где вариант текста совпал, проводим сравнение вариантов текста
     
 
