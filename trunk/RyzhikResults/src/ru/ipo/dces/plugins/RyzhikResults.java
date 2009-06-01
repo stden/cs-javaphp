@@ -259,11 +259,10 @@ public class RyzhikResults implements Plugin {
       e[k] = Math.round((e[k] / e0[k]) * 100);
       p[k] = Math.round((p[k] / p0[k]) * 100);
       t[k] = Functions.getParamText(e[k], p[k]);
-      text += "Владение " + param[k] + ": " + e[k] + "%<br/><br/>";
+      text += "Владение " + param[k] + ": " + e[k] + "%<br/>";
     }
     //для объединения случаев, где вариант текста совпал, проводим сравнение вариантов текста
-    //запоминаем, сколько для каждого варианта повторений и на каких они местах
-    //строковый массив n[]
+    
 
     for (int i = 0; i < t.length; i++) {
       for (int j = i + 1; j < t.length; j++) {

@@ -30,9 +30,10 @@ public class RyzhikPlugin implements Plugin {
   private JLabel statement;
 
   private final int CELL_WIDTH = 33;
-  private final int BORDER = 20;
-  private final int CELL_HEIGHT = 150;
+  private final int BORDER = 10;
+  private final int CELL_HEIGHT = 25;
   private final int IMG_WIDTH = 350;
+  private final int IMG_HEIGHT = 350;
 
   public RyzhikPlugin(PluginEnvironment pe) {
     myEnvironment = pe;
@@ -50,25 +51,49 @@ public class RyzhikPlugin implements Plugin {
 
     //create size for tablelayout
     double size[][] =
-            {{BORDER, IMG_WIDTH, BORDER, 40, 10, CELL_WIDTH, 5, CELL_WIDTH, 5, CELL_WIDTH, 5, CELL_WIDTH, 5, CELL_WIDTH, TableLayout.FILL},
-                    {BORDER, CELL_HEIGHT, 16, 10, 16, 10, 16, 10, 16, 10, 16, CELL_HEIGHT, TableLayout.FILL}};
+            {{BORDER, IMG_WIDTH, BORDER, 30, BORDER, CELL_WIDTH, 5, CELL_WIDTH, 5, CELL_WIDTH, 5, CELL_WIDTH, 5, CELL_WIDTH, TableLayout.FILL},
+                    {BORDER, CELL_HEIGHT, 5, CELL_HEIGHT, 5, CELL_HEIGHT, 5, CELL_HEIGHT, 5, CELL_HEIGHT, 5, CELL_HEIGHT, 5, CELL_HEIGHT, 5, CELL_HEIGHT, 5, CELL_HEIGHT, 5, CELL_HEIGHT, 5, CELL_HEIGHT, TableLayout.FILL}};
     mainPanel.setLayout(new TableLayout(size));
+    mainPanel.setBackground(Color.WHITE);
+    mainPanel.setBorder(BorderFactory.createMatteBorder(1, 2, 1, 2, Color.BLUE));
     //create label with image
     statement = new JLabel();
+    statement.setLayout(new GridLayout(1,1));
     statement.setIcon(new ImageIcon(getStatementGif()));
-    mainPanel.add(statement, "1, 1, 1, 11");
+    statement.setBackground(Color.PINK);
+    JPanel butPanel = new JPanel();
+    butPanel.setBorder(BorderFactory.createMatteBorder(1, 2, 1, 2, Color.BLUE));
+    statement.setBorder(BorderFactory.createMatteBorder(1, 2, 1, 2, Color.BLUE));
+    mainPanel.add(statement, "1, 1, 1, 21");
+    String comment[] = {"ќцените, пожалуйста, каждое утверждение",
+            "'+' - верно всегда",
+            "'-' - не верно никогда",
+            "'0' - не знаю",
+            "'?' - в некоторых случа€х верно, в некоторых - нет",
+            "'!' - условие некорректно"
+    };
+
+    JLabel commentLabel[] = new JLabel[comment.length];
+    for (int i = 0; i < comment.length; i++) {
+      commentLabel[i] = new JLabel(comment[i]);
+      commentLabel[i].setFont(new Font(commentLabel[i].getFont().getFontName(), commentLabel[i].getFont().getStyle(), 13));
+      mainPanel.add(commentLabel[i], "3, " + (2 * i + 1) + ", 14, " + (2 * i + 1));
+    }
+
+
     //create groups of radiobuttons
     for (int i = 1; i < 6; i++) {
 
-      JLabel item = new JLabel("ѕункт " + i);
-      mainPanel.add(item, "3, " + (2 * i));
+      JLabel item = new JLabel("є" + i);
+      item.setFont(new Font(item.getFont().getFontName(), item.getFont().getStyle(), 13));
+      mainPanel.add(item, "3, " + (2 * i + 11));
       String symbol[] = {"+", "-", "0", "?", "!"};
       JRadioButton radioButton[] = new JRadioButton[symbol.length];
       ButtonGroup bg = new ButtonGroup();
 
       for (int j = 0; j < symbol.length; j++) {
         radioButton[j] = new JRadioButton(symbol[j]);
-        mainPanel.add(radioButton[j], "" + (2 * j + 5) + ", " + (2 * i));
+        mainPanel.add(radioButton[j], "" + (2 * j + 5) + ", " + (2 * i + 11));
         bg.add(radioButton[j]);
         radioButton[j].addActionListener(new RadioButtonActionListener(i, radioButton[j], myEnvironment));
         if (symbol[j].equals("0"))
