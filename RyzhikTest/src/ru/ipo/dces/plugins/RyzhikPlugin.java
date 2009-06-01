@@ -52,7 +52,7 @@ public class RyzhikPlugin implements Plugin {
     //create size for tablelayout
     double size[][] =
             {{BORDER, IMG_WIDTH, BORDER, 30, BORDER, CELL_WIDTH, 5, CELL_WIDTH, 5, CELL_WIDTH, 5, CELL_WIDTH, 5, CELL_WIDTH, TableLayout.FILL},
-                    {BORDER, CELL_HEIGHT, 5, CELL_HEIGHT, 5, CELL_HEIGHT, 5, CELL_HEIGHT, 5, CELL_HEIGHT, 5, CELL_HEIGHT, 5, CELL_HEIGHT, 5, CELL_HEIGHT, 5, CELL_HEIGHT, 5, CELL_HEIGHT, 5, CELL_HEIGHT, TableLayout.FILL}};
+                    {BORDER, CELL_HEIGHT, 5, CELL_HEIGHT, 5, CELL_HEIGHT, 5, CELL_HEIGHT, 5, CELL_HEIGHT, 5, CELL_HEIGHT, 5, CELL_HEIGHT, 5, CELL_HEIGHT, 5, CELL_HEIGHT, 5, CELL_HEIGHT, 5, CELL_HEIGHT, TableLayout.FILL, TableLayout.FILL}};
     mainPanel.setLayout(new TableLayout(size));
     mainPanel.setBackground(Color.WHITE);
     mainPanel.setBorder(BorderFactory.createMatteBorder(1, 2, 1, 2, Color.BLUE));
@@ -64,7 +64,7 @@ public class RyzhikPlugin implements Plugin {
     JPanel butPanel = new JPanel();
     butPanel.setBorder(BorderFactory.createMatteBorder(1, 2, 1, 2, Color.BLUE));
     statement.setBorder(BorderFactory.createMatteBorder(1, 2, 1, 2, Color.BLUE));
-    mainPanel.add(statement, "1, 1, 1, 21");
+    mainPanel.add(statement, "1, 1, 1, 22");
     String comment[] = {"ќцените, пожалуйста, каждое утверждение",
             "'+' - верно всегда",
             "'-' - не верно никогда",
