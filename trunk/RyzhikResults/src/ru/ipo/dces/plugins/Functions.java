@@ -12,22 +12,28 @@ public class Functions {
   public static int getSecText(int w, int r, int d) {
     int t = 0;
     if (w == 10) t = 1;
-    if (r == 10) t = 2;
-    if (d == 10) t = 3;
-    if (w > 2 & w < 10) {
-      if (r >= 7) t = 4;
+    else {
+      if (r == 10) t = 2;
       else {
-        if (d >= 2) t = 5;
-        else t = 6;
+        if (d == 10) t = 3;
+        else {
+          if (w > 2 & w < 10) {
+            if (r >= 7) t = 4;
+            else {
+              if (d >= 2) t = 5;
+              else t = 6;
+            }
+          }
+          if (w == 0) {
+            if (r >= 7) t = 7;
+            else t = 8;
+          }
+          if (w > 0 & w <= 2) {
+            if (r >= 7) t = 9;
+            else t = 10;
+          }
+        }
       }
-    }
-    if (w == 0) {
-      if (r >= 7) t = 7;
-      else t = 8;
-    }
-    if (w > 0 & w <= 2) {
-      if (r >= 7) t = 9;
-      else t = 10;
     }
     return t;
   }
@@ -56,29 +62,36 @@ public class Functions {
 
   }
 
-  public static int getText(int w, int r, int d ){
+  public static int getText(int w, int r, int d) {
     int t = 0;
     if (w == 30) t = 1;
-    if (r == 30) t = 2;
-    if (d == 30) t = 3;
-    if (r<=w) t=1;
     else {
-    if (w > 6 & w < 30) {
-      if (r >= 21) t = 4;
+      if (r == 30) t = 2;
       else {
+        if (d == 30) t = 3;
+        else {
+          if (r <= w) t = 1;
+          else {
+            if (w > 6 & w < 30) {
+              if (r >= 21) t = 4;
+              else {
 
-        if (d >= 6) t = 5;
-        else t = 6;
+                if (d >= 6) t = 5;
+                else t = 6;
+              }
+            }
+            if (w == 0) {
+              if (r >= 21) t = 7;
+              else t = 8;
+            }
+            if (w > 0 & w <= 6) {
+              if (r >= 21) t = 9;
+              else t = 10;
+            }
+          }
+        }
       }
     }
-    if (w == 0) {
-      if (r >= 21) t = 7;
-      else t = 8;
-    }
-    if (w > 0 & w <= 6) {
-      if (r >= 21) t = 9;
-      else t = 10;
-    } }
     return t;
   }
 }
