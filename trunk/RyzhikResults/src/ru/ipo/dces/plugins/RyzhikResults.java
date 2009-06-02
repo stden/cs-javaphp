@@ -223,9 +223,9 @@ public class RyzhikResults implements Plugin {
               {"По теме ", "По темам ", " знания неустойчивые.", " знания неустойчивые. "}};
 //if text numbers are different
       if (((t1 != t2) & (t2 != t3)) & (t1 != t3)) {
-        text += SecText[t1 - 1][0] + " <b>Числа</b>" + SecText[t1][2];
-        text += SecText[t2 - 1][0] + " <b>Функции</b>" + SecText[t2][2];
-        text += SecText[t3 - 1][0] + " <b>Фигуры</b>" + SecText[t3][2];
+        text += SecText[t1 - 1][0] + " <b>Числа</b>" + SecText[t1-1][2];
+        text += SecText[t2 - 1][0] + " <b>Функции</b>" + SecText[t2-1][2];
+        text += SecText[t3 - 1][0] + " <b>Фигуры</b>" + SecText[t3-1][2];
       }
 
 //if text numbers are not different
@@ -304,7 +304,7 @@ public class RyzhikResults implements Plugin {
         s[k] = Math.round((s[k] / s0[k]) * 100);
         t[k] = Functions.getParamText(e[k], p[k]);
         ts[k] = Functions.getParamText(s[k], p[k]);
-        text += "Владение " + param[k] + ": " + e[k] + "%. " + "<font color='red'> Или " + s[k] + "%</font><br/>";
+        text += "Владение " + param[k] + ": " + e[k] + "%." + "<font color='red'> Или " + s[k] + "%</font><br/>";
       }
 
 
@@ -349,7 +349,7 @@ String param1[] = {" умением оперировать фактами",
       }
       text+="</font>";
     }
-    return text + "></body></html>";
+    return text + "</body></html>";
   }
 
   private void stopContest() {
