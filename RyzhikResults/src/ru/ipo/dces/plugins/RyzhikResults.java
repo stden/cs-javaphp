@@ -177,8 +177,8 @@ public class RyzhikResults implements Plugin {
     int r = r1 + r2 + r3;
     int d = d1 + d2 + d3;
     String ball[] = {" баллов", " балл", " балла", " балла", " балла", " баллов", " баллов", " баллов", " баллов", " баллов", " баллов"};
-    String text = "<html>" + "<body><h4>Здравствуйте! Ознакомьтесь, пожалуйста, с Вашими результатами:</h4><br>";
-    text+="Выбранные Вами ответы (сверху) и правильные ответы (снизу): <br><br><tt>";
+    String text = "<html>" + "<body><b>Здравствуйте! Ознакомьтесь, пожалуйста, с Вашими результатами:</b><br><br>";
+    text+="Выбранные Вами ответы (сверху) и правильные ответы (снизу): <br><tt>";
 
     for (int i=0; i<6; i++){for (int j=0; j<5; j++) {text += "" + results[i][j].charAt(0);}
     text+="  ";}
@@ -187,7 +187,7 @@ public class RyzhikResults implements Plugin {
     for (int i=0; i<6; i++){for (int j=0; j<5; j++) {text += "" + results[i][j].charAt(1);}
     text+="  ";}
     text+="<br><br></tt>";
-
+    text += "<i>За каждый правильный ответ начисляется один балл, за каждый неправильный - балл снимается,<br> за ответ 'не знаю' баллы не начисляются и не снимаются.</i><br><br>";
 
     String testText[] = {"<b><font color='red'>Тест не пройден. Ваши результаты аналогичны результатам, полученным случайно!</font></b> ",
             "Тест пройден на высшем уровне. ",
@@ -199,12 +199,13 @@ public class RyzhikResults implements Plugin {
             "Тест пройден хорошо, но слабые места есть и Вы их знаете.",
             "Тест пройден, но зафиксированы некоторые пробелы в знаниях. ",
             "Тест пройден, но есть много слабых мест. "};
-    text += "Сумма Ваших баллов: " + (r - w) + "<br>";
-    text += "" + testText[Functions.getText(w, r, d) - 1] + "<br>";
+
+    text += "<b>Сумма Ваших баллов:<i> " + (r - w) + "</i></b><br>";
+    text += "" + testText[Functions.getText(w, r, d) - 1] + "<br><br>";
     if (Functions.getText(w, r, d) != 1) {
       text += "по теме <b>Числа</b> Вы набрали: " + (r1 - w1) + ball[Math.abs(r1 - w1)] + ".<br/>";
       text += "по теме <b>Функции</b> Вы набрали: " + (r2 - w2) + ball[Math.abs(r2 - w2)] + ".<br/>";
-      text += "по теме <b>Фигуры</b> Вы набрали: " + (r3 - w3) + ball[Math.abs(r3 - w3)] + ".<br/>";
+      text += "по теме <b>Фигуры</b> Вы набрали: " + (r3 - w3) + ball[Math.abs(r3 - w3)] + ".<br/><br>";
 
       int t1, t2, t3;
       t1 = Functions.getSecText(w1, r1, d1);   //text number for "Числа"
@@ -291,20 +292,21 @@ public class RyzhikResults implements Plugin {
       String paramText[] = {"Вы в совершенстве владеете",
               "Вы хорошо владеете",
               "Вероятнее всего, Вы хорошо владеете",
-              "Вероятнее всего, Вы не очень хорошо владеете",
-              "Вероятнее всего, Вы на удовлетворительном уровне владеете",
-              "Вероятнее всего, Вы на низком уровне владеете",
-              "Вы показали на низком уровне владение",
+              "По-видимому, Вы не очень хорошо владеете",
+              "Предположительно, Вы на удовлетворительном уровне владеете",
+              "С большой долей аероятности, Вы на низком уровне владеете",
+              "Вы плохо владеете",
       };
       int t[] = {0, 0, 0, 0, 0};
       int ts[] = {0,0,0,0,0};
       for (int k = 0; k < param.length; k++) {
         e[k] = Math.round((e[k] / e0[k]) * 100);
         p[k] = Math.round((p[k] / p0[k]) * 100);
-        s[k] = Math.round((s[k] / s0[k]) * 100);
+        e[k] = Math.round(0.75*e[k]+0.25*((s[k] / s0[k]) * 100));
+
         t[k] = Functions.getParamText(e[k], p[k]);
-        ts[k] = Functions.getParamText(s[k], p[k]);
-        text += "Владение " + param[k] + ": " + e[k] + "%." + "<font color='red'> Или " + s[k] + "%</font><br/>";
+        //ts[k] = Functions.getParamText(s[k], p[k]);
+        text += "Владение " + param[k] + ": " + e[k] + "%.<br/>";
       }
 
 
@@ -321,13 +323,13 @@ public class RyzhikResults implements Plugin {
           }
         }
       }
-      text += " ";
+
       for (int k = 0; k < param.length; k++) {
-        if ((!param[k].equals("")) & (t[k] != 8)) text += " " + paramText[t[k] - 1] + " " + param[k];
+        if ((!param[k].equals("")) & (t[k] != 8)) text += " " + paramText[t[k] - 1] + " " + param[k]+". ";
       }
 
 
-String param1[] = {" умением оперировать фактами",
+/*String param1[] = {" умением оперировать фактами",
               " вычислительными умениями",
               " приемами визуального представления знаний",
               " умением переформулировать задачи и переходить от одной формы представления знаний к другой",
@@ -347,7 +349,7 @@ String param1[] = {" умением оперировать фактами",
       for (int k = 0; k < param1.length; k++) {
         if ((!param1[k].equals("")) & (ts[k] != 8)) text += "<font color='red'> " + paramText[ts[k] - 1] + " " + param1[k];
       }
-      text+="</font>";
+      text+="</font>";*/
     }
     return text + "</body></html>";
   }
