@@ -227,12 +227,6 @@ public class MathkitApplet extends JPanel implements Runnable, AppletContext, JS
   }
 
   public JSObject getJSObject() {
-    try {
-      throw new Exception("get js object");
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-        
     return obj;
   }
 }
