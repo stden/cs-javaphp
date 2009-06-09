@@ -24,7 +24,7 @@ public class TestMathKitPlugin2 {
 		      }
 
 		      public File getStatement() throws GeneralRequestFailureException, IOException {
-		        return new File("debug/c11");
+		        return new File("MathKitPlugin/debug/c11");
 		      }
 		    };
 

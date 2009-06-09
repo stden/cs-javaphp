@@ -8,7 +8,7 @@ import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
 @DCESPluginLoadable
 public class PluginInt implements Plugin{
-	  MathkitAppletPanel mapanel;
+	  MathkitAppletPanel mapanel = null;
 	  static PluginEnvironment pe;
 	  
 	public PluginInt(PluginEnvironment pe){
@@ -29,7 +29,8 @@ public class PluginInt implements Plugin{
 
 	public JPanel getPanel() {
 		// TODO Auto-generated method stub
-		mapanel = new MathkitAppletPanel();
+		if (mapanel == null)
+      mapanel = new MathkitAppletPanel();
 		return mapanel;
 	}
 	
