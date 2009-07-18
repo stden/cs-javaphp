@@ -22,6 +22,7 @@ import java.lang.reflect.Constructor;
 import java.util.HashSet;
 import java.util.Date;
 import java.text.DateFormat;
+import java.awt.*;
 
 /**
  * Контроллер, который хранит данные о соединении с сервером и позволяет

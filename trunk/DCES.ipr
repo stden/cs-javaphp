@@ -104,6 +104,7 @@
   <component name="CopyrightManager" default="">
     <module2copyright />
   </component>
+  <component name="DataSourceManagerImpl" compressed="false" />
   <component name="DependenciesAnalyzeManager">
     <option name="myForwardDirection" value="false" />
   </component>
@@ -308,6 +309,7 @@
       <module fileurl="file://$PROJECT_DIR$/DCESTests/DCESTests.iml" filepath="$PROJECT_DIR$/DCESTests/DCESTests.iml" />
       <module fileurl="file://$PROJECT_DIR$/DCES_API/DCES_API.iml" filepath="$PROJECT_DIR$/DCES_API/DCES_API.iml" />
       <module fileurl="file://$PROJECT_DIR$/MathKitPlugin/MathKitPlugin.iml" filepath="$PROJECT_DIR$/MathKitPlugin/MathKitPlugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Resources.iml" filepath="$PROJECT_DIR$/Resources.iml" />
       <module fileurl="file://$PROJECT_DIR$/RyzhikResults/RyzhikResults.iml" filepath="$PROJECT_DIR$/RyzhikResults/RyzhikResults.iml" />
       <module fileurl="file://$PROJECT_DIR$/RyzhikTest/RyzhikTest.iml" filepath="$PROJECT_DIR$/RyzhikTest/RyzhikTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/SamplePlugin/SamplePlugin.iml" filepath="$PROJECT_DIR$/SamplePlugin/SamplePlugin.iml" />
