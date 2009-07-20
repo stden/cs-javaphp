@@ -2,19 +2,26 @@ package ru.ipo.dces.client;
 
 import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
+import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.exceptions.ServerReturnedError;
 import ru.ipo.dces.exceptions.GeneralRequestFailureException;
 import ru.ipo.dces.log.LogMessageType;
 import ru.ipo.dces.server.ServerFacade;
 
+import javax.swing.*;
 import java.util.HashMap;
 import java.io.File;
 
 public class PluginEnvironmentImpl implements PluginEnvironment {
 
-  private final PluginEnvironmentView view = new PluginEnvironmentView();
   private final ProblemDescription pd;
   public static final String PROBLEMS_DIR = "problems";
+  private int tabIndex = -1;
+  private String cachedTitle = null;
+
+  private static final Icon TAB_ICON = new ImageIcon("TabIcon.gif");
+
+  private static HashMap<JPanel, Plugin> panel2plugin = new HashMap<JPanel, Plugin>();
 
   public PluginEnvironmentImpl(ProblemDescription pd) {
     this.pd = pd;
@@ -25,12 +32,11 @@ public class PluginEnvironmentImpl implements PluginEnvironment {
     this.pd.name = pluginName;
   }
 
-  public PluginEnvironmentView getView() {
-    return view;
-  }
-
   public void setTitle(String title) {
-    view.setTitle(title);
+    if (tabIndex != -1)
+      Controller.getClientDialog().getMainTabbedPane().setTitleAt(tabIndex, title);
+    else
+      cachedTitle = title;
   }
 
   public HashMap<String, String> submitSolution(HashMap<String, String> solution) throws GeneralRequestFailureException {
@@ -79,4 +85,23 @@ public class PluginEnvironmentImpl implements PluginEnvironment {
   public int getProblemID() {
     return pd.id;
   }
+
+  public int getTabIndex() {
+    return tabIndex;
+  }
+
+  public void init(Plugin p) {
+    panel2plugin.put(p.getPanel(), p);
+
+    JTabbedPane tabbedPane = Controller.getClientDialog().getMainTabbedPane();
+    tabbedPane.addTab("Задача (!!!)", TAB_ICON, p.getPanel());
+    tabIndex = tabbedPane.getTabCount() - 1;    
+    if (cachedTitle != null)
+      setTitle(cachedTitle);
+  }
+
+  public static Plugin getPluginByPanel(JPanel panel) {
+    return panel2plugin.get(panel);
+  }
+
 }

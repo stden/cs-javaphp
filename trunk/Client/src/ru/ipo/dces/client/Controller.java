@@ -12,7 +12,6 @@ import ru.ipo.dces.server.http.HttpServer;
 import ru.ipo.dces.log.ConsoleUserMessagesLogger;
 import ru.ipo.dces.log.LogMessageType;
 import ru.ipo.dces.log.UserMessagesLogger;
-import ru.ipo.dces.log.LoggerFactory;
 import ru.ipo.dces.utils.FileSystemUtils;
 import ru.ipo.dces.utils.ZipUtils;
 
@@ -22,7 +21,11 @@ import java.lang.reflect.Constructor;
 import java.util.HashSet;
 import java.util.Date;
 import java.text.DateFormat;
-import java.awt.*;
+
+import com.jgoodies.looks.plastic.PlasticXPLookAndFeel;
+import com.jgoodies.looks.plastic.PlasticLookAndFeel;
+import com.jgoodies.looks.plastic.Plastic3DLookAndFeel;
+import com.jgoodies.looks.plastic.theme.*;
 
 /**
  *  онтроллер, который хранит данные о соединении с сервером и позвол€ет
@@ -36,9 +39,6 @@ public class Controller {
   private static UserMessagesLogger logger;
   
   private static ContestChoosingPanel contestChooserPanel;
-  private static Plugin currentPlugin;
-
-  private static LogoutPlugin logoutPlugin;
 
   public static void log(ServerReturnedError err) {
     getLogger().log(err.getMessage(), LogMessageType.Error, Localization.LOGGER_NAME);
@@ -58,16 +58,15 @@ public class Controller {
 
     Plugin p;
     try {
-        Class<? extends Plugin> mainClass = PluginLoader.getPluginClass(pd.clientPluginAlias);
-        //NullPointerException is possible in the next line
-        Constructor<? extends Plugin> constructor = mainClass.getConstructor(PluginEnvironment.class);
-        p = constructor.newInstance((PluginEnvironment) pe);
+      Class<? extends Plugin> mainClass = PluginLoader.getPluginClass(pd.clientPluginAlias);
+      //NullPointerException is possible in the next line
+      Constructor<? extends Plugin> constructor = mainClass.getConstructor(PluginEnvironment.class);
+      p = constructor.newInstance((PluginEnvironment) pe);
+      pe.init(p);
     } catch (Exception e) {
-        //something wrong with plugins
-      p = null;
+      //something wrong with plugins
+      Controller.getLogger().log("Ќе удалось загрузить плагин", LogMessageType.Error, Localization.LOGGER_NAME);
     }
-
-    clientDialog.addPluginToForm(pe.getView(), p);
   }
 
   /** ƒобавление Plugin'а в клиент
@@ -79,7 +78,7 @@ public class Controller {
       PluginEnvironmentImpl pe = new PluginEnvironmentImpl(Localization.getAdminPluginName(pluginClass));
       final Constructor<? extends AdminPlugin> constructor = pluginClass.getConstructor(PluginEnvironment.class);
       AdminPlugin p = constructor.newInstance(pe);
-      clientDialog.addPluginToForm(pe.getView(), p);
+      pe.init(p);
       return p;
     } catch (Exception e) {
       System.out.println("Admin plugin " + pluginClass.getSimpleName() + " has no constuctor(PluginEnvironment)");
@@ -140,7 +139,7 @@ public class Controller {
           addAdminPlugin(AdjustContestsPlugin.class);
           addAdminPlugin(ManageUsersPlugin.class);
           addAdminPlugin(ResultsPlugin.class);
-          setLogoutPlugin((LogoutPlugin) addAdminPlugin(LogoutPlugin.class));
+          addAdminPlugin(LogoutPlugin.class);
           break;
         case SuperAdmin:
           contestChooserPanel.setChooserVisible(true);
@@ -149,7 +148,7 @@ public class Controller {
           addAdminPlugin(ManageUsersPlugin.class);
           addAdminPlugin(PluginsManagementPlugin.class);
           addAdminPlugin(ResultsPlugin.class);
-          setLogoutPlugin((LogoutPlugin) addAdminPlugin(LogoutPlugin.class));
+          addAdminPlugin(LogoutPlugin.class);
           break;
         case Participant:
           contestChooserPanel.setChooserVisible(false);
@@ -167,12 +166,6 @@ public class Controller {
       Controller.getLogger().log("Ќе удалось загрузить плагины", LogMessageType.Error, Localization.LOGGER_NAME);
       clientDialog.initialState();
     }
-  }
-
-  private static void setLogoutPlugin(LogoutPlugin logoutPlugin) {
-    Controller.logoutPlugin = logoutPlugin;
-    if (logoutPlugin != null)
-      logoutPlugin.setStopContestControlsVisible(getContestDescription().contestTiming.selfContestStart);
   }
 
   public static void refreshParticipantInfo(boolean refreshProblems, boolean refreshPlugins) throws ServerReturnedError, GeneralRequestFailureException, IOException {
@@ -218,7 +211,7 @@ public class Controller {
     }
 
     addAdminPlugin(ResultsPlugin.class);
-    setLogoutPlugin((LogoutPlugin) addAdminPlugin(LogoutPlugin.class));
+    addAdminPlugin(LogoutPlugin.class);
   }
 
   /** «авершение сессии пользовател€ */
@@ -257,9 +250,10 @@ public class Controller {
    * @param args the command line input
    */
   public static void main(String[] args) {
+    //PlasticLookAndFeel.setPlasticTheme(new DesertYellow());
     try {
-      UIManager.setLookAndFeel(
-            UIManager.getSystemLookAndFeelClassName());
+      //UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+      UIManager.setLookAndFeel(new Plastic3DLookAndFeel());
     } catch (Exception e) {
       System.out.println("Failed to set system look and feel");
       System.exit(1);
@@ -557,24 +551,30 @@ public class Controller {
     return contestChooserPanel == null ? contestChooserPanel = new ContestChoosingPanel() : contestChooserPanel;
   }
 
-  public static void contestSelected(ContestDescription contest) {    
+  //TODO remove this method at all
+  public static void contestSelected(ContestDescription contest) {
+
+    JTabbedPane tabbedPane = Controller.getClientDialog().getMainTabbedPane();
+    int selIndex = tabbedPane.getSelectedIndex();
+    if (selIndex == -1) return;
+
+    Plugin currentPlugin = PluginEnvironmentImpl.getPluginByPanel(
+            (JPanel) tabbedPane.getComponentAt(selIndex)
+    );
+
+    if (currentPlugin == null) return;
+
     if (currentPlugin instanceof AdminPlugin) {
       AdminPlugin plugin = (AdminPlugin)currentPlugin;
       plugin.contestSelected(contest);
     }
   }
 
-  public static void setCurrentPlugin(Plugin currentPlugin) {
-    Controller.currentPlugin = currentPlugin;
-
-    if (currentPlugin instanceof AdminPlugin) {
-      AdminPlugin plugin = (AdminPlugin)currentPlugin;
+  public static void somePluginSelected(Plugin selectedPlugin) {
+    if (selectedPlugin instanceof AdminPlugin) {
+      AdminPlugin plugin = (AdminPlugin)selectedPlugin;
       plugin.contestSelected(getContestDescription());
     }
-  }
-
-  public static Plugin getCurrentPlugin() {
-    return currentPlugin;
   }
 
   public static void stopContest() {
@@ -588,17 +588,4 @@ public class Controller {
       //do nothing - everything already logged
     }
   }
-
-  /*public static String[][] getResults() throws GeneralRequestFailureException {
-    try {
-      GetContestResultsRequest r = new GetContestResultsRequest();
-      r.sessionID = sessionID;
-      r.contestID = getContestID();
-      GetContestResultsResponse response = server.doRequest(r);
-      return response.table[response.userLine];
-    } catch (ServerReturnedError serverReturnedError) {
-      LoggerFactory.getLogger().log(serverReturnedError.getMessage(), LogMessageType.Error, null);
-      throw new GeneralRequestFailureException();
-    }
-  }*/
 }

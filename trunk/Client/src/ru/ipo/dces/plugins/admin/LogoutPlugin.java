@@ -89,7 +89,7 @@ public class LogoutPlugin extends JPanel implements AdminPlugin {
     });
   }
 
-  public void setStopContestControlsVisible(boolean visible) {
+  private void setStopContestControlsVisible(boolean visible) {
     stopContestSeparator.setVisible(visible);
     stopContestLabel.setVisible(visible);
     stopContestButton.setVisible(visible);
@@ -104,7 +104,10 @@ public class LogoutPlugin extends JPanel implements AdminPlugin {
   }
 
   public void activate() {
-    //do nothing
+    ContestDescription cd = Controller.getContestDescription();
+    //noinspection SimplifiableConditionalExpression
+    boolean visible = (cd != null) && (cd.contestTiming != null);    
+    setStopContestControlsVisible(visible);
   }
 
   public void deactivate() {

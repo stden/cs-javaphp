@@ -14,11 +14,6 @@
         <attribute name="method" value="2" />
         <attribute name="URI" value="/" />
       </containerElement>
-      <containerElement type="library" level="module">
-        <attribute name="method" value="2" />
-        <attribute name="URI" value="/" />
-        <url>jar://$JUNIT_HOME$!/</url>
-      </containerElement>
       <containerElement type="library" name="TableLayout" level="project">
         <attribute name="method" value="2" />
         <attribute name="URI" value="/" />
@@ -35,18 +30,18 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="DCES_API" />
+    <orderEntry type="library" name="FormLayout" level="project" />
+    <orderEntry type="library" name="TableLayout" level="project" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$JUNIT_HOME$!/" />
+          <root url="jar://$MODULE_DIR$/../libs/looks-2.2.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module" module-name="DCES_API" />
-    <orderEntry type="library" name="FormLayout" level="project" />
-    <orderEntry type="library" name="TableLayout" level="project" />
   </component>
 </module>
 
