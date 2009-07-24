@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="ru.ipo.dces.plugins.admin.LoginPluginV2">
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="ru.ipo.dces.plugins.admin.LoginPlugin">
   <grid id="27dc6" binding="loginPanel" custom-create="true" layout-manager="FormLayout">
     <rowspec value="center:max(d;0px):noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
@@ -47,40 +47,6 @@
     <properties/>
     <border type="none"/>
     <children>
-      <scrollpane id="f43ef">
-        <constraints>
-          <grid row="4" column="2" row-span="13" col-span="3" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-          <forms defaultalign-horz="false" defaultalign-vert="false"/>
-        </constraints>
-        <properties/>
-        <border type="none"/>
-        <children>
-          <component id="ceb46" class="javax.swing.JList" binding="contestsList">
-            <constraints/>
-            <properties>
-              <model/>
-            </properties>
-          </component>
-        </children>
-      </scrollpane>
-      <component id="e838a" class="javax.swing.JLabel">
-        <constraints>
-          <grid row="2" column="2" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="Список доступных контестов"/>
-        </properties>
-      </component>
-      <component id="fb5e7" class="javax.swing.JButton" binding="refreshContestsButton">
-        <constraints>
-          <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
-          <forms defaultalign-vert="false"/>
-        </constraints>
-        <properties>
-          <text value="Обновить"/>
-        </properties>
-      </component>
       <scrollpane id="e8194">
         <constraints>
           <grid row="16" column="8" row-span="7" col-span="3" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -221,6 +187,18 @@
         </constraints>
         <properties>
           <orientation value="1"/>
+        </properties>
+      </component>
+      <component id="9b375" class="ru.ipo.dces.client.ContestChoosingPanel" binding="contestChoosingPanel">
+        <constraints>
+          <grid row="2" column="2" row-span="15" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <beforeLabelGap value="20"/>
+          <enabled value="true"/>
+          <popup value="true"/>
+          <showLabel value="true"/>
         </properties>
       </component>
     </children>

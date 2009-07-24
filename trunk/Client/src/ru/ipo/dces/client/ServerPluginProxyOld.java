@@ -32,7 +32,7 @@ public class ServerPluginProxyOld implements ServerPluginEmulator {
     final SubmitSolutionRequest solutionRequest = new SubmitSolutionRequest();
     solutionRequest.problemID = problem.id;
     solutionRequest.problemResult = solution;
-    solutionRequest.sessionID = Controller.getSessionID();
+    solutionRequest.sessionID = Controller.getContestConnection().getSessionID();
     SubmitSolutionResponse r;
 
     try {

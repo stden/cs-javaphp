@@ -145,7 +145,7 @@
 //  public GetUsersResponse doRequest(GetUsersRequest gur)
 //      throws GeneralRequestFailureException, ServerReturnedError {
 //    MockSessionServer session = getSession(gur.sessionID);
-//    // if (!session.isAdmin)
+//    // if (!session.isSuperAdmin)
 //    // throw new RequestFailedResponse("Требуются права администратора");
 //
 //    GetUsersResponse getUsersResponse = new GetUsersResponse();

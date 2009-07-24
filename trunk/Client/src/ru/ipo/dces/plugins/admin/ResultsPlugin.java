@@ -1,21 +1,26 @@
 package ru.ipo.dces.plugins.admin;
 
-import ru.ipo.dces.client.AdminPlugin;
 import ru.ipo.dces.client.Controller;
 import ru.ipo.dces.client.Localization;
+import ru.ipo.dces.client.ContestChoosingPanel;
 import ru.ipo.dces.clientservercommunication.ContestDescription;
 import ru.ipo.dces.clientservercommunication.GetContestResultsRequest;
 import ru.ipo.dces.clientservercommunication.GetContestResultsResponse;
+import ru.ipo.dces.clientservercommunication.UserDescription;
 import ru.ipo.dces.exceptions.GeneralRequestFailureException;
 import ru.ipo.dces.exceptions.ServerReturnedError;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
+import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.plugins.admin.resultstable.ResultsTableModel;
 import ru.ipo.dces.plugins.admin.resultstable.OneMessageTableModel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+import info.clearthought.layout.TableLayout;
 
 /**
  * Created by IntelliJ IDEA.
@@ -23,21 +28,33 @@ import java.awt.*;
  * Date: 13.04.2009
  * Time: 0:39:44
  */
-public class ResultsPlugin implements AdminPlugin {
+public class ResultsPlugin implements Plugin {
 
   private final JPanel mainPanel;
   private final JTable table;
+  private final ContestChoosingPanel contestChoosingPanel;
 
   public ResultsPlugin(PluginEnvironment env) {
     this.mainPanel = new JPanel();
     this.table = new JTable();
+    this.contestChoosingPanel = new ContestChoosingPanel();
 
     env.setTitle(Localization.getAdminPluginName(ResultsPlugin.class));
 
     JScrollPane scroll = new JScrollPane(table);
-    mainPanel.setLayout(new GridLayout(1,1));
-    mainPanel.add(scroll);
+    mainPanel.setLayout(new TableLayout(new double[][]{
+      {TableLayout.FILL}, {TableLayout.PREFERRED, TableLayout.FILL}
+    }));
+    mainPanel.add(scroll, "0, 1");
     table.setModel(new DefaultTableModel());
+
+    contestChoosingPanel.addContestChangedActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        contestSelected(contestChoosingPanel.getContest());
+      }
+    });
+    mainPanel.add(contestChoosingPanel, "0, 0");
+    mainPanel.validate();
   }
 
   public JPanel getPanel() {
@@ -45,7 +62,14 @@ public class ResultsPlugin implements AdminPlugin {
   }
 
   public void activate() {
-    //do nothing
+    boolean needContestChoose =
+            Controller.getContestConnection() == null ||
+            Controller.getContestConnection().getUser().userType == UserDescription.UserType.SuperAdmin;
+    contestChoosingPanel.setVisible(needContestChoose);
+    if (!needContestChoose)
+      contestChoosingPanel.setContest(Controller.getContestConnection().getContest());
+
+    contestSelected(contestChoosingPanel.getContest());
   }
 
   private void showMessageInTable(String message) {    
@@ -56,7 +80,7 @@ public class ResultsPlugin implements AdminPlugin {
     //do nothing
   }
 
-  public void contestSelected(ContestDescription contest) {
+  private void contestSelected(ContestDescription contest) {
     if (contest == null) {
       showMessageInTable("Выберите соревнование");
       return;
@@ -65,7 +89,7 @@ public class ResultsPlugin implements AdminPlugin {
     try {
       GetContestResultsRequest crr = new GetContestResultsRequest();
       crr.contestID = contest.contestID;
-      crr.sessionID = Controller.getSessionID();
+      crr.sessionID = Controller.getContestConnection().getSessionID();
       GetContestResultsResponse r = Controller.getServer().doRequest(crr);
 
       ResultsTableModel model = new ResultsTableModel(r.headers, r.minorHeaders, r.table);

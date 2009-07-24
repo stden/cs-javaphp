@@ -4,13 +4,13 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import ru.ipo.dces.client.Controller;
 import ru.ipo.dces.log.LogMessageType;
-import ru.ipo.dces.client.AdminPlugin;
 import ru.ipo.dces.client.Localization;
 import ru.ipo.dces.clientservercommunication.ContestDescription;
 import ru.ipo.dces.clientservercommunication.UserDataField;
 import ru.ipo.dces.clientservercommunication.ContestTiming;
 import ru.ipo.dces.clientservercommunication.ResultsAccessPolicy;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
+import ru.ipo.dces.pluginapi.Plugin;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -25,7 +25,7 @@ import java.text.SimpleDateFormat;
 import java.text.ParseException;
 import java.util.regex.Pattern;
 
-public class CreateContestPlugin extends JPanel implements AdminPlugin {
+public class CreateContestPlugin extends JPanel implements Plugin {
   private JTextField contestName;
   private JFormattedTextField beginDate;
   private JFormattedTextField beginTime;
@@ -366,10 +366,6 @@ public class CreateContestPlugin extends JPanel implements AdminPlugin {
 
   public void deactivate() {
     //do nothing
-  }
-
-  public void contestSelected(ContestDescription contest) {
-    //To change body of implemented methods use File | Settings | File Templates.
   }
 
   /**
