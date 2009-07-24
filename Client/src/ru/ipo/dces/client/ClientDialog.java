@@ -7,7 +7,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import ru.ipo.dces.pluginapi.Plugin;
-import ru.ipo.dces.plugins.admin.LoginPluginV2;
+import ru.ipo.dces.plugins.admin.LoginPlugin;
 import ru.ipo.dces.plugins.admin.ResultsPlugin;
 import info.clearthought.layout.TableLayout;
 
@@ -31,14 +31,13 @@ public class ClientDialog extends JFrame {
   public void initGUI() {
     //set outer components and outer layout
     TableLayout outerLayout = new TableLayout(new double[][]
-            {{TableLayout.FILL}, {20, TableLayout.FILL, 60}}
+            {{TableLayout.FILL}, {TableLayout.FILL, 60}}
     );    getContentPane().setLayout(outerLayout);
     logTextPane = new JTextPane();
     mainTabbedPane = new JTabbedPane(JTabbedPane.LEFT, JTabbedPane.SCROLL_TAB_LAYOUT);
     JScrollPane logScrollPane = new JScrollPane(logTextPane);
-    getContentPane().add(Controller.getContestChooserPanel(), "0, 0");
-    getContentPane().add(mainTabbedPane, "0, 1");
-    getContentPane().add(logScrollPane, "0, 2");
+    getContentPane().add(mainTabbedPane, "0, 0");
+    getContentPane().add(logScrollPane, "0, 1");
 
     //logTextPane adjust
     logTextPane.setEditable(false);
@@ -55,12 +54,8 @@ public class ClientDialog extends JFrame {
 
         if (selectedPlugin != null)
           selectedPlugin.deactivate();
-        if (newPlugin != null) {
-          //TODO remove the next 'if'
-          if (newPlugin instanceof AdminPlugin && Controller.getContestDescription() != null)
-            ((AdminPlugin)newPlugin).contestSelected(Controller.getContestDescription());
+        if (newPlugin != null)
           newPlugin.activate();
-        }
 
         selectedPlugin = newPlugin;
       }
@@ -80,14 +75,17 @@ public class ClientDialog extends JFrame {
   public void initialState() {
     clearLeftPanel();
 
+    Controller.addAdminPlugin(LoginPlugin.class);
+    Controller.addAdminPlugin(ResultsPlugin.class);
+
     //add login plugin.
     //can not use Controller.addAdminPlugin() because sometimes it's called from constructor
     //so here it is some code duplication
-    PluginEnvironmentImpl pe1 = new PluginEnvironmentImpl(Localization.getAdminPluginName(LoginPluginV2.class));
-    pe1.init(new LoginPluginV2(pe1));
-
-    PluginEnvironmentImpl pe2 = new PluginEnvironmentImpl(Localization.getAdminPluginName(ResultsPlugin.class));
-    pe2.init(new ResultsPlugin(pe2));
+//    PluginEnvironmentImpl pe1 = new PluginEnvironmentImpl(Localization.getAdminPluginName(LoginPlugin.class));
+//    pe1.init(new LoginPlugin(pe1));
+//
+//    PluginEnvironmentImpl pe2 = new PluginEnvironmentImpl(Localization.getAdminPluginName(ResultsPlugin.class));
+//    pe2.init(new ResultsPlugin(pe2));
   }
 
   public JTextPane getLogTextPane() {

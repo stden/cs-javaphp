@@ -4,14 +4,15 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import ru.ipo.dces.client.Controller;
 import ru.ipo.dces.client.RequestResponseUtils;
-import ru.ipo.dces.client.AdminPlugin;
 import ru.ipo.dces.client.Localization;
+import ru.ipo.dces.client.ContestChoosingPanel;
 import ru.ipo.dces.clientservercommunication.ContestDescription;
 import ru.ipo.dces.clientservercommunication.UserDescription;
 import ru.ipo.dces.clientservercommunication.UserDataField;
 import ru.ipo.dces.exceptions.GeneralRequestFailureException;
 import ru.ipo.dces.exceptions.ServerReturnedError;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
+import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.plugins.admin.beans.ManageUsersPluginBean;
 import ru.ipo.dces.plugins.admin.beans.UsersListBean;
 
@@ -20,7 +21,7 @@ import javax.swing.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ManageUsersPlugin extends JPanel implements AdminPlugin {
+public class ManageUsersPlugin extends JPanel implements Plugin {
   private JPanel drawPanel;
   private JList usersList;
   private JButton addButton;
@@ -32,6 +33,7 @@ public class ManageUsersPlugin extends JPanel implements AdminPlugin {
   private JRadioButton contestAdminCB;
   private JTextField usernameField;
   private JPasswordField passwordField;
+  private ContestChoosingPanel contestChoosingPanel;
   private DefaultListModel usersListModel = new DefaultListModel();
 
   private ManageUsersPluginBean oldBean = null;
@@ -87,7 +89,7 @@ public class ManageUsersPlugin extends JPanel implements AdminPlugin {
     addButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
 
-        ContestDescription contest = Controller.getContestDescription();
+        ContestDescription contest = contestChoosingPanel.getContest();
 
         if (contest == null) return;
 
@@ -123,7 +125,7 @@ public class ManageUsersPlugin extends JPanel implements AdminPlugin {
           JOptionPane.showMessageDialog(null, "Не удалось связаться с сервером", "Ошибка сервера", JOptionPane.ERROR_MESSAGE);
         }
 
-        ContestDescription contest = Controller.getContestDescription();
+        ContestDescription contest = contestChoosingPanel.getContest();
 
         if (contest == null)
           fillDaFormWithData(-1, null);
@@ -202,6 +204,12 @@ public class ManageUsersPlugin extends JPanel implements AdminPlugin {
         newBean.setValue(e.getFirstRow(), userDataTable.getValue(e.getFirstRow()));
       }
     });
+
+    contestChoosingPanel.addContestChangedActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        contestSelected(contestChoosingPanel.getContest());
+      }
+    });
   }
 
   public JPanel getPanel() {
@@ -209,7 +217,11 @@ public class ManageUsersPlugin extends JPanel implements AdminPlugin {
   }
 
   public void activate() {
-    //do nothing
+    boolean isSuperAdmin =
+            Controller.getContestConnection().getUser().userType == UserDescription.UserType.SuperAdmin;
+    contestChoosingPanel.setVisible(isSuperAdmin);
+    if (!isSuperAdmin)
+      contestChoosingPanel.setContest(Controller.getContestConnection().getContest());
   }
 
   public void deactivate() {
@@ -260,7 +272,7 @@ public class ManageUsersPlugin extends JPanel implements AdminPlugin {
     drawPanel = this;
   }
 
-  public void contestSelected(ContestDescription contest) {
+  private void contestSelected(ContestDescription contest) {
 
     oldBean = null;
     newBean = new ManageUsersPluginBean();
@@ -281,58 +293,62 @@ public class ManageUsersPlugin extends JPanel implements AdminPlugin {
    */
   private void $$$setupUI$$$() {
     createUIComponents();
-    drawPanel.setLayout(new FormLayout("fill:max(d;4px):noGrow,left:4dlu:noGrow,fill:115dlu:grow,left:4dlu:noGrow,left:90dlu:grow(2.0),fill:4dlu:noGrow,fill:4dlu:noGrow", "center:max(d;4px):noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:17dlu:noGrow,top:4dlu:noGrow,center:80dlu:grow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:grow,top:4dlu:noGrow,top:4dlu:noGrow"));
+    drawPanel.setLayout(new FormLayout("fill:max(d;4px):noGrow,left:4dlu:noGrow,fill:115dlu:grow,left:4dlu:noGrow,left:90dlu:grow(2.0),fill:4dlu:noGrow,fill:4dlu:noGrow", "center:max(d;4px):noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:17dlu:noGrow,top:4dlu:noGrow,center:80dlu:grow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:noGrow,top:4dlu:noGrow,center:16dlu:grow,top:4dlu:noGrow,top:4dlu:noGrow"));
     final JScrollPane scrollPane1 = new JScrollPane();
     CellConstraints cc = new CellConstraints();
-    drawPanel.add(scrollPane1, cc.xywh(3, 5, 1, 23, CellConstraints.FILL, CellConstraints.FILL));
+    drawPanel.add(scrollPane1, cc.xywh(3, 7, 1, 23, CellConstraints.FILL, CellConstraints.FILL));
     usersList = new JList();
     scrollPane1.setViewportView(usersList);
     final JLabel label1 = new JLabel();
     label1.setText("Пользователи");
-    drawPanel.add(label1, cc.xy(3, 3));
+    drawPanel.add(label1, cc.xy(3, 5));
     final JLabel label2 = new JLabel();
     label2.setText("Логин");
     label2.setVerticalAlignment(3);
     label2.setVerticalTextPosition(3);
-    drawPanel.add(label2, cc.xy(5, 5, CellConstraints.DEFAULT, CellConstraints.FILL));
+    drawPanel.add(label2, cc.xy(5, 7, CellConstraints.DEFAULT, CellConstraints.FILL));
     usernameField = new JTextField();
     usernameField.setText("");
-    drawPanel.add(usernameField, cc.xy(5, 7, CellConstraints.FILL, CellConstraints.DEFAULT));
+    drawPanel.add(usernameField, cc.xy(5, 9, CellConstraints.FILL, CellConstraints.DEFAULT));
     final JLabel label3 = new JLabel();
     label3.setText("Пароль");
     label3.setVerticalAlignment(3);
     label3.setVerticalTextPosition(0);
-    drawPanel.add(label3, cc.xy(5, 9, CellConstraints.DEFAULT, CellConstraints.FILL));
+    drawPanel.add(label3, cc.xy(5, 11, CellConstraints.DEFAULT, CellConstraints.FILL));
     passwordField = new JPasswordField();
     passwordField.setText("");
-    drawPanel.add(passwordField, cc.xy(5, 11, CellConstraints.FILL, CellConstraints.DEFAULT));
+    drawPanel.add(passwordField, cc.xy(5, 13, CellConstraints.FILL, CellConstraints.DEFAULT));
     superAdminCB = new JRadioButton();
     superAdminCB.setText("Администратор");
-    drawPanel.add(superAdminCB, cc.xy(5, 13));
+    drawPanel.add(superAdminCB, cc.xy(5, 15));
     contestAdminCB = new JRadioButton();
     contestAdminCB.setHorizontalAlignment(10);
     contestAdminCB.setHorizontalTextPosition(11);
     contestAdminCB.setText("Администратор контеста");
-    drawPanel.add(contestAdminCB, cc.xy(5, 15));
+    drawPanel.add(contestAdminCB, cc.xy(5, 17));
     participantCB = new JRadioButton();
     participantCB.setSelected(false);
     participantCB.setText("Участник");
-    drawPanel.add(participantCB, cc.xy(5, 17));
+    drawPanel.add(participantCB, cc.xy(5, 19));
     addButton = new JButton();
     addButton.setText("Добавить");
-    drawPanel.add(addButton, cc.xy(5, 21, CellConstraints.FILL, CellConstraints.DEFAULT));
+    drawPanel.add(addButton, cc.xy(5, 23, CellConstraints.FILL, CellConstraints.DEFAULT));
     final JScrollPane scrollPane2 = new JScrollPane();
-    drawPanel.add(scrollPane2, cc.xy(5, 19, CellConstraints.FILL, CellConstraints.FILL));
+    drawPanel.add(scrollPane2, cc.xy(5, 21, CellConstraints.FILL, CellConstraints.FILL));
     userDataTable = new JUserTable();
     userDataTable.putClientProperty("JTable.autoStartsEdit", Boolean.TRUE);
     userDataTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
     scrollPane2.setViewportView(userDataTable);
     changeButton = new JButton();
     changeButton.setText("Изменить");
-    drawPanel.add(changeButton, cc.xy(5, 23, CellConstraints.FILL, CellConstraints.DEFAULT));
+    drawPanel.add(changeButton, cc.xy(5, 25, CellConstraints.FILL, CellConstraints.DEFAULT));
     deleteButton = new JButton();
     deleteButton.setText("Удалить");
-    drawPanel.add(deleteButton, cc.xy(5, 25, CellConstraints.FILL, CellConstraints.DEFAULT));
+    drawPanel.add(deleteButton, cc.xy(5, 27, CellConstraints.FILL, CellConstraints.DEFAULT));
+    contestChoosingPanel = new ContestChoosingPanel();
+    contestChoosingPanel.setBeforeLabelGap(0);
+    contestChoosingPanel.setShowLabel(true);
+    drawPanel.add(contestChoosingPanel, cc.xyw(3, 3, 3));
     ButtonGroup buttonGroup;
     buttonGroup = new ButtonGroup();
     buttonGroup.add(contestAdminCB);

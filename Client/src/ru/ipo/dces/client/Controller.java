@@ -14,31 +14,26 @@ import ru.ipo.dces.log.LogMessageType;
 import ru.ipo.dces.log.UserMessagesLogger;
 import ru.ipo.dces.utils.FileSystemUtils;
 import ru.ipo.dces.utils.ZipUtils;
+import ru.ipo.dces.client.ContestConnection;
 
 import javax.swing.*;
 import java.io.*;
 import java.lang.reflect.Constructor;
 import java.util.HashSet;
-import java.util.Date;
-import java.text.DateFormat;
 
-import com.jgoodies.looks.plastic.PlasticXPLookAndFeel;
-import com.jgoodies.looks.plastic.PlasticLookAndFeel;
 import com.jgoodies.looks.plastic.Plastic3DLookAndFeel;
-import com.jgoodies.looks.plastic.theme.*;
 
 /**
  * Контроллер, который хранит данные о соединении с сервером и позволяет
  * выполнять стандартные действия с сервером
  */
 public class Controller {
+
+  private static ContestConnection contestConnection;
+
   private static ServerFacade server;
-  private static String             sessionID;
-  private static ClientDialog       clientDialog;
-  private static UserDescription.UserType userType;
+  private static ClientDialog clientDialog;
   private static UserMessagesLogger logger;
-  
-  private static ContestChoosingPanel contestChooserPanel;
 
   public static void log(ServerReturnedError err) {
     getLogger().log(err.getMessage(), LogMessageType.Error, Localization.LOGGER_NAME);
@@ -50,10 +45,12 @@ public class Controller {
     }
   }
 
-  /** Добавление Plugin'а в клиент
+  /**
+   * Добавление Plugin'а в клиент
+   *
    * @param pd the description of the problem for which the plugin is added
    */
-  public static void addPlugin(ProblemDescription pd) {
+  private static void addPlugin(ProblemDescription pd) {
     PluginEnvironmentImpl pe = new PluginEnvironmentImpl(pd);
 
     Plugin p;
@@ -69,15 +66,17 @@ public class Controller {
     }
   }
 
-  /** Добавление Plugin'а в клиент
+  /**
+   * Добавление Plugin'а в клиент
+   *
    * @param pluginClass class of new Plugin
    * @return added plugin
    */
-  public static AdminPlugin addAdminPlugin(Class<? extends AdminPlugin> pluginClass) {
+  public static Plugin addAdminPlugin(Class<? extends Plugin> pluginClass) {
     try {
       PluginEnvironmentImpl pe = new PluginEnvironmentImpl(Localization.getAdminPluginName(pluginClass));
-      final Constructor<? extends AdminPlugin> constructor = pluginClass.getConstructor(PluginEnvironment.class);
-      AdminPlugin p = constructor.newInstance(pe);
+      final Constructor<? extends Plugin> constructor = pluginClass.getConstructor(PluginEnvironment.class);
+      Plugin p = constructor.newInstance(pe);
       pe.init(p);
       return p;
     } catch (Exception e) {
@@ -87,93 +86,12 @@ public class Controller {
     }
   }
 
-  public static void login(String login, char[] password, ContestDescription contest) {
-    try {
-      ConnectToContestRequest request = new ConnectToContestRequest();
-      request.contestID = contest.contestID;
-
-      contestChooserPanel.setContest(contest);
-
-      request.login = login;
-      // TODO improve the security here
-      request.password = new String(password);
-      ConnectToContestResponse res = Controller.server.doRequest(request);
-      Controller.sessionID = res.sessionID;
-
-      //show message - 'ok, connected, finish is at...'
-      String leftTimeMessage;
-      switch (res.user.userType) {
-        case SuperAdmin:
-          leftTimeMessage = "Суперадминистратор";
-          break;
-        case ContestAdmin:
-          leftTimeMessage = "Администратор соревнования";
-          break;
-        case Participant:
-          Date now = new Date();
-          if (now.before(res.finishTime))
-            //TODO format only time if the finish is today
-            leftTimeMessage = "Окончание соревнования в " + DateFormat.getInstance().format(res.finishTime);
-          else
-            leftTimeMessage = "Соревнование уже закончилось";
-          break;
-        default:
-          leftTimeMessage = "?? Неизвестный тип пользователя";
-      }
-
-      getLogger().log(
-              "Успешное подключение к соревнованию. " + leftTimeMessage,
-              LogMessageType.OK,
-              Localization.LOGGER_NAME
-      );
-
-      // Удаляем все запущенные Plugin'ы
-      clientDialog.clearLeftPanel();
-
-      // Если пользователь администратор или администратор сервера
-      // загружаем ему административные Plugin'ы
-      userType = res.user.userType;
-      switch (res.user.userType) {
-        case ContestAdmin:
-          contestChooserPanel.setChooserVisible(false);
-          addAdminPlugin(AdjustContestsPlugin.class);
-          addAdminPlugin(ManageUsersPlugin.class);
-          addAdminPlugin(ResultsPlugin.class);
-          addAdminPlugin(LogoutPlugin.class);
-          break;
-        case SuperAdmin:
-          contestChooserPanel.setChooserVisible(true);
-          addAdminPlugin(CreateContestPlugin.class);
-          addAdminPlugin(AdjustContestsPlugin.class);
-          addAdminPlugin(ManageUsersPlugin.class);
-          addAdminPlugin(PluginsManagementPlugin.class);
-          addAdminPlugin(ResultsPlugin.class);
-          addAdminPlugin(LogoutPlugin.class);
-          break;
-        case Participant:
-          contestChooserPanel.setChooserVisible(false);
-          // Получаем данные о задачах
-          refreshParticipantInfo(false, false);
-      }
-
-    } catch (ServerReturnedError e) {
-      Controller.log(e);
-      clientDialog.initialState();
-    } catch (GeneralRequestFailureException e) {
-      //log nothing
-      clientDialog.initialState();
-    } catch (IOException e) {
-      Controller.getLogger().log("Не удалось загрузить плагины", LogMessageType.Error, Localization.LOGGER_NAME);
-      clientDialog.initialState();
-    }
-  }
-
   public static void refreshParticipantInfo(boolean refreshProblems, boolean refreshPlugins) throws ServerReturnedError, GeneralRequestFailureException, IOException {
     GetContestDataRequest rq = new GetContestDataRequest();
     rq.contestID = -1;
     rq.infoType = GetContestDataRequest.InformationType.ParticipantInfo;
     rq.extendedData = null; //TODO download only problems that are not already on disk
-    rq.sessionID = sessionID;
+    rq.sessionID = contestConnection.getSessionID();
     GetContestDataResponse rs = Controller.server.doRequest(rq);
 
     if (refreshPlugins) {
@@ -183,13 +101,13 @@ public class Controller {
         contestPlugins.add(pd.clientPluginAlias);
       //remove contest plugins
       for (String contestPlugin : contestPlugins) {
-          File pluginFile = new File(Settings.getInstance().getPluginsDirectory() + '/' + contestPlugin + ".jar");
-          if (!pluginFile.delete())
-              getLogger().log(
-                      "Не удалось обновить плагин: " + pluginFile.getName(),
-                      LogMessageType.Error,
-                      Localization.LOGGER_NAME
-              );
+        File pluginFile = new File(Settings.getInstance().getPluginsDirectory() + '/' + contestPlugin + ".jar");
+        if (!pluginFile.delete())
+          getLogger().log(
+                  "Не удалось обновить плагин: " + pluginFile.getName(),
+                  LogMessageType.Error,
+                  Localization.LOGGER_NAME
+          );
       }
       PluginLoader.clear();
     }
@@ -201,8 +119,7 @@ public class Controller {
       if (problemFolder.exists()) {
         FileSystemUtils.deleteDir(problemFolder);
         problemFolder.mkdir();
-      }
-      else
+      } else
         problemFolder.mkdirs();
 
       ZipUtils.unzip(pd.statement, problemFolder);
@@ -214,37 +131,32 @@ public class Controller {
     addAdminPlugin(LogoutPlugin.class);
   }
 
-  /** Завершение сессии пользователя */
+  /**
+   * Завершение сессии пользователя
+   */
   public static void logout() {
-    DisconnectRequest dr = new DisconnectRequest();
-    dr.sessionID = sessionID;
-
     try {
-        server.doRequest(dr);
-        contestChooserPanel.setContest(null);
+      contestConnection.disconnect();
     } catch (ServerReturnedError sre) {
-        log(sre);
+      log(sre);
     } catch (GeneralRequestFailureException grfe) {
       //do nothing
     }
 
-    Controller.sessionID = null;
-    Controller.userType = null;
     clientDialog.initialState();
-    contestChooserPanel.setChooserVisible(true);
   }
 
-    public static UserMessagesLogger getLogger() {
-      if (logger == null) {
-        if (clientDialog != null)
-          logger = new TextPaneUserMessagesLogger(clientDialog.getLogTextPane());
-        else
-          logger = new ConsoleUserMessagesLogger();
-      }
-      return logger;      
+  public static UserMessagesLogger getLogger() {
+    if (logger == null) {
+      if (clientDialog != null)
+        logger = new TextPaneUserMessagesLogger(clientDialog.getLogTextPane());
+      else
+        logger = new ConsoleUserMessagesLogger();
     }
+    return logger;
+  }
 
-    /**
+  /**
    * Запуск клиента
    *
    * @param args the command line input
@@ -276,12 +188,10 @@ public class Controller {
       System.out.println("Usage: -help shows this help");
       System.out.println("       -createdb <superuser-login> <superuser-password>");
       System.exit(0);
-    }
-    else if (args[0].equals("-createdb")) {
+    } else if (args[0].equals("-createdb")) {
       if (args.length != 3)
-        System.out.println("need exactly two additional paramenters: superuser login and superuser password"); 
-      else
-      {
+        System.out.println("need exactly two additional paramenters: superuser login and superuser password");
+      else {
         final CreateDataBaseRequest createDataBaseRequest = new CreateDataBaseRequest();
         createDataBaseRequest.login = args[1];
         createDataBaseRequest.password = args[2];
@@ -304,7 +214,7 @@ public class Controller {
   public static ContestDescription[] getAvailableContests() {
     try {
       AvailableContestsResponse res = Controller.server
-          .doRequest(new AvailableContestsRequest());
+              .doRequest(new AvailableContestsRequest());
       return res.contests;
     } catch (GeneralRequestFailureException e) {
       //log nothing
@@ -316,51 +226,51 @@ public class Controller {
   }
 
   public static boolean addContest(ContestDescription cd) {
-      try {
-          CreateContestRequest contestRequest = new CreateContestRequest();
-          contestRequest.sessionID = sessionID;
-          contestRequest.contest = cd;
-          server.doRequest(contestRequest);
-      } catch (ServerReturnedError e) {
-          Controller.log(e);
-          return false;
-      } catch (GeneralRequestFailureException e) {
-          //log nothing
-          return false;
-      }
+    try {
+      CreateContestRequest contestRequest = new CreateContestRequest();
+      contestRequest.sessionID = contestConnection.getSessionID();
+      contestRequest.contest = cd;
+      server.doRequest(contestRequest);
+    } catch (ServerReturnedError e) {
+      Controller.log(e);
+      return false;
+    } catch (GeneralRequestFailureException e) {
+      //log nothing
+      return false;
+    }
 
-      return true;
+    return true;
   }
 
-    public static GetContestDataResponse getContestData(int contestID) {
-      GetContestDataRequest gcdr = new GetContestDataRequest();
-      gcdr.contestID = contestID;
-      gcdr.extendedData = null;
-      gcdr.infoType = GetContestDataRequest.InformationType.NoInfo;
-      gcdr.sessionID = sessionID;
+  public static GetContestDataResponse getContestData(int contestID) {
+    GetContestDataRequest gcdr = new GetContestDataRequest();
+    gcdr.contestID = contestID;
+    gcdr.extendedData = null;
+    gcdr.infoType = GetContestDataRequest.InformationType.NoInfo;
+    gcdr.sessionID = contestConnection.getSessionID();
 
-      try {
-        return server.doRequest(gcdr);
-      } catch (ServerReturnedError serverReturnedError) {
-        Controller.log(serverReturnedError);
-        return null;
-      } catch (GeneralRequestFailureException GeneralRequestFailureException) {
-        //log nothing
-        return null;
-      }
+    try {
+      return server.doRequest(gcdr);
+    } catch (ServerReturnedError serverReturnedError) {
+      Controller.log(serverReturnedError);
+      return null;
+    } catch (GeneralRequestFailureException GeneralRequestFailureException) {
+      //log nothing
+      return null;
     }
+  }
 
-    public static boolean adjustContestData(AdjustContestRequest acr) {
-        try {
-          acr.sessionID = sessionID;
-          server.doRequest(acr);
-        } catch (ServerReturnedError serverReturnedError) {
-            log(serverReturnedError);
-        } catch (GeneralRequestFailureException GeneralRequestFailureException) {
-            return false;
-        }
-        return true;
+  public static boolean adjustContestData(AdjustContestRequest acr) {
+    try {
+      acr.sessionID = contestConnection.getSessionID();
+      server.doRequest(acr);
+    } catch (ServerReturnedError serverReturnedError) {
+      log(serverReturnedError);
+    } catch (GeneralRequestFailureException GeneralRequestFailureException) {
+      return false;
     }
+    return true;
+  }
 
   public static void registerAnonymouslyToContest(String login, char[] password, int contestID, String[] userData) {
     RegisterToContestRequest r = new RegisterToContestRequest();
@@ -373,7 +283,7 @@ public class Controller {
     r.user.userType = UserDescription.UserType.Participant;
 
     try {
-      server.doRequest(r);      
+      server.doRequest(r);
       Controller.getLogger().log("Регистрация прошла успешно", LogMessageType.OK, Localization.LOGGER_NAME);
     } catch (ServerReturnedError serverReturnedError) {
       Controller.log(serverReturnedError);
@@ -392,33 +302,17 @@ public class Controller {
     return new File(debugDir.getPath() + '/' + problemID);
   }
 
-  public static String getSessionID() {
-    return sessionID;
-  }
-
   public static ServerFacade getServer() {
     return server;
-  }
-
-  public static int getContestID() {
-    return contestChooserPanel.getContest().contestID;
-  }
-
-  /**
-   * Returns user type of the user currently logged in or null if client is not connected to a contest
-   * @return user type of the user currently logged  in or null if client is not connected to a contest
-   */
-  public static UserDescription.UserType getUserType() {
-    return userType;
   }
 
   public static void debugProblem(int problemID, int contestID) {
     //create and fill get contest data request
     final GetContestDataRequest contestRequest = new GetContestDataRequest();
     contestRequest.contestID = contestID;
-    contestRequest.extendedData = new int[] {problemID};
+    contestRequest.extendedData = new int[]{problemID};
     contestRequest.infoType = GetContestDataRequest.InformationType.ParticipantInfo;
-    contestRequest.sessionID = sessionID;
+    contestRequest.sessionID = contestConnection.getSessionID();
 
     //do a request and get a response
     final GetContestDataResponse contestResponse;
@@ -448,36 +342,32 @@ public class Controller {
     //run debug
     final Class<? extends Plugin> pluginClass = PluginLoader.getPluginClass(problem.clientPluginAlias);
     PluginBox box = new PluginBox(pluginClass, new ServerPluginProxyOld(problem), problem.name);
-    box.setVisible(true);    
+    box.setVisible(true);
   }
 
   public static ClientDialog getClientDialog() {
     return clientDialog;
   }
 
-    public static UserDescription[] getUsers(int contestID) {
-        final GetUsersRequest req = new GetUsersRequest();
+  public static UserDescription[] getUsers(int contestID) {
+    final GetUsersRequest req = new GetUsersRequest();
 
-        req.contestID = contestID;
-        req.sessionID = sessionID;
+    req.contestID = contestID;
+    req.sessionID = contestConnection.getSessionID();
 
-        try {
-            GetUsersResponse res = server.doRequest(req);
+    try {
+      GetUsersResponse res = server.doRequest(req);
 
-            return res.users;
+      return res.users;
 
-        } catch (ServerReturnedError e) {
-            Controller.log(e);
-        } catch (GeneralRequestFailureException e) {
-            //log nothing
-        }
-
-        return new UserDescription[]{};
+    } catch (ServerReturnedError e) {
+      Controller.log(e);
+    } catch (GeneralRequestFailureException e) {
+      //log nothing
     }
 
-    public static ContestDescription getContestDescription() {
-        return contestChooserPanel.getContest();
-    }
+    return new UserDescription[]{};
+  }
 
   public static void adjustClientPlugin(String alias, String description, File file) throws ServerReturnedError, GeneralRequestFailureException {
     AdjustClientPluginRequest r = new AdjustClientPluginRequest();
@@ -489,19 +379,18 @@ public class Controller {
     else
       r.description = description;
 
-    r.sessionID = sessionID;
+    r.sessionID = contestConnection.getSessionID();
 
     //load plugin data from file
     if (file != null) {
-      r.pluginData = new byte[(int)file.length()];
+      r.pluginData = new byte[(int) file.length()];
       try {
         InputStream is = new FileInputStream(file);
         if (is.read(r.pluginData) < r.pluginData.length) throw new IOException();
       } catch (IOException e) {
         throw new ServerReturnedError(0, "");
       }
-    }
-    else
+    } else
       r.pluginData = null;
 
     server.doRequest(r);
@@ -510,71 +399,32 @@ public class Controller {
   public static void removeClientPlugin(String alias) throws ServerReturnedError, GeneralRequestFailureException {
     RemoveClientPluginRequest r = new RemoveClientPluginRequest();
     r.pluginAlias = alias;
-    r.sessionID = sessionID;
+    r.sessionID = contestConnection.getSessionID();
     server.doRequest(r);
   }
 
-    public static void addUser(String login, char[] password, String[] dataValue, UserDescription.UserType ut, int contestID) throws ServerReturnedError, GeneralRequestFailureException {
+  public static void addUser(String login, char[] password, String[] dataValue, UserDescription.UserType ut, int contestID) throws ServerReturnedError, GeneralRequestFailureException {
 
-        RegisterToContestRequest cur = new RegisterToContestRequest();
+    RegisterToContestRequest cur = new RegisterToContestRequest();
 
-        UserDescription ud = new UserDescription();
+    UserDescription ud = new UserDescription();
 
-        ud.login = login;
-        ud.password = new String(password);
-        ud.dataValue = dataValue;
-        ud.userType = ut;
+    ud.login = login;
+    ud.password = new String(password);
+    ud.dataValue = dataValue;
+    ud.userType = ut;
 
-        cur.contestID = contestID;
-        cur.sessionID = sessionID;
-        cur.user = ud;
+    cur.contestID = contestID;
+    cur.sessionID = contestConnection.getSessionID();
+    cur.user = ud;
 
-        server.doRequest(cur);
-    }
-
-    public static void removeUser(int userID) throws ServerReturnedError, GeneralRequestFailureException {
-        RemoveUserRequest rur = new RemoveUserRequest();
-
-        rur.sessionID = sessionID;
-        rur.userID = userID;
-
-        server.doRequest(rur);
-    }
+    server.doRequest(cur);
+  }
 
   public static void setFreeze(boolean freeze) {
     if (clientDialog == null) return;
 
     clientDialog.setEnabled(!freeze);
-  }
-
-  public static ContestChoosingPanel getContestChooserPanel() {
-    return contestChooserPanel == null ? contestChooserPanel = new ContestChoosingPanel() : contestChooserPanel;
-  }
-
-  //TODO remove this method at all
-  public static void contestSelected(ContestDescription contest) {
-
-    JTabbedPane tabbedPane = Controller.getClientDialog().getMainTabbedPane();
-    int selIndex = tabbedPane.getSelectedIndex();
-    if (selIndex == -1) return;
-
-    Plugin currentPlugin = PluginEnvironmentImpl.getPluginByPanel(
-            (JPanel) tabbedPane.getComponentAt(selIndex)
-    );
-
-    if (currentPlugin == null) return;
-
-    if (currentPlugin instanceof AdminPlugin) {
-      AdminPlugin plugin = (AdminPlugin)currentPlugin;
-      plugin.contestSelected(contest);
-    }
-  }
-
-  public static void somePluginSelected(Plugin selectedPlugin) {
-    if (selectedPlugin instanceof AdminPlugin) {
-      AdminPlugin plugin = (AdminPlugin)selectedPlugin;
-      plugin.contestSelected(getContestDescription());
-    }
   }
 
   public static void stopContest() {
@@ -587,5 +437,22 @@ public class Controller {
     } catch (GeneralRequestFailureException e) {
       //do nothing - everything already logged
     }
+  }
+
+  public static void removeUser(int userID) throws ServerReturnedError, GeneralRequestFailureException {
+    RemoveUserRequest rur = new RemoveUserRequest();
+
+    rur.sessionID = contestConnection.getSessionID();
+    rur.userID = userID;
+
+    server.doRequest(rur);
+  }
+
+  public static ContestConnection getContestConnection() {
+    return contestConnection;
+  }
+
+  public static void connectToContest(ContestDescription contest, String login, char[] password) throws ServerReturnedError, GeneralRequestFailureException {
+    contestConnection = new ContestConnection(server, contest, login, password);
   }
 }

@@ -2,12 +2,12 @@ package ru.ipo.dces.plugins.admin;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import ru.ipo.dces.client.AdminPlugin;
 import ru.ipo.dces.client.Controller;
 import ru.ipo.dces.client.Localization;
 import ru.ipo.dces.clientservercommunication.ContestDescription;
 import ru.ipo.dces.clientservercommunication.UserDescription;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
+import ru.ipo.dces.pluginapi.Plugin;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -19,7 +19,7 @@ import java.awt.event.ActionListener;
  * Date: 11.12.2008
  * Time: 20:06:45
  */
-public class LogoutPlugin extends JPanel implements AdminPlugin {
+public class LogoutPlugin extends JPanel implements Plugin {
   private JButton logoutButton;
   private JPanel mainPanel;
   private JButton refreshProblemsButton;
@@ -46,7 +46,7 @@ public class LogoutPlugin extends JPanel implements AdminPlugin {
     });
     refreshProblemsButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        if (Controller.getUserType() != UserDescription.UserType.Participant) {
+        if (Controller.getContestConnection().getUser().userType != UserDescription.UserType.Participant) {
           JOptionPane.showMessageDialog(null, "Только участники могут обновлять список задач");
           return;
         }
@@ -64,7 +64,7 @@ public class LogoutPlugin extends JPanel implements AdminPlugin {
     });
     refreshPluginsButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        if (Controller.getUserType() == UserDescription.UserType.SuperAdmin) {
+        if (Controller.getContestConnection().getUser().userType == UserDescription.UserType.SuperAdmin) {
           JOptionPane.showMessageDialog(null, "Супер администратор не может обновить модули");
           return;
         }
@@ -104,17 +104,13 @@ public class LogoutPlugin extends JPanel implements AdminPlugin {
   }
 
   public void activate() {
-    ContestDescription cd = Controller.getContestDescription();
+    ContestDescription cd = Controller.getContestConnection().getContest();
     //noinspection SimplifiableConditionalExpression
     boolean visible = (cd != null) && (cd.contestTiming != null);    
     setStopContestControlsVisible(visible);
   }
 
   public void deactivate() {
-    //do nothing
-  }
-
-  public void contestSelected(ContestDescription contest) {
     //do nothing
   }
 

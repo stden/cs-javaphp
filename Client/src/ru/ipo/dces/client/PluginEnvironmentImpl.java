@@ -43,7 +43,7 @@ public class PluginEnvironmentImpl implements PluginEnvironment {
     SubmitSolutionRequest ssr = new SubmitSolutionRequest();
     ssr.problemID = pd.id;
     ssr.problemResult = solution;    
-    ssr.sessionID = Controller.getSessionID();
+    ssr.sessionID = Controller.getContestConnection().getSessionID();
       final SubmitSolutionResponse response;
       try {
           response = Controller.getServer().doRequest(ssr);
@@ -79,7 +79,7 @@ public class PluginEnvironmentImpl implements PluginEnvironment {
   }
 
   public String getSessionID() {
-    return Controller.getSessionID();
+    return Controller.getContestConnection().getSessionID();
   }
 
   public int getProblemID() {

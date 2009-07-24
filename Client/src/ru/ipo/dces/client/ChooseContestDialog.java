@@ -13,8 +13,8 @@ public class ChooseContestDialog extends JDialog {
   private JList   contestsList;
   private ContestDescription selectedContest;
 
-  public ChooseContestDialog(JFrame frame) {
-    super(frame);
+  public ChooseContestDialog(/*JFrame frame*/) {
+    super(Controller.getClientDialog());
     initGUI();
   }
 
@@ -69,17 +69,8 @@ public class ChooseContestDialog extends JDialog {
     this.setVisible(false);
   }
 
-  private ContestsListBean[] getContestList() {
-    ContestDescription[] contestDescriptions = Controller.getAvailableContests();
-    ContestsListBean[] result = new ContestsListBean[contestDescriptions.length];
-    for (int i = 0; i < contestDescriptions.length; i++)
-      result[i] = new ContestsListBean(contestDescriptions[i]);
-
-    return result;
-  }
-
   public ContestDescription run() {
-    ContestsListBean[] contestDescriptions = getContestList();
+    ContestsListBean[] contestDescriptions = ContestChoosingPanel.getContestList();
     ListModel listModel = new DefaultComboBoxModel(contestDescriptions);
     contestsList.setModel(listModel);
 
