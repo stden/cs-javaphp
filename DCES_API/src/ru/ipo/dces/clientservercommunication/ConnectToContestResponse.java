@@ -7,10 +7,18 @@ import java.util.Date;
  */
 public class ConnectToContestResponse implements Response {
 
+  /**
+   * Возвращает идентификатор сессии, он используется во всех запросах, которые совершаются неанонимно
+   */
   public String          sessionID;
 
-  /** Описание пользователя */
+  /** Описание пользователя, подключившегося к соревнования */
   public UserDescription user;
 
+  /**
+   * <p>Время окончания соревнования.
+   * <p>Актуально в случае, если участник
+   * сам начинает соревнование, т.е. в описании соревнования установлено contestTiming.selfContestStart == true
+   */
   public Date finishTime; 
 }

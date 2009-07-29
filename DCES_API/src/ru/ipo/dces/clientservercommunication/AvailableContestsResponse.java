@@ -1,12 +1,13 @@
 package ru.ipo.dces.clientservercommunication;
 
-import ru.ipo.dces.clientservercommunication.ContestDescription;
-
 /**
- * ќтвет - список всех контестов
+ * ќтвет на запрос о списке соревнований AvailableContestsRequest.
  */
 public class AvailableContestsResponse implements Response {
 
+  /**
+   * ћассив с описани€ми всех зарегистрированных в системе соревновани€х
+   */
   public ContestDescription[] contests;
 
 }

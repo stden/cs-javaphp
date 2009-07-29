@@ -131,21 +131,6 @@ public class Controller {
     addAdminPlugin(LogoutPlugin.class);
   }
 
-  /**
-   * Завершение сессии пользователя
-   */
-  public static void logout() {
-    try {
-      contestConnection.disconnect();
-    } catch (ServerReturnedError sre) {
-      log(sre);
-    } catch (GeneralRequestFailureException grfe) {
-      //do nothing
-    }
-
-    clientDialog.initialState();
-  }
-
   public static UserMessagesLogger getLogger() {
     if (logger == null) {
       if (clientDialog != null)
@@ -454,5 +439,22 @@ public class Controller {
 
   public static void connectToContest(ContestDescription contest, String login, char[] password) throws ServerReturnedError, GeneralRequestFailureException {
     contestConnection = new ContestConnection(server, contest, login, password);
+  }
+
+  public static void logout() {
+    try {
+      contestConnection.disconnect();
+    } catch (ServerReturnedError sre) {
+      log(sre);
+    } catch (GeneralRequestFailureException grfe) {
+      //do nothing
+    }
+
+    contestConnection = null;
+    clientDialog.initialState();
+  }
+
+  public static boolean isContestUnknownMode() {
+    return contestConnection == null || contestConnection.getUser().userType == UserDescription.UserType.SuperAdmin;
   }
 }

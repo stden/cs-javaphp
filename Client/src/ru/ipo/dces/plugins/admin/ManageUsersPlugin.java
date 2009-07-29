@@ -89,7 +89,7 @@ public class ManageUsersPlugin extends JPanel implements Plugin {
     addButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
 
-        ContestDescription contest = contestChoosingPanel.getContest();
+        ContestDescription contest = getContest();
 
         if (contest == null) return;
 
@@ -125,7 +125,7 @@ public class ManageUsersPlugin extends JPanel implements Plugin {
           JOptionPane.showMessageDialog(null, "Не удалось связаться с сервером", "Ошибка сервера", JOptionPane.ERROR_MESSAGE);
         }
 
-        ContestDescription contest = contestChoosingPanel.getContest();
+        ContestDescription contest = getContest();
 
         if (contest == null)
           fillDaFormWithData(-1, null);
@@ -217,11 +217,8 @@ public class ManageUsersPlugin extends JPanel implements Plugin {
   }
 
   public void activate() {
-    boolean isSuperAdmin =
-            Controller.getContestConnection().getUser().userType == UserDescription.UserType.SuperAdmin;
-    contestChoosingPanel.setVisible(isSuperAdmin);
-    if (!isSuperAdmin)
-      contestChoosingPanel.setContest(Controller.getContestConnection().getContest());
+    contestChoosingPanel.setVisible(Controller.isContestUnknownMode());
+    contestSelected(getContest());
   }
 
   public void deactivate() {
@@ -282,6 +279,13 @@ public class ManageUsersPlugin extends JPanel implements Plugin {
     UserDataField[] data = contest.data;
     if (data == null) data = new UserDataField[0];
     fillDaFormWithData(contest.contestID, RequestResponseUtils.extractFieldNames(data));
+  }
+
+  private ContestDescription getContest() {
+    if (Controller.isContestUnknownMode())
+      return contestChoosingPanel.getContest();
+    else
+      return Controller.getContestConnection().getContest();
   }
 
   /**

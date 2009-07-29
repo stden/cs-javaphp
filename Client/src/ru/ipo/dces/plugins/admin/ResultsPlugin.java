@@ -6,7 +6,6 @@ import ru.ipo.dces.client.ContestChoosingPanel;
 import ru.ipo.dces.clientservercommunication.ContestDescription;
 import ru.ipo.dces.clientservercommunication.GetContestResultsRequest;
 import ru.ipo.dces.clientservercommunication.GetContestResultsResponse;
-import ru.ipo.dces.clientservercommunication.UserDescription;
 import ru.ipo.dces.exceptions.GeneralRequestFailureException;
 import ru.ipo.dces.exceptions.ServerReturnedError;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
@@ -16,7 +15,6 @@ import ru.ipo.dces.plugins.admin.resultstable.OneMessageTableModel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -62,14 +60,9 @@ public class ResultsPlugin implements Plugin {
   }
 
   public void activate() {
-    boolean needContestChoose =
-            Controller.getContestConnection() == null ||
-            Controller.getContestConnection().getUser().userType == UserDescription.UserType.SuperAdmin;
-    contestChoosingPanel.setVisible(needContestChoose);
-    if (!needContestChoose)
-      contestChoosingPanel.setContest(Controller.getContestConnection().getContest());
+    contestChoosingPanel.setVisible(Controller.isContestUnknownMode());
 
-    contestSelected(contestChoosingPanel.getContest());
+    contestSelected(getContest());
   }
 
   private void showMessageInTable(String message) {    
@@ -78,6 +71,13 @@ public class ResultsPlugin implements Plugin {
 
   public void deactivate() {
     //do nothing
+  }
+
+  private ContestDescription getContest() {
+    if (Controller.isContestUnknownMode())
+      return contestChoosingPanel.getContest();
+    else
+      return Controller.getContestConnection().getContest();
   }
 
   private void contestSelected(ContestDescription contest) {

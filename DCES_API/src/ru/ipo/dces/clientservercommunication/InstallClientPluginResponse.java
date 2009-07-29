@@ -1,9 +1,9 @@
 package ru.ipo.dces.clientservercommunication;
 
 /**
- * ѕолучить архив с Plugin'ом
+ * ќтвет с плагином стороны клиента
  */
 public class InstallClientPluginResponse implements Response {
-  /** архив с содержимым плагина */
+  /** —одержимое плагина стороны клиента */
   public byte[] pluginInstaller;
 }

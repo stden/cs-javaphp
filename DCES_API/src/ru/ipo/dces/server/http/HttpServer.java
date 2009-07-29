@@ -56,11 +56,6 @@ public class HttpServer implements ServerFacade {
         return doRequest(AvailableContestsResponse.class, r);
     }
 
-    public AcceptedResponse doRequest(ChangePasswordRequest r)
-            throws ServerReturnedError, GeneralRequestFailureException {
-        return doRequest(AcceptedResponse.class, r);
-    }
-
     public <T extends Response> T doRequest(Class<T> cls, Request obj)
             throws ServerReturnedError, GeneralRequestFailureException {
 
@@ -184,11 +179,6 @@ public class HttpServer implements ServerFacade {
     public SubmitSolutionResponse doRequest(SubmitSolutionRequest r)
             throws ServerReturnedError, GeneralRequestFailureException {
         return doRequest(SubmitSolutionResponse.class, r);
-    }
-
-    public AcceptedResponse doRequest(UploadClientPluginRequest r)
-            throws ServerReturnedError, GeneralRequestFailureException {
-        return doRequest(AcceptedResponse.class, r);
     }
 
     public AcceptedResponse doRequest(CreateDataBaseRequest r) throws ServerReturnedError, GeneralRequestFailureException {

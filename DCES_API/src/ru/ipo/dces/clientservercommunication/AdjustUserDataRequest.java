@@ -5,14 +5,41 @@ package ru.ipo.dces.clientservercommunication;
  * User: »ль€
  * Date: 11.01.2009
  * Time: 18:34:37
+ * <p/>
+ * «апрос на изменение информации об одном из пользователей
  */
 public class AdjustUserDataRequest implements Request {
 
-    public int userID;
-    public String sessionID;
+  /**
+   * id пользовател€, информацию о котором требуетс€ изменить
+   */
+  public int userID;
 
-    public String login;
-    public String password;
-    public UserDescription.UserType newType;
-    public String[] userData;
+  /**
+   * »дентификатор сессии. ƒолжен быть идентификатором администратора сервера или администратора соревновани€,
+   * которому принадлежит измен€емый пользователь.
+   */
+  public String sessionID;
+
+  /**
+   * Ќовый login этого пользовател€, либо null, если новый логин устанавливать не нужно
+   */
+  public String login;
+
+  /**
+   * Ќовый пароль этого пользовател€, либо null, если новый пароль устанавливать не нужно
+   */
+  public String password;
+
+  /**
+   * Ќовый тип этого пользовател€, либо null, если тип измен€ть не нужно
+   */
+  public UserDescription.UserType newType;
+
+  /**
+   * Ќова€ информаци€ по пользователю (в соответствии с полем data из ContestDescription - описание соревновани€,
+   * к которому относитс€ измен€емый пользователь).
+   * ≈сли информацию по пользователю измен€ть не нужно, в поле userData подставл€етс€ null 
+   */
+  public String[] userData;
 }

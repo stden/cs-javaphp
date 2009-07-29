@@ -1,7 +1,7 @@
 package ru.ipo.dces.clientservercommunication;
 
 /**
- * ѕолучить список всех контестов с сервера
+ * «апрос на получение информации о зарегистирированных в системе соревновани€х
  */
 public class AvailableContestsRequest implements Request {
 
