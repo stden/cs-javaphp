@@ -11,13 +11,9 @@ function processStopContestRequest($request) {
 
     $user_row = RequestUtils::testSession($request->sessionID);
 
-    $requested_contest_id = RequestUtils::getRequestedContest(
-        $request->contestID,
-        $user_row['contest_id'],
-        $user_row['user_type']
-    );
+    $requested_contest_id = $user_row['contest_id'];
 
-    if ($requested_contest_id < 0) throwBusinessLogicError(0);
+    if ($requested_contest_id <= 0) throwBusinessLogicError(0);
 
     $settings = Data::_unserialize($user_row['settings']);
 

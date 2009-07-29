@@ -167,6 +167,7 @@ function processGetContestResultsRequest($request) {
         $result->userLine = 0;
     } else {
         $ind = 0;
+        $result->userLine = -1;
         while ($user_row = Data::getNextRow($all_users_rows)) {
             $result->table[] = getTableRow($user_row, $is_admin, $problem_ids, $problem_cols_sizes, $contest_settings->data);
             if ($user_row['id'] == $user_contest_row['id'])

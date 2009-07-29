@@ -1,7 +1,7 @@
 package ru.ipo.dces.clientservercommunication;
 
 /**
- * Запрос: Отключиться от сервера
+ * Запрос на отключиться от соревнования
  */
 public class DisconnectRequest implements Request {
 

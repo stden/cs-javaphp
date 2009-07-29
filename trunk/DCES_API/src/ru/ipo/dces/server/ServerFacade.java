@@ -12,9 +12,6 @@ public interface ServerFacade {
   public AvailableContestsResponse doRequest(AvailableContestsRequest r)
       throws ServerReturnedError, GeneralRequestFailureException;
 
-  public AcceptedResponse doRequest(ChangePasswordRequest r)
-      throws ServerReturnedError, GeneralRequestFailureException;
-
   public ConnectToContestResponse doRequest(ConnectToContestRequest r)
       throws ServerReturnedError, GeneralRequestFailureException;
 
@@ -43,9 +40,6 @@ public interface ServerFacade {
       throws ServerReturnedError, GeneralRequestFailureException;
 
   public SubmitSolutionResponse doRequest(SubmitSolutionRequest r)
-      throws ServerReturnedError, GeneralRequestFailureException;
-
-  public AcceptedResponse doRequest(UploadClientPluginRequest r)
       throws ServerReturnedError, GeneralRequestFailureException;
 
   public AcceptedResponse doRequest(CreateDataBaseRequest r)

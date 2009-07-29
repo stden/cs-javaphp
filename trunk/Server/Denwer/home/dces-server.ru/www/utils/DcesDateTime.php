@@ -24,11 +24,17 @@
     if ($contest_settings->contestTiming->selfContestStart)
     {
       if (is_null($user_start_time)) return array('interval'=>'before', 'is_ending'=>false);
+
       $start = $user_start_time;
+      if ($start < $contest_settings->start)
+        $start = $contest_settings->start;
+        
       if (!is_null($user_finish_time) /*&& $user_finish_time <= $now*/)
         $finish = $user_finish_time;
       else
-        $finish = $start + $contest_settings->contestTiming->maxContestDuration * 60;
+        $finish = $start + $contest_settings->contestTiming->maxContestDuration * 60;        
+      if ($finish > $contest_settings->finish)
+        $finish = $contest_settings->finish;
 
       $ending_start = $finish;
       $ending_finish = $finish;

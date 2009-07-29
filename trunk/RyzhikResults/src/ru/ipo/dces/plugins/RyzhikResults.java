@@ -357,7 +357,6 @@ public class RyzhikResults implements Plugin {
   private void stopContest() {
     ServerFacade server = environment.getServer();
     StopContestRequest stopRequest = new StopContestRequest();
-    stopRequest.contestID = -1;
     stopRequest.sessionID = environment.getSessionID();
     try {
       server.doRequest(stopRequest);

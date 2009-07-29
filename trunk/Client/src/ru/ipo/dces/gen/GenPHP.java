@@ -7,7 +7,7 @@ public class GenPHP {
 
   static Class<?> messages[] = { AcceptedResponse.class,
       AdjustContestRequest.class, AvailableContestsRequest.class,
-      AvailableContestsResponse.class, ChangePasswordRequest.class,
+      AvailableContestsResponse.class,
       ConnectToContestRequest.class, ConnectToContestResponse.class,
       ContestDescription.class, CreateContestRequest.class,
       DisconnectRequest.class,
@@ -18,7 +18,7 @@ public class GenPHP {
       RemoveClientPluginRequest.class, RemoveContestRequest.class,
       RemoveUserRequest.class, RequestFailedResponse.class,
       RestorePasswordRequest.class, SubmitSolutionRequest.class,
-      SubmitSolutionResponse.class, UploadClientPluginRequest.class,
+      SubmitSolutionResponse.class,
       UserDescription.class/*, Sum.class*/ };
 
   /**

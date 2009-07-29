@@ -220,7 +220,7 @@ public class AdjustContestsPlugin extends JPanel implements Plugin {
         int problemID = updatedBean.getProblemDescriptions()[i].id;
 
         //get contest id
-        ContestDescription cd = contestChoosingPanel.getContest();
+        ContestDescription cd = getContest();
         if (cd == null) return;
 
         Controller.debugProblem(problemID, cd.contestID);
@@ -493,11 +493,8 @@ public class AdjustContestsPlugin extends JPanel implements Plugin {
   }
 
   public void activate() {
-    boolean isSuperAdmin =
-            Controller.getContestConnection().getUser().userType == UserDescription.UserType.SuperAdmin;
-    contestChoosingPanel.setVisible(isSuperAdmin);
-    if (!isSuperAdmin)
-      contestChoosingPanel.setContest(Controller.getContestConnection().getContest());
+    contestChoosingPanel.setVisible(Controller.isContestUnknownMode());
+    contestSelected(getContest());
   }
 
   public void deactivate() {
@@ -523,6 +520,13 @@ public class AdjustContestsPlugin extends JPanel implements Plugin {
     if (contest.contestID == 0) return;
 
     fillDaFormWithData(contest.contestID);
+  }
+
+  private ContestDescription getContest() {
+    if (Controller.isContestUnknownMode())
+      return contestChoosingPanel.getContest();
+    else
+      return Controller.getContestConnection().getContest();
   }
 
   /**
