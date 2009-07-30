@@ -1,0 +1,43 @@
+#summary Формат обмена данными с сервером
+#labels Phase-Design,CSC
+
+= Introduction =
+
+DCES сервер работает в пассивном режиме: он принимает приходящие к нему запросы, выполняет их и отсылает ответ. Сам сервер не может инициировать действия.
+
+Вместо ответа сервер может послать сообщение об ошибке.
+
+= Соответствие между запросами и ответами =
+
+
+Соответствие между запросами и ответами сервера приведено ниже. Во всех случаях вместо написанного в таблице ответа сервер может вернуть ошибку в `RequestFailedResponse`.
+
+_(некоторые запросы, к сожалению, пока забыты. Например, нет запроса на удаление плагина сторны сервера. Также некоторые запросы пока не реализованы)_
+
+|| *Запрос* || *Ответ* || *Пояснение* ||
+||`AdjustContestRequest`||`AdjustContestResponse`|| Настроить соревноваие ||
+||`AvailableContestsRequest`||`AvailableContestsResponse`|| Получить доступные соревнования ||
+||`ConnectToContestRequest`||`ConnectToContestResponse`|| Подсоединиться к соревнованию||
+||`CreateContestRequest`||`CreateContestResponse`|| Создать соревнование ||
+||`DisconnectRequest`||`AcceptedResponse`|| Отсоединиться от соревнования ||
+||`GetContestDataRequest`||`GetContestDataResponse`|| Узнать данные соревнования ||
+||`GetUsersRequest`||`GetUsersResponse`|| Узнать пользователей соревнования ||
+||`InstallClientPluginRequest`||`InstallClientPluginResponse`|| Скачать и установить плагин ||
+||`RegisterToContestRequest`||`AcceptedResponse`|| Зарегистрироваться для участни||
+||`RemoveClientPluginRequest`||`AcceptedResponse`|| Удалить плагин клиента ||
+||`RestorePasswordRequest`||`AcceptedResponse`|| Восстановить пароль ||
+||`SubmitSolutionRequest`||`SubmitSolutionResponse`|| Послать решение ||
+||`CreateDataBaseRequest`||`AcceptedResponse`|| Создать базу данных ||
+||`RemoveUserRequest`||`AcceptedResponse`|| Удалить пользователя ||
+||`RemoveContestRequest`||`AcceptedResponse`|| Удалить соревноваие ||
+||`AdjustClientPluginRequest`||`AcceptedResponse`|| Настроить плагин клиента ||
+||`AdjustServerPluginRequest`||`AcceptedResponse`|| Настроить плагин сервера ||
+||`GetContestResultsRequest`||`GetContestResultsResponse`|| Узнать результаты соревнования ||
+||`StopContestRequest`||`AcceptedResponse`|| Остановить соревнование досрочно ||
+
+== Формат запроса к сереверу ==
+Запрос к серверу передается в POST запросе в формате
+`x=[сериализованный php-класс с запросом]`. Таким образом, серверу достаточно проверить, что первые два символа запроса это `x=`, отбросить их, а весь остаток десериализовать php функцией `unserialize()`.
+
+== Формат ответа сервера ==
+Если произошла ошибка при обработке запроса, сервер создает объект `RequestFailedResponse`, заполняет его поля, сериализует и посылает ответ. Если ошибок не приозошло, сервер сериализует значение `null` (получается два символа `N;`), после этого сериализует объект с ответом сервера, сериализует его и окончательно посылает два сериализованных значения подряд.
