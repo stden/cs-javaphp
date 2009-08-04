@@ -1,4 +1,4 @@
-package ru.ipo.dces.client;
+package ru.ipo.dces.client.components;
 
 import ru.ipo.dces.log.LogMessageType;
 import ru.ipo.dces.log.UserMessagesLogger;

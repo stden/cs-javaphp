@@ -5,7 +5,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import ru.ipo.dces.client.Controller;
 import ru.ipo.dces.client.RequestResponseUtils;
 import ru.ipo.dces.client.Localization;
-import ru.ipo.dces.client.ContestChoosingPanel;
+import ru.ipo.dces.client.components.ContestChoosingPanel;
 import ru.ipo.dces.clientservercommunication.ContestDescription;
 import ru.ipo.dces.clientservercommunication.UserDescription;
 import ru.ipo.dces.clientservercommunication.UserDataField;
@@ -27,7 +27,7 @@ public class ManageUsersPlugin extends JPanel implements Plugin {
   private JButton addButton;
   private JButton deleteButton;
   private JButton changeButton;
-  private JUserTable userDataTable;
+  private UserTable userDataTable;
   private JRadioButton superAdminCB;
   private JRadioButton participantCB;
   private JRadioButton contestAdminCB;
@@ -339,7 +339,7 @@ public class ManageUsersPlugin extends JPanel implements Plugin {
     drawPanel.add(addButton, cc.xy(5, 23, CellConstraints.FILL, CellConstraints.DEFAULT));
     final JScrollPane scrollPane2 = new JScrollPane();
     drawPanel.add(scrollPane2, cc.xy(5, 21, CellConstraints.FILL, CellConstraints.FILL));
-    userDataTable = new JUserTable();
+    userDataTable = new UserTable();
     userDataTable.putClientProperty("JTable.autoStartsEdit", Boolean.TRUE);
     userDataTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
     scrollPane2.setViewportView(userDataTable);

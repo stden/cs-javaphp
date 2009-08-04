@@ -4,7 +4,7 @@ import com.jgoodies.forms.layout.*;
 import ru.ipo.dces.client.Controller;
 import ru.ipo.dces.log.LogMessageType;
 import ru.ipo.dces.client.Localization;
-import ru.ipo.dces.client.ContestChoosingPanel;
+import ru.ipo.dces.client.components.ContestChoosingPanel;
 import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
 import ru.ipo.dces.pluginapi.Plugin;
@@ -191,7 +191,7 @@ public class AdjustContestsPlugin extends JPanel implements Plugin {
     });
     applyButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        sendDaChangedContestToServa();        
+        sendDaChangedContestToServa();
       }
     });
     changeStatementButton.addActionListener(new ActionListener() {
@@ -640,7 +640,7 @@ public class AdjustContestsPlugin extends JPanel implements Plugin {
     drawPanel.add(previewButton, cc.xy(11, 27));
     contestChoosingPanel = new ContestChoosingPanel();
     contestChoosingPanel.setBeforeLabelGap(0);
-    contestChoosingPanel.setPopup(false);
+    contestChoosingPanel.setPopup(true);
     contestChoosingPanel.setShowLabel(true);
     drawPanel.add(contestChoosingPanel, cc.xyw(3, 3, 9));
     administratorRegistrationRB = new JRadioButton();

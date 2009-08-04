@@ -42,6 +42,8 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="L2FProd" level="project" />
+    <orderEntry type="library" name="JCalendar" level="project" />
   </component>
 </module>
 

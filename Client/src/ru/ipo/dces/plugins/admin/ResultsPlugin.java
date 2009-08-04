@@ -2,7 +2,8 @@ package ru.ipo.dces.plugins.admin;
 
 import ru.ipo.dces.client.Controller;
 import ru.ipo.dces.client.Localization;
-import ru.ipo.dces.client.ContestChoosingPanel;
+import ru.ipo.dces.client.ContestConnection;
+import ru.ipo.dces.client.components.ContestChoosingPanel;
 import ru.ipo.dces.clientservercommunication.ContestDescription;
 import ru.ipo.dces.clientservercommunication.GetContestResultsRequest;
 import ru.ipo.dces.clientservercommunication.GetContestResultsResponse;
@@ -89,7 +90,10 @@ public class ResultsPlugin implements Plugin {
     try {
       GetContestResultsRequest crr = new GetContestResultsRequest();
       crr.contestID = contest.contestID;
-      crr.sessionID = Controller.getContestConnection().getSessionID();
+      ContestConnection contestConnection = Controller.getContestConnection();
+      crr.sessionID = Controller.getContestConnection() == null ?
+              null :
+              contestConnection.getSessionID();
       GetContestResultsResponse r = Controller.getServer().doRequest(crr);
 
       ResultsTableModel model = new ResultsTableModel(r.headers, r.minorHeaders, r.table);

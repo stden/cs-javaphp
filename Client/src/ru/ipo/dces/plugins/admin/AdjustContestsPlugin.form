@@ -376,14 +376,14 @@
           <text value="Посмотреть"/>
         </properties>
       </component>
-      <component id="728ff" class="ru.ipo.dces.client.ContestChoosingPanel" binding="contestChoosingPanel">
+      <component id="728ff" class="ru.ipo.dces.client.components.ContestChoosingPanel" binding="contestChoosingPanel">
         <constraints>
           <grid row="2" column="2" row-span="1" col-span="9" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
           <forms/>
         </constraints>
         <properties>
           <beforeLabelGap value="0"/>
-          <popup value="false"/>
+          <popup value="true"/>
           <showLabel value="true"/>
         </properties>
       </component>

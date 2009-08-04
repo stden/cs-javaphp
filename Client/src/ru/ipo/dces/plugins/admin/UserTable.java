@@ -5,11 +5,11 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 
-public class JUserTable extends JTable {
+public class UserTable extends JTable {
     private UserTableModel userDataTableModel = new UserTableModel();
     protected final String[] COLUMN_NAMES = new String [] {"Поле", "Значение"};
 
-    //TODO add parameter for _selected_ values
+  //TODO add parameter for _selected_ values
     public void setKeys(String[] keys) {
 
         userDataTableModel.setRowCount(keys.length);
@@ -44,7 +44,7 @@ public class JUserTable extends JTable {
         }
     }
 
-    public JUserTable() {
+    public UserTable() {
         super();    //To change body of overridden methods use File | Settings | File Templates.
 
         this.setModel(userDataTableModel);
