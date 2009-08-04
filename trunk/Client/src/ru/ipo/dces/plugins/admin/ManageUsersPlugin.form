@@ -159,7 +159,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="ab73e" class="ru.ipo.dces.plugins.admin.JUserTable" binding="userDataTable">
+          <component id="ab73e" class="ru.ipo.dces.plugins.admin.UserTable" binding="userDataTable">
             <constraints/>
             <properties/>
             <clientProperties>
@@ -187,7 +187,7 @@
           <text value="Удалить"/>
         </properties>
       </component>
-      <component id="48d8" class="ru.ipo.dces.client.ContestChoosingPanel" binding="contestChoosingPanel">
+      <component id="48d8" class="ru.ipo.dces.client.components.ContestChoosingPanel" binding="contestChoosingPanel">
         <constraints>
           <grid row="2" column="2" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
           <forms/>

@@ -55,7 +55,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="94871" class="ru.ipo.dces.plugins.admin.JUserTable" binding="registerToContestTable">
+          <component id="94871" class="ru.ipo.dces.plugins.admin.UserTable" binding="registerToContestTable">
             <constraints/>
             <properties/>
             <clientProperties>
@@ -189,7 +189,7 @@
           <orientation value="1"/>
         </properties>
       </component>
-      <component id="9b375" class="ru.ipo.dces.client.ContestChoosingPanel" binding="contestChoosingPanel">
+      <component id="9b375" class="ru.ipo.dces.client.components.ContestChoosingPanel" binding="contestChoosingPanel">
         <constraints>
           <grid row="2" column="2" row-span="15" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
           <forms/>
@@ -197,7 +197,7 @@
         <properties>
           <beforeLabelGap value="20"/>
           <enabled value="true"/>
-          <popup value="true"/>
+          <popup value="false"/>
           <showLabel value="true"/>
         </properties>
       </component>

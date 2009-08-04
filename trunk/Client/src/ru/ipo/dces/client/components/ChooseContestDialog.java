@@ -1,4 +1,4 @@
-package ru.ipo.dces.client;
+package ru.ipo.dces.client.components;
 
 import java.awt.BorderLayout;
 import java.awt.event.*;
@@ -7,6 +7,8 @@ import javax.swing.*;
 
 import ru.ipo.dces.clientservercommunication.ContestDescription;
 import ru.ipo.dces.plugins.admin.beans.ContestsListBean;
+import ru.ipo.dces.client.components.ContestChoosingPanel;
+import ru.ipo.dces.client.Controller;
 
 public class ChooseContestDialog extends JDialog {
 

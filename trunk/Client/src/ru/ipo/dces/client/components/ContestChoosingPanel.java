@@ -1,4 +1,4 @@
-package ru.ipo.dces.client;
+package ru.ipo.dces.client.components;
 
 import info.clearthought.layout.TableLayout;
 
@@ -12,6 +12,8 @@ import java.util.HashSet;
 
 import ru.ipo.dces.clientservercommunication.ContestDescription;
 import ru.ipo.dces.plugins.admin.beans.ContestsListBean;
+import ru.ipo.dces.client.components.ChooseContestDialog;
+import ru.ipo.dces.client.Controller;
 
 /**
  * Created by IntelliJ IDEA.
@@ -113,7 +115,7 @@ public class ContestChoosingPanel extends JPanel {
   private void setInterface() {
     removeAll();
 
-    if (!popup) {
+    if (popup) {
 
       if (showLabel) {
         setLayout(new TableLayout(new double[][]{
@@ -199,7 +201,7 @@ public class ContestChoosingPanel extends JPanel {
     contestChangedListeners.remove(l);
   }
 
-  public ActionListener[] getContestChaActionListeners() {
+  public ActionListener[] getContestChangedActionListeners() {
     return contestChangedListeners.toArray(new ActionListener[contestChangedListeners.size()]);
   }
 

@@ -15,6 +15,7 @@ import ru.ipo.dces.log.UserMessagesLogger;
 import ru.ipo.dces.utils.FileSystemUtils;
 import ru.ipo.dces.utils.ZipUtils;
 import ru.ipo.dces.client.ContestConnection;
+import ru.ipo.dces.client.components.TextPaneUserMessagesLogger;
 
 import javax.swing.*;
 import java.io.*;
@@ -31,7 +32,7 @@ public class Controller {
 
   private static ContestConnection contestConnection;
 
-  private static ServerFacade server;
+  public static ServerFacade server;
   private static ClientDialog clientDialog;
   private static UserMessagesLogger logger;
 
@@ -457,4 +458,5 @@ public class Controller {
   public static boolean isContestUnknownMode() {
     return contestConnection == null || contestConnection.getUser().userType == UserDescription.UserType.SuperAdmin;
   }
+  
 }
