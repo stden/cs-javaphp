@@ -35,6 +35,15 @@ class Data {
         return $row;
     }
 
+    public static function hasRows($query) {
+        $rows = Data::getRows($query);
+        $row = Data::getNextRow($rows);
+        if ($row)
+            return true;
+        else
+            return false;
+    }
+
     public static function submitModificationQuery($query) {
         Data::$queries[] = $query;
     }

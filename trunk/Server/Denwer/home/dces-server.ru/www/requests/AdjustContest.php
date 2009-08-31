@@ -91,11 +91,17 @@
       //set client plugin
       if (!is_null($p->clientPluginAlias)) {
         $col_value['client_plugin_alias'] = $p->clientPluginAlias;
+        $cp = Data::quote_smart($p->clientPluginAlias);
+        if (!Data::hasRows("SELECT alias FROM ${prfx}client_plugin WHERE alias=$cp"))
+            throwBusinessLogicError(6);
       } else $all_set = false;
 
       //set server plugin
       if (!is_null($p->serverPluginAlias)) {
         $col_value['server_plugin_alias'] = $p->serverPluginAlias;
+        $sp = Data::quote_smart($p->serverPluginAlias);
+        if (!Data::hasRows("SELECT alias FROM ${prfx}server_plugin WHERE alias=$sp"))
+            throwBusinessLogicError(5);
       } else $all_set = false;
 
       //set name
