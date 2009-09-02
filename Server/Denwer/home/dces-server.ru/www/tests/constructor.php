@@ -43,7 +43,7 @@ class Constructor
 
     public function createContest($rap = 0, $ct = 0, $name = 'name', $descr = 'description', $start = 0, $finish = 0, $regType = 'Self', $userData = array())
     {
-        $request = new CreateContestRequest();
+        $request = new CreateContestRequest(); 
 
         /*
           public int              contestID;

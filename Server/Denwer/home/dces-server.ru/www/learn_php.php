@@ -1,6 +1,8 @@
 <?php
 
-  var_dump("" . 42);
+  $s = 'asdf';
+  $i = $s.asdf();
+  var_dump($i);
   die();
 
   class A{};
