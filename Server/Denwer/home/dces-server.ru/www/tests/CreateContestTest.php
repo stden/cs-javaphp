@@ -4,43 +4,24 @@ require_once('DCESTestCase.php');
 
 class CreateContestTestCase extends DCESTestCase
 {
-    public function testEmptyContest()
+    protected $sessionID;
+    protected $contest;
+    protected $connToContest;
+    
+    protected function setUp()
     {
-        //code example for constructing a request and sending it
-        $request = $contructor->
-            construct('CreateContestRequest')->
-            set('sessionID', 'Asd2354sdfkgsl')->
-            set('contestTiming->selfContestStart', true)->
-            set('name', 'A contest');            
-            
-        $response = $request->send();
-        $response->assertIsError();
-        $response->get('SessionID');
+        $this->contest = Constructor::instance($self)->construct('CreateContest');
+        $this->connToContest = Constructor::instance($self)->construct('ConnectToContest');
         
-        $r = $contructor->
-            construct('RegisterToContestRequest')->           
-            set('password', 'pass')->send();
+        $this->sessionID = $connToContest->set('login', 'admin')->set('password', 'superpassword')->set('contestID', 0)->send()->
+                     assertNotError()->get('sessionID');
         
-        send()->
-        assertBLError(13)->
-        doit();
-        
-        $constructor->
-        recordMacro('mymacro')->
-        construct('CreateContestRequest')->
-        set('sessionID', $constructor->param(1))->
-        set('name', 'A contest')->        
-        send()->
-        assertNotBLError()->
-        doit()->        
-        stopRecording()->
-        macro('mymacro', 'id of session');             
+        $this->contest = $this->contest->set('sessionID', $this->sessionID);
     }
     
-    function set($key, $val) {
-        $p = $key.getParamInd();
-        if ($p != 0) // if it is really a parameter
-            
+    public function testEmptyContest()
+    {
+        $this->contest->set('name', 'blablabla')->send()->assertNotError();    
     }
     
 }
