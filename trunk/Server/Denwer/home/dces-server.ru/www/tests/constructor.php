@@ -6,41 +6,40 @@ require_once('post_request.php');
 
 class Constructor
 {
-    //private $mirrorCommands = array(); //storing SQL anti-commands here
-    //private $currentErrCode = ''; //store current error msg from server here
-    
     private $serverURL = "http://localhost/dces/dces.php";
-
-    public function createDatabase()
-    {
-        $request = new CreateDataBaseRequest();
-        $request->login = "admin";
-        $request->password = "superpassword";
-        
-        return $this->sendRequestObject($request);
-    }
     
-    public function getAcceptedResponse()
+    private static $inst; //array<test cases, contsructor instances>
+    
+    private $test;
+
+    /*private function getAcceptedResponse()
     {
         return 'N;'.serialize(new AcceptedResponse());
-    } 
+    }*/
+   
+    protected function __construct($test)
+    {
+        $this->test = $test;
+    }
+   
+    public static function instance($test){
+        if(!isset($this->inst[$test]))
+            $this->inst[$test] = new Constructor($test);
+        
+        return $this->inst[$test];
+    }
     
-    private function sendRequestObject($reqObj)
+    public function construct($name)
     {
-        return PostRequest::doPostRequest($this->serverURL, 'x='.serialize($reqObj));
+        $obj = new $name();
+        
+        //if (NAME==to-to) fill tak-to else if ...
+        
+        $wrapper = new MessageWrapper($name, $this->test);
+        
+        return $wrapper; 
     }
-
-    public function connectToContest($login, $password, $contestID = 0)
-    {
-        $request = new ConnectToContestRequest();
-
-        $request->login = $login;
-        $request->password = $password;
-        $request->contestID = $contestID;
-
-        return $this->sendRequestObject($request);
-    }
-
+       
     public function createContest($rap = 0, $ct = 0, $name = 'name', $descr = 'description', $start = 0, $finish = 0, $regType = 'Self', $userData = array())
     {
         $request = new CreateContestRequest(); 
