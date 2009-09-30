@@ -4,6 +4,7 @@ import ru.ipo.dces.clientservercommunication.ContestDescription;
 
 import java.beans.PropertyChangeSupport;
 import java.beans.PropertyChangeListener;
+import java.util.Date;
 
 /**
  * Created by IntelliJ IDEA.
@@ -14,7 +15,8 @@ import java.beans.PropertyChangeListener;
 public class ContestDescriptionBean {
 
   private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
-   
+
+  private int contestID;
   private String name;
   private String description;
   private DateBean start;
@@ -22,8 +24,20 @@ public class ContestDescriptionBean {
   private ContestDescription.RegistrationType registrationType;
   private ResultsAccessPolicyBean resultsAccessPolicy;
   private ContestTimingBean contestTiming;
+
+  public void setDefault() {
+    setContestID(-1);
+    setName("Новое соревнование");
+    setDescription("");
+    setStart(new DateBean(new Date())); //now
+    setFinish(new DateBean(new Date(new Date().getTime() + 1000 * 60 * 60))); // now + 1 hour
+    setRegistrationType(ContestDescription.RegistrationType.ByAdmins);
+    this.resultsAccessPolicy.setDefault();
+    this.contestTiming.setDefault();
+  }
   
   public void setData(ContestDescription cd) {
+    setContestID(cd.contestID);
     setName(cd.name);
     setDescription(cd.description);
     setStart(new DateBean(cd.start));
@@ -41,6 +55,7 @@ public class ContestDescriptionBean {
   public ContestDescription getData() {
     ContestDescription cd = new ContestDescription();
 
+    cd.contestID = this.contestID;
     cd.name = this.name;
     cd.description = this.description;
     cd.start = this.start.getDate();
@@ -50,6 +65,18 @@ public class ContestDescriptionBean {
     cd.contestTiming = this.contestTiming.getData();
 
     return cd;
+  }
+
+  //getters and setters
+
+  public int getContestID() {
+    return contestID;
+  }
+
+  public void setContestID(int contestID) {
+    int oldValue = this.contestID;
+    this.contestID = contestID;
+    pcs.firePropertyChange("contestID", oldValue, contestID);    
   }
 
   public String getName() {
@@ -122,6 +149,8 @@ public class ContestDescriptionBean {
     pcs.firePropertyChange("contestTiming", oldValue, this.contestTiming);
   }
 
+  //pcs delegation
+
   public void addPropertyChangeListener(PropertyChangeListener listener) {
     pcs.addPropertyChangeListener(listener);
   }
@@ -145,4 +174,5 @@ public class ContestDescriptionBean {
   public PropertyChangeListener[] getPropertyChangeListeners(String propertyName) {
     return pcs.getPropertyChangeListeners(propertyName);
   }
+
 }

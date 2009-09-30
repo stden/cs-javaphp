@@ -1,13 +1,14 @@
 package ru.ipo.dces.plugins.admin.beans;
 
 import ru.ipo.dces.clientservercommunication.*;
+import ru.ipo.dces.utils.ZipUtils;
 
 import javax.swing.*;
 import javax.swing.event.ListDataListener;
 import javax.swing.event.ListDataEvent;
-import java.beans.PropertyChangeSupport;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeEvent;
+import java.beans.*;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,7 +16,7 @@ import java.beans.PropertyChangeEvent;
  * Date: 31.07.2009
  * Time: 15:45:36
  */
-public class ContestAdjustmentBean {
+public class ContestAdjustmentBean {    
 
   private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
@@ -139,16 +140,110 @@ public class ContestAdjustmentBean {
   public ProblemDescriptionBean newProblemBean() {
     ProblemDescriptionBean bean = new ProblemDescriptionBean();
     bean.addPropertyChangeListener(modifiedListener);
-    return bean;    
+
+    final ZipBean statementZipBean = bean.getAnswerData();
+    final ZipBean answerZipBean = bean.getStatementData();
+
+    statementZipBean.addVetoableChangeListener("file", new ZipListener(statementZipBean));
+    answerZipBean.addVetoableChangeListener("file", new ZipListener(answerZipBean));
+
+    statementZipBean.addPropertyChangeListener(modifiedListener);
+    answerZipBean.addPropertyChangeListener(modifiedListener);
+
+    bean.setDefault();
+    return bean;
   }
 
+  @SuppressWarnings({"UnusedDeclaration"})
   public ContestDescription getAdjustmentForContestDescription(ContestDescription oldData) {
-    //TODO implement
+    //TODO think of better implementation
     return contestDescription.getData();
   }
 
-  public ProblemDescription[] getAdjustmentForProblemsDescription(ProblemDescription[] oldData) {
-    //TODO implement
-    return null;
+  public ProblemDescription[] getAdjustmentForProblemsDescription(ProblemDescription[] oldProblems) {
+    final int newProblemsCount = problemsListModel.getSize();
+
+    ProblemDescription[] resultProblems = new ProblemDescription[newProblemsCount];
+    boolean areEqual = oldProblems.length == newProblemsCount; //means nothing changed at all
+
+    //main loop to fill results array
+    for (int i = 0; i < newProblemsCount; i++) {
+
+      ProblemDescription newP = ((ProblemDescriptionBean) problemsListModel.get(i)).getData();
+      ProblemDescription resP = new ProblemDescription();
+
+      if (newP.id != -1) {
+        ProblemDescription oldP = null;
+        for (int j = 0; j < oldProblems.length; j++) {
+          ProblemDescription problem = oldProblems[j];
+          if (problem.id == newP.id) {
+            areEqual &= i == j;
+            oldP = problem;
+            break;
+          }
+        }
+
+        if (oldP == null)
+          throw new IndexOutOfBoundsException("Didn't found appropriate problem in this.problems array");
+
+        resP.id = oldP.id;
+
+        if (!oldP.name.equals(newP.name)) {
+          resP.name = newP.name;
+          areEqual = false;
+        } else resP.name = null;
+
+        resP.answerData = newP.answerData;
+        if (newP.answerData != null) areEqual = false;
+        resP.statementData = newP.statementData;
+        if (newP.statementData != null) areEqual = false;
+
+        if (!oldP.serverPluginAlias.equals(newP.serverPluginAlias)) {
+          resP.serverPluginAlias = newP.serverPluginAlias;
+          areEqual = false;
+        } else resP.serverPluginAlias = null;
+
+        if (!oldP.clientPluginAlias.equals(newP.clientPluginAlias)) {
+          resP.clientPluginAlias = newP.clientPluginAlias;
+          areEqual = false;
+        } else resP.clientPluginAlias = null;
+      } else { //if new problem was added
+        areEqual = false;
+        resP.id = -1;
+        resP.name = newP.name;
+        resP.answerData = newP.answerData;
+        resP.statementData = newP.statementData;
+        resP.serverPluginAlias = newP.serverPluginAlias;
+        resP.clientPluginAlias = newP.clientPluginAlias;
+      }
+
+      resultProblems[i] = resP;
+    }
+
+    if (areEqual)
+      return null;
+
+    return resultProblems;
+  }
+
+  private class ZipListener implements VetoableChangeListener {
+    private ZipBean zipBean;
+
+    public ZipListener(ZipBean zipBean) {
+      this.zipBean = zipBean;
+    }
+
+    public void vetoableChange(PropertyChangeEvent evt) throws PropertyVetoException {
+      File f = (File) evt.getNewValue();
+
+      if (f == null) return;
+
+      try {
+        final byte[] bytes = ZipUtils.zip(f);
+        zipBean.setNewBytes(bytes);
+      } catch (IOException e) {
+        throw new PropertyVetoException("Failed to zip the file", evt);
+      }
+    }
   }
 }

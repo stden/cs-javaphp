@@ -458,5 +458,20 @@ public class Controller {
   public static boolean isContestUnknownMode() {
     return contestConnection == null || contestConnection.getUser().userType == UserDescription.UserType.SuperAdmin;
   }
-  
+
+  public static boolean isSuperAdmin() {
+    return contestConnection != null && contestConnection.getUser().userType == UserDescription.UserType.SuperAdmin;
+  }
+
+  public static boolean isAdmin() {
+    return contestConnection != null && contestConnection.getUser().userType == UserDescription.UserType.ContestAdmin;
+  }
+
+  public static boolean isParticipant() {
+    return contestConnection != null && contestConnection.getUser().userType == UserDescription.UserType.Participant;
+  }
+
+  public static boolean isNoConnection() {
+    return contestConnection == null;
+  }
 }

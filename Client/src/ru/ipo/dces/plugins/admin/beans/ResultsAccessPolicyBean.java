@@ -29,6 +29,12 @@ public class ResultsAccessPolicyBean {
     ap2short.put(ResultsAccessPolicy.AccessPermission.NoAccess, "N");
   }
 
+  public void setDefault() {
+    setContestPermission(ResultsAccessPolicy.AccessPermission.NoAccess);
+    setContestEndingPermission(ResultsAccessPolicy.AccessPermission.NoAccess);
+    setAfterContestPermission(ResultsAccessPolicy.AccessPermission.FullAccess);
+  }
+
   public void setData(ResultsAccessPolicy rap) {
     setContestPermission(rap.contestPermission);
     setContestEndingPermission(rap.contestEndingPermission);
@@ -105,4 +111,5 @@ public class ResultsAccessPolicyBean {
             ap2short.get(contestEndingPermission) + " " +
             ap2short.get(afterContestPermission);
   }
+
 }
