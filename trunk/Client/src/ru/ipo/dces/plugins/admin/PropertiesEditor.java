@@ -58,6 +58,8 @@ public class PropertiesEditor extends JPanel {
     f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     f.pack();
     f.setVisible(true);
+
+
   }
 
   public static class Contest {

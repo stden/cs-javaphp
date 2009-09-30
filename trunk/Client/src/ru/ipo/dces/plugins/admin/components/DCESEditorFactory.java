@@ -8,7 +8,6 @@ package ru.ipo.dces.plugins.admin.components;
 
 import com.l2fprod.common.propertysheet.PropertyEditorRegistry;
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
-import ru.ipo.dces.plugins.admin.beans.DateBean;
 import ru.ipo.dces.clientservercommunication.ContestDescription;
 import ru.ipo.dces.clientservercommunication.ResultsAccessPolicy;
 

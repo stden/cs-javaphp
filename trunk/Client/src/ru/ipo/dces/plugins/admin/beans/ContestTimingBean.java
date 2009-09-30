@@ -27,6 +27,13 @@ public class ContestTimingBean {
     setContestEndingFinish(ct.contestEndingFinish);
   }
 
+  public void setDefault() {
+    setSelfContestStart(false);
+    setMaxContestDuration(0);
+    setContestEndingStart(0);
+    setContestEndingFinish(0);
+  }
+
   public ContestTiming getData() {
     ContestTiming ct = new ContestTiming();
 

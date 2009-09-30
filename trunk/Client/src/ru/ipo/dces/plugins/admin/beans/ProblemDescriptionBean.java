@@ -4,6 +4,7 @@ import ru.ipo.dces.clientservercommunication.ProblemDescription;
 
 import java.beans.PropertyChangeSupport;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,32 +16,55 @@ public class ProblemDescriptionBean {
 
   private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
+  private int id;
   private String clientPluginAlias;
   private String serverPluginAlias;
   private String name;
-  private byte[] statementData;
-  private byte[] answerData;
+  private ZipBean statementData;
+  private ZipBean answerData;
 
-  ProblemDescriptionBean() {}
+  ProblemDescriptionBean() {
+    statementData = new ZipBean();
+    answerData = new ZipBean();
+  }
 
   public void setData(ProblemDescription pd) {
+    setId(id);
     setClientPluginAlias(pd.clientPluginAlias);
     setServerPluginAlias(pd.serverPluginAlias);
     setName(pd.name);
-    setStatementData(pd.statementData);
-    setAnswerData(pd.answerData);
+    statementData.setData(pd.statementData);
+    answerData.setData(pd.answerData);    
+  }
+
+  public void setDefault () {
+    setId(-1);
+    setClientPluginAlias(null);
+    setServerPluginAlias(null);
+    setName("Новая задача");
+    statementData.setDefault();
+    answerData.setDefault();
   }
 
   public ProblemDescription getData() {
     ProblemDescription pd = new ProblemDescription();
 
+    pd.id = this.id;
     pd.clientPluginAlias = this.clientPluginAlias;
     pd.serverPluginAlias = this.serverPluginAlias;
     pd.name = this.name;
-    pd.statementData = this.statementData;
-    pd.answerData = this.answerData;
+    pd.statementData = this.statementData.getBytes();
+    pd.answerData = this.answerData.getBytes();
 
     return pd;
+  }
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
   }
 
   public String getClientPluginAlias() {
@@ -73,22 +97,22 @@ public class ProblemDescriptionBean {
     pcs.firePropertyChange("name", oldValue, name);
   }
 
-  public byte[] getStatementData() {
+  public ZipBean getStatementData() {
     return statementData;
   }
 
-  public void setStatementData(byte[] statementData) {
-    byte[] oldValue = this.statementData;
+  public void setStatementData(ZipBean statementData) {
+    ZipBean oldValue = this.statementData;
     this.statementData = statementData;
     pcs.firePropertyChange("statementData", oldValue, statementData);
   }
 
-  public byte[] getAnswerData() {
+  public ZipBean getAnswerData() {
     return answerData;
   }
 
-  public void setAnswerData(byte[] answerData) {
-    byte[] oldValue = this.answerData;
+  public void setAnswerData(ZipBean answerData) {
+    ZipBean oldValue = this.answerData;
     this.answerData = answerData;
     pcs.firePropertyChange("answerData", oldValue, answerData);
   }

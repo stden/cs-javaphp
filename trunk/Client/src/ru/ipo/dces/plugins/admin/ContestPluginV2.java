@@ -5,6 +5,7 @@ import ru.ipo.dces.pluginapi.PluginEnvironment;
 import ru.ipo.dces.client.components.ContestChoosingPanel;
 import ru.ipo.dces.plugins.admin.beans.*;
 import ru.ipo.dces.plugins.admin.components.DCESEditorFactory;
+import ru.ipo.dces.plugins.admin.components.DCESRendererFactory;
 import ru.ipo.dces.client.Controller;
 import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.exceptions.ServerReturnedError;
@@ -18,11 +19,14 @@ import java.awt.event.ActionEvent;
 import java.util.Date;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
+import java.io.File;
 
 import com.l2fprod.common.swing.JButtonBar;
 import com.l2fprod.common.propertysheet.PropertySheetPanel;
 import com.l2fprod.common.propertysheet.DefaultProperty;
 import com.l2fprod.common.propertysheet.Property;
+import com.l2fprod.common.beans.editor.DirectoryPropertyEditor;
+import com.l2fprod.common.beans.editor.FilePropertyEditor;
 import info.clearthought.layout.TableLayout;
 
 /**
@@ -32,6 +36,8 @@ import info.clearthought.layout.TableLayout;
  * Time: 11:45:45
  */
 public class ContestPluginV2 implements Plugin, ActionListener {
+
+  //TODO clear property list when not used and fill it when open
 
   private JPanel mainPanel;
   private ContestChoosingPanel contestChoosingPanel;
@@ -102,8 +108,10 @@ public class ContestPluginV2 implements Plugin, ActionListener {
     mainPanel.add(contestSplitPane, "0, 2");
 
     contestProperties = new PropertySheetPanel();
-    initContestPropertiesEditor();
+    contestProperties.setRendererFactory(DCESRendererFactory.getInstance());
     contestProperties.setEditorFactory(DCESEditorFactory.getInstance());
+    contestProperties.setDescriptionVisible(true);
+    initContestPropertiesEditor();
     contestSplitPane.setLeftComponent(contestProperties);
 
     JPanel rightPanel = new JPanel(new TableLayout(new double[][]{
@@ -141,24 +149,37 @@ public class ContestPluginV2 implements Plugin, ActionListener {
 
     problemProperties = new PropertySheetPanel();
     problemProperties.setEditorFactory(DCESEditorFactory.getInstance());
+    problemProperties.setRendererFactory(DCESRendererFactory.getInstance());
+    problemProperties.setDescriptionVisible(true);
+    initProblemPropertiesEditor();
     problemSplitPane.setRightComponent(problemProperties);
 
     //set all views and register view changins to listeners
     addListeners();
 
-    setAllInterfaceEnabled();
+    setPropertiesEnabled(contestProperties, false);
+    setPropertiesEnabled(problemProperties, false);
+    setProblemsToolBarView();
+    setUserFieldsToolBarView();
+    setContestToolBarView();
+
+  }
+
+  private void setPropertiesEnabled(PropertySheetPanel sheet, boolean enabled) {
+    sheet.getTable().setEnabled(enabled);
   }
 
   private void addListeners() {
-    bean.getProblemsListSelectionModel().addListSelectionListener(new ListSelectionListener() {
-      public void valueChanged(ListSelectionEvent e) {
-        setProblemsToolBarView();
-      }
-    });
-
     bean.addPropertyChangeListener("contestType", new PropertyChangeListener() {
       public void propertyChange(PropertyChangeEvent evt) {
-        setAllInterfaceEnabled();
+        if (bean.getContestType() != -1) {
+          setPropertiesEnabled(contestProperties, true);
+        } else {
+          setPropertiesEnabled(contestProperties, false);
+        }
+        setContestToolBarView();
+        setProblemsToolBarView();
+        setUserFieldsToolBarView();
       }
     });
 
@@ -170,20 +191,40 @@ public class ContestPluginV2 implements Plugin, ActionListener {
 
     contestProperties.addPropertySheetChangeListener(new PropertyChangeListener() {
       public void propertyChange(PropertyChangeEvent evt) {
-        Property prop = (Property)evt.getSource();
+        Property prop = (Property) evt.getSource();
         prop.writeToObject(bean.getContestDescription());
+      }
+    });
+
+    problemProperties.addPropertySheetChangeListener(new PropertyChangeListener() {
+      public void propertyChange(PropertyChangeEvent evt) {
+        Property prop = (Property) evt.getSource();
+        int ind = bean.getProblemsListSelectionModel().getMinSelectionIndex();
+        if (ind == -1) return;
+        prop.writeToObject(bean.getProblemsListModel().get(ind));
+      }
+    });
+
+    bean.getProblemsListSelectionModel().addListSelectionListener(new ListSelectionListener() {
+      public void valueChanged(ListSelectionEvent e) {
+        setProblemsToolBarView();
+
+        int ind = bean.getProblemsListSelectionModel().getMinSelectionIndex();
+        if (ind == -1) {
+          setPropertiesEnabled(problemProperties, false);
+          clearPropertiesValues(problemProperties);
+        } else {
+          setPropertiesEnabled(problemProperties, true);
+          problemProperties.readFromObject(bean.getProblemsListModel().get(ind));
+        }
       }
     });
   }
 
-  private void setAllInterfaceEnabled() {
-    if (bean.getContestType() != -1)
-      initContestPropertiesEditor();
-    else
-      contestProperties.setProperties(new Property[0]);
-    setProblemsToolBarView();
-    setUserFieldsToolBarView();
-    setContestToolBarView();
+  private void clearPropertiesValues(PropertySheetPanel sheetPanel) {
+    for (Property p : sheetPanel.getProperties()) {
+      sheetPanel.removeProperty(p);
+    }
   }
 
   private void setUserFieldsToolBarView() {
@@ -191,7 +232,8 @@ public class ContestPluginV2 implements Plugin, ActionListener {
   }
 
   private void setContestToolBarView() {
-    removeContestButton.setEnabled(bean.getContestType() == 1);
+    addContestButton.setEnabled(Controller.isSuperAdmin());
+    removeContestButton.setEnabled(bean.getContestType() == 1 && Controller.isSuperAdmin());
     applyContestChangesButton.setEnabled(bean.isModified());
     undoContestChangesButton.setEnabled(bean.isModified());
   }
@@ -225,7 +267,7 @@ public class ContestPluginV2 implements Plugin, ActionListener {
             DateBean.class,
             "Начало",
             "Время начала соревнования. До этого времени участники не могут подключиться к соревнованию"
-    );    
+    );
     DefaultProperty finishProperty = newProperty(
             "finish",
             DateBean.class,
@@ -252,7 +294,7 @@ public class ContestPluginV2 implements Plugin, ActionListener {
     );
 
     //start properties
-    
+
     DefaultProperty startDayProperty = newProperty(
             "day",
             Date.class,
@@ -276,7 +318,7 @@ public class ContestPluginV2 implements Plugin, ActionListener {
     startProperty.addSubProperties(startProperties);
 
     //finish properties
-    
+
     DefaultProperty finishDayProperty = newProperty(
             "day",
             Date.class,
@@ -355,6 +397,8 @@ public class ContestPluginV2 implements Plugin, ActionListener {
     };
     contestTimingProperty.addSubProperties(conteseTimingProperties);
 
+    contestProperties.setProperties(new Property[0]);
+
     //add all properties
     contestProperties.addProperty(nameProperty);
     contestProperties.addProperty(descriptionProperty);
@@ -363,6 +407,94 @@ public class ContestPluginV2 implements Plugin, ActionListener {
     contestProperties.addProperty(registrationTypeProperty);
     contestProperties.addProperty(resultsAccessPolicyProperty);
     contestProperties.addProperty(contestTimingProperty);
+  }
+
+  private void initProblemPropertiesEditor() {
+    DefaultProperty nameProperty = newProperty(
+            "name",
+            String.class,
+            "Название",
+            "Название задачи"
+    );
+    DefaultProperty clientPluginAliasProperty = newProperty(
+            "clientPluginAlias",
+            String.class,
+            "Плагин клиента",
+            "Имя плагина стороны клиента"
+    );
+    DefaultProperty serverPluginAliasProperty = newProperty(
+            "serverPluginAlias",
+            String.class,
+            "Плагин сервера",
+            "Имя плагина стороны клиента"
+    );
+    DefaultProperty statementDataProperty = newProperty(
+            "statementData",
+            ZipBean.class,
+            "Условие",
+            "Файл или папка с данными для условия"
+    );
+    DefaultProperty answerDataProperty = newProperty(
+            "answerData",
+            ZipBean.class,
+            "Ответ",
+            "Файл или папка с данными для ответа"
+    );
+
+    //statement zip subproperties
+    DefaultProperty statementAsFileProperty = newProperty(
+            "file",
+            File.class,
+            "Файл",
+            "Задание условия в виде одного файла"
+    );
+    DefaultProperty statementAsDirectoryProperty = newProperty(
+            "file",
+            File.class,
+            "Директория",
+            "Задание условия в виде директории"
+    );
+
+    statementDataProperty.addSubProperties(new Property[]{statementAsFileProperty, statementAsDirectoryProperty});
+
+    //answer zip subproperties
+    DefaultProperty answerAsFileProperty = newProperty(
+            "file",
+            File.class,
+            "Файл",
+            "Задание условия в виде одного файла"
+    );
+    DefaultProperty answerAsDirectoryProperty = newProperty(
+            "file",
+            File.class,
+            "Директория",
+            "Задание условия в виде директории"
+    );
+
+    answerDataProperty.addSubProperties(new Property[]{answerAsFileProperty, answerAsDirectoryProperty});
+
+    DCESEditorFactory.getInstance().registerEditor(statementAsDirectoryProperty, DirectoryPropertyEditor.class);
+    DCESEditorFactory.getInstance().registerEditor(answerAsDirectoryProperty, DirectoryPropertyEditor.class);
+    DCESEditorFactory.getInstance().registerEditor(statementAsFileProperty, FilePropertyEditor.class);
+    DCESEditorFactory.getInstance().registerEditor(answerAsFileProperty, FilePropertyEditor.class);
+
+    DCESRendererFactory.getInstance().registerRenderer(statementAsDirectoryProperty,
+            DCESRendererFactory.DirectoryOnlyRenderer.class);
+    DCESRendererFactory.getInstance().registerRenderer(answerAsDirectoryProperty,
+            DCESRendererFactory.DirectoryOnlyRenderer.class);
+    DCESRendererFactory.getInstance().registerRenderer(statementAsFileProperty,
+            DCESRendererFactory.FileOnlyRenderer.class);
+    DCESRendererFactory.getInstance().registerRenderer(answerAsFileProperty,
+            DCESRendererFactory.FileOnlyRenderer.class);
+
+    problemProperties.setProperties(new Property[0]);
+
+    //add all properties
+    problemProperties.addProperty(nameProperty);
+    problemProperties.addProperty(clientPluginAliasProperty);
+    problemProperties.addProperty(serverPluginAliasProperty);
+    problemProperties.addProperty(statementDataProperty);
+    problemProperties.addProperty(answerDataProperty);
   }
 
   private DefaultProperty newProperty(String name, Class type, String displayName, String description) {
@@ -389,11 +521,23 @@ public class ContestPluginV2 implements Plugin, ActionListener {
 
   public void actionPerformed(ActionEvent e) {
     if (e.getSource() == addContestButton) {
-      //TODO implement
+      if (!applyChangesConfirmation()) return;
+
+      bean.setModified(false);
+      bean.setContestType(0);
+      bean.getContestDescription().setDefault();
+      bean.getProblemsListModel().clear();
+
+      contestProperties.readFromObject(bean.getContestDescription());
     } else if (e.getSource() == removeContestButton) {
-      //TODO implement
+      if (!applyChangesConfirmation()) return;
+
+      removeContest();
+
+      bean.setContestType(-1);
+      bean.getProblemsListModel().clear();
     } else if (e.getSource() == applyContestChangesButton) {
-      applyChanges();      
+      applyChanges();
     } else if (e.getSource() == undoContestChangesButton) {
       bean.setData(contestData);
       bean.setModified(false);
@@ -402,7 +546,6 @@ public class ContestPluginV2 implements Plugin, ActionListener {
 
       DefaultListModel listModel = bean.getProblemsListModel();
       ProblemDescriptionBean pdBean = bean.newProblemBean();
-      pdBean.setName("Новая Задача");
       listModel.addElement(pdBean);
       bean.getProblemsListSelectionModel().setSelectionInterval(listModel.getSize() - 1, listModel.getSize() - 1);
 
@@ -428,6 +571,44 @@ public class ContestPluginV2 implements Plugin, ActionListener {
     } else if (e.getSource() == contestChoosingPanel) {
       contestChanged();
     }
+  }
+
+  private void removeContest() {
+    RemoveContestRequest req = new RemoveContestRequest();
+    req.sessionID = Controller.getContestConnection().getSessionID();
+    req.contestID = bean.getContestDescription().getContestID();
+    try {
+      Controller.getServer().doRequest(req);
+    } catch (ServerReturnedError e) {
+      Controller.log(e);
+    } catch (GeneralRequestFailureException e) {
+      //do nothing
+    }
+  }
+
+  /**
+   * @return Возвращает, верно ли что пользователь согласился продолжать работу, т.е. не нажал Cancel
+   */
+  private boolean applyChangesConfirmation() {
+    if (bean.isModified()) {
+      switch (JOptionPane.showConfirmDialog(
+              null,
+              "У вас остались несохраненные изменения, сохранить?",
+              "Несохраненные изменения",
+              JOptionPane.YES_NO_CANCEL_OPTION)
+              ) {
+        case JOptionPane.YES_OPTION:
+          applyChanges();
+          break;
+        case JOptionPane.NO_OPTION:
+          //do nothing
+          break;
+        case JOptionPane.CANCEL_OPTION:
+          return false;
+      }
+    }
+
+    return true;
   }
 
   private boolean mayMoveProblem(int dir) {
@@ -492,14 +673,13 @@ public class ContestPluginV2 implements Plugin, ActionListener {
       adjustContestRequest = new AdjustContestRequest();
 
       adjustContestRequest.contest = bean.getAdjustmentForContestDescription(contestData.contest);
-      adjustContestRequest.contest.contestID = contestData.contest.contestID;
 
       adjustContestRequest.problems = bean.getAdjustmentForProblemsDescription(contestData.problems);
 
       adjustContestRequest.sessionID = Controller.getContestConnection().getSessionID();
     } else {
       createContestRequest = new CreateContestRequest();
-      
+
       createContestRequest.contest = bean.getContestDescription().getData();
       createContestRequest.sessionID = Controller.getContestConnection().getSessionID();
     }
@@ -507,8 +687,10 @@ public class ContestPluginV2 implements Plugin, ActionListener {
     try {
       if (bean.getContestType() == 1)
         Controller.getServer().doRequest(adjustContestRequest);
-      else if (bean.getContestType() == 0)
+      else if (bean.getContestType() == 0) {
         Controller.getServer().doRequest(createContestRequest);
+        bean.setContestType(1);
+      }
 
       bean.setModified(false);
     } catch (ServerReturnedError e) {
