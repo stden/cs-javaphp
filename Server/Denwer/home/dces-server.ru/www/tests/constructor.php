@@ -11,6 +11,7 @@ class Constructor
     private static $inst; //array<test cases, contsructor instances>
     
     private $test;
+    private $xml_datafile;
 
     /*private function getAcceptedResponse()
     {
@@ -20,20 +21,41 @@ class Constructor
     protected function __construct($test)
     {
         $this->test = $test;
+        $this->xml_datafile = '/tests/data/config.xml';
     }
    
     public static function instance($test){
-        if(!isset($this->inst[$test]))
-            $this->inst[$test] = new Constructor($test);
+        if(!isset($inst[$test]))
+            $inst[$test] = new Constructor($test);
         
-        return $this->inst[$test];
+        return $inst[$test];
     }
     
     public function construct($name)
     {
         $obj = new $name();
         
-        //if (NAME==to-to) fill tak-to else if ...
+        switch($name)
+        {
+            case 'ContestDescription':
+                $obj->contestID = -1;
+                $obj->name = $name;
+                $obj->diption = $objescr;
+                $obj->start = !$start ? time() : $start;
+                $obj->finish = !$finish ? $start + 1*60*60: $finish; //start + 1 hour
+                $obj->registrationType = $regType;
+                $obj->data = $userData;
+                $obj->contestTiming = $ct;
+                break;
+            
+            case 'ContestTiming':
+                $obj->selfContestStart = false;
+                $obj->contestEndingStart = 0;
+                $obj->contestEndingFinish = 0;
+                break;
+            case 'ResultsAccessPolicy':
+                $obj = simplexml_load_file($this->xml_datafile);
+        }
         
         $wrapper = new MessageWrapper($name, $this->test);
         
@@ -91,8 +113,6 @@ class Constructor
 
         return $this->sendRequestObject($request);
     }
-
-
 }
 
 ?>
