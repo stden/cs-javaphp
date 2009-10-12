@@ -20,7 +20,17 @@ class MessageWrapper
     
     function send()
     {
-        
+        return $this;        
+    }
+    
+    function get($key)
+    {
+        return $this;
+    }
+    
+    function set($key, $value)
+    {
+        return $this;
     }
 }
 

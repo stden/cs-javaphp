@@ -6,7 +6,7 @@ class CreateDataBaseTestCase extends DCESTestCase
 {
     public function testCreateDatabase()
     {
-        Constructor::instance($self)->
+        Constructor::instance($this)->
         construct('CreateDataBaseRequest')->
         set('login', 'admin')->
         set('password', 'superpassword')->
