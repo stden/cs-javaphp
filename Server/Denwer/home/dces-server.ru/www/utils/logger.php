@@ -8,15 +8,29 @@ class Logger
     protected $logpath;
     protected $stream;
     
-    public function __construct($logpath, $clear)
+    private function __construct($logpath = '', $clear)
     {
+        if($logpath == '') //create a log file like 09.09.09 12:34:34 
+        {
+            $path = $_SERVER['DOCUMENT_ROOT'].'/logs/';
+            
+            if($h = @opendir($path))
+                $logpath = $path;
+            else
+                $h = mkdir($path);
+            
+            closedir($h);
+            
+            $logpath .= date('d.m.Y H:i:s').'.txt';
+        }
+        
         $this->stream = fopen($logpath, "a+t");
         
         if($clear)
             ftruncate($this->stream, 0);
     }
     
-    public static function L($logpath, $clear = false)
+    public static function L($logpath = '', $clear = false)
     {
          if(self::$logger === null)
             self::$logger = new Logger($logpath, $clear);

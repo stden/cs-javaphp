@@ -15,7 +15,7 @@ class MessageWrapper
     
     private function sendRequestObject($reqObj)
     {
-        return PostRequest::doPostRequest($this->serverURL, 'x='.serialize($reqObj));
+        return PostRequest::send($this->serverURL, 'x='.serialize($reqObj));
     }
     
     function send()
@@ -29,6 +29,11 @@ class MessageWrapper
     }
     
     function set($key, $value)
+    {
+        return $this;
+    }
+    
+    function assertNotError()
     {
         return $this;
     }

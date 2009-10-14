@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<object type="ContestDescription">
+    <param name="contestID" type="int" value="-1"/>
+    <param name="name" value="name"/>
+    <param name="description" value="description" />
+    <param name="start" type="script" value="time()" />
+    <param name="finish" type="script" value="time() + 1*60*60" />
+    <param name="registrationType" value="Self"/>
+    <param name="data" type="script" value="array()"/>
+    <param name="contestTiming" type="object" value="ContestTiming" />
+</object>
+
+
+<!-- 
+
+$obj->contestID = -1;
+$obj->name = $name;
+$obj->diption = $objescr;
+$obj->start = !$start ? time() : $start;
+$obj->finish = !$finish ? $start + 1*60*60: $finish; //start + 1 hour
+$obj->registrationType = $regType;
+$obj->data = $userData;
+$obj->contestTiming = $ct;
+
+-->

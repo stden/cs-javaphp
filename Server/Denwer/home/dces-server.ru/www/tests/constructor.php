@@ -3,6 +3,7 @@
 require_once('../utils/Messages.php');
 require_once('../requests/CreateDataBase.php');
 require_once('post_request.php');
+require_once('MessageWrapper.php');
 
 class Constructor
 {
@@ -11,7 +12,7 @@ class Constructor
     private static $inst; //array<test cases, contsructor instances>
     
     private $test;
-    private $xml_datafile;
+    private $xml_mocks;
 
     /*private function getAcceptedResponse()
     {
@@ -21,26 +22,47 @@ class Constructor
     protected function __construct($test)
     {
         $this->test = $test;
-        $this->xml_datafile = '/tests/data/config.xml';
+        $this->xml_mocks = $_SERVER['DOCUMENT_ROOT'].'/tests/data/mocks.xml';
     }
    
     public static function instance($test){
-        if(!isset($inst[$test]))
-            $inst[$test] = new Constructor($test);
         
-        return $inst[$test];
+        $className = get_class($test);
+        
+        if(!isset(Constructor::$inst[$className]))
+            Constructor::$inst[$className] = new Constructor($test);
+        
+        return Constructor::$inst[$className];
     }
     
-    public function construct($name)
+    /**
+     * @return 
+     * @param string $name A DTO name to construct
+     * @param array $params Additional parameters
+     */
+    public function construct($name, $params = array())
     {
-        $obj = new $name();
+        $obj = null;
         
-        switch($name)
+        if(file_exists($this->xml_mocks))
+        {
+            $obj = simplexml_load_file($this->xml_mocks);
+
+            Logger::L()->log(strval($obj));
+            
+           /* if(isset($params[$name]) && $params[$name] != null)
+            {
+                foreach($params[$name] as $paramName => $paramValue)
+                    $obj->$paramName = $paramValue;
+            }*/
+        }
+        
+       /* switch($name)
         {
             case 'ContestDescription':
                 $obj->contestID = -1;
                 $obj->name = $name;
-                $obj->diption = $objescr;
+                $obj->description = $obj;
                 $obj->start = !$start ? time() : $start;
                 $obj->finish = !$finish ? $start + 1*60*60: $finish; //start + 1 hour
                 $obj->registrationType = $regType;
@@ -54,10 +76,11 @@ class Constructor
                 $obj->contestEndingFinish = 0;
                 break;
             case 'ResultsAccessPolicy':
-                $obj = simplexml_load_file($this->xml_datafile);
+                $obj = simplexml_load_file();
         }
-        
-        $wrapper = new MessageWrapper($name, $this->test);
+        */
+       
+        $wrapper = new MessageWrapper($obj, $this->test);
         
         return $wrapper; 
     }
