@@ -10,18 +10,22 @@ class CreateContestTestCase extends DCESTestCase
     
     protected function setUp()
     {
-        $this->contest = Constructor::instance($this)->construct('CreateContest');
+        /*$this->contest = Constructor::instance($this)->construct('CreateContest');
         $this->connToContest = Constructor::instance($this)->construct('ConnectToContest');
         
         $this->sessionID = $connToContest->set('login', 'admin')->set('password', 'superpassword')->set('contestID', 0)->send()->
                      assertNotError()->get('sessionID');
         
-        $this->contest = $this->contest->set('sessionID', $this->sessionID);
+        $this->contest = $this->contest->set('sessionID', $this->sessionID);*/
     }
     
     public function testEmptyContest()
     {
-        $this->contest->set('name', 'blablabla')->send()->assertNotError();    
+        $c = Constructor::instance($this);
+        
+        $c->construct('CreateContest');
+        
+        //$this->contest->set('name', 'blablabla')->send()->assertNotError();    
     }
     
 }

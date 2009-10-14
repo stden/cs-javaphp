@@ -2,7 +2,7 @@
 
 class PostRequest {
 	
-public static function doPostRequest($url, $data, $optional_headers = null)
+public static function send($url, $data, $optional_headers = null)
 {
     $params = array ('http'=> array ('method' => 'post', 'content' => $data));
     
