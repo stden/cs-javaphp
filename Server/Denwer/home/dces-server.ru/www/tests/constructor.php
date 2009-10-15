@@ -23,7 +23,7 @@ class Constructor
     protected function __construct($test)
     {
         $this->test = $test;
-        $this->xml_mocks = './data/mocks.xml';
+        $this->xml_mocks = dirname(__FILE__).'/data/mocks.xml';
     }
    
     public static function instance($test){
@@ -50,21 +50,18 @@ class Constructor
         
         $xml = simplexml_load_file($this->xml_mocks);
         
-        $obj_type = $xml->object->type;
-        
-        Logger::L("C:\DCES_log.txt")->log((int)$xml);
-        
         //$obj = new $obj_type();
         
         for($i = 0; $i < count($xml->param); $i++)
         {
-            foreach($xml->param[$i] as $name => $value)
-            {
-                switch($name)
+            if($xml->param[$i] == $name)
+                foreach($xml->param[$i] as $name => $value)
                 {
-                    case '': echo 'foo: '.$value; break;
+                    switch($name)
+                    {
+                        case '': echo 'foo: '.$value; break;
+                    }
                 }
-            }
         }
         
         if(isset($params[$name]) && $params[$name] != null)
