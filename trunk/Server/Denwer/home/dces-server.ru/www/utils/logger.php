@@ -7,26 +7,29 @@ class Logger
     protected static $logger;
     protected $logpath;
     protected $stream;
+    protected $clear = false;
     
-    private function __construct($logpath = '', $clear)
+    private function __construct($logpath = '')
     {
         if($logpath == '') //create a log file like 09.09.09 12:34:34 
         {
-            $path = $_SERVER['DOCUMENT_ROOT'].'/logs/';
+            $path = dirname(__FILE__)."/../logs/";
             
-            if($h = @opendir($path))
-                $logpath = $path;
+            $h = @opendir($path);
+            
+            if(!$h)
+                if(!mkdir($path)) throw new Exception("Couldn't create directory 'logs' in root directory");
             else
-                $h = mkdir($path);
+                closedir($h);
+                    
+            $logpath = $path;            
             
-            closedir($h);
-            
-            $logpath .= date('d.m.Y H:i:s').'.txt';
+            $logpath .= date('d.m.Y').'.txt';
         }
         
         $this->stream = fopen($logpath, "a+t");
         
-        if($clear)
+        if($this->clear)
             ftruncate($this->stream, 0);
     }
     
@@ -34,13 +37,25 @@ class Logger
     {
          if(self::$logger === null)
             self::$logger = new Logger($logpath, $clear);
-            
+         
+         self::$logger->setClear($clear);
+         
          return self::$logger;
     }
     
     public function log($msg)
     {
-        fwrite($this->stream, $msg."\n");
+        fwrite($this->stream, date('[H:i:s]: ').$msg."\n");
+    }
+    
+    public function getClear()
+    {
+        return $this->clear;
+    }
+    
+    public function setClear($clear)
+    {
+        $this->clear = ($clear == true) ? true : false;
     }
     
     public function __destruct()
