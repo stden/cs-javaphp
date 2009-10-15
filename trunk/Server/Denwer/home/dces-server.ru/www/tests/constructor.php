@@ -4,6 +4,7 @@ require_once('../utils/Messages.php');
 require_once('../requests/CreateDataBase.php');
 require_once('post_request.php');
 require_once('MessageWrapper.php');
+require_once('../utils/logger.php');
 
 class Constructor
 {
@@ -22,7 +23,7 @@ class Constructor
     protected function __construct($test)
     {
         $this->test = $test;
-        $this->xml_mocks = $_SERVER['DOCUMENT_ROOT'].'/tests/data/mocks.xml';
+        $this->xml_mocks = './data/mocks.xml';
     }
    
     public static function instance($test){
@@ -44,18 +45,34 @@ class Constructor
     {
         $obj = null;
         
-        if(file_exists($this->xml_mocks))
+        if(!file_exists($this->xml_mocks))
+            throw new Exception("Couldn't load XML models");
+        
+        $xml = simplexml_load_file($this->xml_mocks);
+        
+        $obj_type = $xml->object->type;
+        
+        Logger::L("C:\DCES_log.txt")->log((int)$xml);
+        
+        //$obj = new $obj_type();
+        
+        for($i = 0; $i < count($xml->param); $i++)
         {
-            $obj = simplexml_load_file($this->xml_mocks);
-
-            Logger::L()->log(strval($obj));
-            
-           /* if(isset($params[$name]) && $params[$name] != null)
+            foreach($xml->param[$i] as $name => $value)
             {
-                foreach($params[$name] as $paramName => $paramValue)
-                    $obj->$paramName = $paramValue;
-            }*/
+                switch($name)
+                {
+                    case '': echo 'foo: '.$value; break;
+                }
+            }
         }
+        
+        if(isset($params[$name]) && $params[$name] != null)
+        {
+            foreach($params[$name] as $paramName => $paramValue)
+                $obj->$paramName = $paramValue;
+        }
+        
         
        /* switch($name)
         {
