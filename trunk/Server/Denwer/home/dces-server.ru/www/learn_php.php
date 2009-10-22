@@ -1,5 +1,9 @@
 <?php
 
+  echo $_SERVER['DOCUMENT_ROOT'];
+
+  die();
+
   $s = 'asdf';
   $i = $s.asdf();
   var_dump($i);
