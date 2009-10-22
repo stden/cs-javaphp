@@ -3,27 +3,20 @@
 require_once('../utils/Messages.php');
 require_once('../requests/CreateDataBase.php');
 require_once('post_request.php');
-require_once('MessageWrapper.php');
 require_once('../utils/logger.php');
+require_once('data/mocks.php');
+
+// Accepted response is 'N;'.serialize(new AcceptedResponse()); 
 
 class Constructor
 {
-    private $serverURL = "http://localhost/dces/dces.php";
-    
+    private $serverURL = "http://localhost/dces/dces.php"; //TODO: refactor to load from config file
     private static $inst; //array<test cases, contsructor instances>
-    
     private $test;
-    private $xml_mocks;
 
-    /*private function getAcceptedResponse()
-    {
-        return 'N;'.serialize(new AcceptedResponse());
-    }*/
-   
     protected function __construct($test)
     {
         $this->test = $test;
-        $this->xml_mocks = dirname(__FILE__).'/data/mocks.xml';
     }
    
     public static function instance($test){
@@ -39,66 +32,33 @@ class Constructor
     /**
      * @return 
      * @param string $name A DTO name to construct
-     * @param array $params Additional parameters
      */
-    public function construct($name, $params = array())
+    public function construct($name)
     {
-        $obj = null;
+        $obj = new $name();
+        $this->_construct($obj, $name);
         
-        if(!file_exists($this->xml_mocks))
-            throw new Exception("Couldn't load XML models");
-        
-        $xml = simplexml_load_file($this->xml_mocks);
-        
-        //$obj = new $obj_type();
-        
-        for($i = 0; $i < count($xml->param); $i++)
-        {
-            if($xml->param[$i] == $name)
-                foreach($xml->param[$i] as $name => $value)
-                {
-                    switch($name)
-                    {
-                        case '': echo 'foo: '.$value; break;
-                    }
-                }
-        }
-        
-        if(isset($params[$name]) && $params[$name] != null)
-        {
-            foreach($params[$name] as $paramName => $paramValue)
-                $obj->$paramName = $paramValue;
-        }
-        
-        
-       /* switch($name)
-        {
-            case 'ContestDescription':
-                $obj->contestID = -1;
-                $obj->name = $name;
-                $obj->description = $obj;
-                $obj->start = !$start ? time() : $start;
-                $obj->finish = !$finish ? $start + 1*60*60: $finish; //start + 1 hour
-                $obj->registrationType = $regType;
-                $obj->data = $userData;
-                $obj->contestTiming = $ct;
-                break;
-            
-            case 'ContestTiming':
-                $obj->selfContestStart = false;
-                $obj->contestEndingStart = 0;
-                $obj->contestEndingFinish = 0;
-                break;
-            case 'ResultsAccessPolicy':
-                $obj = simplexml_load_file();
-        }
-        */
-       
-        $wrapper = new MessageWrapper($obj, $this->test);
-        
-        return $wrapper; 
+        return $obj;
     }
-       
+    
+    private function _construct(&$obj, $name)
+    {
+        $val = Mocks::m()->expand($name);
+        
+        if(!$val) return;
+        
+        foreach($val[1] as $key => $value)
+            if(is_array($value)){
+                
+                $obj->$key = new $value[0]();
+                $this->_construct($obj->$key, $value[0]);
+            } 
+            else
+                $obj->$key = $value;
+    }
+    
+    
+    //FOR REFERENCE ONLY   
     public function createContest($rap = 0, $ct = 0, $name = 'name', $descr = 'description', $start = 0, $finish = 0, $regType = 'Self', $userData = array())
     {
         $request = new CreateContestRequest(); 

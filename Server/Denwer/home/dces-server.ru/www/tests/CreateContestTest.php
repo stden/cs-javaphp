@@ -21,11 +21,9 @@ class CreateContestTestCase extends DCESTestCase
     
     public function testEmptyContest()
     {
-        $c = Constructor::instance($this);
-        
+        /*$c = Constructor::instance($this);
         $c->construct('CreateContest');
-        
-        //$this->contest->set('name', 'blablabla')->send()->assertNotError();    
+        $this->contest->set('name', 'blablabla')->send()->assertNotError();*/    
     }
     
 }
