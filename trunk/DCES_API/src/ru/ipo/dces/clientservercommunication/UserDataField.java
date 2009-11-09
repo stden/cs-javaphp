@@ -14,17 +14,20 @@ public class UserDataField {
   /**
    * Имя поля. Например, "школа" или "класс" или "e-mail"
    */
+  @PHPDefaultValue("name")
   public String data;
 
   /**
    * Обязательно ли поле должно быть заполнено
    */
+  @PHPDefaultValue("true")
   public boolean compulsory;
 
   /**
    * Отображать ли поле в общедоступных результатах соревнования. Например, имя участника отобразить
    * в результатах логично, а его адрес - нет
    */
+  @PHPDefaultValue("true")
   public boolean showInResult;
 
 }

@@ -13,27 +13,32 @@ public class AdjustUserDataRequest implements Request {
   /**
    * id пользовател€, информацию о котором требуетс€ изменить
    */
+  @PHPDefaultValue("0")
   public int userID;
 
   /**
    * »дентификатор сессии. ƒолжен быть идентификатором администратора сервера или администратора соревновани€,
    * которому принадлежит измен€емый пользователь.
    */
+  @PHPDefaultValue("null")
   public String sessionID;
 
   /**
    * Ќовый login этого пользовател€, либо null, если новый логин устанавливать не нужно
    */
+  @PHPDefaultValue("'test_login'")
   public String login;
 
   /**
    * Ќовый пароль этого пользовател€, либо null, если новый пароль устанавливать не нужно
    */
+  @PHPDefaultValue("'test_password'")
   public String password;
 
   /**
    * Ќовый тип этого пользовател€, либо null, если тип измен€ть не нужно
    */
+  @PHPDefaultValue("'Participant'")
   public UserDescription.UserType newType;
 
   /**
@@ -41,5 +46,6 @@ public class AdjustUserDataRequest implements Request {
    * к которому относитс€ измен€емый пользователь).
    * ≈сли информацию по пользователю измен€ть не нужно, в поле userData подставл€етс€ null 
    */
+  @PHPDefaultValue("array()")
   public String[] userData;
 }

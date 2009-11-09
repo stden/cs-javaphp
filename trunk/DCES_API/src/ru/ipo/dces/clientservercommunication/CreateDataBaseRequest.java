@@ -14,13 +14,13 @@ public class CreateDataBaseRequest implements Request {
   /**
    * Логин администратора сервера
    */
-  @PHPDefaultValue("admin")
+  @PHPDefaultValue("'admin'")
   public String login;
 
   /**
    * Пароль администратора сервера
    */
-  @PHPDefaultValue("superpassword")
+  @PHPDefaultValue("'superpassword'")
   public String password;
 
 }

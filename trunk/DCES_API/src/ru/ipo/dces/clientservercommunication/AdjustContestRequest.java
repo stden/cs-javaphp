@@ -12,6 +12,7 @@ public class AdjustContestRequest implements Request {
   /** Идентификатор сессии. Требуется идентификатор администратора сервера или администратора
    * изменяемого соревнования
    */
+  @PHPDefaultValue("null")
   public String               sessionID;
 
   /**
@@ -21,6 +22,7 @@ public class AdjustContestRequest implements Request {
    * соответствующего администратору.
    * Остальные поля contest могут быть null, что означает, что их изменение не требуется
    */
+  @PHPDefaultValue("")
   public ContestDescription contest;
 
   /**
@@ -35,6 +37,7 @@ public class AdjustContestRequest implements Request {
    * <p>Если в старом наборе задач была задача с id, который не перечисляется среди problems[i].id, то эта задача
    * удаляется из базы   
    */
+  @PHPDefaultValue("null")
   public ProblemDescription[] problems;
 
 }

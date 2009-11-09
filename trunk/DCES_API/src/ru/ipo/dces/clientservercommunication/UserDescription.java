@@ -26,16 +26,19 @@ public class UserDescription {
   /**
    * Идентификатор пользователя
    */
+  @PHPDefaultValue("null")
   public int      userID;
 
   /**
    * Логин
    */
+  @PHPDefaultValue("'test_login'")
   public String   login;
 
   /**
    * Пароль. В ответах сервера это поле не заполняется
    */
+  @PHPDefaultValue("'test_password'")
   public String   password;
 
   /**
@@ -43,10 +46,12 @@ public class UserDescription {
    * элемента массива хранятся в описании контеста. ContestDescription содержит
    * UserDataField[] data c информацией о полях с данными
    */
+  @PHPDefaultValue("array()")
   public String[] dataValue;
 
   /** Тип пользователя */
   //TODO избавиться от инициализатора
+  @PHPDefaultValue("'Participant'")
   public UserType userType = UserType.Participant;
 
 }

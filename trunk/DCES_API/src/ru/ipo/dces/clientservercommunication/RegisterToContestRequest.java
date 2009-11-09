@@ -11,6 +11,7 @@ public class RegisterToContestRequest implements Request {
    * сессии администраторов. Регистрировать администраторов соревнования и сервера может только администратор
    * сервера
    */
+  @PHPDefaultValue("null")
   public String sessionID;
 
   /**
@@ -18,10 +19,12 @@ public class RegisterToContestRequest implements Request {
    * и регистрации администратором сервера. Администратор соревнования должен указать -1 или идентификатор
    * своего соревнования
    */
+  @PHPDefaultValue("null")
   public int contestID;
 
   /**
    * Описание нового регистрируемого пользователя
    */
+  @PHPDefaultValue("")
   public UserDescription user;
 }

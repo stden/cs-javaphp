@@ -9,6 +9,7 @@ public class ConnectToContestRequest implements Request {
    * и€, к которому происходит подсоединение. 0 - виртуальное соревнование, к нему подключаетс€
    * администратор сервера, чтобы иметь возможность администрировать сервер
    */
+  @PHPDefaultValue("null")
   public int    contestID;
 
   /**
@@ -16,10 +17,12 @@ public class ConnectToContestRequest implements Request {
    * <p>«амечание. ¬ системе может быть зарегистрировано много одинаковых логинов. ѕользователь определ€етс€
    * на основе пары полей contestID / login
    */
+  @PHPDefaultValue("'test_login'")
   public String login;
 
   /**
    * ѕароль пользовател€.
    */
+  @PHPDefaultValue("'test_password'")
   public String password;
 }

@@ -13,6 +13,7 @@ public class StopContestRequest implements Request {
   /**
    * Идентификатор сессии участника
    */
+  @PHPDefaultValue("null")
   public String sessionID;
 
 }
