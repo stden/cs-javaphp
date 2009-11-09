@@ -31,6 +31,7 @@ public class ResultsAccessPolicy {
   /**
    * права на доступ во время соревнования
    */
+  @PHPDefaultValue("'FullAccess'")
   public AccessPermission contestPermission;
 
   /**
@@ -39,13 +40,15 @@ public class ResultsAccessPolicy {
    * В этот промежуток времени можно настроить права на доступ к результатам соревнования, других назначений
    * у "окончания соревнования" нет.
    * <p>Например, в соревнованиях ACM результаты перестают быть видны участникам за час до конца, а становятся видны
-   * уже черездолго после конца соревнования, чтобы не портить интригу при награждении
+   * уже через некоторое время после окончания соревнования, чтобы не портить интригу при награждении
    */
+  @PHPDefaultValue("'FullAccess'")
   public AccessPermission contestEndingPermission;
 
   /**
    * права на доступ после соревнования
    */
+  @PHPDefaultValue("'FullAccess'")
   public AccessPermission afterContestPermission;  
 
 }
