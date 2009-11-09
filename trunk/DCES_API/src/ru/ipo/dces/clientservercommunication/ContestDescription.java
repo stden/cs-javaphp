@@ -19,29 +19,36 @@ public class ContestDescription {
   }
 
   /** ID соревновани€ */
+  @PHPDefaultValue("-1")
   public int              contestID;
 
   /** Ќазвание соревновани€ */
+  @PHPDefaultValue("'Sample contest'")
   public String           name;
 
   /** –асширенное описание соревновани€ */
+  @PHPDefaultValue("'Description of sample contest'")
   public String           description;
 
   /** ¬рем€ начала соревновани€. ƒо этого времени подключение участников к соревнованию
    * физически невозможно */
+  @PHPDefaultValue("time()")
   public Date             start;
 
   /** ¬рем€ окончани€ соревновани€. ѕосле этого времени участники могут подключатьс€ к соревнованию,
    * но отсылка решений более невозможна. (ѕод отсылкой решений понимаютс€ запросы SubmitSolutinRequest, которые
    * при обработке плагином стороны сервера помечаютс€ плагином как "решение") */
+  @PHPDefaultValue("time() + 3600")
   public Date             finish;
 
   /** —пособ регистрации на соревнование */
+  @PHPDefaultValue("'ByAdmins'")
   public RegistrationType registrationType;
 
   /**
    * Ќабор данных об участнике
    */
+  @PHPDefaultValue("array()")
   public UserDataField[]  data;
 
   /**
@@ -49,11 +56,13 @@ public class ContestDescription {
    * участникам и анонимным пользовател€м разрешен доступ к результатам соревновани€.
    * јдминистраторы всегда имеют доступ к результатам
    */
+  @PHPDefaultValue("")
   public ResultsAccessPolicy resultsAccessPolicy;
 
   /**
    * “онка€ настройка времени проведени€ соревновани€
    */
+  @PHPDefaultValue("")
   public ContestTiming contestTiming;
 
 }
