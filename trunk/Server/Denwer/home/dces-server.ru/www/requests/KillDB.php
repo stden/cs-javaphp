@@ -23,4 +23,6 @@ function processKillDBRequest($request) {
     
     foreach ($tables as $t)  
         Data::submitModificationQuery("DROP TABLE $prfx" . $t);
+        
+    return new AcceptedResponse();
 }
