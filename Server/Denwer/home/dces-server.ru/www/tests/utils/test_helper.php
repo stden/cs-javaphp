@@ -1,6 +1,6 @@
 <?php
 
-function createFailedRes($failReason, $code, $info = '')
+function createFailedResponse($code, $failReason = 'BusinessLogicError' , $info = '')
 {
     $res = new RequestFailedResponse();
     
