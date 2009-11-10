@@ -14,8 +14,8 @@ if (strpos($x, 'x=') === 0)
  $s_request = substr($x, 2);
 else
 {
-  echo "<b>DCES</b> версии 0.1, добро пожаловать\n";
-  echo "Веб интерфейс к DCES-серверу пока не предусмотрен";
+  echo "<b>DCES</b> пїЅпїЅпїЅпїЅпїЅпїЅ 0.1, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n";
+  echo "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ DCES-пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ";
   exit();
 }
 
@@ -119,6 +119,11 @@ switch(get_class($request)) {
 	  require("requests/StopContest.php");
 	  processStopContestRequest($request);
 	  break;
+    
+    case 'KillDBRequest':
+      require("requests/KillDB.php");
+      processKillDBRequest($request);
+      break;
 
   default:
       throwBusinessLogicError(15, get_class($request));

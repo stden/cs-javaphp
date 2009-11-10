@@ -39,4 +39,5 @@ class GetContestResultsResponse{};
 class CreateContestResponse{};
 class StopContestRequest{};
 class ContestTiming{};
+class KillDBRequest{};
 ?>

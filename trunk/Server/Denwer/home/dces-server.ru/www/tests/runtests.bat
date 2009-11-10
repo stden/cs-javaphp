@@ -1,0 +1,1 @@
+phpunit --bootstrap includes.php .

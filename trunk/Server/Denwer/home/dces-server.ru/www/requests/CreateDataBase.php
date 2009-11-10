@@ -42,6 +42,15 @@
      'user_type' => 'SuperAdmin'
    );
    $queries[] = composeInsertQuery('user', $col_value);
+   
+   /*$f = fopen('q.log', 'a');
+   
+   foreach ($queries as $q) {
+        fwrite($f, $q.'\n');
+   }
+   
+   fclose($f);*/
+   
 
    transaction($con, $queries) or throwServerProblem(65);
 
