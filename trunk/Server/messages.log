@@ -1,0 +1,6 @@
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:13:"KillDBRequest":0:{}
+answer = N;
+
