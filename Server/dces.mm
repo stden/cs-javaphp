@@ -81,7 +81,7 @@
 <node CREATED="1211619260729" ID="Freemind_Link_1159031729" MODIFIED="1211619267693" TEXT="&#x440;&#x435;&#x437;&#x443;&#x43b;&#x44c;&#x442;&#x430;&#x442; &#x437;&#x430;&#x434;&#x430;&#x447;&#x438;"/>
 </node>
 </node>
-<node CREATED="1211732355878" HGAP="40" ID="Freemind_Link_180529100" MODIFIED="1229036979114" TEXT="&#x418;&#x437;&#x43c;&#x435;&#x43d;&#x438;&#x442;&#x44c; &#x43f;&#x430;&#x440;&#x43e;&#x43b;&#x44c;">
+<node CREATED="1211732355878" HGAP="38" ID="Freemind_Link_180529100" MODIFIED="1229534170116" TEXT="&#x418;&#x437;&#x43c;&#x435;&#x43d;&#x438;&#x442;&#x44c; &#x43f;&#x430;&#x440;&#x43e;&#x43b;&#x44c;" VSHIFT="1">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1211732364741" ID="Freemind_Link_33668472" MODIFIED="1211732373890" TEXT="ChangePasswordRequest">
 <node CREATED="1211732375245" ID="Freemind_Link_1665998013" MODIFIED="1211732382964" TEXT="sessionID"/>
@@ -120,7 +120,8 @@
 </node>
 <node CREATED="1211624717746" ID="Freemind_Link_699175040" MODIFIED="1211625356354" TEXT="AcceptedResponse"/>
 </node>
-<node CREATED="1211720802144" ID="Freemind_Link_1478586369" MODIFIED="1229036984454" TEXT="&#x423;&#x434;&#x430;&#x43b;&#x438;&#x442;&#x44c; &#x43f;&#x43e;&#x43b;&#x44c;&#x437;&#x43e;&#x432;&#x430;&#x442;&#x435;&#x43b;&#x44f; &#x43a;&#x43e;&#x43d;&#x442;&#x435;&#x441;&#x442;&#x430;">
+<node CREATED="1211720802144" ID="Freemind_Link_1478586369" MODIFIED="1229081415491" TEXT="&#x423;&#x434;&#x430;&#x43b;&#x438;&#x442;&#x44c; &#x43f;&#x43e;&#x43b;&#x44c;&#x437;&#x43e;&#x432;&#x430;&#x442;&#x435;&#x43b;&#x44f; &#x43a;&#x43e;&#x43d;&#x442;&#x435;&#x441;&#x442;&#x430;">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1211720816205" ID="Freemind_Link_209935291" MODIFIED="1211720823888" TEXT="RemoveUserRequest">
 <node CREATED="1211721002604" ID="Freemind_Link_1660259176" MODIFIED="1211721007801" TEXT="sessionID"/>
 <node CREATED="1211720828491" ID="Freemind_Link_444660505" MODIFIED="1229037091357" TEXT="userID"/>
@@ -157,7 +158,8 @@
 </node>
 <node CREATED="1211622013472" ID="Freemind_Link_1187453876" MODIFIED="1211625385757" TEXT="AcceptedResponse "/>
 </node>
-<node COLOR="#cc3300" CREATED="1211621961734" ID="Freemind_Link_1203674203" MODIFIED="1213020270413" TEXT="&#x423;&#x434;&#x430;&#x43b;&#x438;&#x442;&#x44c; &#x43a;&#x43e;&#x43d;&#x442;&#x435;&#x441;&#x442;">
+<node COLOR="#cc3300" CREATED="1211621961734" ID="Freemind_Link_1203674203" MODIFIED="1229094194849" TEXT="&#x423;&#x434;&#x430;&#x43b;&#x438;&#x442;&#x44c; &#x43a;&#x43e;&#x43d;&#x442;&#x435;&#x441;&#x442;">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1211622320000" ID="Freemind_Link_316932790" MODIFIED="1211622329851" TEXT="RemoveContestRequest">
 <node CREATED="1211622681683" ID="Freemind_Link_318870976" MODIFIED="1211622686026" TEXT="sessionID"/>
 <node CREATED="1211622647507" ID="Freemind_Link_747916806" MODIFIED="1211622668846" TEXT="contestID"/>
@@ -167,8 +169,9 @@
 <node CREATED="1211624303574" ID="Freemind_Link_293727446" MODIFIED="1211732987262" TEXT="&#x41d;&#x430;&#x441;&#x442;&#x440;&#x43e;&#x438;&#x442;&#x44c; &#x43f;&#x43b;&#x430;&#x433;&#x438;&#x43d; &#x441;&#x442;&#x43e;&#x440;&#x43e;&#x43d;&#x44b; &#x43a;&#x43b;&#x438;&#x435;&#x43d;&#x442;&#x430;">
 <node CREATED="1211624391657" ID="Freemind_Link_1333403576" MODIFIED="1211733121111" TEXT="AdjustClientPluginRequest">
 <node CREATED="1211624415589" ID="Freemind_Link_739699949" MODIFIED="1211624419977" TEXT="sessionID"/>
-<node CREATED="1211624421431" ID="Freemind_Link_970899050" MODIFIED="1211624424477" TEXT="pluginID"/>
+<node CREATED="1211624421431" ID="Freemind_Link_970899050" MODIFIED="1229632584033" TEXT="pluginAlias"/>
 <node CREATED="1211624425887" ID="Freemind_Link_426189427" MODIFIED="1211624683452" TEXT="&#x434;&#x430;&#x43d;&#x43d;&#x44b;&#x435; &#x441; &#x43f;&#x43b;&#x430;&#x433;&#x438;&#x43d;&#x43e;&#x43c;"/>
+<node CREATED="1229626024430" ID="Freemind_Link_1310441763" MODIFIED="1229626044262" TEXT="description"/>
 </node>
 <node CREATED="1211624717746" ID="Freemind_Link_191779898" MODIFIED="1211625356354" TEXT="AcceptedResponse"/>
 </node>
