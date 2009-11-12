@@ -9,7 +9,7 @@ public class ConnectToContestRequest implements Request {
    * ия, к которому происходит подсоединение. 0 - виртуальное соревнование, к нему подключается
    * администратор сервера, чтобы иметь возможность администрировать сервер
    */
-  @PHPDefaultValue("null")
+  @PHPDefaultValue("0")
   public int    contestID;
 
   /**
