@@ -14,8 +14,7 @@ if (strpos($x, 'x=') === 0)
  $s_request = substr($x, 2);
 else
 {
-  echo "<b>DCES</b> пїЅпїЅпїЅпїЅпїЅпїЅ 0.1, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n";
-  echo "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ DCES-пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ";
+  echo "<b>DCES</b> Здесь был какой-то текст, который к сожалению, больше не прочитать из-за испорченной кодировки\n";  
   exit();
 }
 
@@ -117,12 +116,12 @@ switch(get_class($request)) {
 
 	case 'StopContestRequest':
 	  require("requests/StopContest.php");
-	  processStopContestRequest($request);
+	  $result = processStopContestRequest($request);
 	  break;
     
     case 'KillDBRequest':
       require("requests/KillDB.php");
-      processKillDBRequest($request);
+      $result = processKillDBRequest($request);
       break;
 
   default:
