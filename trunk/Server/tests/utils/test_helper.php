@@ -1,11 +1,11 @@
 <?php
 
-function createFailedRes($failReason, $code, $info = '')
+function createFailRes($code, $failReason = 'BusinessLogicError', $info = '')
 {
     $res = new RequestFailedResponse();
     
     $res->failReason = $failReason;
-    $res->failErrNo = $code;
+    $res->failErrNo = $code.'';
     $res->extendedInfo = $info;
     
     return $res;

@@ -1,5 +1,4 @@
 <?php
-
 class CreateDataBaseRequest{
     public $login;
     public $password;
