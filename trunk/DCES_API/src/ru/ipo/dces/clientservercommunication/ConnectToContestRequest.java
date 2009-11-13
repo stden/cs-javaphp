@@ -17,12 +17,12 @@ public class ConnectToContestRequest implements Request {
    * <p>Замечание. В системе может быть зарегистрировано много одинаковых логинов. Пользователь определяется
    * на основе пары полей contestID / login
    */
-  @PHPDefaultValue("'test_login'")
+  @PHPDefaultValue("'admin'")
   public String login;
 
   /**
    * Пароль пользователя.
    */
-  @PHPDefaultValue("'test_password'")
+  @PHPDefaultValue("'superpassword'")
   public String password;
 }
