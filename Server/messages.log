@@ -4,3 +4,693 @@ answer = O:16:"AcceptedResponse":0:{}
 request = O:13:"KillDBRequest":0:{}
 answer = N;
 
+request = O:13:"KillDBRequest":0:{}
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:0:"";s:8:"password";s:0:"";}
+request = O:13:"KillDBRequest":0:{}
+answer = N;
+
+request = O:13:"KillDBRequest":0:{}
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:0:"";s:8:"password";s:4:"pass";}
+request = O:13:"KillDBRequest":0:{}
+answer = N;
+
+request = O:13:"KillDBRequest":0:{}
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"login";s:8:"password";s:0:"";}
+request = O:13:"KillDBRequest":0:{}
+answer = N;
+
+request = O:13:"KillDBRequest":0:{}
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";i:42;s:8:"password";i:42;}
+request = O:13:"KillDBRequest":0:{}
+answer = N;
+
+request = O:13:"KillDBRequest":0:{}
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+request = O:13:"KillDBRequest":0:{}
+answer = N;
+
+request = O:13:"KillDBRequest":0:{}
+request = O:13:"KillDBRequest":0:{}
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:0:"";s:8:"password";s:4:"pass";}
+request = O:13:"KillDBRequest":0:{}
+answer = N;
+
+request = O:13:"KillDBRequest":0:{}
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"login";s:8:"password";s:0:"";}
+request = O:13:"KillDBRequest":0:{}
+answer = N;
+
+request = O:13:"KillDBRequest":0:{}
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";i:42;s:8:"password";i:42;}
+request = O:13:"KillDBRequest":0:{}
+answer = N;
+
+request = O:13:"KillDBRequest":0:{}
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+request = O:13:"KillDBRequest":0:{}
+answer = N;
+
+request = O:13:"KillDBRequest":0:{}
+request = O:13:"KillDBRequest":0:{}
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:0:"";s:8:"password";s:4:"pass";}
+request = O:13:"KillDBRequest":0:{}
+answer = N;
+
+request = O:13:"KillDBRequest":0:{}
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"login";s:8:"password";s:0:"";}
+request = O:13:"KillDBRequest":0:{}
+answer = N;
+
+request = O:13:"KillDBRequest":0:{}
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";i:42;s:8:"password";i:42;}
+request = O:13:"KillDBRequest":0:{}
+answer = N;
+
+request = O:13:"KillDBRequest":0:{}
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+request = O:13:"KillDBRequest":0:{}
+answer = N;
+
+request = O:13:"KillDBRequest":0:{}
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+request = O:13:"KillDBRequest":0:{}
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+request = O:13:"KillDBRequest":0:{}
+answer = N;
+
+request = O:13:"KillDBRequest":0:{}
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+request = O:13:"KillDBRequest":0:{}
+answer = N;
+
+request = O:13:"KillDBRequest":0:{}
+request = O:13:"KillDBRequest":0:{}
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:0:"";s:8:"password";s:4:"pass";}
+request = O:13:"KillDBRequest":0:{}
+answer = N;
+
+request = O:13:"KillDBRequest":0:{}
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"login";s:8:"password";s:0:"";}
+request = O:13:"KillDBRequest":0:{}
+answer = N;
+
+request = O:13:"KillDBRequest":0:{}
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";i:42;s:8:"password";i:42;}
+request = O:13:"KillDBRequest":0:{}
+answer = N;
+
+request = O:13:"KillDBRequest":0:{}
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+request = O:13:"KillDBRequest":0:{}
+answer = N;
+
+request = O:13:"KillDBRequest":0:{}
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:13:"KillDBRequest":0:{}
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:0:"";s:8:"password";s:0:"";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"login";s:8:"password";s:7:"zbazhin";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";i:42;s:8:"password";i:42;}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:275:"thisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25chars";s:8:"password";s:275:"thisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25chars";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:13:"KillDBRequest":0:{}
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";N;s:8:"password";N;}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:0:"";s:8:"password";s:0:"";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"login";s:8:"password";s:7:"zbazhin";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";i:42;s:8:"password";i:42;}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:275:"thisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25chars";s:8:"password";s:275:"thisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25chars";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:23:"ConnectToContestRequest":3:{s:9:"contestID";N;s:5:"login";s:10:"test_login";s:8:"password";s:13:"test_password";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:23:"ConnectToContestRequest":3:{s:9:"contestID";N;s:5:"login";s:10:"test_login";s:8:"password";s:13:"test_password";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:23:"ConnectToContestRequest":3:{s:9:"contestID";N;s:5:"login";s:10:"test_login";s:8:"password";s:13:"test_password";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:23:"ConnectToContestRequest":3:{s:9:"contestID";N;s:5:"login";s:10:"test_login";s:8:"password";s:13:"test_password";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:23:"ConnectToContestRequest":3:{s:9:"contestID";N;s:5:"login";s:10:"test_login";s:8:"password";s:13:"test_password";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";N;s:8:"password";N;}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:0:"";s:8:"password";s:0:"";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"login";s:8:"password";s:7:"zbazhin";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";i:42;s:8:"password";i:42;}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:275:"thisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25chars";s:8:"password";s:275:"thisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25chars";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:23:"ConnectToContestRequest":3:{s:9:"contestID";N;s:5:"login";s:10:"test_login";s:8:"password";s:13:"test_password";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:23:"ConnectToContestRequest":3:{s:9:"contestID";N;s:5:"login";s:10:"test_login";s:8:"password";s:13:"test_password";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:23:"ConnectToContestRequest":3:{s:9:"contestID";N;s:5:"login";s:10:"test_login";s:8:"password";s:13:"test_password";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:23:"ConnectToContestRequest":3:{s:9:"contestID";N;s:5:"login";s:10:"test_login";s:8:"password";s:13:"test_password";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:23:"ConnectToContestRequest":3:{s:9:"contestID";N;s:5:"login";s:10:"test_login";s:8:"password";s:13:"test_password";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";N;s:8:"password";N;}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:0:"";s:8:"password";s:0:"";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"login";s:8:"password";s:7:"zbazhin";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";i:42;s:8:"password";i:42;}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:275:"thisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25chars";s:8:"password";s:275:"thisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25chars";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:23:"ConnectToContestRequest":3:{s:9:"contestID";N;s:5:"login";s:10:"test_login";s:8:"password";s:13:"test_password";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:23:"ConnectToContestRequest":3:{s:9:"contestID";N;s:5:"login";s:10:"test_login";s:8:"password";s:13:"test_password";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:23:"ConnectToContestRequest":3:{s:9:"contestID";N;s:5:"login";s:10:"test_login";s:8:"password";s:13:"test_password";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:23:"ConnectToContestRequest":3:{s:9:"contestID";N;s:5:"login";s:10:"test_login";s:8:"password";s:13:"test_password";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:23:"ConnectToContestRequest":3:{s:9:"contestID";N;s:5:"login";s:10:"test_login";s:8:"password";s:13:"test_password";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";N;s:8:"password";N;}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:0:"";s:8:"password";s:0:"";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"login";s:8:"password";s:7:"zbazhin";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";i:42;s:8:"password";i:42;}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:275:"thisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25chars";s:8:"password";s:275:"thisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25chars";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:23:"ConnectToContestRequest":3:{s:9:"contestID";N;s:5:"login";s:10:"test_login";s:8:"password";s:13:"test_password";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:23:"ConnectToContestRequest":3:{s:9:"contestID";N;s:5:"login";s:10:"test_login";s:8:"password";s:13:"test_password";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:23:"ConnectToContestRequest":3:{s:9:"contestID";N;s:5:"login";s:10:"test_login";s:8:"password";s:13:"test_password";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:23:"ConnectToContestRequest":3:{s:9:"contestID";N;s:5:"login";s:10:"test_login";s:8:"password";s:13:"test_password";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:23:"ConnectToContestRequest":3:{s:9:"contestID";N;s:5:"login";s:10:"test_login";s:8:"password";s:13:"test_password";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";N;s:8:"password";N;}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:0:"";s:8:"password";s:0:"";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"login";s:8:"password";s:7:"zbazhin";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";i:42;s:8:"password";i:42;}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:275:"thisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25chars";s:8:"password";s:275:"thisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25chars";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:23:"ConnectToContestRequest":3:{s:9:"contestID";N;s:5:"login";s:10:"test_login";s:8:"password";s:13:"test_password";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:23:"ConnectToContestRequest":3:{s:9:"contestID";N;s:5:"login";s:10:"test_login";s:8:"password";s:13:"test_password";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:23:"ConnectToContestRequest":3:{s:9:"contestID";N;s:5:"login";s:10:"test_login";s:8:"password";s:13:"test_password";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:23:"ConnectToContestRequest":3:{s:9:"contestID";N;s:5:"login";s:10:"test_login";s:8:"password";s:13:"test_password";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:23:"ConnectToContestRequest":3:{s:9:"contestID";N;s:5:"login";s:10:"test_login";s:8:"password";s:13:"test_password";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";N;s:8:"password";N;}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:0:"";s:8:"password";s:0:"";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"login";s:8:"password";s:7:"zbazhin";}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";i:42;s:8:"password";i:42;}
+request = O:13:"KillDBRequest":0:{}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:5:"admin";s:8:"password";s:13:"superpassword";}
+answer = O:16:"AcceptedResponse":0:{}
+
+request = O:21:"CreateDataBaseRequest":2:{s:5:"login";s:275:"thisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25chars";s:8:"password";s:275:"thisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25chars";}

@@ -1,1 +1,1 @@
-phpunit --bootstrap includes.php .
+phpunit --bootstrap main.php .

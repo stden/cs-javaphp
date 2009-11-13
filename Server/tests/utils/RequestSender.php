@@ -39,7 +39,7 @@ class RequestSender {
         $obj = @unserialize($res);
         
         if (!$obj)
-            throw new Exception('Captain Obvious reports: deserialization epicly failed');
+            throw new Exception('Captain Obvious reports: deserialization epicly failed: '. $res);
             
         return $obj;
     }
