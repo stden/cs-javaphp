@@ -40,7 +40,7 @@
     <colspec value="fill:4dlu:noGrow"/>
     <colspec value="fill:4dlu:noGrow"/>
     <constraints>
-      <xy x="20" y="20" width="545" height="534"/>
+      <xy x="20" y="20" width="545" height="586"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -194,6 +194,7 @@
         </constraints>
         <properties>
           <beforeLabelGap value="0"/>
+          <popup value="true"/>
           <showLabel value="true"/>
         </properties>
       </component>

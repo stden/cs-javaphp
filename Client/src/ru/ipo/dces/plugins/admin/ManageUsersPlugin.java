@@ -351,6 +351,7 @@ public class ManageUsersPlugin extends JPanel implements Plugin {
     drawPanel.add(deleteButton, cc.xy(5, 27, CellConstraints.FILL, CellConstraints.DEFAULT));
     contestChoosingPanel = new ContestChoosingPanel();
     contestChoosingPanel.setBeforeLabelGap(0);
+    contestChoosingPanel.setPopup(true);
     contestChoosingPanel.setShowLabel(true);
     drawPanel.add(contestChoosingPanel, cc.xyw(3, 3, 3));
     ButtonGroup buttonGroup;
