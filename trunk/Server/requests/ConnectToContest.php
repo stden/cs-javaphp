@@ -24,7 +24,7 @@ function processConnectToContestRequest($request) {
       throwBusinessLogicError(12);
 
   //get contest settings and contest time
-  $settings = Data::_unserialize($row['settings'], null);
+  $settings = Data::_unserialize($row['settings'], null);  
 
   if (is_null($row['contest_start'])) {
     $now = getdate();
@@ -53,7 +53,9 @@ function processConnectToContestRequest($request) {
   $session_id = RequestUtils::createSession($row['id']);
 
   //get finish time
-  if ($settings->contestTiming->selfContestStart)
+  if (is_null($settings))
+  	$finish_time = 0;  
+  elseif ($settings->contestTiming->selfContestStart)
     $finish_time = $row['contest_start'] + 60 * $settings->contestTiming->maxContestDuration;
   else
     $finish_time = $settings->finish;

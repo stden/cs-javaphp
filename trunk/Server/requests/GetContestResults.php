@@ -143,6 +143,7 @@ function processGetContestResultsRequest($request) {
     $result->headers[] = 'participant';
     //get participant subcolumns
     $data_subs = array();
+    //TODO Invalid argument supplied for foreach() when superadmin tries to get results
     foreach ($contest_settings->data as $df)
         if ($is_admin || $df->showInResult)
             $data_subs[] = $df->data;
