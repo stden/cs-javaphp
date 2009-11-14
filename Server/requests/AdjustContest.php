@@ -63,7 +63,7 @@
       if ($c->contestTiming->maxContestDuration !== -1)
         $settings->contestTiming->maxContestDuration = $c->contestTiming->maxContestDuration;
 
-      if ($c->contestTiming->contestEndingDuration !== -1)
+      if ($c->contestTiming->contestEndingFinish !== -1)
         $settings->contestTiming->contestEndingFinish = $c->contestTiming->contestEndingFinish;
 
       if ($c->contestTiming->contestEndingStart !== -1)
@@ -234,7 +234,9 @@
 
     //now adjust problems
     $temp_dirs = array(); // will contain set of created temporary plugin directories
-    $queries_2 = array();
+    $queries_2 = array();    
+    $temp_answer_zips = array();
+    $temp_statement_zips = array();    
     if (!is_null($request->problems))
       $queries_2 = queriesToAdjustProblems($con, $request->problems, $contest_id, $temp_dirs, $temp_statement_zips, $temp_answer_zips);
 
