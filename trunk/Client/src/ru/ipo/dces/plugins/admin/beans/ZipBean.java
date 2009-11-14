@@ -23,11 +23,7 @@ public class ZipBean {
 
   public void setData(byte[] bytes) {
     setBytes(bytes);
-    try {
-      setFile(null);
-    } catch (PropertyVetoException e) {
-      //do nothing
-    }
+    setFile(null);
   }
 
   public void setDefault() {
@@ -57,9 +53,13 @@ public class ZipBean {
     return file;
   }
 
-  public void setFile(File file) throws PropertyVetoException {
+  public void setFile(File file) {
     File oldValue = this.file;
-    vcs.fireVetoableChange("file", oldValue, file);
+    try {
+      vcs.fireVetoableChange("file", oldValue, file);
+    } catch (PropertyVetoException e) {
+      return; //nothing changed, don't do anything
+    }
     this.file = file;
     pcs.firePropertyChange("file", oldValue, file);
   }
