@@ -24,8 +24,10 @@ public class ContestAdjustmentBean {
   private int contestType; // -1 = no contest, 0 = new contest, 1 = existing contest
   private ContestDescriptionBean contestDescription;
   private DefaultListModel problemsListModel;
-  private DefaultListSelectionModel problemsListSelectionModel;
 
+  private GetContestDataResponse freshContestData;
+
+  private DefaultListSelectionModel problemsListSelectionModel;
   private final PropertyChangeListener modifiedListener = new PropertyChangeListener() {
     public void propertyChange(PropertyChangeEvent evt) {
       setModified(true);
@@ -42,6 +44,8 @@ public class ContestAdjustmentBean {
   }
 
   public void setData(GetContestDataResponse gcdr) {
+    freshContestData = gcdr;
+
     contestDescription.setData(gcdr.contest);
 
     problemsListModel.clear();
@@ -50,6 +54,20 @@ public class ContestAdjustmentBean {
       pdb.setData(pd);
       problemsListModel.addElement(pdb);
     }
+  }
+
+  public void setDefault() {
+    contestDescription.setDefault();
+    problemsListModel.clear();
+  }
+
+  public void undoChanges() {
+    if (freshContestData == null)
+      setDefault();
+    else
+      setData(freshContestData);
+
+    setModified(false);
   }
 
   public ContestDescriptionBean getContestDescription() {
@@ -88,6 +106,10 @@ public class ContestAdjustmentBean {
     boolean oldValue = this.modified;
     this.modified = modified;
     pcs.firePropertyChange("modified", oldValue, modified);
+  }
+
+  public GetContestDataResponse getFreshContestData() {
+    return freshContestData;
   }
 
   //PropertyChangeSupport delegation
