@@ -14,6 +14,7 @@ import ru.ipo.dces.exceptions.GeneralRequestFailureException;
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.Date;
@@ -36,8 +37,6 @@ import info.clearthought.layout.TableLayout;
  * Time: 11:45:45
  */
 public class ContestPluginV2 implements Plugin, ActionListener {
-
-  //TODO clear property list when not used and fill it when open
 
   private JPanel mainPanel;
   private ContestChoosingPanel contestChoosingPanel;
@@ -67,7 +66,9 @@ public class ContestPluginV2 implements Plugin, ActionListener {
   private PluginEnvironment environment;
 
   private ContestAdjustmentBean bean = new ContestAdjustmentBean();
-  private GetContestDataResponse contestData;
+
+  private static final Color ENABLED_PROPERTY_FOREGROUND = Color.BLACK;
+  private static final Color DISABLED_PROPERTY_FOREGROUND = Color.LIGHT_GRAY;
 
   public ContestPluginV2(PluginEnvironment environment) {
     this.environment = environment;
@@ -166,6 +167,7 @@ public class ContestPluginV2 implements Plugin, ActionListener {
   }
 
   private void setPropertiesEnabled(PropertySheetPanel sheet, boolean enabled) {
+    sheet.getTable().setPropertyForeground(enabled ? ENABLED_PROPERTY_FOREGROUND : DISABLED_PROPERTY_FOREGROUND);
     sheet.getTable().setEnabled(enabled);
   }
 
@@ -539,9 +541,11 @@ public class ContestPluginV2 implements Plugin, ActionListener {
     } else if (e.getSource() == applyContestChangesButton) {
       applyChanges();
     } else if (e.getSource() == undoContestChangesButton) {
-      bean.setData(contestData);
-      bean.setModified(false);
-      contestProperties.readFromObject(bean.getContestDescription());
+      bean.undoChanges();
+      if (bean.getContestType() == 0)
+        bean.setContestType(-1);
+      else //if contest type = 1
+        contestProperties.readFromObject(bean.getContestDescription());
     } else if (e.getSource() == addProblemButton) {
 
       DefaultListModel listModel = bean.getProblemsListModel();
@@ -632,6 +636,8 @@ public class ContestPluginV2 implements Plugin, ActionListener {
   private void contestChanged() {
     //request contest data
 
+    GetContestDataResponse contestData;
+
     if (contestChoosingPanel.getContest() == null)
       contestData = null; //or make here empty data
     else {
@@ -672,9 +678,9 @@ public class ContestPluginV2 implements Plugin, ActionListener {
     if (bean.getContestType() == 1) {
       adjustContestRequest = new AdjustContestRequest();
 
-      adjustContestRequest.contest = bean.getAdjustmentForContestDescription(contestData.contest);
+      adjustContestRequest.contest = bean.getAdjustmentForContestDescription(bean.getFreshContestData().contest);
 
-      adjustContestRequest.problems = bean.getAdjustmentForProblemsDescription(contestData.problems);
+      adjustContestRequest.problems = bean.getAdjustmentForProblemsDescription(bean.getFreshContestData().problems);
 
       adjustContestRequest.sessionID = Controller.getContestConnection().getSessionID();
     } else {
