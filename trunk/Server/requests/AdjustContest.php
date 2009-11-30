@@ -69,6 +69,8 @@
       if ($c->contestTiming->contestEndingStart !== -1)
         $settings->contestTiming->contestEndingStart = $c->contestTiming->contestEndingStart;                  
     }
+    
+    RequestUtils::assertContestSettingsIntegrity($settings);
 
     $col_value = array('settings' => @serialize($settings));
     return composeUpdateQuery("contest", $col_value, "id=$contest_id");
@@ -122,7 +124,7 @@
         $plugin_alias = $row['server_plugin_alias'];
       }
       elseif ($p->id == -1 && is_null($p->serverPluginAlias))
-        throwBusinessLogicError(1);
+        throwBusinessLogicError(1);             
 
       //get current server plugin
       //TODO improve security here            

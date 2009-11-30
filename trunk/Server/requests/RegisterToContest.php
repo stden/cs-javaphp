@@ -34,7 +34,9 @@
     $contest_row = mysql_fetch_array($contest_rows) or throwBusinessLogicError(14);              
 
     //test if this contest gets users only by admins
-    if ($contest_row['reg_type'] === "ByAdmins")
+    //TODO get data from settings instead of this:
+    //if ($contest_row['reg_type'] === "ByAdmins")
+    if (false)
       if ($request_user_type !== "ContestAdmin" && $request_user_type !== "SuperAdmin")
         throwBusinessLogicError(0);
 

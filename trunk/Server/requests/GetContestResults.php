@@ -87,7 +87,10 @@ function processGetContestResultsRequest($request) {
     $contest_settings = Data::_unserialize($serialized_contest_settings);
 
     //get $is_admin
-    $is_admin = ($user_contest_row['user_type'] === 'SuperAdmin') || ($user_contest_row['user_type'] === 'ContestAdmin');
+    $is_admin = !$is_anonymous && (
+    					($user_contest_row['user_type'] === 'SuperAdmin') ||
+    					($user_contest_row['user_type'] === 'ContestAdmin')
+    				);
 
     //get $permission
     $ctime = getCurrentContestTime($contest_settings, $user_contest_start_time, $user_contest_finish_time);
@@ -143,10 +146,12 @@ function processGetContestResultsRequest($request) {
     $result->headers[] = 'participant';
     //get participant subcolumns
     $data_subs = array();
-    //TODO Invalid argument supplied for foreach() when superadmin tries to get results
-    foreach ($contest_settings->data as $df)
-        if ($is_admin || $df->showInResult)
-            $data_subs[] = $df->data;
+    
+    $contest_user_data = $contest_settings->data;
+    if ($contest_user_data)
+    	foreach ($contest_settings->data as $df)
+        	if ($is_admin || $df->showInResult)
+            	$data_subs[] = $df->data;
     $result->minorHeaders[] = $data_subs;
 
     //columns with problems

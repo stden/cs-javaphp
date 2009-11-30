@@ -17,7 +17,7 @@
       $lines = file($this->folder . '/problem.answer');
       $no = $this->getLineForUser($user_id, count($lines));
 
-      return $this->
+      //return $this->
     }    
 
     public function getStatement($user_id, $statement_data) {
@@ -27,12 +27,12 @@
       $data = 'problem.prm;' . $lines[$no];
 
       if (! @file_put_contents($this->folder . '/result/data.tex', $data))
-        return false;
+        return false;             
 
       //TODO use appropriate dirs
       system('latex ' . $this->folder . '/idz2');
 
-      system('dvips -E ' . $this->folder . '/idz2);
+      system('dvips -E ' . $this->folder . '/idz2');
 
       system('convert -quality 100 -density 120 ' . $this->folder . '/idz2 idz2.png');
 
