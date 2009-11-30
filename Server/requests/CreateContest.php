@@ -14,6 +14,9 @@ function processCreateContestRequest($request) {
     throwBusinessLogicError(0);
   
   unset($request->contest->contest_id);
+  
+  RequestUtils::assertContestSettingsIntegrity($request->contest);
+  
   $col_value = array('settings' => serialize($request->contest));
 
   mysql_query(composeInsertQuery('contest', $col_value)) or throwServerProblem(5, mysql_error());

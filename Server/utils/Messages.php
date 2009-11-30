@@ -40,4 +40,6 @@ class CreateContestResponse{};
 class StopContestRequest{};
 class ContestTiming{};
 class KillDBRequest{};
+class AvailablePluginsRequest{}
+class AvailablePluginsResponse{}
 ?>

@@ -104,5 +104,13 @@ class RequestUtils {
 
         return $contest_id;
       }
+      
+      public static function assertContestSettingsIntegrity($contest) {
+      	if ($contest->data === null)
+      		throwBusinessLogicError(15, "data in contest description may not be null");
+      	
+      	if ($contest->start >= $contest->finish)
+      		throwBusinessLogicError(15, "contest may not start after its finish");
+      } 
 
 }

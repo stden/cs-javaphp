@@ -123,6 +123,11 @@ switch(get_class($request)) {
       require("requests/KillDB.php");
       $result = processKillDBRequest($request);
       break;
+      
+    case 'AvailablePluginsRequest':    	
+      require("requests/AvailablePlugins.php");
+      $result = processAvailablePluginsRequest($request);
+      break;  
 
   default:
       throwBusinessLogicError(15, get_class($request));
