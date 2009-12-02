@@ -17,9 +17,9 @@ public class ZipBean {
   private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
   private VetoableChangeSupport vcs = new VetoableChangeSupport(this);
 
-  private byte[] bytes;
-  private byte[] newBytes;
-  private File file;
+  private byte[] bytes; //initial bytes
+  private byte[] newBytes; //new zipped bytes
+  private File file; //new file, null if nothing is to be changed
 
   public void setData(byte[] bytes) {
     setBytes(bytes);
@@ -39,11 +39,11 @@ public class ZipBean {
 
   //getters and setters
 
-  public byte[] getBytes() {
+  /*public byte[] getBytes() {
     return bytes;
-  }
+  }*/
 
-  public void setBytes(byte[] bytes) {
+  private void setBytes(byte[] bytes) {
     byte[] oldValue = this.bytes;
     this.bytes = bytes;
     pcs.firePropertyChange("bytes", oldValue, bytes);
@@ -64,9 +64,9 @@ public class ZipBean {
     pcs.firePropertyChange("file", oldValue, file);
   }
 
-  public byte[] getNewBytes() {
+  /*public byte[] getNewBytes() {
     return newBytes;
-  }
+  }*/
 
   public void setNewBytes(byte[] bytes) {
     byte[] oldValue = this.newBytes;

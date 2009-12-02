@@ -1,4 +1,4 @@
-package ru.ipo.dces.plugins.admin;
+package ru.ipo.dces.trash;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;

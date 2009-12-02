@@ -15,6 +15,7 @@ import javax.swing.*;
 
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.CellConstraints;
+import ru.ipo.dces.trash.CreateContestPlugin;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -210,14 +211,15 @@ public class LoginPlugin extends JPanel implements Plugin {
       // загружаем ему административные Plugin'ы
       switch (con.getUser().userType) {
         case ContestAdmin:
-          Controller.addAdminPlugin(AdjustContestsPlugin.class);
+          Controller.addAdminPlugin(ContestPluginV2.class);
           Controller.addAdminPlugin(ManageUsersPlugin.class);
           Controller.addAdminPlugin(ResultsPlugin.class);
           Controller.addAdminPlugin(LogoutPlugin.class);
           break;
         case SuperAdmin:
+          Controller.addAdminPlugin(ContestPluginV2.class);
           Controller.addAdminPlugin(CreateContestPlugin.class);
-          Controller.addAdminPlugin(AdjustContestsPlugin.class);
+//          Controller.addAdminPlugin(AdjustContestsPlugin.class);
           Controller.addAdminPlugin(ManageUsersPlugin.class);
           Controller.addAdminPlugin(PluginsManagementPlugin.class);
           Controller.addAdminPlugin(ResultsPlugin.class);

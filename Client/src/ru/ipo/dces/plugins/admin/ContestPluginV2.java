@@ -1,5 +1,6 @@
 package ru.ipo.dces.plugins.admin;
 
+import ru.ipo.dces.client.Localization;
 import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
 import ru.ipo.dces.client.components.ContestChoosingPanel;
@@ -14,7 +15,6 @@ import ru.ipo.dces.exceptions.GeneralRequestFailureException;
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
-import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.Date;
@@ -67,13 +67,14 @@ public class ContestPluginV2 implements Plugin, ActionListener {
 
   private ContestAdjustmentBean bean = new ContestAdjustmentBean();
 
-  private static final Color ENABLED_PROPERTY_FOREGROUND = Color.BLACK;
-  private static final Color DISABLED_PROPERTY_FOREGROUND = Color.LIGHT_GRAY;
+//  private static final Color ENABLED_PROPERTY_FOREGROUND = Color.BLACK;
+//  private static final Color DISABLED_PROPERTY_FOREGROUND = Color.LIGHT_GRAY;
 
   public ContestPluginV2(PluginEnvironment environment) {
     this.environment = environment;
     //environment.setTitle(Localization.getAdminPluginName(this.getClass()));
     initInterface();
+    environment.setTitle(Localization.getAdminPluginName(this.getClass()));
   }
 
   private JButton addButtonToContestToolBar(JButtonBar toolBar, String text, Icon icon) {
@@ -158,26 +159,32 @@ public class ContestPluginV2 implements Plugin, ActionListener {
     //set all views and register view changins to listeners
     addListeners();
 
-    setPropertiesEnabled(contestProperties, false);
-    setPropertiesEnabled(problemProperties, false);
+    //setPropertiesEnabled(contestProperties, false);
+    //setPropertiesEnabled(problemProperties, false);
+    clearPropertiesValues(contestProperties);
+    clearPropertiesValues(problemProperties);
     setProblemsToolBarView();
     setUserFieldsToolBarView();
     setContestToolBarView();
 
   }
 
-  private void setPropertiesEnabled(PropertySheetPanel sheet, boolean enabled) {
+  /*private void setPropertiesEnabled(PropertySheetPanel sheet, boolean enabled) {
     sheet.getTable().setPropertyForeground(enabled ? ENABLED_PROPERTY_FOREGROUND : DISABLED_PROPERTY_FOREGROUND);
+    //TODO remove values from table
+    sheet.setEnabled(enabled);
     sheet.getTable().setEnabled(enabled);
-  }
+  }*/
 
   private void addListeners() {
     bean.addPropertyChangeListener("contestType", new PropertyChangeListener() {
       public void propertyChange(PropertyChangeEvent evt) {
         if (bean.getContestType() != -1) {
-          setPropertiesEnabled(contestProperties, true);
+          //setPropertiesEnabled(contestProperties, true);
+          initContestPropertiesEditor();
         } else {
-          setPropertiesEnabled(contestProperties, false);
+          //setPropertiesEnabled(contestProperties, false);
+          clearPropertiesValues(contestProperties);
         }
         setContestToolBarView();
         setProblemsToolBarView();
@@ -204,6 +211,7 @@ public class ContestPluginV2 implements Plugin, ActionListener {
         int ind = bean.getProblemsListSelectionModel().getMinSelectionIndex();
         if (ind == -1) return;
         prop.writeToObject(bean.getProblemsListModel().get(ind));
+        problemsList.repaint();
       }
     });
 
@@ -213,10 +221,11 @@ public class ContestPluginV2 implements Plugin, ActionListener {
 
         int ind = bean.getProblemsListSelectionModel().getMinSelectionIndex();
         if (ind == -1) {
-          setPropertiesEnabled(problemProperties, false);
+          //setPropertiesEnabled(problemProperties, false);          
           clearPropertiesValues(problemProperties);
         } else {
-          setPropertiesEnabled(problemProperties, true);
+          //setPropertiesEnabled(problemProperties, true);
+          initProblemPropertiesEditor();
           problemProperties.readFromObject(bean.getProblemsListModel().get(ind));
         }
       }
@@ -242,13 +251,14 @@ public class ContestPluginV2 implements Plugin, ActionListener {
 
   private void setProblemsToolBarView() {
     boolean problemSelected = problemsList.getSelectedIndex() != -1;
+    boolean contestCreated = bean.getContestType() == 1;
 
-    addProblemButton.setEnabled(bean.getContestType() != -1);
-    removeProblemButton.setEnabled(problemSelected);
-    upProblemButton.setEnabled(mayMoveProblem(-1));
-    downProblemButton.setEnabled(mayMoveProblem(1));
-    debugProblemButton.setEnabled(problemSelected);
-    downloadProblemButton.setEnabled(problemSelected);
+    addProblemButton.setEnabled(contestCreated && bean.getContestType() != -1);
+    removeProblemButton.setEnabled(contestCreated && problemSelected);
+    upProblemButton.setEnabled(contestCreated && mayMoveProblem(-1));
+    downProblemButton.setEnabled(contestCreated && mayMoveProblem(1));
+    debugProblemButton.setEnabled(contestCreated && problemSelected);
+    downloadProblemButton.setEnabled(contestCreated && problemSelected);   
   }
 
   private void initContestPropertiesEditor() {
@@ -479,6 +489,8 @@ public class ContestPluginV2 implements Plugin, ActionListener {
     DCESEditorFactory.getInstance().registerEditor(answerAsDirectoryProperty, DirectoryPropertyEditor.class);
     DCESEditorFactory.getInstance().registerEditor(statementAsFileProperty, FilePropertyEditor.class);
     DCESEditorFactory.getInstance().registerEditor(answerAsFileProperty, FilePropertyEditor.class);
+    DCESEditorFactory.getInstance().registerEditor(clientPluginAliasProperty, new DCESEditorFactory.PluginAliasEditor(AvailablePluginsRequest.PluginSide.Client));
+    DCESEditorFactory.getInstance().registerEditor(serverPluginAliasProperty, new DCESEditorFactory.PluginAliasEditor(AvailablePluginsRequest.PluginSide.Server));
 
     DCESRendererFactory.getInstance().registerRenderer(statementAsDirectoryProperty,
             DCESRendererFactory.DirectoryOnlyRenderer.class);
@@ -532,20 +544,27 @@ public class ContestPluginV2 implements Plugin, ActionListener {
 
       contestProperties.readFromObject(bean.getContestDescription());
     } else if (e.getSource() == removeContestButton) {
-      if (!applyChangesConfirmation()) return;
+      if (JOptionPane.showConfirmDialog(
+              null,
+              "Вы уверены, что хотите удалить это соревнование?",
+              "Удаление соревования",
+              JOptionPane.YES_NO_CANCEL_OPTION
+      ) != JOptionPane.YES_OPTION)        
+          return;
 
       removeContest();
 
+      bean.setData(null);
       bean.setContestType(-1);
-      bean.getProblemsListModel().clear();
     } else if (e.getSource() == applyContestChangesButton) {
       applyChanges();
     } else if (e.getSource() == undoContestChangesButton) {
-      bean.undoChanges();
-      if (bean.getContestType() == 0)
+      bean.setData(bean.getFreshContestData());
+      if (bean.getFreshContestData() == null)
         bean.setContestType(-1);
-      else //if contest type = 1
+      if (bean.getContestType() != -1)
         contestProperties.readFromObject(bean.getContestDescription());
+      bean.setModified(false);
     } else if (e.getSource() == addProblemButton) {
 
       DefaultListModel listModel = bean.getProblemsListModel();
@@ -569,7 +588,22 @@ public class ContestPluginV2 implements Plugin, ActionListener {
       moveProblem(1);
 
     } else if (e.getSource() == debugProblemButton) {
-      //TODO implement
+      ProblemDescriptionBean pdb = (ProblemDescriptionBean) problemsList.getSelectedValue();
+      if (pdb == null) return;
+
+      if (bean.isModified()) {
+        if (JOptionPane.showConfirmDialog(
+                null,
+                "Перед отладкой задачи все изменения соревнования должны бить применены. Применить их сейчас?",
+                "Отладка задачи",
+                JOptionPane.YES_NO_CANCEL_OPTION
+        ) != JOptionPane.YES_OPTION)
+            return;
+
+        applyChanges();
+      }
+      
+      Controller.debugProblem(pdb.getId(), contestChoosingPanel.getContest().contestID);
     } else if (e.getSource() == downloadProblemButton) {
       //TODO implement
     } else if (e.getSource() == contestChoosingPanel) {
@@ -659,6 +693,7 @@ public class ContestPluginV2 implements Plugin, ActionListener {
     //fill bean with new Data
     if (contestData == null) {
       bean.getProblemsListModel().clear();
+      bean.setData(null);
       bean.setContestType(-1);
     } else {
       bean.setData(contestData);
@@ -678,7 +713,7 @@ public class ContestPluginV2 implements Plugin, ActionListener {
     if (bean.getContestType() == 1) {
       adjustContestRequest = new AdjustContestRequest();
 
-      adjustContestRequest.contest = bean.getAdjustmentForContestDescription(bean.getFreshContestData().contest);
+      adjustContestRequest.contest = bean.getAdjustmentForContestDescription(bean.getFreshContestData().contest);      
 
       adjustContestRequest.problems = bean.getAdjustmentForProblemsDescription(bean.getFreshContestData().problems);
 
@@ -687,18 +722,20 @@ public class ContestPluginV2 implements Plugin, ActionListener {
       createContestRequest = new CreateContestRequest();
 
       createContestRequest.contest = bean.getContestDescription().getData();
+      createContestRequest.contest.data = new UserDataField[0];
       createContestRequest.sessionID = Controller.getContestConnection().getSessionID();
     }
 
     try {
-      if (bean.getContestType() == 1)
+      if (adjustContestRequest != null) {
         Controller.getServer().doRequest(adjustContestRequest);
-      else if (bean.getContestType() == 0) {
-        Controller.getServer().doRequest(createContestRequest);
+        contestChanged();
+      } else /*if (createContestRequest != null)*/ {
+        CreateContestResponse resp = Controller.getServer().doRequest(createContestRequest);
+        createContestRequest.contest.contestID = resp.createdContestID;
+        contestChoosingPanel.setContest(createContestRequest.contest);
         bean.setContestType(1);
       }
-
-      bean.setModified(false);
     } catch (ServerReturnedError e) {
       Controller.log(e);
     } catch (GeneralRequestFailureException e) {

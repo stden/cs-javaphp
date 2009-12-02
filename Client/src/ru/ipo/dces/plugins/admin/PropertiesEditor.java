@@ -1,5 +1,6 @@
 package ru.ipo.dces.plugins.admin;
 
+import com.l2fprod.common.demo.Main;
 import com.l2fprod.common.propertysheet.Property;
 import com.l2fprod.common.propertysheet.PropertySheetPanel;
 import com.l2fprod.common.demo.PropertySheetPage3;
@@ -7,15 +8,20 @@ import com.jgoodies.looks.plastic.Plastic3DLookAndFeel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.util.Date;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.beans.*;
+import java.util.HashMap;
 
 import ru.ipo.dces.client.Controller;
 import ru.ipo.dces.client.Settings;
 import ru.ipo.dces.exceptions.GeneralRequestFailureException;
 import ru.ipo.dces.exceptions.ServerReturnedError;
+import ru.ipo.dces.log.LogMessageType;
+import ru.ipo.dces.pluginapi.PluginEnvironment;
+import ru.ipo.dces.server.ServerFacade;
 import ru.ipo.dces.server.http.HttpServer;
 
 /**
@@ -30,8 +36,7 @@ public class PropertiesEditor extends JPanel {
     public int i;
   }
 
-  public static void main(String[] args) throws GeneralRequestFailureException, ServerReturnedError, IntrospectionException {
-
+  public static void main(String[] args) throws Exception {
     try {
       //UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
       UIManager.setLookAndFeel(new Plastic3DLookAndFeel());
@@ -52,7 +57,35 @@ public class PropertiesEditor extends JPanel {
     psp.setBeanInfo(beanInfo);
 
     //f.add(psp);
-    f.add(new ContestPluginV2(null).getPanel());
+    f.add(new ContestPluginV2(new PluginEnvironment() {
+      public void setTitle(String title) {}
+
+      public HashMap<String, String> submitSolution(HashMap<String, String> solution) throws GeneralRequestFailureException {
+        return null;
+      }
+
+      public File getProblemFolder() {
+        return null;
+      }
+
+      public String getProblemName() {
+        return null;
+      }
+
+      public void log(String message, LogMessageType type) {}
+
+      public ServerFacade getServer() {
+        return null;
+      }
+
+      public String getSessionID() {
+        return null;
+      }
+
+      public int getProblemID() {
+        return 0;
+      }
+    }).getPanel());
     //f.add(new PropertySheetPage3());
 
     f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

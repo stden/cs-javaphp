@@ -165,6 +165,7 @@ public class ContestChoosingPanel extends JPanel {
     return contest;
   }
 
+  //TODO move selection in list if the list is visible
   public void setContest(ContestDescription contest) {
     this.contest = contest;
     String contestDisplayName = contest == null ? "" : contest.name;
