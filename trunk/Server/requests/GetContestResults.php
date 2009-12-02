@@ -18,7 +18,8 @@ function getTableRow($user_row, $is_admin, $problem_ids, $problem_cols_sizes, $u
     $user_data = Data::_unserialize($user_row['user_data']);
     foreach ($user_data_cols as $ud) {        
         if ($is_admin || $ud->showInResult)
-            $data_cols[] = $user_data[$ind];
+            //TODO review this
+            $data_cols[] = @$user_data[$ind]; //user may not have a description
         $ind++;
     }
     $row[] = $data_cols;
@@ -27,7 +28,7 @@ function getTableRow($user_row, $is_admin, $problem_ids, $problem_cols_sizes, $u
     $results = Data::_unserialize($user_row['results']);
     $ind = 0;
     foreach ($problem_ids as $pid) {
-        $cells = $results[$pid];
+        $cells = @$results[$pid]; //index may be undefined
         if (is_null($cells)) //add $problem_cols_sizes[$ind] empty cells
             for ($i = 0; $i < $problem_cols_sizes[$ind] ; $i++)
                 $cells[] = '';

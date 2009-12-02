@@ -1,8 +1,8 @@
 <?php
 
   function setResultsColumns($user_row, $problem_id, $new_cols) {
-    //get old results
-    $new_results = Data::_unserialize($user_row['results']);
+    //get old results       
+    $new_results = Data::_unserialize($user_row['results']);    
     //set new columns for the problem    
     $new_results[$problem_id] = $new_cols;
     //compose query
@@ -45,8 +45,8 @@
 
     $plugin = new $plugin_alias($GLOBALS['dces_dir_problems'] . '/' . $request->problemID);
 
-    //get answer data
-    $answer_data = Data::_unserialize($problem_row['answer']);
+    //get answer data    
+    $answer_data = Data::_unserialize($problem_row['answer']);       
 
     //get previous result
     $problem_status_row = Data::getRow(
@@ -59,8 +59,8 @@
       $current_result = null;
       $do_status_update = false;
     }
-    else {
-      $current_result = Data::_unserialize($problem_status_row['status'], null);
+    else {    	
+      $current_result = Data::_unserialize($problem_status_row['status'], null);      
       $do_status_update = true;
     }
     $current_cols = null;
