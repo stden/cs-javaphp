@@ -34,9 +34,8 @@
     $contest_row = mysql_fetch_array($contest_rows) or throwBusinessLogicError(14);              
 
     //test if this contest gets users only by admins
-    //TODO get data from settings instead of this:
-    //if ($contest_row['reg_type'] === "ByAdmins")
-    if (false)
+    $contest_settings = @unserialize($contest_row['settings']);
+    if ($contest_settings->registrationType === 'ByAdmins')
       if ($request_user_type !== "ContestAdmin" && $request_user_type !== "SuperAdmin")
         throwBusinessLogicError(0);
 
@@ -44,7 +43,7 @@
     $u = $request->user;    
 
     //test that superadmins are registered only for 0 contest
-    if ($u->userType === "SuperAdmin" && $contest_id != 0)
+    if ($u->userType === 'SuperAdmin' && $contest_id != 0)
       throwBusinessLogicError(18);
 
     //test that there is no user with the same login in this contest
@@ -74,5 +73,5 @@
 
     return new AcceptedResponse();
   }
-//TODO prevent creation of users with empty logins and "weak" passwords
+//TODO prevent creation of users with empty logins and weak passwords
 ?>
