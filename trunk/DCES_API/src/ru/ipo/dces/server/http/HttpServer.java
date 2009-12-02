@@ -201,11 +201,16 @@ public class HttpServer implements ServerFacade {
         return doRequest(AcceptedResponse.class, r);
     }
 
-  public GetContestResultsResponse doRequest(GetContestResultsRequest r) throws ServerReturnedError, GeneralRequestFailureException {
+    public GetContestResultsResponse doRequest(GetContestResultsRequest r) throws ServerReturnedError, GeneralRequestFailureException {
         return doRequest(GetContestResultsResponse.class,  r);
     }
 
     public AcceptedResponse doRequest(StopContestRequest r) throws ServerReturnedError, GeneralRequestFailureException {
         return doRequest(AcceptedResponse.class, r);
     }
+
+    public AvailablePluginsResponse doRequest(AvailablePluginsRequest r) throws ServerReturnedError, GeneralRequestFailureException {
+        return doRequest(AvailablePluginsResponse.class, r); 
+    }
+
 }

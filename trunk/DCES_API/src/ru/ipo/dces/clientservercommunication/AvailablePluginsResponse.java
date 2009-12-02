@@ -8,7 +8,7 @@ package ru.ipo.dces.clientservercommunication;
  *
  * Ответ на запрос о доступных в системе плагинах
  */
-public class AvailablePluginsResponse {
+public class AvailablePluginsResponse implements Response {
 
   /**
    * Массив алиасов плагинов

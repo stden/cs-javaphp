@@ -29,7 +29,7 @@ public class ProblemDescriptionBean {
   }
 
   public void setData(ProblemDescription pd) {
-    setId(id);
+    setId(pd.id);
     setClientPluginAlias(pd.clientPluginAlias);
     setServerPluginAlias(pd.serverPluginAlias);
     setName(pd.name);
@@ -53,8 +53,8 @@ public class ProblemDescriptionBean {
     pd.clientPluginAlias = this.clientPluginAlias;
     pd.serverPluginAlias = this.serverPluginAlias;
     pd.name = this.name;
-    pd.statementData = this.statementData.getBytes();
-    pd.answerData = this.answerData.getBytes();
+    pd.statementData = this.statementData.getData();
+    pd.answerData = this.answerData.getData();
 
     return pd;
   }

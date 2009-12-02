@@ -11,6 +11,26 @@
       <properties />
     </buildFile>
   </component>
+  <component name="ArtifactManager">
+    <artifact type="jar" build-on-make="true" name="SamplePlugin">
+      <output-path>$PROJECT_DIR$/plugins/</output-path>
+      <root id="archive" name="SamplePlugin.jar">
+        <element id="directory" name="META-INF">
+          <element id="file-copy" path="$PROJECT_DIR$/SamplePlugin/META-INF/MANIFEST.MF" />
+        </element>
+        <element id="module-output" name="SamplePlugin" />
+      </root>
+    </artifact>
+    <artifact type="jar" name="ACMLitePlugin">
+      <output-path>$PROJECT_DIR$/plugins</output-path>
+      <root id="archive" name="ACMLitePlugin.jar">
+        <element id="module-output" name="ACMLitePlugin" />
+        <element id="directory" name="META-INF">
+          <element id="file-copy" path="$PROJECT_DIR$/ACMLitePlugin/META-INF/MANIFEST.MF" />
+        </element>
+      </root>
+    </artifact>
+  </component>
   <component name="BuildJarProjectSettings">
     <option name="BUILD_JARS_ON_MAKE" value="true" />
   </component>

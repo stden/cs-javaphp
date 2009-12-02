@@ -16,7 +16,7 @@ import java.io.IOException;
  * Date: 31.07.2009
  * Time: 15:45:36
  */
-public class ContestAdjustmentBean {    
+public class ContestAdjustmentBean {
 
   private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
@@ -46,28 +46,23 @@ public class ContestAdjustmentBean {
   public void setData(GetContestDataResponse gcdr) {
     freshContestData = gcdr;
 
-    contestDescription.setData(gcdr.contest);
+    if (gcdr != null)
+      contestDescription.setData(gcdr.contest);
 
     problemsListModel.clear();
-    for (ProblemDescription pd : gcdr.problems) {
-      ProblemDescriptionBean pdb = new ProblemDescriptionBean();
-      pdb.setData(pd);
-      problemsListModel.addElement(pdb);
-    }
+
+    if (gcdr != null)
+      for (ProblemDescription pd : gcdr.problems) {
+        ProblemDescriptionBean pdb = new ProblemDescriptionBean();
+        initProblemBean(pdb);
+        pdb.setData(pd);
+        problemsListModel.addElement(pdb);
+      }
   }
 
   public void setDefault() {
     contestDescription.setDefault();
     problemsListModel.clear();
-  }
-
-  public void undoChanges() {
-    if (freshContestData == null)
-      setDefault();
-    else
-      setData(freshContestData);
-
-    setModified(false);
   }
 
   public ContestDescriptionBean getContestDescription() {
@@ -161,6 +156,16 @@ public class ContestAdjustmentBean {
 
   public ProblemDescriptionBean newProblemBean() {
     ProblemDescriptionBean bean = new ProblemDescriptionBean();
+    initProblemBean(bean);
+    bean.setDefault();
+    return bean;
+  }
+
+  /**
+   * adds listeners to the bean 
+   * @param bean bean to add listeners
+   */
+  private void initProblemBean(ProblemDescriptionBean bean) {
     bean.addPropertyChangeListener(modifiedListener);
 
     final ZipBean statementZipBean = bean.getAnswerData();
@@ -171,9 +176,6 @@ public class ContestAdjustmentBean {
 
     statementZipBean.addPropertyChangeListener(modifiedListener);
     answerZipBean.addPropertyChangeListener(modifiedListener);
-
-    bean.setDefault();
-    return bean;
   }
 
   @SuppressWarnings({"UnusedDeclaration"})

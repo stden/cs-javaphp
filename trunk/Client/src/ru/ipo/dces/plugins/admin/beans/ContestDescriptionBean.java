@@ -1,6 +1,7 @@
 package ru.ipo.dces.plugins.admin.beans;
 
 import ru.ipo.dces.clientservercommunication.ContestDescription;
+import ru.ipo.dces.clientservercommunication.UserDataField;
 
 import java.beans.PropertyChangeSupport;
 import java.beans.PropertyChangeListener;
@@ -31,7 +32,7 @@ public class ContestDescriptionBean {
     setDescription("");
     setStart(new DateBean(new Date())); //now
     setFinish(new DateBean(new Date(new Date().getTime() + 1000 * 60 * 60))); // now + 1 hour
-    setRegistrationType(ContestDescription.RegistrationType.ByAdmins);
+    setRegistrationType(ContestDescription.RegistrationType.ByAdmins);    
     this.resultsAccessPolicy.setDefault();
     this.contestTiming.setDefault();
   }

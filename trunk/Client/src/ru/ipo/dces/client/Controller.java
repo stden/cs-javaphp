@@ -415,6 +415,7 @@ public class Controller {
 
   public static void stopContest() {
     StopContestRequest r = new StopContestRequest();
+    r.sessionID = contestConnection.getSessionID();
     try {
       server.doRequest(r);
       getLogger().log("Соревнование остановлено", LogMessageType.OK, Localization.LOGGER_NAME);
