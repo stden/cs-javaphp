@@ -25,7 +25,7 @@ class CreatedDatabaseTestCase extends DCESWithDBTestCase
         $req->login = $login;
         $req->password = $pass;
         
-        $this->assertEquals(createFailRes(12), RequestSender::send($req));
+        $this->assertEquals(createFailRes(13), RequestSender::send($req));
     }
     
     public function badLoginPassProvider()
