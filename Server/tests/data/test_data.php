@@ -9,9 +9,11 @@ class TestData
                                      array('', ''),
                                      array('login', 'zbazhin'),
                                      array(42, 42),
+                                     
                                      /* length:(275, 275) */
                                      array('thisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25chars', 
                                            'thisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25chars')
+                                     
                                      /*TODO: try to add SQL Injection test code here*/
                                      ),
                                      
