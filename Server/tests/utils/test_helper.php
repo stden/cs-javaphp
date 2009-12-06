@@ -11,33 +11,17 @@ function createFailRes($code, $failReason = 'BusinessLogicError', $info = '')
     return $res;
 }
 
-class Constructor
+function createUser($login, $pass, $type = 'Participant', $data = array())
 {
-     //TODO: refactor to load from config file
-    private static $inst; //array<test cases, contsructor instances>
-    private $test;
-
-    protected function __construct($test)
-    {
-        $this->test = $test;
-    }
-   
-    public static function instance($test){
-        
-        $className = get_class($test);
-        
-        if(!isset(Constructor::$inst[$className]))
-            Constructor::$inst[$className] = new Constructor($test);
-        
-        return Constructor::$inst[$className];
-    }
+    $user = new UserDescription();
+    $user->login = $login;
+    $user->password = $pass;
+    $user->userType = $type;
     
-    public function construct($name)
-    {
-        $obj = new $name();
+    $user->data = $data;
         
-        return $obj;
-    }
-};
+    return $user;
+}
+
 
 ?>
