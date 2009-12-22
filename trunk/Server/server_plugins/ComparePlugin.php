@@ -28,7 +28,8 @@
     }
 
     public function updateAnswerData($answer_zip) {
-      $p = $answer_zip->getFromName('answer.txt');
+      //$p = $answer_zip->getFromName('answer.txt');
+      $p = $answer_zip->getFromIndex(0);
       if (! $p) return false;
            else return $p;
     }

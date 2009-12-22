@@ -28,7 +28,8 @@
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.php.core.PHPNature</nature>
-		<nature>com.aptana.ide.editor.php.phpnature</nature>
+		<nature>com.aptana.ide.project.nature.web</nature>
 		<nature>com.aptana.ide.projects.com.aptana.ide.project.nature.web</nature>
+		<nature>com.aptana.ide.editor.php.phpnature</nature>
 	</natures>
 </projectDescription>
