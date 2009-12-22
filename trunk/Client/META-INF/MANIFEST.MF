@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Class-Path: libs/forms.jar libs/looks-2.2.2.jar libs/l2fprod-common-al
+ l.jar libs/jcalendar-1.3.3.jar libs/TableLayout.jar libs/plugin.jar
+Main-Class: ru.ipo.dces.client.Controller
+

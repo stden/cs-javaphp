@@ -23,6 +23,9 @@
     <setting name="buildJar" value="true" />
     <setting name="mainClass" value="ru.ipo.dces.client.Controller" />
   </component>
+  <component name="DBNavigator.Module.ConnectionManager">
+    <connections />
+  </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">

@@ -722,7 +722,7 @@ public class ContestPluginV2 implements Plugin, ActionListener {
       createContestRequest = new CreateContestRequest();
 
       createContestRequest.contest = bean.getContestDescription().getData();
-      createContestRequest.contest.data = new UserDataField[0];
+      createContestRequest.contest.data = bean.getUserDataFields();
       createContestRequest.sessionID = Controller.getContestConnection().getSessionID();
     }
 

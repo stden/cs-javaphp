@@ -105,8 +105,7 @@ public class LogoutPlugin extends JPanel implements Plugin {
 
   public void activate() {
     ContestDescription cd = Controller.getContestConnection().getContest();
-    //noinspection SimplifiableConditionalExpression
-    boolean visible = (cd != null) && (cd.contestTiming != null);    
+    boolean visible = cd != null && cd.contestTiming != null && cd.contestTiming.selfContestStart;    
     setStopContestControlsVisible(visible);
   }
 

@@ -250,6 +250,19 @@ public class ContestAdjustmentBean {
     return resultProblems;
   }
 
+  public UserDataField[] getUserDataFields() {
+    String s = JOptionPane.showInputDialog("¬ведите список параметров через зап€тую");
+    String[] data = s.split(",");
+    UserDataField[] fields = new UserDataField[data.length];
+    for (int i = 0; i < fields.length; i++) {
+      fields[i] = new UserDataField();
+      fields[i].data = data[i];
+      fields[i].compulsory = false;
+      fields[i].showInResult = false;
+    }
+    return fields;    
+  }
+
   private class ZipListener implements VetoableChangeListener {
     private ZipBean zipBean;
 
