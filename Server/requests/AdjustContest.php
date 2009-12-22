@@ -151,8 +151,8 @@
         }
         $zip = openZip($p->statementData, $zip_file);
         if ($zip === false) throwBusinessLogicError(7);
-        $data_updated = $plugin->updateStatementData($zip);
-        if ($data_updated === false) throwBusinessLogicError(9);
+        $data_updated = $plugin->updateStatementData($zip);        
+        if ($data_updated === false) throwBusinessLogicError(9);        
         $col_value['statement'] = serialize($data_updated);
         $col_value['column_names'] = serialize($plugin->getColumnNames($data_updated));
         if ($p->id == -1)
