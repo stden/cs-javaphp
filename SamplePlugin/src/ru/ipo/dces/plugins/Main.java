@@ -196,10 +196,12 @@ public class Main extends JPanel implements Plugin {
           res.put("answer", answerTextField.getText());
           try {
             final HashMap<String, String> ans = env.submitSolution(res);
-            if (ans.get("result").equals("yes"))
+            if (ans.get("result").equals("answer accepted"))
               JOptionPane.showMessageDialog(null, "Вы дали правильный ответ!");
-            else if (ans.get("result").equals("no"))
+            else if (ans.get("result").equals("wrong answer"))
               JOptionPane.showMessageDialog(null, "Вы дали неправильный ответ!!");
+            else if (ans.get("result").equals("no submissions left"))
+              JOptionPane.showMessageDialog(null, "У Вас более не осталось попыток");
             else
               JOptionPane.showMessageDialog(null, "Ответ сервера: " + ans.get("result"));
           }

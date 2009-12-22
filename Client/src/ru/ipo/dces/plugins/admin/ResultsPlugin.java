@@ -15,9 +15,16 @@ import ru.ipo.dces.plugins.admin.resultstable.ResultsTableModel;
 import ru.ipo.dces.plugins.admin.resultstable.OneMessageTableModel;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 
 import info.clearthought.layout.TableLayout;
 
@@ -42,7 +49,7 @@ public class ResultsPlugin implements Plugin {
 
     JScrollPane scroll = new JScrollPane(table);
     mainPanel.setLayout(new TableLayout(new double[][]{
-      {TableLayout.FILL}, {TableLayout.PREFERRED, TableLayout.FILL}
+            {TableLayout.FILL}, {TableLayout.PREFERRED, TableLayout.FILL}
     }));
     mainPanel.add(scroll, "0, 1");
     table.setModel(new DefaultTableModel());
@@ -54,6 +61,49 @@ public class ResultsPlugin implements Plugin {
     });
     mainPanel.add(contestChoosingPanel, "0, 0");
     mainPanel.validate();
+
+    table.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseClicked(MouseEvent e) {
+        if (e.getClickCount() >= 2)
+          saveTableContents2CSV();
+      }
+    });
+  }
+
+  private void saveTableContents2CSV() {
+    JFileChooser fileopen = new JFileChooser();
+    FileFilter filter = new FileNameExtensionFilter("csv files", "csv");
+    fileopen.addChoosableFileFilter(filter);
+
+    if (fileopen.showDialog(null, "Open file") != JFileChooser.APPROVE_OPTION) return;
+
+    File file = fileopen.getSelectedFile();
+    try {
+      PrintWriter p = new PrintWriter(file);
+
+      //write column headers
+      for (int j = 0; j < table.getColumnCount(); j++) {
+        if (j != 0) p.append(',');
+        p.append(table.getModel().getColumnName(j));
+      }
+      p.append('\n');
+
+      //write data
+      for (int i = 0; i < table.getRowCount(); i++) {
+        for (int j = 0; j < table.getColumnCount(); j++) {
+          if (j != 0) p.append(',');
+          p.append(table.getModel().getValueAt(i, j).toString());
+        }
+        p.append('\n');
+      }
+
+      p.close();
+
+      JOptionPane.showMessageDialog(null, "Файл успешно записан");
+    } catch (FileNotFoundException e) {
+      JOptionPane.showMessageDialog(null, "Файл записать не удалось");
+    }
   }
 
   public JPanel getPanel() {
@@ -62,11 +112,11 @@ public class ResultsPlugin implements Plugin {
 
   public void activate() {
     contestChoosingPanel.setVisible(Controller.isContestUnknownMode());
-
+    contestChoosingPanel.refreshContestList();
     contestSelected(getContest());
   }
 
-  private void showMessageInTable(String message) {    
+  private void showMessageInTable(String message) {
     table.setModel(new OneMessageTableModel(message));
   }
 

@@ -11,6 +11,9 @@
     <setting name="buildJar" value="true" />
     <setting name="mainClass" value="" />
   </component>
+  <component name="DBNavigator.Module.ConnectionManager">
+    <connections />
+  </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">

@@ -162,6 +162,7 @@ public class CreateContestPlugin extends JPanel implements Plugin {
           cd.data[i] = new UserDataField();
           cd.data[i].data = ((TypeNameBean) typeNameModel.get(i)).getName();
           cd.data[i].compulsory = ((TypeNameBean) typeNameModel.get(i)).isCompulsory();
+          cd.data[i].showInResult = true;
         }
 
         //TODO remove the hack
