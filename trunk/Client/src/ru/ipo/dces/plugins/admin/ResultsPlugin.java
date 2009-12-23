@@ -11,6 +11,7 @@ import ru.ipo.dces.exceptions.GeneralRequestFailureException;
 import ru.ipo.dces.exceptions.ServerReturnedError;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
 import ru.ipo.dces.pluginapi.Plugin;
+import ru.ipo.dces.plugins.admin.extra.ComparePluginGenResultsView;
 import ru.ipo.dces.plugins.admin.resultstable.ResultsTableModel;
 import ru.ipo.dces.plugins.admin.resultstable.OneMessageTableModel;
 
@@ -39,6 +40,7 @@ public class ResultsPlugin implements Plugin {
   private final JPanel mainPanel;
   private final JTable table;
   private final ContestChoosingPanel contestChoosingPanel;
+  private GetContestResultsResponse resResponse = null;
 
   public ResultsPlugin(PluginEnvironment env) {
     this.mainPanel = new JPanel();
@@ -66,7 +68,17 @@ public class ResultsPlugin implements Plugin {
       @Override
       public void mouseClicked(MouseEvent e) {
         if (e.getClickCount() >= 2)
-          saveTableContents2CSV();
+          //saveTableContents2CSV();
+        {
+          if (resResponse != null) {
+            ComparePluginGenResultsView v = new ComparePluginGenResultsView(
+                    resResponse.headers,
+                    resResponse.minorHeaders,
+                    resResponse.table,
+                    table.getSelectedRow()
+            );            
+          }
+        }
       }
     });
   }
@@ -144,9 +156,9 @@ public class ResultsPlugin implements Plugin {
       crr.sessionID = Controller.getContestConnection() == null ?
               null :
               contestConnection.getSessionID();
-      GetContestResultsResponse r = Controller.getServer().doRequest(crr);
+      resResponse = Controller.getServer().doRequest(crr);
 
-      ResultsTableModel model = new ResultsTableModel(r.headers, r.minorHeaders, r.table);
+      ResultsTableModel model = new ResultsTableModel(resResponse.headers, resResponse.minorHeaders, resResponse.table);
       table.setModel(model);
     } catch (ServerReturnedError e) {
       showMessageInTable(e.getMessage());

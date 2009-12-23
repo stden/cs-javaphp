@@ -66,7 +66,7 @@ public class ClientDialog extends JFrame {
     setSize(800, 600);
     // Разместить окно по центру экрана
     setLocationRelativeTo(null);
-    setTitle("DCES Client");
+    //setTitle("DCES Client");
   }
 
   /**
@@ -92,4 +92,9 @@ public class ClientDialog extends JFrame {
     return logTextPane;
   }
 
+  @Override
+  public void setTitle(String title) {
+    super.setTitle("DCES Client");
+    //super.setTitle(title);
+  }
 }
