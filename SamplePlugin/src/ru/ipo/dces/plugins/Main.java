@@ -52,8 +52,7 @@ public class Main extends JPanel implements Plugin {
       return 3;
     else if (extension.equals("txt"))
       return 2;
-    else
-    if (extension.equals("bmp") || extension.equals("gif") || extension.equals("jpeg") || extension.equals("jpg") || extension.equals("png"))
+    else if (extension.equals("bmp") || extension.equals("gif") || extension.equals("jpeg") || extension.equals("jpg") || extension.equals("png"))
       return 1;
     else
       return 0;
@@ -239,12 +238,9 @@ public class Main extends JPanel implements Plugin {
   private void $$$setupUI$$$() {
     createUIComponents();
     pluginPanel.setLayout(new FormLayout("fill:0dlu:noGrow,left:4dlu:noGrow,fill:40dlu:noGrow,left:4dlu:noGrow,fill:140dlu:grow,left:4dlu:noGrow,fill:60dlu:noGrow,left:4dlu:noGrow,fill:0dlu:noGrow", "center:max(d;0px):noGrow,top:4dlu:noGrow,center:12dlu:noGrow,top:4dlu:noGrow,center:80dlu:grow,top:4dlu:noGrow,center:20dlu:noGrow,top:4dlu:noGrow,center:max(d;4px):grow"));
-    statementTextPane = new JTextPane();
-    statementTextPane.setEditable(false);
-    CellConstraints cc = new CellConstraints();
-    pluginPanel.add(statementTextPane, cc.xyw(3, 5, 5, CellConstraints.FILL, CellConstraints.FILL));
     submitButton = new JButton();
     submitButton.setText("Ответить");
+    CellConstraints cc = new CellConstraints();
     pluginPanel.add(submitButton, cc.xy(7, 7));
     answerTextField = new JTextField();
     pluginPanel.add(answerTextField, cc.xy(5, 7, CellConstraints.FILL, CellConstraints.DEFAULT));
@@ -254,6 +250,11 @@ public class Main extends JPanel implements Plugin {
     final JLabel label2 = new JLabel();
     label2.setText("Ответ");
     pluginPanel.add(label2, cc.xy(3, 7));
+    final JScrollPane scrollPane1 = new JScrollPane();
+    pluginPanel.add(scrollPane1, cc.xyw(3, 5, 5, CellConstraints.FILL, CellConstraints.FILL));
+    statementTextPane = new JTextPane();
+    statementTextPane.setEditable(false);
+    scrollPane1.setViewportView(statementTextPane);
   }
 
   /**
