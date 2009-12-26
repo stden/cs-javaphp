@@ -9,7 +9,7 @@ class ConnectToContestTestCase extends DCESWithDBTestCase
     
     public function setUp() 
     {
-        //connecting to adming with superadmin login/pass
+        //connecting to admin with superadmin login/pass
         $req = new ConnectToContestRequest();
         
         $req->login = 'admin';
@@ -36,7 +36,15 @@ class ConnectToContestTestCase extends DCESWithDBTestCase
         
         $this->assertEquals(new AcceptedResponse(), RequestSender::send($req));
         
-        $this->admin = $req->user; 
+        $this->admin = $req->user;
+        
+        //TODO: create sample user with type Participant
+        $req = new RegisterToContestRequest();
+        $req->sessionID = $this->connect->sessionID;
+        $req->contestID = $this->contestID;
+        
+        $req->user = createUser('login', 'pass');
+        $this->assertEquals(new AcceptedResponse(), RequestSender::send($req));
     }
     
     /**
@@ -67,6 +75,7 @@ class ConnectToContestTestCase extends DCESWithDBTestCase
         $res = RequestSender::send($req);
         
         $this->assertNotEquals($res->sessionID, '');
+        $this->assertNotEquals($res->sessionID, null);
         $this->assertEquals($res->user->login, 'admin');
         $this->assertEquals($res->user->userType, 'SuperAdmin');
     }
@@ -86,6 +95,8 @@ class ConnectToContestTestCase extends DCESWithDBTestCase
         
         $this->assertEquals($res->user->login, $login);
         $this->assertNotEquals($res->sessionID, '');
+        $this->assertNotEquals($res->sessionID, null);
+        $this->assertEquals($res->user->userType, 'ContestAdmin');
     }
     
     /**
@@ -112,7 +123,17 @@ class ConnectToContestTestCase extends DCESWithDBTestCase
         $req->contestID = 0;
         
         $req->user = createUser('admin', 'superpassword');
-        $this->assertEquals(createFailRes(12), RequestSender::send($req));
+        $this->assertEquals(createFailRes(16), RequestSender::send($req));
+    }
+    
+    public function testBadLoginPasswordForParticipant($login, $pass)
+    {
+        //TODO: implement
+    }
+    
+    public function testGoodLoginPasswordForParticipant($login, $pass)
+    {
+        //TODO: implement
     }
 
     public function goodLoginPassProvider()
