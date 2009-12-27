@@ -1,24 +1,14 @@
 <?php
 
-class ConnectToContestTestCase extends DCESWithDBTestCase
+class ConnectToContestTestCase extends DCESWithSuperAdminTestCase
 {
-    protected $connect;
-    protected $superadmin;
     protected $contestID;
     protected $admin;    
     
     public function setUp() 
     {
-        //connecting to admin with superadmin login/pass
-        $req = new ConnectToContestRequest();
-        
-        $req->login = 'admin';
-        $req->password = 'superpassword';
-        $req->contestID = 0;
-        
-        $this->connect = RequestSender::send($req);
-        $this->superadmin = $this->connect->user;
-        
+        parent::setUp();
+                
         //creating sample contest
         $req = new CreateContestRequest();
         $req->sessionID = $this->connect->sessionID;
@@ -27,23 +17,25 @@ class ConnectToContestTestCase extends DCESWithDBTestCase
         $this->contestID = RequestSender::send($req)->createdContestID;
         
         //creating sample contest admin
+        
         $req = new RegisterToContestRequest();
         $req->sessionID = $this->connect->sessionID;
         $req->contestID = $this->contestID;
         
-        $lp = TestData::getData('goodLoginPass'); $l = $lp[0][0]; $p = $lp[0][1];
-        $req->user = createUser($l, $p, 'ContestAdmin');
+        $lp = TestData::getSingleData('goodCALoginPass');
+        $req->user = createUser($lp[0], $lp[1], 'ContestAdmin');
         
         $this->assertEquals(new AcceptedResponse(), RequestSender::send($req));
-        
-        $this->admin = $req->user;
-        
+            
         //TODO: create sample user with type Participant
+    
         $req = new RegisterToContestRequest();
         $req->sessionID = $this->connect->sessionID;
         $req->contestID = $this->contestID;
         
-        $req->user = createUser('login', 'pass');
+        $lp = TestData::getSingleData('goodLoginPass');
+        $req->user = createUser($lp[0], $lp[1]); 
+
         $this->assertEquals(new AcceptedResponse(), RequestSender::send($req));
     }
     
@@ -81,7 +73,7 @@ class ConnectToContestTestCase extends DCESWithDBTestCase
     }
     
     /**
-     * @dataProvider goodLoginPassProvider 
+     * @dataProvider goodCALoginPassProvider 
      */
     public function testGoodLoginPasswordForContestAdmin($login, $pass)
     {
@@ -102,7 +94,7 @@ class ConnectToContestTestCase extends DCESWithDBTestCase
     /**
      * @dataProvider badLoginPassProvider 
      */
-    public function testBadLoginPasswordForContestAdmin($login, $pass)
+    public function testBadLoginPasswordForContestAdminAndParticipant($login, $pass)
     {
         $req = new ConnectToContestRequest();
         
@@ -115,6 +107,25 @@ class ConnectToContestTestCase extends DCESWithDBTestCase
         $this->assertEquals(createFailRes(12), $res);
     }
     
+    /**
+     * @dataProvider goodLoginPassProvider 
+     */
+    public function testGoodLoginPasswordForParticipant($login, $pass)
+    {
+        $req = new ConnectToContestRequest();
+        
+        $req->login = $login;
+        $req->password = $pass;
+        $req->contestID = $this->contestID;
+        
+        $res = RequestSender::send($req);
+        
+        $this->assertEquals($res->user->login, $login);
+        $this->assertNotEquals($res->sessionID, '');
+        $this->assertNotEquals($res->sessionID, null);
+        $this->assertEquals($res->user->userType, 'Participant');
+    }
+
     public function testWrongContestTypeRegisterForContestAdmin()
     {
         $req = new RegisterToContestRequest();
@@ -125,16 +136,6 @@ class ConnectToContestTestCase extends DCESWithDBTestCase
         $req->user = createUser('admin', 'superpassword');
         $this->assertEquals(createFailRes(16), RequestSender::send($req));
     }
-    
-    public function testBadLoginPasswordForParticipant($login, $pass)
-    {
-        //TODO: implement
-    }
-    
-    public function testGoodLoginPasswordForParticipant($login, $pass)
-    {
-        //TODO: implement
-    }
 
     public function goodLoginPassProvider()
     {
@@ -144,6 +145,11 @@ class ConnectToContestTestCase extends DCESWithDBTestCase
     public function badLoginPassProvider()
     {
         return TestData::getData('badLoginPass');
+    }
+
+    public function goodCALoginPassProvider()
+    {
+        return TestData::getData('goodCALoginPass');
     }
     
     public function badSALoginPassProvider()

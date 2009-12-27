@@ -31,5 +31,24 @@ abstract class DCESWithDBTestCase extends DCESBaseTestCase
         $this->assertEquals(new AcceptedResponse(), RequestSender::send(new CreateDataBaseRequest()));
     }
 }
+
+abstract class DCESWithSuperAdminTestCase extends DCESWithDBTestCase {
+    protected $connect;
+    protected $superadmin;
+    
+    public function setUp() {
+        parent::setUp();
+        
+        //connecting to admin with superadmin login/pass
+        $req = new ConnectToContestRequest();
+        
+        $req->login = 'admin';
+        $req->password = 'superpassword';
+        $req->contestID = 0;
+        
+        $this->connect = RequestSender::send($req);
+        $this->superadmin = $this->connect->user;
+    }
+}
  
 ?>
