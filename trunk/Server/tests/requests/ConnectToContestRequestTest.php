@@ -44,13 +44,7 @@ class ConnectToContestTestCase extends DCESWithSuperAdminTestCase
      */
     public function testBadLoginPasswordForSuperAdmin($login, $pass)
     {
-        $req = new ConnectToContestRequest();
-        
-        $req->login = $login;
-        $req->password = $pass;
-        $req->contestID = 0;
-        
-        $this->assertEquals(createFailRes(12), RequestSender::send($req));
+        $this->LPForSA(FALSE, $login, $pass);
     }
     
     /**
@@ -58,18 +52,7 @@ class ConnectToContestTestCase extends DCESWithSuperAdminTestCase
      */
     public function testGoodLoginPasswordForSuperAdmin($login, $pass)
     {
-        $req = new ConnectToContestRequest();
-        
-        $req->login = $login;
-        $req->password = $pass;
-        $req->contestID = 0;
-        
-        $res = RequestSender::send($req);
-        
-        $this->assertNotEquals($res->sessionID, '');
-        $this->assertNotEquals($res->sessionID, null);
-        $this->assertEquals($res->user->login, 'admin');
-        $this->assertEquals($res->user->userType, 'SuperAdmin');
+        $this->LPForSA(TRUE, $login, $pass);
     }
     
     /**
@@ -77,18 +60,7 @@ class ConnectToContestTestCase extends DCESWithSuperAdminTestCase
      */
     public function testGoodLoginPasswordForContestAdmin($login, $pass)
     {
-        $req = new ConnectToContestRequest();
-        
-        $req->login = $login;
-        $req->password = $pass;
-        $req->contestID = $this->contestID;
-        
-        $res = RequestSender::send($req);
-        
-        $this->assertEquals($res->user->login, $login);
-        $this->assertNotEquals($res->sessionID, '');
-        $this->assertNotEquals($res->sessionID, null);
-        $this->assertEquals($res->user->userType, 'ContestAdmin');
+        $this->LPForCAAndParticipant(TRUE, $login, $pass, 'ContestAdmin');
     }
     
     /**
@@ -96,15 +68,7 @@ class ConnectToContestTestCase extends DCESWithSuperAdminTestCase
      */
     public function testBadLoginPasswordForContestAdminAndParticipant($login, $pass)
     {
-        $req = new ConnectToContestRequest();
-        
-        $req->login = $login;
-        $req->password = $pass;
-        $req->contestID = $this->contestID;
-        
-        $res = RequestSender::send($req);
-        
-        $this->assertEquals(createFailRes(12), $res);
+        $this->LPForCAAndParticipant(FALSE, $login, $pass);  
     }
     
     /**
@@ -112,18 +76,7 @@ class ConnectToContestTestCase extends DCESWithSuperAdminTestCase
      */
     public function testGoodLoginPasswordForParticipant($login, $pass)
     {
-        $req = new ConnectToContestRequest();
-        
-        $req->login = $login;
-        $req->password = $pass;
-        $req->contestID = $this->contestID;
-        
-        $res = RequestSender::send($req);
-        
-        $this->assertEquals($res->user->login, $login);
-        $this->assertNotEquals($res->sessionID, '');
-        $this->assertNotEquals($res->sessionID, null);
-        $this->assertEquals($res->user->userType, 'Participant');
+        $this->LPForCAAndParticipant(TRUE, $login, $pass);
     }
 
     public function testWrongContestTypeRegisterForContestAdmin()
@@ -136,7 +89,49 @@ class ConnectToContestTestCase extends DCESWithSuperAdminTestCase
         $req->user = createUser('admin', 'superpassword');
         $this->assertEquals(createFailRes(16), RequestSender::send($req));
     }
-
+    
+    private function LPForCAAndParticipant($isGood, $login, $pass, $type = 'Participant') 
+    {
+        $req = new ConnectToContestRequest();
+        
+        $req->login = $login;
+        $req->password = $pass;
+        $req->contestID = $this->contestID;
+        
+        $res = RequestSender::send($req);    
+        
+        if($isGood) {
+            $this->assertEquals($res->user->login, $login);
+            $this->assertNotEquals($res->sessionID, '');
+            $this->assertNotEquals($res->sessionID, null);
+            $this->assertEquals($res->user->userType, $type);
+        } else
+            $this->assertEquals(createFailRes(12), $res);
+    }
+    
+    private function LPForSA($isGood, $login, $pass)
+    {
+        $req = new ConnectToContestRequest();
+        
+        $req->login = $login;
+        $req->password = $pass;
+        $req->contestID = 0;
+        
+        $res = RequestSender::send($req);
+        
+        if($isGood) {
+            $this->assertNotEquals($res->sessionID, '');
+            $this->assertNotEquals($res->sessionID, null);
+            $this->assertEquals($res->user->login, 'admin');
+            $this->assertEquals($res->user->userType, 'SuperAdmin');
+        } else 
+             $this->assertEquals(createFailRes(12), RequestSender::send($req));    
+    }
+    
+    
+    
+    /* Data providers */
+    
     public function goodLoginPassProvider()
     {
         return TestData::getData('goodLoginPass');
