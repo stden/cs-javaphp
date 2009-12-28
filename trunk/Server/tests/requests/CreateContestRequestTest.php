@@ -6,8 +6,18 @@ class CreateContestRequestTestCase extends DCESWithSuperAdminTestCase {
         parent::setUp();
     }
     
-    public function testResultAccessPolicyAdjustedContest() {
-        
+    /**
+     * @dataProvider badResultAccessPolicyDataProvider
+     */
+    public function testBadResultAccessPolicyAdjustedContest($after, $during, $ending) {
+        $this->RAPAdjustedContest(FALSE, $after, $during, $ending);
+    }
+    
+    /**
+     * @dataProvider goodResultAccessPolicyDataProvider
+     */
+    public function testGoodResultAccessPolicyAdjustedContest($after, $during, $ending) {
+        $this->RAPAdjustedContest(TRUE, $after, $during, $ending);
     }
     
     public function testRegistrationTypeAdjustedContest() {
@@ -22,29 +32,33 @@ class CreateContestRequestTestCase extends DCESWithSuperAdminTestCase {
     /**
      * @dataProvider goodContestTimingDataProvider
      */
-    public function testGoodContestTimingAdjustedContest($selfStart, $s, $f, $eS, $eF, $maxDur) {
-        $this->cTAdjContest(TRUE, $selfStart, $s, $f, $eS, $eF, $maxDur);
+    public function testGoodContestTimingAdjustedContest($selfStart, $s, $f, $eS, $eF, $maxDur) 
+    {
+        $this->CTAdjContest(TRUE, $selfStart, $s, $f, $eS, $eF, $maxDur);
     }
 
     /**
      * @dataProvider badContestTimingDataProvider
      */
-    public function testBadContestTimingAdjustedContest($selfStart, $s, $f, $eS, $eF, $maxDur) {
-        $this->cTAdjContest(FALSE, $selfStart, $s, $f, $eS, $eF, $maxDur);
+    public function testBadContestTimingAdjustedContest($selfStart, $s, $f, $eS, $eF, $maxDur) 
+    {
+        $this->CTAdjContest(FALSE, $selfStart, $s, $f, $eS, $eF, $maxDur);
     }
     
-    private function cTAdjContest($isGood, $selfStart, $s, $f, $eS, $eF, $maxDur) {
+    private function CTAdjContest($isGood, $selfStart, $s, $f, $eS, $eF, $maxDur) 
+    {
         $req = new CreateContestRequest();
-        
-        $descr = new ContestDescription();
-        $descr->start = $s;
-        $descr->finish = $f;
         
         $ct = new ContestTiming();
         $ct->selfContestStart = $selfStart;
         $ct->maxContestDuration = $maxDur;
         $ct->contestEndingStart = $eS;
         $ct->contestEndingFinish = $eF;
+        
+        $descr = new ContestDescription();
+        $descr->start = $s;
+        $descr->finish = $f;
+        $descr->contestTiming = $ct;
         
         $req->sessionID = $this->connect->sessionID;
         $req->contest = $descr;
@@ -57,9 +71,34 @@ class CreateContestRequestTestCase extends DCESWithSuperAdminTestCase {
             $this->assertEquals(createFailRes(15, 'contest may not start after its finish'), $res);
     }
     
+    private function RAPAdjustedContest($isGood, $after, $during, $ending) 
+    {
+        
+        $req = new CreateContestRequest();
+        
+        $rap = new ResultsAccessPolicy();
+        $rap->afterContestPermission = $after;
+        $rap->contestPermission = $during;
+        $rap->contestEndingPermission = $ending;
+        
+        $descr = new ContestDescription();
+        $descr->resultsAccessPolicy = $rap;
+        
+        $req->sessionID = $this->connect->sessionID;
+        $req->contest = $descr;
+        
+        $res = RequestSender::send($req);
+        
+        if($isGood) 
+            $this->assertNotEquals($res->createdContestID, null);
+        else
+            $this->assertEquals(createFailRes(15), $res);
+    }
+    
     /* Data providers */
     
-    public function goodContestTimingDataProvider() {
+    public function goodContestTimingDataProvider() 
+    {
         
         $res = array();
         
@@ -81,7 +120,8 @@ class CreateContestRequestTestCase extends DCESWithSuperAdminTestCase {
         return $res;
     }
     
-    public function badContestTimingDataProvider() {
+    public function badContestTimingDataProvider() 
+    {
         $res = array();
         
         $now = time();
@@ -109,6 +149,24 @@ class CreateContestRequestTestCase extends DCESWithSuperAdminTestCase {
         //TODO: test for overloading max integer values;
         
         return $res;
+    }
+    
+    public function goodResultAccessPolicyDataProvider()
+    {
+        $input = array ('FullAccess', 'NoAccess', 'OnlySelfResults');
+        $res = array();
+        
+        for($i = 0; $i < 3; $i++)
+            for($j = 0; $j < 3; $j++)
+                for($k = 0; $k < 3; $k++)
+                    $res[] = array($input[$i], $input[$j], $input[$k]);
+                    
+        return $res;
+    }
+
+    public function badResultAccessPolicyDataProvider()
+    {
+        return TestData::getData('badResultsAccessPolicy');
     }
 }
 

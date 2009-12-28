@@ -30,6 +30,13 @@ class TestData
                                           ),
        
         'accessPermission' =>       array ('FullAccess', 'NoAccess', 'OnlySelfResults'),
+        
+        'badResultsAccessPolicy' => array(
+                                        array (null, null, null),
+                                        array (42, 42, 42),
+                                        array ('', '', ''),
+                                        array (42, '', null),
+                                         ),
         );
             
                                       
