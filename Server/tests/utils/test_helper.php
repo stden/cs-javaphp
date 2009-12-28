@@ -1,6 +1,6 @@
 <?php
 
-function createFailRes($code, $failReason = 'BusinessLogicError', $info = '')
+function createFailRes($code, $info = '', $failReason = 'BusinessLogicError')
 {
     $res = new RequestFailedResponse();
     
@@ -22,6 +22,5 @@ function createUser($login, $pass, $type = 'Participant', $data = array())
         
     return $user;
 }
-
 
 ?>

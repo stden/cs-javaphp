@@ -2,6 +2,9 @@
 
 class TestData 
 {
+    const TIME_SCALE = 100;
+    const RANDOM_TESTS_NUMBER = 20;
+    
     private static $data = array(
         
         'badLoginPass' =>           array (
@@ -26,9 +29,8 @@ class TestData
                                         array('admin', 'superpassword')
                                           ),
        
-        'accessPermission' =>      array ('FullAccess', 'NoAccess', 'OnlySelfResults'),
+        'accessPermission' =>       array ('FullAccess', 'NoAccess', 'OnlySelfResults'),
         );
-                                
             
                                       
     public static function getData($name, $is_random = false)
