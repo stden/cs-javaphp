@@ -2,50 +2,43 @@
 
 class CreateContestRequestTestCase extends DCESWithSuperAdminTestCase {
     
-    public function setUp() {
+    public function setUp() 
+    {
         parent::setUp();
     }
     
-    /**
-     * @dataProvider badResultAccessPolicyDataProvider
-     */
-    public function testBadResultAccessPolicyAdjustedContest($after, $during, $ending) {
-        $this->RAPAdjustedContest(FALSE, $after, $during, $ending);
-    }
-    
-    /**
-     * @dataProvider goodResultAccessPolicyDataProvider
-     */
-    public function testGoodResultAccessPolicyAdjustedContest($after, $during, $ending) {
-        $this->RAPAdjustedContest(TRUE, $after, $during, $ending);
-    }
-    
-    public function testRegistrationTypeAdjustedContest() {
-    }
-    
     public function testUserDataFieldAdjustedContest() {
+        
     }
     
     public function testGeneralContestParameters() {
     }
     
     /**
-     * @dataProvider goodContestTimingDataProvider
-     */
-    public function testGoodContestTimingAdjustedContest($selfStart, $s, $f, $eS, $eF, $maxDur) 
+    * @dataProvider registrationTypeDataProvider
+    */
+    public function testRegistrationTypeAdjustedContest($isGood, $regType) 
     {
-        $this->CTAdjContest(TRUE, $selfStart, $s, $f, $eS, $eF, $maxDur);
-    }
-
-    /**
-     * @dataProvider badContestTimingDataProvider
-     */
-    public function testBadContestTimingAdjustedContest($selfStart, $s, $f, $eS, $eF, $maxDur) 
-    {
-        $this->CTAdjContest(FALSE, $selfStart, $s, $f, $eS, $eF, $maxDur);
+        $req = new CreateContestRequest();
+        
+        $descr = new ContestDescription();
+        $descr->registrationType = $regType;
+        
+        $req->sessionID = $this->connect->sessionID;
+        $req->contest = $descr;
+        
+        $res = RequestSender::send($req);
+        
+        if($isGood)
+            $this->assertNotEquals($res->createdContestID, null);
+        else
+            $this->assertEquals(createFailRes(15), $res);
     }
     
-    private function CTAdjContest($isGood, $selfStart, $s, $f, $eS, $eF, $maxDur) 
+    /**
+     * @dataProvider contestTimingDataProvider
+     */
+    public function testContestTimingAdjustedContest($isGood, $selfStart, $s, $f, $eS, $eF, $maxDur) 
     {
         $req = new CreateContestRequest();
         
@@ -71,7 +64,10 @@ class CreateContestRequestTestCase extends DCESWithSuperAdminTestCase {
             $this->assertEquals(createFailRes(15, 'contest may not start after its finish'), $res);
     }
     
-    private function RAPAdjustedContest($isGood, $after, $during, $ending) 
+    /**
+     * @dataProvider resultsAccessPolicyDataProvider
+     */
+    public function testResultsAccessPolicyAdjustedContest($isGood, $after, $during, $ending) 
     {
         
         $req = new CreateContestRequest();
@@ -97,15 +93,15 @@ class CreateContestRequestTestCase extends DCESWithSuperAdminTestCase {
     
     /* Data providers */
     
-    public function goodContestTimingDataProvider() 
+    public function contestTimingDataProvider() 
     {
-        
         $res = array();
         
+        $now = time();
+        $int = $now/TestData::TIME_SCALE;
+        
+        //generate 'good' data
         for($i = 0; $i < TestData::RANDOM_TESTS_NUMBER; $i++) {
-            
-            $now = time();
-            $int = $now/TestData::TIME_SCALE;
             
             $start = $now + rand(-$int, $int);
             $finish = $start + rand(1, $int);
@@ -114,19 +110,10 @@ class CreateContestRequestTestCase extends DCESWithSuperAdminTestCase {
             
             $maxContestDuration = rand(1, ($i % 2 == 1) ? $finish - $start : $int);
             
-            $res[] = array($i % 2 == 1 ? TRUE : false, $start, $finish, $contestEndingStart, $contestEndingFinish, $maxContestDuration);
+            $res[] = array(GOOD_DATA, $i % 2 == 1 ? TRUE : false, $start, $finish, $contestEndingStart, $contestEndingFinish, $maxContestDuration);
         }
         
-        return $res;
-    }
-    
-    public function badContestTimingDataProvider() 
-    {
-        $res = array();
-        
-        $now = time();
-        $int = $now/TestData::TIME_SCALE;
-        
+        //generate 'bad' data
         for($i = 0; $i < TestData::RANDOM_TESTS_NUMBER; $i++) {
 
             $start = $now + rand(-$int, $int);
@@ -139,34 +126,35 @@ class CreateContestRequestTestCase extends DCESWithSuperAdminTestCase {
             
             $maxContestDuration = rand(-$l, 0);
             
-            $res[] = array($i % 2 == 1 ? TRUE : FALSE, $start, $finish, $contestEndingStart, $contestEndingFinish, $maxContestDuration);
+            $res[] = array(BAD_DATA, $i % 2 == 1 ? TRUE : FALSE, $start, $finish, $contestEndingStart, $contestEndingFinish, $maxContestDuration);
         }
         
-        $res[] = array(FALSE, $now, $now, $now, $now, 0);
+        $res[] = array(BAD_DATA, FALSE, $now, $now, $now, $now, 0);
 
-        $res[] = array(FALSE, null, null, null, null, null); // TODO: is it good to return 15 error on this?
+        $res[] = array(BAD_DATA, FALSE, null, null, null, null, null);
         
         //TODO: test for overloading max integer values;
         
         return $res;
     }
     
-    public function goodResultAccessPolicyDataProvider()
+    public function resultsAccessPolicyDataProvider()
     {
-        $input = array ('FullAccess', 'NoAccess', 'OnlySelfResults');
-        $res = array();
+        $res = TestData::getData('resultsAccessPolicy');
         
+        $input = TestData::getData('accessPermission');
+
         for($i = 0; $i < 3; $i++)
             for($j = 0; $j < 3; $j++)
                 for($k = 0; $k < 3; $k++)
-                    $res[] = array($input[$i], $input[$j], $input[$k]);
+                    $res[] = array(GOOD_DATA, $input[$i], $input[$j], $input[$k]);
                     
         return $res;
     }
-
-    public function badResultAccessPolicyDataProvider()
+    
+    public function registrationTypeDataProvider()
     {
-        return TestData::getData('badResultsAccessPolicy');
+        return TestData::getData('registrationType');    
     }
 }
 
