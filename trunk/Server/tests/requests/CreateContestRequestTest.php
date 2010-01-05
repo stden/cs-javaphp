@@ -7,11 +7,46 @@ class CreateContestRequestTestCase extends DCESWithSuperAdminTestCase {
         parent::setUp();
     }
     
-    public function testUserDataFieldAdjustedContest() {
+    /**
+    * @dataProvider userDataFieldDataProvider
+    */
+    public function testUserDataFieldAdjustedContest($isGood, $fields) {
+        $req = new CreateContestRequest();
         
+        $descr = new ContestDescription();    
+        $descr->data = $fields;
+        
+        $req->sessionID = $this->connect->sessionID;
+        $req->contest = $descr;
+        
+        $res = RequestSender::send($req);
+        
+        if($isGood)
+            $this->assertNotEquals($res->createdContestID, null);
+        else
+            $this->assertEquals(createFailRes(15), $res);
     }
     
-    public function testGeneralContestParameters() {
+    /**
+    * @dataProvider generalParametersDataProvider
+    */
+    public function testGeneralContestParameters($isGood, $name, $description) 
+    {
+        $req = new CreateContestRequest();
+        
+        $descr = new ContestDescription();
+        $descr->name = $name;
+        $descr->description = $description;
+        
+        $req->sessionID = $this->connect->sessionID;
+        $req->contest = $descr;
+        
+        $res = RequestSender::send($req);
+        
+        if($isGood)
+            $this->assertNotEquals($res->createdContestID, null);
+        else
+            $this->assertEquals(createFailRes(15), $res);
     }
     
     /**
@@ -155,6 +190,44 @@ class CreateContestRequestTestCase extends DCESWithSuperAdminTestCase {
     public function registrationTypeDataProvider()
     {
         return TestData::getData('registrationType');    
+    }
+    
+    public function userDataFieldDataProvider()
+    {
+        $res = array();
+        
+        for($i = 0; $i < 2 * TestData::RANDOM_TESTS_NUMBER; $i++) {
+            
+            $cols = array();
+            
+            $isGood = TestData::gB();
+            
+            for($j = 1; $j <= rand(1, TestData::MAX_USER_DATA_FIELDS); $j++)
+                if($isGood)
+                    $cols[] = array(TestData::gS(rand(1, TestData::MAX_DATA_LENGTH)), TestData::gB(), TestData::gB());
+                else
+                    $cols[] = array(TestData::getRandomValue(array(null, '', 42)), TestData::gB(), TestData::gB());
+            
+            $res[] = array($isGood, $cols);
+        }
+        
+        return $res;
+    }
+    
+    public function generalParametersDataProvider() 
+    {
+        $res = array();
+        
+        $input = array(null, 42, '');
+        
+        for($i = 0; $i < 3; $i++)
+            for($j = 0; $j < 3; $j++)
+                $res[] = array(BAD_DATA, $input[$i], $input[$j]);
+        
+        $res[] = array(GOOD_DATA, TestData::gS(rand(1, TestData::MAX_DATA_LENGTH)), TestData::gS(rand(1, TestData::MAX_DATA_LENGTH)));
+                
+        return $res;      
+        
     }
 }
 

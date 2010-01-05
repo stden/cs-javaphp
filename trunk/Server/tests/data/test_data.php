@@ -7,7 +7,8 @@ class TestData
 {
     const TIME_SCALE = 100;
     const RANDOM_TESTS_NUMBER = 20;
-    
+    const MAX_USER_DATA_FIELDS = 10;
+    const MAX_DATA_LENGTH = 255;
     
     private static $data = array(
         
@@ -41,7 +42,7 @@ class TestData
                                         array (BAD_DATA, '', '', ''),
                                         array (BAD_DATA, 42, '', null),
                                          ),
-         'registrationType' =>   array(
+         'registrationType' =>      array(
                                         array(BAD_DATA, null), 
                                         array(BAD_DATA, 42), 
                                         array(BAD_DATA, ''),
@@ -51,18 +52,40 @@ class TestData
         );
             
                                       
-    public static function getData($name, $is_random = false)
+    public static function getData($name)
     {
         return TestData::$data[$name];
     }
     
-    public static function getSingleData($name, $is_random = false)
+    public static function getSingleData($array, $is_random = false)
     {
         if($is_random == true)
             return TestData::$data[$name][rand(0, sizeof(TestData::$data[$name]) - 1)];
         else
             return TestData::$data[$name][0];
-    }                                      
+    }
+    
+    public static function getRandomValue($ar) {
+         return $ar[rand(0, sizeof($ar) - 1)];
+    }
+    
+    
+    public static function gS($length)
+    {
+        $res = '';
+        
+        for($i = 0; $i < $length; $i++) {
+            
+            $ch = dechex(rand(32, 65535));
+            
+            $res .= '\u'.$ch;
+        }
+    }                        
+    
+    public static function gB()
+    {
+        return rand(0,1) ? TRUE : FALSE;
+    }              
 }
 
 ?>
