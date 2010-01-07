@@ -1,84 +1,7 @@
 <?php
 
-class ConnectToContestTestCase extends DCESWithSuperAdminTestCase
+class ConnectToContestTestCase extends DCESWithContestAdminAndParticipantTestCase
 {
-    protected $contestID;
-    protected $admin;    
-    
-    public function setUp() 
-    {
-        parent::setUp();
-                
-        //creating sample contest
-        $req = new CreateContestRequest();
-        $req->sessionID = $this->connect->sessionID;
-        $req->contest = new ContestDescription();
-        
-        $this->contestID = RequestSender::send($req)->createdContestID;
-        
-        //creating sample contest admin
-        
-        $req = new RegisterToContestRequest();
-        $req->sessionID = $this->connect->sessionID;
-        $req->contestID = $this->contestID;
-        
-        $lp = TestData::getSingleData('goodCALoginPass');
-        $req->user = createUser($lp[0], $lp[1], 'ContestAdmin');
-        
-        $this->assertEquals(new AcceptedResponse(), RequestSender::send($req));
-            
-        //TODO: create sample user with type Participant
-    
-        $req = new RegisterToContestRequest();
-        $req->sessionID = $this->connect->sessionID;
-        $req->contestID = $this->contestID;
-        
-        $lp = TestData::getSingleData('goodLoginPass');
-        $req->user = createUser($lp[0], $lp[1]); 
-
-        $this->assertEquals(new AcceptedResponse(), RequestSender::send($req));
-    }
-    
-    /**
-     * @dataProvider badSALoginPassProvider 
-     */
-    public function testBadLoginPasswordForSuperAdmin($login, $pass)
-    {
-        $this->LPForSA(FALSE, $login, $pass);
-    }
-    
-    /**
-     * @dataProvider goodSALoginPassProvider 
-     */
-    public function testGoodLoginPasswordForSuperAdmin($login, $pass)
-    {
-        $this->LPForSA(TRUE, $login, $pass);
-    }
-    
-    /**
-     * @dataProvider goodCALoginPassProvider 
-     */
-    public function testGoodLoginPasswordForContestAdmin($login, $pass)
-    {
-        $this->LPForCAAndParticipant(TRUE, $login, $pass, 'ContestAdmin');
-    }
-    
-    /**
-     * @dataProvider badLoginPassProvider 
-     */
-    public function testBadLoginPasswordForContestAdminAndParticipant($login, $pass)
-    {
-        $this->LPForCAAndParticipant(FALSE, $login, $pass);  
-    }
-    
-    /**
-     * @dataProvider goodLoginPassProvider 
-     */
-    public function testGoodLoginPasswordForParticipant($login, $pass)
-    {
-        $this->LPForCAAndParticipant(TRUE, $login, $pass);
-    }
-
     public function testWrongContestTypeRegisterForContestAdmin()
     {
         $req = new RegisterToContestRequest();
@@ -90,72 +13,52 @@ class ConnectToContestTestCase extends DCESWithSuperAdminTestCase
         $this->assertEquals(createFailRes(16), RequestSender::send($req));
     }
     
-    private function LPForCAAndParticipant($isGood, $login, $pass, $type = 'Participant') 
+    /**
+    * @dataProvider loginPassProvider 
+    */    
+    public function testLoginPassword($isGood, $login, $pass, $type) 
     {
         $req = new ConnectToContestRequest();
         
         $req->login = $login;
         $req->password = $pass;
-        $req->contestID = $this->contestID;
+        $req->contestID = $type != 'SuperAdmin' ? $this->contestID : 0;
         
         $res = RequestSender::send($req);    
         
         if($isGood) {
-            $this->assertEquals($res->user->login, $login);
             $this->assertNotEquals($res->sessionID, '');
             $this->assertNotEquals($res->sessionID, null);
+            $this->assertEquals($res->user->login, $login);
             $this->assertEquals($res->user->userType, $type);
         } else
             $this->assertEquals(createFailRes(12), $res);
     }
     
-    private function LPForSA($isGood, $login, $pass)
+    
+    /* ======================== Data providers ===================== */
+    
+    public function loginPassProvider()
     {
-        $req = new ConnectToContestRequest();
+        $res = array();
         
-        $req->login = $login;
-        $req->password = $pass;
-        $req->contestID = 0;
-        
-        $res = RequestSender::send($req);
-        
-        if($isGood) {
-            $this->assertNotEquals($res->sessionID, '');
-            $this->assertNotEquals($res->sessionID, null);
-            $this->assertEquals($res->user->login, 'admin');
-            $this->assertEquals($res->user->userType, 'SuperAdmin');
-        } else 
-             $this->assertEquals(createFailRes(12), RequestSender::send($req));    
-    }
-    
-    
-    
-    /* Data providers */
-    
-    public function goodLoginPassProvider()
-    {
-        return TestData::getData('goodLoginPass');
-    }
-    
-    public function badLoginPassProvider()
-    {
-        return TestData::getData('badLoginPass');
-    }
+        $bad_input = array(null, '', 42, TestData::genUnicodeStr(rand(0, 1) ? 
+                                                                     rand(1, TestData::MIN_LP_LENGTH) : 
+                                                                     rand(TestData::MAX_LP_LENGTH, 2*TestData::MAX_LP_LENGTH)));
+                    
+        $roles = array('SuperAdmin', 'ContestAdmin', 'Participant');
 
-    public function goodCALoginPassProvider()
-    {
-        return TestData::getData('goodCALoginPass');
+        //bad data for all roles        
+        for($i = 0; $i < sizeof($roles); $i++)
+            $res[] = array(BAD_DATA, TestData::getRandomValue($bad_input), TestData::getRandomValue($bad_input), $roles[$i]);
+        
+        //bad data for super admin but good for everyone else
+        $lp_len = rand(TestData::MIN_LP_LENGTH, TestData::MAX_LP_LENGTH);
+        $res[] = array(BAD_DATA, TestData::genUnicodeStr($lp_len), TestData::genUnicodeStr($lp_len), 'SuperAdmin');
+        
+        return $res;
     }
     
-    public function badSALoginPassProvider()
-    {
-        return array_merge(TestData::getData('badLoginPass'), TestData::getData('goodLoginPass'));
-    }
-    
-    public function goodSALoginPassProvider()
-    {
-        return TestData::getData('goodSALoginPass');
-    }
 }
 
 ?>

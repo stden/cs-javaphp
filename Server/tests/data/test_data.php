@@ -9,31 +9,11 @@ class TestData
     const RANDOM_TESTS_NUMBER = 20;
     const MAX_USER_DATA_FIELDS = 10;
     const MAX_DATA_LENGTH = 255;
+    const MIN_LP_LENGTH = 5;
+    const MAX_LP_LENGTH = 24;
     
     private static $data = array(
         
-        'badLoginPass' =>           array (
-                                        array(null, null),
-                                        array('', ''),
-                                        array(42, 42),
-                                    
-                                        /* length:(275, 275) */
-                                        array('thisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25chars', 
-                                              'thisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25charsthisstringoccupies25chars')
-                                          ),
-                                           
-        'goodCALoginPass' =>        array (
-                                        array('calogin', 'capass')
-                                          ), 
-                                          
-        'goodLoginPass' =>          array (
-                                        array('login', 'pass')
-                                          ), 
-                                         
-        'goodSALoginPass' =>        array (
-                                        array('admin', 'superpassword')
-                                          ),
-       
         'accessPermission' =>       array ('FullAccess', 'NoAccess', 'OnlySelfResults'),
         
         'resultsAccessPolicy' =>    array(
@@ -57,30 +37,29 @@ class TestData
         return TestData::$data[$name];
     }
     
-    public static function getSingleData($array, $is_random = false)
-    {
-        if($is_random == true)
-            return TestData::$data[$name][rand(0, sizeof(TestData::$data[$name]) - 1)];
-        else
-            return TestData::$data[$name][0];
-    }
-    
     public static function getRandomValue($ar) {
          return $ar[rand(0, sizeof($ar) - 1)];
     }
     
-    
-    public static function gS($length)
+    public static function genUnicodeStr($length)
     {
         $res = '';
         
-        for($i = 0; $i < $length; $i++) {
-            
-            $ch = dechex(rand(32, 65535));
-            
-            $res .= '\u'.$ch;
-        }
+        for($i = 0; $i < $length; $i++)
+            $res .= mb_convert_encoding('&#' . rand(32, 65535) . ';', 'UTF-8', 'HTML-ENTITIES');
+        
+        return $res;
     }                        
+    
+    public function genASCIIStr($length)
+    {
+        $res = '';
+        
+        for($i = 0; $i < $length; $i++)
+            $res .= chr(rand(32, 127));
+        
+        return $res;
+    }
     
     public static function gB()
     {

@@ -1,20 +1,15 @@
 <?php
 
-class CreateContestRequestTestCase extends DCESWithSuperAdminTestCase {
+class CreateContestRequestTestCase extends DCESWithAllRolesTestCase {
     
     public function setUp() 
     {
         parent::setUp();
     }
     
-    /**
-    * @dataProvider userDataFieldDataProvider
-    */
-    public function testUserDataFieldAdjustedContest($isGood, $fields) {
+    private function createContest($descr, $isGood, $info = '') 
+    {
         $req = new CreateContestRequest();
-        
-        $descr = new ContestDescription();    
-        $descr->data = $fields;
         
         $req->sessionID = $this->connect->sessionID;
         $req->contest = $descr;
@@ -24,7 +19,18 @@ class CreateContestRequestTestCase extends DCESWithSuperAdminTestCase {
         if($isGood)
             $this->assertNotEquals($res->createdContestID, null);
         else
-            $this->assertEquals(createFailRes(15), $res);
+            $this->assertEquals(createFailRes(15, $info), $res);
+    }
+    
+    /**
+    * @dataProvider userDataFieldDataProvider
+    */
+    public function testUserDataFieldAdjustedContest($isGood, $fields) 
+    {
+        $cd = new ContestDescription();
+        $cd->data = $fields;
+
+        $this->createContest($cd, $isGood);
     }
     
     /**
@@ -32,21 +38,11 @@ class CreateContestRequestTestCase extends DCESWithSuperAdminTestCase {
     */
     public function testGeneralContestParameters($isGood, $name, $description) 
     {
-        $req = new CreateContestRequest();
+        $cd = new ContestDescription();
+        $cd->name = $name;
+        $cd->description = $description;
         
-        $descr = new ContestDescription();
-        $descr->name = $name;
-        $descr->description = $description;
-        
-        $req->sessionID = $this->connect->sessionID;
-        $req->contest = $descr;
-        
-        $res = RequestSender::send($req);
-        
-        if($isGood)
-            $this->assertNotEquals($res->createdContestID, null);
-        else
-            $this->assertEquals(createFailRes(15), $res);
+        $this->createContest($cd, $isGood);
     }
     
     /**
@@ -54,20 +50,10 @@ class CreateContestRequestTestCase extends DCESWithSuperAdminTestCase {
     */
     public function testRegistrationTypeAdjustedContest($isGood, $regType) 
     {
-        $req = new CreateContestRequest();
+        $cd = new ContestDescription();
+        $cd->registrationType = $regType;
         
-        $descr = new ContestDescription();
-        $descr->registrationType = $regType;
-        
-        $req->sessionID = $this->connect->sessionID;
-        $req->contest = $descr;
-        
-        $res = RequestSender::send($req);
-        
-        if($isGood)
-            $this->assertNotEquals($res->createdContestID, null);
-        else
-            $this->assertEquals(createFailRes(15), $res);
+        $this->createContest($cd, $isGood);
     }
     
     /**
@@ -75,28 +61,18 @@ class CreateContestRequestTestCase extends DCESWithSuperAdminTestCase {
      */
     public function testContestTimingAdjustedContest($isGood, $selfStart, $s, $f, $eS, $eF, $maxDur) 
     {
-        $req = new CreateContestRequest();
-        
         $ct = new ContestTiming();
         $ct->selfContestStart = $selfStart;
         $ct->maxContestDuration = $maxDur;
         $ct->contestEndingStart = $eS;
         $ct->contestEndingFinish = $eF;
         
-        $descr = new ContestDescription();
-        $descr->start = $s;
-        $descr->finish = $f;
-        $descr->contestTiming = $ct;
+        $cd = new ContestDescription();
+        $cd->start = $s;
+        $cd->finish = $f;
+        $cd->contestTiming = $ct;
         
-        $req->sessionID = $this->connect->sessionID;
-        $req->contest = $descr;
-        
-        $res = RequestSender::send($req);
-        
-        if($isGood)
-            $this->assertNotEquals($res->createdContestID, null);
-        else
-            $this->assertEquals(createFailRes(15, 'contest may not start after its finish'), $res);
+        $this->createContest($cd, $isGood, 'contest may not start after its finish');
     }
     
     /**
@@ -104,29 +80,52 @@ class CreateContestRequestTestCase extends DCESWithSuperAdminTestCase {
      */
     public function testResultsAccessPolicyAdjustedContest($isGood, $after, $during, $ending) 
     {
-        
-        $req = new CreateContestRequest();
-        
         $rap = new ResultsAccessPolicy();
         $rap->afterContestPermission = $after;
         $rap->contestPermission = $during;
         $rap->contestEndingPermission = $ending;
         
-        $descr = new ContestDescription();
-        $descr->resultsAccessPolicy = $rap;
+        $cd = new ContestDescription();
+        $cd->resultsAccessPolicy = $rap;
         
-        $req->sessionID = $this->connect->sessionID;
-        $req->contest = $descr;
+        $this->createContest($cd, $isGood);
+    }
+    
+    public function testInvalidSessionIDForZeroContest()
+    {
+        $req = new CreateContestRequest();
+        $cd = new ContestDescription();
+        
+        $req->sessionID = TestData::genUnicodeStr(rand(1, 48));
+        $req->contest = $cd;
         
         $res = RequestSender::send($req);
         
-        if($isGood) 
-            $this->assertNotEquals($res->createdContestID, null);
-        else
-            $this->assertEquals(createFailRes(15), $res);
+        $this->assertEquals(createFailRes(3), $res);
     }
     
-    /* Data providers */
+    public function testCreateContestByOtherRolesFailure($sessionID)
+    {
+        $req = new CreateContestRequest();
+        $cd = new ContestDescription();
+        
+        //contest admin failure
+        $req->sessionID = $this->caConnect->sessionID;
+        $req->contest = $cd;
+        $this->assertEquals(createFailRes(0), RequestSender::send($req));
+
+        //participant failure
+        $req->sessionID = $this->pConnect->sessionID;
+        $req->contest = $cd;
+        $this->assertEquals(createFailRes(0), RequestSender::send($req));
+        
+        //null failure
+        $req->sessionID = null;
+        $req->contest = $cd;
+        $this->assertEquals(createFailRes(0), RequestSender::send($req));
+    }
+        
+    /* ================= Data providers ================ */
     
     public function contestTimingDataProvider() 
     {
@@ -204,7 +203,7 @@ class CreateContestRequestTestCase extends DCESWithSuperAdminTestCase {
             
             for($j = 1; $j <= rand(1, TestData::MAX_USER_DATA_FIELDS); $j++)
                 if($isGood)
-                    $cols[] = array(TestData::gS(rand(1, TestData::MAX_DATA_LENGTH)), TestData::gB(), TestData::gB());
+                    $cols[] = array(TestData::genUnicodeStr(rand(1, TestData::MAX_DATA_LENGTH)), TestData::gB(), TestData::gB());
                 else
                     $cols[] = array(TestData::getRandomValue(array(null, '', 42)), TestData::gB(), TestData::gB());
             
@@ -224,7 +223,7 @@ class CreateContestRequestTestCase extends DCESWithSuperAdminTestCase {
             for($j = 0; $j < 3; $j++)
                 $res[] = array(BAD_DATA, $input[$i], $input[$j]);
         
-        $res[] = array(GOOD_DATA, TestData::gS(rand(1, TestData::MAX_DATA_LENGTH)), TestData::gS(rand(1, TestData::MAX_DATA_LENGTH)));
+        $res[] = array(GOOD_DATA, TestData::genUnicodeStr(rand(1, TestData::MAX_DATA_LENGTH)), TestData::genUnicodeStr(rand(1, TestData::MAX_DATA_LENGTH)));
                 
         return $res;      
         
