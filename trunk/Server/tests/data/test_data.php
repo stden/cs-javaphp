@@ -22,6 +22,7 @@ class TestData
                                         array (BAD_DATA, '', '', ''),
                                         array (BAD_DATA, 42, '', null),
                                          ),
+                                         
          'registrationType' =>      array(
                                         array(BAD_DATA, null), 
                                         array(BAD_DATA, 42), 
@@ -30,7 +31,6 @@ class TestData
                                         array(GOOD_DATA, 'ByAdmins')
                                          ),
         );
-            
                                       
     public static function getData($name)
     {
