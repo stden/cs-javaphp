@@ -39,14 +39,18 @@ abstract class DCESWithSuperAdminTestCase extends DCESWithDBTestCase {
     public function setUp() {
         parent::setUp();
         
+        $td = TestData::getData('userTestData');
+        
         //connecting to admin with superadmin login/pass
         $req = new ConnectToContestRequest();
         
-        $req->login = 'admin';
-        $req->password = 'superpassword';
+        $req->login = $td['SuperAdmin'][0];
+        $req->password = $td['SuperAdmin'][1];
         $req->contestID = 0;
         
         $this->connect = RequestSender::send($req);
+        
+        $this->sessionID = $this->connect->sessionID;
         $this->superadmin = $this->connect->user;
     }
 }
@@ -54,8 +58,6 @@ abstract class DCESWithSuperAdminTestCase extends DCESWithDBTestCase {
 abstract class DCESWithAllRolesTestCase extends DCESWithSuperAdminTestCase {
     
     protected $contestID;
-    protected $contestAdminLP = array('contestAdmin', 'pass');
-    protected $participantLP = array('participant', 'pass');
     
     protected $caConnect;
     protected $pConnect;
@@ -63,6 +65,8 @@ abstract class DCESWithAllRolesTestCase extends DCESWithSuperAdminTestCase {
     public function setUp() 
     {
         parent::setUp();
+        
+        $td = TestData::getData('userTestData');
         
         //creating sample contest
         $req = new CreateContestRequest();
@@ -77,7 +81,7 @@ abstract class DCESWithAllRolesTestCase extends DCESWithSuperAdminTestCase {
         $req->sessionID = $this->connect->sessionID;
         $req->contestID = $this->contestID;
         
-        $req->user = createUser($this->contestAdminLP[0], $this->contestAdminLP[1], 'ContestAdmin');
+        $req->user = createUser($td['ContestAdmin'][0], $td['ContestAdmin'][1], 'ContestAdmin');
         
         $this->assertEquals(new AcceptedResponse(), RequestSender::send($req));
             
@@ -87,7 +91,7 @@ abstract class DCESWithAllRolesTestCase extends DCESWithSuperAdminTestCase {
         $req->sessionID = $this->connect->sessionID;
         $req->contestID = $this->contestID;
         
-        $req->user = createUser($this->participantLP[0], $this->participantLP[1]); 
+        $req->user = createUser($td['Participant'][0], $td['Participant'][1]); 
 
         $this->assertEquals(new AcceptedResponse(), RequestSender::send($req));
         
@@ -95,8 +99,8 @@ abstract class DCESWithAllRolesTestCase extends DCESWithSuperAdminTestCase {
         
         $ca_req = new ConnectToContestRequest();
         
-        $ca_req->login = $this->contestAdminLP[0];
-        $ca_req->password = $this->contestAdminLP[1];
+        $ca_req->login = $td['ContestAdmin'][0];
+        $ca_req->password = $td['ContestAdmin'][1];
         $ca_req->contestID = $this->contestID;
         
         $this->caConnect = RequestSender::send($ca_req);
@@ -105,8 +109,8 @@ abstract class DCESWithAllRolesTestCase extends DCESWithSuperAdminTestCase {
          
         $p_req = new ConnectToContestRequest();
 
-        $p_req->login = $this->participantLP[0];
-        $p_req->password = $this->participantLP[1];
+        $p_req->login = $td['Participant'][0];
+        $p_req->password = $td['Participant'][1];
         $p_req->contestID = $this->contestID;
         
         $this->pConnect = RequestSender::send($p_req);
