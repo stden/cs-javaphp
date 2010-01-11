@@ -104,7 +104,7 @@ class CreateContestRequestTestCase extends DCESWithAllRolesTestCase {
         $this->assertEquals(createFailRes(3), $res);
     }
     
-    public function testCreateContestByOtherRolesFailure($sessionID)
+    public function testCreateContestByOtherRolesFailure()
     {
         $req = new CreateContestRequest();
         $cd = new ContestDescription();

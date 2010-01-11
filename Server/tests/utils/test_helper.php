@@ -11,14 +11,14 @@ function createFailRes($code, $info = '', $failReason = 'BusinessLogicError')
     return $res;
 }
 
-function createUser($login, $pass, $type = 'Participant', $data = array())
+function createUser($login, $pass, $type = 'Participant', $dataValue = array())
 {
     $user = new UserDescription();
     $user->login = $login;
     $user->password = $pass;
     $user->userType = $type;
     
-    $user->data = $data;
+    $user->dataValue = $dataValue;
         
     return $user;
 }
