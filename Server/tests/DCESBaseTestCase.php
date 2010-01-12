@@ -116,5 +116,26 @@ abstract class DCESWithAllRolesTestCase extends DCESWithSuperAdminTestCase {
         $this->pConnect = RequestSender::send($p_req);
     }
 }
+
+abstract class DCESTwoDatabasesWithAllRoles extends DCESWithAllRolesTestCase {
+    
+    protected $contestID2;
+    
+    public function setUp() {
+        parent::setUp();
+        
+        //creating another sample contest with registration type = 'Self'
+        $req = new CreateContestRequest();
+        $req->sessionID = $this->connect->sessionID;
+        
+        $cd = new ContestDescription();
+        $cd->registrationType = 'Self'; //TODO: big refactor
+        
+        $req->contest = $cd;
+        
+        $this->contestID2 = RequestSender::send($req)->createdContestID;
+        
+    }
+}
  
 ?>
