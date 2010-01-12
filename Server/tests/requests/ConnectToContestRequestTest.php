@@ -1,6 +1,6 @@
 <?php
 
-class ConnectToContestTestCase extends DCESWithContestAdminAndParticipantTestCase
+class ConnectToContestTestCase extends DCESWithAllRolesTestCase
 {
     public function testWrongContestTypeRegisterForContestAdmin()
     {
@@ -27,6 +27,7 @@ class ConnectToContestTestCase extends DCESWithContestAdminAndParticipantTestCas
         $res = RequestSender::send($req);    
         
         if($isGood) {
+            //TODO: Encapsulate this assertion pack into a method
             $this->assertNotEquals($res->sessionID, '');
             $this->assertNotEquals($res->sessionID, null);
             $this->assertEquals($res->user->login, $login);
@@ -35,6 +36,42 @@ class ConnectToContestTestCase extends DCESWithContestAdminAndParticipantTestCas
             $this->assertEquals(createFailRes(12), $res);
     }
     
+    public function testStartBeforeContestStarted()
+    {
+        //adjust contest
+        $req = new AdjustContestRequest();
+        $req->sessionID = $this->sessionID;
+        
+        $req->contest->contestID = $this->contestID;
+        $req->contest->start = time() + 3600;
+        $req->contest->finish = time() + 7200;
+        
+        $res = RequestSender::send($req);
+        $this->assertEquals('AdjustContestResponse', get_class($res));
+        
+        $td = TestData::getData('userTestData');
+        
+        $req = new ConnectToContestRequest();
+        $req->login = $td['Participant'][0];
+        $req->password = $td['Participant'][1];
+        $req->contestID = $this->contestID;
+        
+        $res = RequestSender::send($req);
+        
+        //participant can't connect to not yet started contest
+        $this->assertEquals(createFailRes(19), $res);
+                
+        $req->login = $td['ContestAdmin'][0];
+        $req->password = $td['ContestAdmin'][1];
+        $res = RequestSender::send($req);
+        $req->contestID = $this->contestID;
+        
+        //while contest admin can
+        $this->assertNotEquals($res->sessionID, '');
+        $this->assertNotEquals($res->sessionID, null);
+        $this->assertEquals($res->user->login, $td['ContestAdmin'][0]);
+        $this->assertEquals($res->user->userType, 'ContestAdmin');
+    }
     
     /* ======================== Data providers ===================== */
     
@@ -58,7 +95,6 @@ class ConnectToContestTestCase extends DCESWithContestAdminAndParticipantTestCas
         
         return $res;
     }
-    
 }
 
 ?>

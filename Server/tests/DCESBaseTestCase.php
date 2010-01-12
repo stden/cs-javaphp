@@ -70,7 +70,7 @@ abstract class DCESWithAllRolesTestCase extends DCESWithSuperAdminTestCase {
         
         //creating sample contest
         $req = new CreateContestRequest();
-        $req->sessionID = $this->connect->sessionID;
+        $req->sessionID = $this->sessionID;
         $req->contest = new ContestDescription();
         
         $this->contestID = RequestSender::send($req)->createdContestID;
