@@ -41,7 +41,7 @@ switch(get_class($request)) {
 
 	case 'ConnectToContestRequest':
 	  require("requests/ConnectToContest.php");
-      $result = processConnectToContestRequest($request);
+      $result = processConnectToContestRequest($request);      
 	  break;
 
 	case 'DisconnectRequest':
@@ -66,7 +66,7 @@ switch(get_class($request)) {
 
 	case 'RegisterToContestRequest':
 	  require("requests/RegisterToContest.php");
-	  $result = processRegisterToContestRequest($request);
+	  $result = processRegisterToContestRequest($request);      
 	  break;
 
 	case 'InstallClientPluginRequest':

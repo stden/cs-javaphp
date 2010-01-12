@@ -33,6 +33,105 @@ class TestData
                                         array(GOOD_DATA, 'Self'), 
                                         array(GOOD_DATA, 'ByAdmins')
                                          ),
+         'regToContest' =>          array(
+                                         
+                                        // ======================== SuperAdmin ============================ //  
+                                         
+                                        array(GOOD_DATA, 'SuperAdmin', 'SuperAdmin', 'new_admin', 'new_pass', 0),      //ok
+                                        array(BAD_DATA, 'SuperAdmin', 'SuperAdmin', 'admin', 'superpassword', 0, 17),  //already registered
+                                        array(BAD_DATA, 'SuperAdmin', 'SuperAdmin', null, 'pass', 0, 12),              //bad login
+                                        array(BAD_DATA, 'SuperAdmin', 'SuperAdmin', '', 'pass', 0, 12),                //-||-
+                                        array(BAD_DATA, 'SuperAdmin', 'SuperAdmin', 'new_admin', 'new_pass', 1, 18),   //wrong contestID 
+                                        
+                                        array(GOOD_DATA, 'SuperAdmin', 'ContestAdmin', 'new_contestAdmin', 'new_pass', 1),     //ok
+                                        array(BAD_DATA, 'SuperAdmin', 'ContestAdmin', 'contestAdmin', 'pass', 1, 17),          //already registered
+                                        array(BAD_DATA, 'SuperAdmin', 'ContestAdmin', 'new_contestAdmin', 'new_pass', 0, 14),  //correct: wrong contestID
+                                        array(BAD_DATA, 'SuperAdmin', 'ContestAdmin', '', 'pass', 1, 12),                      //bad login
+                                        array(BAD_DATA, 'SuperAdmin', 'ContestAdmin', null, 'pass', 1, 12),                    //bad login
+
+                                        array(GOOD_DATA, 'SuperAdmin', 'Participant', 'new_participant', 'new_pass', 1),     //ok
+                                        array(BAD_DATA, 'SuperAdmin', 'Participant', 'participant', 'pass', 1, 17),          //already registered
+                                        array(BAD_DATA, 'SuperAdmin', 'Participant', 'new_participant', 'new_pass', 0, 14),  //correct: wrong contestID
+                                        array(BAD_DATA, 'SuperAdmin', 'Participant', '', 'pass', 1, 12),                     //bad login
+                                        array(BAD_DATA, 'SuperAdmin', 'Participant', null, 'pass', 1, 12),                   //bad login
+
+                                        array(BAD_DATA, 'SuperAdmin', 'asdf', null, 'pass', 1),                          //bad whom user type
+
+
+                                        // ======================== ContestAdmin ============================ //
+                                        
+                                        array(BAD_DATA, 'ContestAdmin', 'SuperAdmin', 'new_admin', 'new_pass', 0, '?'),
+                                        array(BAD_DATA, 'ContestAdmin', 'SuperAdmin', 'new_admin', 'new_pass', 1, '?'),
+                                        array(BAD_DATA, 'ContestAdmin', 'SuperAdmin', 'admin', 'superpassword', 0, '?'),
+                                        array(BAD_DATA, 'ContestAdmin', 'SuperAdmin', null, 'pass', 0, '?'),            
+                                        array(BAD_DATA, 'ContestAdmin', 'SuperAdmin', '', 'pass', 0, '?'),              
+                                        array(BAD_DATA, 'ContestAdmin', 'SuperAdmin', 'new_admin', 'new_pass', 1, '?'), 
+                                        
+                                        array(GOOD_DATA, 'ContestAdmin', 'ContestAdmin', 'new_contestAdmin', 'new_pass', 1),     //ok
+                                        array(BAD_DATA, 'ContestAdmin', 'ContestAdmin', 'contestAdmin', 'pass', 1, 17),          //already registered
+                                        array(BAD_DATA, 'ContestAdmin', 'ContestAdmin', 'new_contestAdmin', 'new_pass', 0, 14),  //correct: wrong contestID
+                                        array(BAD_DATA, 'ContestAdmin', 'ContestAdmin', '', 'pass', 1, 12),                      //bad login
+                                        array(BAD_DATA, 'ContestAdmin', 'ContestAdmin', null, 'pass', 1, 12),                    //bad login
+                                        array(BAD_DATA, 'ContestAdmin', 'ContestAdmin', 'new_admin', 'new_pass', 2, 0),     //crosscontest registration
+
+                                        array(GOOD_DATA, 'ContestAdmin', 'Participant', 'new_participant', 'new_pass', 1),     //ok
+                                        array(BAD_DATA, 'ContestAdmin', 'Participant', 'participant', 'pass', 1, 17),          //already registered
+                                        array(BAD_DATA, 'ContestAdmin', 'Participant', 'new_participant', 'new_pass', 0, 14),  //correct: wrong contestID
+                                        array(BAD_DATA, 'ContestAdmin', 'Participant', '', 'pass', 1, 12),                     //bad login
+                                        array(BAD_DATA, 'ContestAdmin', 'Participant', null, 'pass', 1, 12),                   //bad login
+                                        array(BAD_DATA, 'ContestAdmin', 'Participant', 'new_participant', 'new_pass', 2, 0), //crosscontest registration
+
+                                        array(BAD_DATA, 'ContestAdmin', 'asdf', null, 'pass', 1),                          //bad whom user type
+                                                                                
+
+                                        // ======================== Participant ============================ //
+                                        
+                                        array(BAD_DATA, 'Participant', 'SuperAdmin', 'new_admin', 'new_pass', 0, 0),
+                                        array(BAD_DATA, 'Participant', 'SuperAdmin', 'new_admin', 'new_pass', 1, 0),
+                                        array(BAD_DATA, 'Participant', 'SuperAdmin', 'admin', 'superpassword', 0, 0),
+                                        array(BAD_DATA, 'Participant', 'SuperAdmin', null, 'pass', 0, 0),            
+                                        array(BAD_DATA, 'Participant', 'SuperAdmin', '', 'pass', 0, 0),              
+                                        array(BAD_DATA, 'Participant', 'SuperAdmin', 'new_admin', 'new_pass', 1, 0), 
+                                        
+                                        array(BAD_DATA, 'Participant', 'ContestAdmin', 'new_contestAdmin', 'new_pass', 1, 0),     //ok
+                                        array(BAD_DATA, 'Participant', 'ContestAdmin', 'contestAdmin', 'pass', 1, 0),          //already registered
+                                        array(BAD_DATA, 'Participant', 'ContestAdmin', 'new_contestAdmin', 'new_pass', 0, 0),  //correct: wrong contestID
+                                        array(BAD_DATA, 'Participant', 'ContestAdmin', '', 'pass', 1, 0),                      //bad login
+                                        array(BAD_DATA, 'Participant', 'ContestAdmin', null, 'pass', 1, 0),                    //bad login
+
+                                        array(BAD_DATA, 'Participant', 'Participant', 'new_participant', 'new_pass', 1, 0),     //ok
+                                        array(BAD_DATA, 'Participant', 'Participant', 'participant', 'pass', 1, 0),          //already registered
+                                        array(BAD_DATA, 'Participant', 'Participant', 'new_participant', 'new_pass', 0, 0),  //correct: wrong contestID
+                                        array(BAD_DATA, 'Participant', 'Participant', '', 'pass', 1, 0),                     //bad login
+                                        array(BAD_DATA, 'Participant', 'Participant', null, 'pass', 1, 0),                   //bad login
+
+                                        array(BAD_DATA, 'Participant', 'asdf', null, 'pass', 1, 0),                          //bad whom user type
+                                        
+                                        // ======================== Anonymous ============================ //
+                                        
+                                        array(BAD_DATA, 'Anonymous', 'SuperAdmin', 'new_admin', 'new_pass', 0, 0),
+                                        array(BAD_DATA, 'Anonymous', 'SuperAdmin', 'new_admin', 'new_pass', 1, 0),
+                                        array(BAD_DATA, 'Anonymous', 'SuperAdmin', 'admin', 'superpassword', 0, 0),
+                                        array(BAD_DATA, 'Anonymous', 'SuperAdmin', null, 'pass', 0, 0),            
+                                        array(BAD_DATA, 'Anonymous', 'SuperAdmin', '', 'pass', 0, 0),              
+                                        array(BAD_DATA, 'Anonymous', 'SuperAdmin', 'new_admin', 'new_pass', 1, 0), 
+                                        
+                                        array(BAD_DATA, 'Anonymous', 'ContestAdmin', 'new_contestAdmin', 'new_pass', 1, 0),     //ok
+                                        array(BAD_DATA, 'Anonymous', 'ContestAdmin', 'contestAdmin', 'pass', 1, 0),          //already registered
+                                        array(BAD_DATA, 'Anonymous', 'ContestAdmin', 'new_contestAdmin', 'new_pass', 0, 0),  //correct: wrong contestID
+                                        array(BAD_DATA, 'Anonymous', 'ContestAdmin', '', 'pass', 1, 0),                      //bad login
+                                        array(BAD_DATA, 'Anonymous', 'ContestAdmin', null, 'pass', 1, 0),                    //bad login
+
+                                        array(GOOD_DATA, 'Anonymous', 'Participant', 'new_participant', 'new_pass', 2),     //ok
+                                        array(BAD_DATA, 'Anonymous', 'Participant', 'participant', 'pass', 2, 0),          //already registered
+                                        array(BAD_DATA, 'Anonymous', 'Participant', 'new_participant', 'new_pass', 1, 0),     //wrong contest id
+                                        array(BAD_DATA, 'Anonymous', 'Participant', 'participant', 'pass', 1, 0),          //wrong contest id
+                                        array(BAD_DATA, 'Anonymous', 'Participant', 'new_participant', 'new_pass', 0, 0),  //correct: wrong contestID
+                                        array(BAD_DATA, 'Anonymous', 'Participant', '', 'pass', 2, 0),                     //bad login
+                                        array(BAD_DATA, 'Anonymous', 'Participant', null, 'pass', 2, 0),                   //bad login
+
+                                        array(BAD_DATA, 'Anonymous', 'asdf', null, 'pass', 1, 0),                          //bad whom user type
+                                         )
         );
                                       
     public static function getData($name)
