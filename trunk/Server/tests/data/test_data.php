@@ -131,7 +131,16 @@ class TestData
                                         array(BAD_DATA, 'Anonymous', 'Participant', null, 'pass', 2, 0),                   //bad login
 
                                         array(BAD_DATA, 'Anonymous', 'asdf', null, 'pass', 1, 0),                          //bad whom user type
-                                         )
+                                         ),
+         'disconnectContest' => array (
+                                           array(GOOD_DATA, 'SuperAdmin'),
+                                           array(GOOD_DATA, 'ContestAdmin'),
+                                           array(GOOD_DATA, 'Participant'),
+                                           array(BAD_DATA, 'Anonymous'),
+                                           array(BAD_DATA, 'other', 'empty session id'),
+                                           array(BAD_DATA, 'other', ''),                                           
+                                           array(BAD_DATA, 'other', 42),                                                                                     
+                                      ),
         );
                                       
     public static function getData($name)
