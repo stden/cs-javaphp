@@ -117,7 +117,7 @@ abstract class DCESWithAllRolesTestCase extends DCESWithSuperAdminTestCase {
     }
 }
 
-abstract class DCESTwoDatabasesWithAllRoles extends DCESWithAllRolesTestCase {
+abstract class DCESTwoContestsWithAllRoles extends DCESWithAllRolesTestCase {
     
     protected $contestID2;
     

@@ -1,7 +1,7 @@
 <?php
     //TODO: for all fail responses related to 0-contest use code '16'
     
-class RegisterToContestTestCase extends DCESTwoDatabasesWithAllRoles
+class RegisterToContestTestCase extends DCESTwoContestsWithAllRoles
 {
     public function setUp()
     {
