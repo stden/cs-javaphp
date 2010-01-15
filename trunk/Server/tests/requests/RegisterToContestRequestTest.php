@@ -1,5 +1,4 @@
 <?php
-    //TODO: for all fail responses related to 0-contest use code '16'
     
 class RegisterToContestTestCase extends DCESTwoContestsWithAllRoles
 {
@@ -7,12 +6,6 @@ class RegisterToContestTestCase extends DCESTwoContestsWithAllRoles
     {
         parent::setUp();
     }
-    
-    /*
-    public function testSuperAdminRegisterToContest()
-    {
-        
-    }*/
     
     /**
     * @dataProvider userDataProvider 
@@ -60,11 +53,6 @@ class RegisterToContestTestCase extends DCESTwoContestsWithAllRoles
         else 
             $this->assertEquals(createFailRes($errNo), $res);
     }
-    
-    /*public function testCannotAddSuperAdminToAnotherContest() 
-    {
-
-    }*/
 
     public function userDataProvider()
     {

@@ -1,13 +1,6 @@
 <?php
 class RegisterToContestTestCase extends DCESWithAllRolesTestCase
 {
-    /*
-    public function setUp()
-    {
-        parent::setUp();
-    }
-    */
-   
    /**
     * @dataProvider disconnectionDataProvider
     */   
