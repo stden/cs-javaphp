@@ -23,4 +23,25 @@ function createUser($login, $pass, $type = 'Participant', $dataValue = array())
     return $user;
 }
 
+function createConnectToContestReq($l, $p, $contestID)
+{
+    $req = new ConnectToContestRequest();
+     
+     $req->contestID = $contestID;
+     $req->login = $l;
+     $req->password = $p;
+     
+     return $req;
+}
+
+function fillObjWithArray($name, $ar)
+{
+    $res = new $name();
+    
+    foreach($ar as $prop_name => $value)
+        $res->$prop_name = $value;
+    
+    return $res;
+}
+
 ?>

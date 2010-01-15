@@ -115,6 +115,20 @@ abstract class DCESWithAllRolesTestCase extends DCESWithSuperAdminTestCase {
         
         $this->pConnect = RequestSender::send($p_req);
     }
+    
+    protected function adjustContest($params) {
+        //adjust contest
+        $req = new AdjustContestRequest();
+        $req->sessionID = $this->sessionID;
+        
+        foreach($params as $param => $value)
+            $req->contest->$param = $value;
+
+        $req->contest->contestID = $this->contestID;
+        
+        $res = RequestSender::send($req);
+        $this->assertEquals('AdjustContestResponse', get_class($res));
+    }
 }
 
 abstract class DCESTwoContestsWithAllRoles extends DCESWithAllRolesTestCase {
