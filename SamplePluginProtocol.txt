@@ -1,7 +1,10 @@
 SendSolution:
 	Req:	answer=<Решение>
-	Res:	status=[answer accepted, answer format error, no submissions left, wrong answer, answer submitted]
+	Res:	
+status=[answer accepted, answer format error, no submissions left, wrong answer, answer submitted]
 		submissions left = <-1 (~+inf) .. N>
 		
 
 Mock-up server (like TestSamplePlugin) with random server response and logging of Req & Res
+
+Checker

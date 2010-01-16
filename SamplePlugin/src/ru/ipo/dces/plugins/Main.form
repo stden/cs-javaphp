@@ -9,7 +9,7 @@
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:20dlu:noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
-    <rowspec value="center:max(d;4px):grow"/>
+    <rowspec value="center:20dlu:noGrow"/>
     <colspec value="fill:0dlu:noGrow"/>
     <colspec value="left:4dlu:noGrow"/>
     <colspec value="fill:40dlu:noGrow"/>

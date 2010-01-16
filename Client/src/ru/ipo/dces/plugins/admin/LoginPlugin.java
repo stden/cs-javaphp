@@ -63,9 +63,10 @@ public class LoginPlugin extends JPanel implements Plugin {
     setNoSelfRegistration();
 
     //set default login/pass
-    loginEdit.setText("admin");
-    passwordEdit.setText("pass");
-    loginAsAdminCheckBox.setSelected(true);
+    
+    //loginEdit.setText("admin");
+    //passwordEdit.setText("pass");
+    //loginAsAdminCheckBox.setSelected(true);
   }
 
   private void setNoSelfRegistration() {
