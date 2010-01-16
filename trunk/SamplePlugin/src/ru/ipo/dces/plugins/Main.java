@@ -237,7 +237,7 @@ public class Main extends JPanel implements Plugin {
    */
   private void $$$setupUI$$$() {
     createUIComponents();
-    pluginPanel.setLayout(new FormLayout("fill:0dlu:noGrow,left:4dlu:noGrow,fill:40dlu:noGrow,left:4dlu:noGrow,fill:140dlu:grow,left:4dlu:noGrow,fill:60dlu:noGrow,left:4dlu:noGrow,fill:0dlu:noGrow", "center:max(d;0px):noGrow,top:4dlu:noGrow,center:12dlu:noGrow,top:4dlu:noGrow,center:80dlu:grow,top:4dlu:noGrow,center:20dlu:noGrow,top:4dlu:noGrow,center:max(d;4px):grow"));
+    pluginPanel.setLayout(new FormLayout("fill:0dlu:noGrow,left:4dlu:noGrow,fill:40dlu:noGrow,left:4dlu:noGrow,fill:140dlu:grow,left:4dlu:noGrow,fill:60dlu:noGrow,left:4dlu:noGrow,fill:0dlu:noGrow", "center:max(d;0px):noGrow,top:4dlu:noGrow,center:12dlu:noGrow,top:4dlu:noGrow,center:80dlu:grow,top:4dlu:noGrow,center:20dlu:noGrow,top:4dlu:noGrow,center:20dlu:noGrow"));
     submitButton = new JButton();
     submitButton.setText("Ответить");
     CellConstraints cc = new CellConstraints();

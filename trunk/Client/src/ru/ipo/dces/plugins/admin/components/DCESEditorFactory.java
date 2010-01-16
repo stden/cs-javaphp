@@ -108,7 +108,7 @@ public class DCESEditorFactory extends PropertyEditorRegistry {
           final JComponent r = (JComponent) renderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
           final PluginValue pluginValue = val2plval.get(value);
           //TODO write description in some window instead of sout
-          System.out.println(pluginValue.getDescription());
+          //System.out.println(pluginValue.getDescription());
 
           return r;
         }
