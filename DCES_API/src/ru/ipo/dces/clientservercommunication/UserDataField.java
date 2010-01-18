@@ -14,7 +14,7 @@ public class UserDataField {
   /**
    * Имя поля. Например, "школа" или "класс" или "e-mail"
    */
-  @PHPDefaultValue("name")
+  @PHPDefaultValue("'name'")
   public String data;
 
   /**
