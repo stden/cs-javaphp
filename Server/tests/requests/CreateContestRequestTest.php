@@ -96,7 +96,7 @@ class CreateContestRequestTestCase extends DCESWithAllRolesTestCase {
         $req = new CreateContestRequest();
         $cd = new ContestDescription();
         
-        $req->sessionID = TestData::genUnicodeStr(rand(1, 48));
+        $req->sessionID = TestData::genUnicodeStr(rand(1, 24));
         $req->contest = $cd;
         
         $res = RequestSender::send($req);
@@ -144,7 +144,7 @@ class CreateContestRequestTestCase extends DCESWithAllRolesTestCase {
             
             $maxContestDuration = rand(1, ($i % 2 == 1) ? $finish - $start : $int);
             
-            $res[] = array(GOOD_DATA, $i % 2 == 1 ? TRUE : false, $start, $finish, $contestEndingStart, $contestEndingFinish, $maxContestDuration);
+            $res[] = array(GOOD_DATA, $i % 2 == 1 ? true : false, $start, $finish, $contestEndingStart, $contestEndingFinish, $maxContestDuration);
         }
         
         //generate 'bad' data
@@ -174,7 +174,7 @@ class CreateContestRequestTestCase extends DCESWithAllRolesTestCase {
     
     public function resultsAccessPolicyDataProvider()
     {
-        $res = TestData::getData('resultsAccessPolicy');
+        $res = TestData::getData('resultsAccessPolicyData');
         
         $input = TestData::getData('accessPermission');
 
@@ -188,7 +188,7 @@ class CreateContestRequestTestCase extends DCESWithAllRolesTestCase {
     
     public function registrationTypeDataProvider()
     {
-        return TestData::getData('registrationType');    
+        return TestData::getData('registrationTypeData');    
     }
     
     public function userDataFieldDataProvider()
