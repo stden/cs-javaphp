@@ -5,6 +5,11 @@ abstract class DCESBaseTestCase extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         RequestSender::send(new KillDBRequest());
+    }
+    
+    public function assertClassEquals($golden, $real)
+    {
+        $this->assertEquals(get_class($golden), get_class($real));
     }    
     
     public function fillRequest($name, $params)
@@ -16,11 +21,6 @@ abstract class DCESBaseTestCase extends PHPUnit_Framework_TestCase
         
         return $req;
     }
-    
-    /*public function testEverythingFails($name, $params, $code)
-    {
-        $this->assertEquals(createFailRes($code), $this->fillRequest($name, $params));
-    }*/
 }
 
 abstract class DCESWithDBTestCase extends DCESBaseTestCase
@@ -52,6 +52,17 @@ abstract class DCESWithSuperAdminTestCase extends DCESWithDBTestCase {
         
         $this->sessionID = $this->connect->sessionID;
         $this->superadmin = $this->connect->user;
+    }
+    
+    public function apiCreateContest($params) {
+        $req = $this->fillRequest('CreateContestRequest', $params);
+        $req->sessionID = $this->sessionID;
+        
+        $res = RequestSender::send($req);
+        
+        $this->assertClassEquals(new CreateContestResponse(), $res);
+        $this->assertNotEquals(null, $res->createdContestID);
+        $this->assertNotEquals('0', $res->createdContestID);
     }
 }
 
@@ -148,7 +159,6 @@ abstract class DCESTwoContestsWithAllRoles extends DCESWithAllRolesTestCase {
         $req->contest = $cd;
         
         $this->contestID2 = RequestSender::send($req)->createdContestID;
-        
     }
 }
  

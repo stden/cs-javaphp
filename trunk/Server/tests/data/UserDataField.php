@@ -5,7 +5,7 @@ class UserDataField{
     public $showInResult;
 
     function __construct(){
-        $this->data = name;
+        $this->data = 'name';
         $this->compulsory = true;
         $this->showInResult = true;
     }

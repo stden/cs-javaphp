@@ -13,20 +13,23 @@ class TestData
     const MAX_LP_LENGTH = 24;
     
     private static $data = array(
+        
+        'registrationType' =>       array ('ByAdmins', 'Self'),
+        'accessPermission' =>       array ('FullAccess', 'NoAccess', 'OnlySelfResults'),
+        
         'userTestData' =>           array('SuperAdmin' => array('admin', 'superpassword'),
                                           'ContestAdmin' => array('contestAdmin', 'pass'),
                                           'Participant' => array('participant', 'pass')),
         
-        'accessPermission' =>       array ('FullAccess', 'NoAccess', 'OnlySelfResults'),
         
-        'resultsAccessPolicy' =>    array(
+        'resultsAccessPolicyData' =>    array(
                                         array (BAD_DATA, null, null, null),
                                         array (BAD_DATA, 42, 42, 42),
                                         array (BAD_DATA, '', '', ''),
                                         array (BAD_DATA, 42, '', null),
                                          ),
                                          
-         'registrationType' =>      array(
+         'registrationTypeData' =>      array(
                                         array(BAD_DATA, null), 
                                         array(BAD_DATA, 42), 
                                         array(BAD_DATA, ''),
