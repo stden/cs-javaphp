@@ -12,7 +12,7 @@ abstract class DCESBaseTestCase extends PHPUnit_Framework_TestCase
         $this->assertEquals(get_class($golden), get_class($real));
     }    
     
-    public function fillRequest($name, $params)
+    public function fillRequest($name, $params = array())
     {
         $req = new $name();
         
@@ -54,7 +54,7 @@ abstract class DCESWithSuperAdminTestCase extends DCESWithDBTestCase {
         $this->superadmin = $this->connect->user;
     }
     
-    public function apiCreateContest($params) {
+    public function apiCreateContest($params = array()) {
         $req = $this->fillRequest('CreateContestRequest', $params);
         $req->sessionID = $this->sessionID;
         
