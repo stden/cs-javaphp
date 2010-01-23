@@ -76,16 +76,16 @@ class AvailableContestsRemoveContestTestCase extends DCESWithSuperAdminTestCase 
     
     public function testContestsListChangesAfterRemove()
     {
-        $del_num = rand(1, sizeof($this->CDs));
+        $num_of_deleted = rand(1, sizeof($this->CDs));
         
-        for($i = 0; $i < $del_num; $i++) {
+        for($i = 0; $i < $num_of_deleted; $i++) {
          
             $id = rand(0, sizeof($this->CDs) - 1);
          
             $this->apiRemoveContest(array('contestID'=>$this->CDs[$id]->contestID));
          
             unset($this->CDs[$id]);
-            $this->CDs = array_values($this->CDs);
+            $this->CDs = array_values($this->CDs); //re-index array
         }
             
         $req = new AvailableContestsRequest();
