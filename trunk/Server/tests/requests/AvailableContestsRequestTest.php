@@ -1,6 +1,6 @@
 <?php
 
-class AvailableContestsTestCase extends DCESWithDBTestCase {
+class AvailableContestsTestCase extends DCESWithSuperAdminTestCase {
     
     protected $CDs = array();
     
@@ -14,30 +14,34 @@ class AvailableContestsTestCase extends DCESWithDBTestCase {
             $cd = new ContestDescription();
             
             //create contest descr
-            $cd->name = TestData::genUnicodeStr(TestData::MAX_DATA_LENGTH);
-            $cd->description = TestData::genUnicodeStr(TestData::MAX_DATA_LENGTH);
+            
+            //$cd->name = TestData::genUnicodeStr(TestData::MAX_DATA_LENGTH);
+            $cd->name = TestData::genUnicodeStr(10);
+            $cd->description = TestData::genUnicodeStr(20);
+            //$cd->description = TestData::genUnicodeStr(TestData::MAX_DATA_LENGTH);
             
             $int = time()/TestData::TIME_SCALE;
             
             $cd->start = time() + rand(-$int, $int);
-            $cd->finish = $start + rand(1, $int);
+            $cd->finish = $cd->start + rand(1, $int);
             $cd->registrationType = TestData::getRandomValue(TestData::getData('registrationType'));
             
             $ct = new ContestTiming();
-            $ct->contestEndingStart = rand(1, ($finish - $start)/60);
+            $ct->contestEndingStart = rand(1, ($cd->finish - $cd->start)/60);
             $ct->contestEndingFinish = rand(1, $int);
-            $ct->maxContestDuration = rand(1, ($i % 2 == 1) ? $finish - $start : $int);
+            $ct->maxContestDuration = rand(1, ($i % 2 == 1) ? $cd->finish - $cd->start : $int);
             $ct->selfContestStart = $i % 2 == 1 ? true : false;
             
             $cd->contestTiming = $ct;
             
             $udfs = array();
-            for($i = 0; $i < rand(1, TestData::MAX_USER_DATA_FIELDS); $i++)
+            for($j = 0; $j < rand(1, TestData::MAX_USER_DATA_FIELDS); $j++)
             {
                 $udf = new UserDataField();
                 
                 $udf->compulsory = rand(0, 1) ? true : false;
-                $udf->data = TestData::genUnicodeStr(TestData::MAX_DATA_LENGTH);
+                //$udf->data = TestData::genUnicodeStr(TestData::MAX_DATA_LENGTH);
+                $udf->data = TestData::genUnicodeStr(5);
                 $udf->showInResult = rand(0, 1) ? true: false;
                 
                 $udfs[] = $udf;
@@ -54,13 +58,44 @@ class AvailableContestsTestCase extends DCESWithDBTestCase {
   
             $cd->resultsAccessPolicy = $rap;          
             
+            //create contest with cd data
+            $res = $this->apiCreateContest(array('contest'=>$cd));
+            
+            $cd->contestID = $res->createdContestID;
             //copy object to array
             $this->CDs[] = unserialize(serialize($cd));
-                                
-            //create contest with cd data
-            $this->apiCreateContest(array('contestDescription'=>$cd));
         }
-    }        
+    }
+    
+    public function testCreatedContestsArePresent()
+    {
+        $req = new AvailableContestsRequest();
+        
+        $res = RequestSender::send($req);
+        
+        $this->assertEquals(array_values($this->CDs), $res->contests);
+    }
+    
+    public function testContestsListChangesAfterRemove()
+    {
+        $del_num = rand(1, sizeof($this->CDs));
+        
+        for($i = 0; $i < $del_num; $i++) {
+         
+            $id = rand(0, sizeof($this->CDs) - 1);
+         
+            $this->apiRemoveContest(array('contestID'=>$this->CDs[$id]->contestID));
+         
+            unset($this->CDs[$id]);
+            $this->CDs = array_values($this->CDs);
+        }
+            
+        $req = new AvailableContestsRequest();
+        
+        $res = RequestSender::send($req);
+        
+        $this->assertEquals(array_values($this->CDs), $res->contests);
+    }    
 }
 
 ?>

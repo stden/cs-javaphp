@@ -16,7 +16,7 @@ abstract class DCESBaseTestCase extends PHPUnit_Framework_TestCase
     {
         $req = new $name();
         
-        foreach($params as $field =>$value)
+        foreach($params as $field => $value)
             $req->$field = $value;
         
         return $req;
@@ -63,6 +63,15 @@ abstract class DCESWithSuperAdminTestCase extends DCESWithDBTestCase {
         $this->assertClassEquals(new CreateContestResponse(), $res);
         $this->assertNotEquals(null, $res->createdContestID);
         $this->assertNotEquals('0', $res->createdContestID);
+        
+        return $res;
+    }
+    
+    public function apiRemoveContest($params) {
+        $req = $this->fillRequest('RemoveContestRequest', $params);
+        $req->sessionID = $this->sessionID;
+        
+        $this->assertEquals(new AcceptedResponse(), RequestSender::send($req));
     }
 }
 
