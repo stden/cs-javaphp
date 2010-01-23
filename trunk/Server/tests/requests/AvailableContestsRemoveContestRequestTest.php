@@ -1,6 +1,6 @@
 <?php
 
-class AvailableContestsTestCase extends DCESWithSuperAdminTestCase {
+class AvailableContestsRemoveContestTestCase extends DCESWithSuperAdminTestCase {
     
     protected $CDs = array();
     
@@ -15,10 +15,8 @@ class AvailableContestsTestCase extends DCESWithSuperAdminTestCase {
             
             //create contest descr
             
-            //$cd->name = TestData::genUnicodeStr(TestData::MAX_DATA_LENGTH);
-            $cd->name = TestData::genUnicodeStr(10);
-            $cd->description = TestData::genUnicodeStr(20);
-            //$cd->description = TestData::genUnicodeStr(TestData::MAX_DATA_LENGTH);
+            $cd->name = TestData::genUnicodeStr(TestData::MAX_DATA_LENGTH);
+            $cd->description = TestData::genUnicodeStr(TestData::MAX_DATA_LENGTH);
             
             $int = time()/TestData::TIME_SCALE;
             
@@ -40,7 +38,7 @@ class AvailableContestsTestCase extends DCESWithSuperAdminTestCase {
                 $udf = new UserDataField();
                 
                 $udf->compulsory = rand(0, 1) ? true : false;
-                //$udf->data = TestData::genUnicodeStr(TestData::MAX_DATA_LENGTH);
+                $udf->data = TestData::genUnicodeStr(TestData::MAX_DATA_LENGTH);
                 $udf->data = TestData::genUnicodeStr(5);
                 $udf->showInResult = rand(0, 1) ? true: false;
                 
