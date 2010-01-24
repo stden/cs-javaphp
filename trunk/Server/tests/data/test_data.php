@@ -165,7 +165,7 @@ class TestData
         return $res;
     }                        
     
-    public function genASCIIStr($length)
+    public static function genASCIIStr($length)
     {
         $res = '';
         
@@ -178,7 +178,78 @@ class TestData
     public static function gB()
     {
         return rand(0,1) ? TRUE : FALSE;
-    }              
+    }  
+    
+    public static function genContestDecription($isSelfStart = false)
+    {
+        $cd = new ContestDescription();
+            
+        //create contest descr
+        
+        $cd->name = TestData::genUnicodeStr(TestData::MAX_DATA_LENGTH);
+        $cd->description = TestData::genUnicodeStr(TestData::MAX_DATA_LENGTH);
+        
+        $int = time()/TestData::TIME_SCALE;
+        
+        $cd->start = time() + rand(-$int, $int);
+        $cd->finish = $cd->start + rand(1, $int);
+        $cd->registrationType = TestData::getRandomValue(TestData::getData('registrationType'));
+        
+        $ct = new ContestTiming();
+        $ct->contestEndingStart = rand(1, ($cd->finish - $cd->start)/60);
+        $ct->contestEndingFinish = rand(1, $int);
+        $ct->maxContestDuration = rand(1, $isSelfStart ? $cd->finish - $cd->start : $int);
+        $ct->selfContestStart = $isSelfStart;
+        
+        $cd->contestTiming = $ct;
+        
+        $udfs = array();
+        for($j = 0; $j < rand(1, TestData::MAX_USER_DATA_FIELDS); $j++)
+        {
+            $udf = new UserDataField();
+            
+            $udf->compulsory = rand(0, 1) ? true : false;
+            $udf->data = TestData::genUnicodeStr(TestData::MAX_DATA_LENGTH);
+            $udf->showInResult = rand(0, 1) ? true: false;
+            
+            $udfs[] = $udf;
+        }
+        
+        $cd->data = $udfs;
+        
+        $ar = TestData::getData('accessPermission');
+
+        $rap = new ResultsAccessPolicy();
+        $rap->afterContestPermission = TestData::getRandomValue($ar);
+        $rap->contestEndingPermission = TestData::getRandomValue($ar);
+        $rap->contestPermission = TestData::getRandomValue($ar);
+
+        $cd->resultsAccessPolicy = $rap;
+        
+        return $cd;
+    }            
+
+    public static function genUserDescription($dataFieldsQnt) {
+        
+        if($dataFieldsQnt < 0) throw new InvalidArgumentException();
+        
+        $ud = new UserDescription();
+        
+        $ud->login = TestData::genUnicodeStr(TestData::MAX_DATA_LENGTH);
+        $ud->password = TestData::genUnicodeStr(rand(1, 24));
+        $ud->userType = TestData::getRandomValue(array('Participant', 'ContestAdmin'));
+        
+        for($i = 0; $i < $dataFieldsQnt; $i++)
+            $ud->dataValue[] = TestData::genUnicodeStr(TestData::MAX_DATA_LENGTH);    
+        
+        return $ud;
+    }
 }
+
+
+
+
+
+
 
 ?>

@@ -6,7 +6,7 @@ REM phpunit --verbose --bootstrap main.php .
 
 ECHO ON 
 
-phpunit --log-junit dces-tests.log --bootstrap main.php requests/AvailableContestsRequestTest.php
+phpunit --log-junit dces-tests.log --bootstrap main.php requests/AvailableContestsRemoveContestRequestTest.php
 
 
 

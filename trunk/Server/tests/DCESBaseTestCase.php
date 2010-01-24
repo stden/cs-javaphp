@@ -54,7 +54,7 @@ abstract class DCESWithSuperAdminTestCase extends DCESWithDBTestCase {
         $this->superadmin = $this->connect->user;
     }
     
-    public function apiCreateContest($params = array()) {
+    protected function apiCreateContest($params = array()) {
         $req = $this->fillRequest('CreateContestRequest', $params);
         $req->sessionID = $this->sessionID;
         
@@ -89,14 +89,13 @@ abstract class DCESWithAllRolesTestCase extends DCESWithSuperAdminTestCase {
         $td = TestData::getData('userTestData');
         
         //creating sample contest
-        $req = new CreateContestRequest();
-        $req->sessionID = $this->sessionID;
-        $req->contest = new ContestDescription();
+        $cd = TestData::genContestDecription();
+        $this->contestID = $this->apiCreateContest(array('contest'=>$cd))->createdContestID;
         
-        $this->contestID = RequestSender::send($req)->createdContestID;
-        
+        //store columns info
+        $this->userDataColumns = unserialize(serialize($cd->data));
+         
         //creating sample contest admin
-        
         $req = new RegisterToContestRequest();
         $req->sessionID = $this->connect->sessionID;
         $req->contestID = $this->contestID;
@@ -134,6 +133,9 @@ abstract class DCESWithAllRolesTestCase extends DCESWithSuperAdminTestCase {
         $p_req->contestID = $this->contestID;
         
         $this->pConnect = RequestSender::send($p_req);
+    }
+    
+    protected function apiRegisterUser() {
     }
     
     protected function adjustContest($params) {
