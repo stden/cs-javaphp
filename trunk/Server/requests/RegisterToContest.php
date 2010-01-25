@@ -6,9 +6,9 @@
     //get db connection
     $con = connectToDB();
 
-    //get user_id or die, if session is invalid    
+    //get user_id or die, if session is invalid
     if (is_null($request->sessionID)) {
-      if (!is_numeric($request->contestID)) throwBusinessLogicError(14);      
+      if (!is_numeric($request->contestID)) throwBusinessLogicError(14);
       $contest_id = (int)($request->contestID);
       $request_user_type = '__Anonymous';
     }
@@ -27,24 +27,29 @@
         throwBusinessLogicError(0);
     }
 
-    //get contest registration type
-    $contest_rows = mysql_query(
-                      sprintf("SELECT * FROM ${prfx}contest WHERE id=%s", Data::quote_smart($contest_id))
-                    , $con) or throwServerProblem(29, mysql_error());
-    $contest_row = mysql_fetch_array($contest_rows) or throwBusinessLogicError(14);                 
+    //test permissions
+    if ($contest_id != 0) {
+    	$contest_rows = mysql_query(
+            	          sprintf("SELECT * FROM ${prfx}contest WHERE id=%s", Data::quote_smart($contest_id))
+        	            , $con) or throwServerProblem(29, mysql_error());
+    	$contest_row = mysql_fetch_array($contest_rows) or throwBusinessLogicError(14);              
 
-    //test if this contest gets users only by admins
-    $contest_settings = @unserialize($contest_row['settings']);
-    if ($contest_settings->registrationType === 'ByAdmins')
-      if ($request_user_type !== "ContestAdmin" && $request_user_type !== "SuperAdmin")
-        throwBusinessLogicError(0);
+	    //test if this contest gets users only by admins
+    	$contest_settings = @unserialize($contest_row['settings']);
+    	if ($contest_settings->registrationType === 'ByAdmins')
+     	 if ($request_user_type !== "ContestAdmin" && $request_user_type !== "SuperAdmin")
+    	    throwBusinessLogicError(0);
+  	} else {
+  		if ($request_user_type !== "ContestAdmin")
+  			throwBusinessLogicError(0);
+  	}
 
     //get user from request
     $u = $request->user;    
 
     //test that superadmins are registered only for 0 contest
     if ($u->userType === 'SuperAdmin' && $contest_id != 0)
-      throwBusinessLogicError(18);       
+      throwBusinessLogicError(18);
 
     //test that there is no user with the same login in this contest
     $users_with_the_same_login = mysql_query(
