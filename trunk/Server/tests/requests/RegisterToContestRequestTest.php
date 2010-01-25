@@ -58,6 +58,8 @@ class RegisterToContestTestCase extends DCESTwoContestsWithAllRoles
     {
         $res = TestData::getData('regToContest');
 
+        //TODO: add bad data generator for super-long passwords and logins
+
         return $res;    
     }    
     
