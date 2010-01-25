@@ -8,9 +8,10 @@ class TestData
     const TIME_SCALE = 100;
     const RANDOM_TESTS_NUMBER = 20;
     const MAX_USER_DATA_FIELDS = 10;
-    const MAX_DATA_LENGTH = 255;
-    const MIN_LP_LENGTH = 5;
+    const MAX_DATA_LENGTH = 5;
+    const MIN_LP_LENGTH = 255;
     const MAX_LP_LENGTH = 24;
+    const ALLOWED_UNICODE_LP_LENGTH = 8;
     
     private static $data = array(
         
@@ -180,6 +181,16 @@ class TestData
         return rand(0,1) ? TRUE : FALSE;
     }  
     
+    public static function genStrArray($size, $length)
+    {
+        $res = array();
+        
+        for($i = 0; $i < $size; $i++)
+            $res[] = TestData::genUnicodeStr($length);
+            
+        return $res;     
+    }
+    
     public static function genContestDecription($isSelfStart = false)
     {
         $cd = new ContestDescription();
@@ -235,8 +246,8 @@ class TestData
         
         $ud = new UserDescription();
         
-        $ud->login = TestData::genUnicodeStr(TestData::MAX_DATA_LENGTH);
-        $ud->password = TestData::genUnicodeStr(rand(1, 24));
+        $ud->login = TestData::genUnicodeStr(TestData::ALLOWED_UNICODE_LP_LENGTH);
+        $ud->password = TestData::genUnicodeStr(TestData::ALLOWED_UNICODE_LP_LENGTH);
         $ud->userType = TestData::getRandomValue(array('Participant', 'ContestAdmin'));
         
         for($i = 0; $i < $dataFieldsQnt; $i++)

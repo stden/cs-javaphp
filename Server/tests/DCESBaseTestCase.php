@@ -67,7 +67,7 @@ abstract class DCESWithSuperAdminTestCase extends DCESWithDBTestCase {
         return $res;
     }
     
-    public function apiRemoveContest($params) {
+    public function apiRemoveContest($params = array()) {
         $req = $this->fillRequest('RemoveContestRequest', $params);
         $req->sessionID = $this->sessionID;
         
@@ -96,24 +96,36 @@ abstract class DCESWithAllRolesTestCase extends DCESWithSuperAdminTestCase {
         $this->userDataColumns = unserialize(serialize($cd->data));
          
         //creating sample contest admin
-        $req = new RegisterToContestRequest();
+        /*$req = new RegisterToContestRequest();
         $req->sessionID = $this->connect->sessionID;
         $req->contestID = $this->contestID;
         
         $req->user = createUser($td['ContestAdmin'][0], $td['ContestAdmin'][1], 'ContestAdmin');
         
         $this->assertEquals(new AcceptedResponse(), RequestSender::send($req));
-            
+        */
+        
+        $this->apiRegisterUser(array('user'=> createUser($td['ContestAdmin'][0], 
+                                                         $td['ContestAdmin'][1], 
+                                                         'ContestAdmin', 
+                                                         TestData::genStrArray(sizeof($this->userDataColumns), TestData::MAX_DATA_LENGTH))));
+                                                   
         //create sample user with type Participant
     
-        $req = new RegisterToContestRequest();
+        /*$req = new RegisterToContestRequest();
         $req->sessionID = $this->connect->sessionID;
         $req->contestID = $this->contestID;
         
         $req->user = createUser($td['Participant'][0], $td['Participant'][1]); 
 
         $this->assertEquals(new AcceptedResponse(), RequestSender::send($req));
+        */
         
+        $this->apiRegisterUser(array('user'=> createUser($td['Participant'][0], 
+                                                         $td['Participant'][1], 
+                                                         'Participant', 
+                                                         TestData::genStrArray(sizeof($this->userDataColumns), TestData::MAX_DATA_LENGTH))));
+                    
         //create contest admin connect
         
         $ca_req = new ConnectToContestRequest();
@@ -135,7 +147,24 @@ abstract class DCESWithAllRolesTestCase extends DCESWithSuperAdminTestCase {
         $this->pConnect = RequestSender::send($p_req);
     }
     
-    protected function apiRegisterUser() {
+    protected function apiRegisterUser($params = array()) {
+        $req = $this->fillRequest('RegisterToContestRequest', $params);
+        
+        if(!isset($params['contestID'])) $req->contestID = $this->contestID; 
+        if(!isset($params['sessionID'])) $req->sessionID = $this->sessionID;
+        
+        $res = RequestSender::send($req);
+        
+        $this->assertEquals(new AcceptedResponse(), $res);
+    }
+    
+    protected function apiRemoveUser($userID)
+    {
+        $req = $this->fillRequest('RemoveUserRequest', array('sessionID'=>$this->sessionID, 'userID'=>$userID));
+        
+        $res = RequestSender::send($req);
+        
+        $this->assertEquals(new AcceptedResponse(), $res);
     }
     
     protected function adjustContest($params) {
