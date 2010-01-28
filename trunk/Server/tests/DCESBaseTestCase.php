@@ -11,16 +11,6 @@ abstract class DCESBaseTestCase extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals(get_class($golden), get_class($real));
     }    
-    
-    public function fillRequest($name, $params = array())
-    {
-        $req = new $name();
-        
-        foreach($params as $field => $value)
-            $req->$field = $value;
-        
-        return $req;
-    }
 }
 
 abstract class DCESWithDBTestCase extends DCESBaseTestCase
@@ -55,7 +45,7 @@ abstract class DCESWithSuperAdminTestCase extends DCESWithDBTestCase {
     }
     
     protected function apiCreateContest($params = array()) {
-        $req = $this->fillRequest('CreateContestRequest', $params);
+        $req = TestData::fillRequest('CreateContestRequest', $params);
         $req->sessionID = $this->sessionID;
         
         $res = RequestSender::send($req);
@@ -68,7 +58,7 @@ abstract class DCESWithSuperAdminTestCase extends DCESWithDBTestCase {
     }
     
     public function apiRemoveContest($params = array()) {
-        $req = $this->fillRequest('RemoveContestRequest', $params);
+        $req = TestData::fillRequest('RemoveContestRequest', $params);
         $req->sessionID = $this->sessionID;
         
         $this->assertEquals(new AcceptedResponse(), RequestSender::send($req));
@@ -148,7 +138,7 @@ abstract class DCESWithAllRolesTestCase extends DCESWithSuperAdminTestCase {
     }
     
     protected function apiRegisterUser($params = array()) {
-        $req = $this->fillRequest('RegisterToContestRequest', $params);
+        $req = TestData::fillRequest('RegisterToContestRequest', $params);
         
         if(!isset($params['contestID'])) $req->contestID = $this->contestID; 
         if(!isset($params['sessionID'])) $req->sessionID = $this->sessionID;
@@ -158,14 +148,31 @@ abstract class DCESWithAllRolesTestCase extends DCESWithSuperAdminTestCase {
         $this->assertEquals(new AcceptedResponse(), $res);
     }
     
-    protected function apiRemoveUser($userID)
+    protected function apiRemoveUser($params)
     {
-        $req = $this->fillRequest('RemoveUserRequest', array('sessionID'=>$this->sessionID, 'userID'=>$userID));
+        if(!isset($params['userID'])) throw new Exception('Could not find user ID in parameters');
+        
+        $req = TestData::fillRequest('RemoveUserRequest', $params);
+        
+        if(!isset($params['sessionID'])) $req->sessionID = $this->sessionID;
         
         $res = RequestSender::send($req);
         
         $this->assertEquals(new AcceptedResponse(), $res);
     }
+    
+    protected function apiGetUsers() {
+        $req = TestData::fillRequest('GetUsersRequest');
+        
+        $req->sessionID = $this->sessionID;
+        $req->contestID = $this->contestID;
+        
+        $res = RequestSender::send($req);
+        
+        $this->assertClassEquals(new GetUsersResponse(), $res);
+        
+        return $res->users;
+    }    
     
     protected function adjustContest($params) {
         //adjust contest
@@ -178,7 +185,7 @@ abstract class DCESWithAllRolesTestCase extends DCESWithSuperAdminTestCase {
         $req->contest->contestID = $this->contestID;
         
         $res = RequestSender::send($req);
-        $this->assertEquals('AdjustContestResponse', get_class($res));
+        $this->assertClassEquals(new AdjustContestResponse(), $res);
     }
 }
 

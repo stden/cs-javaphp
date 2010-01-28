@@ -103,6 +103,11 @@ switch(get_class($request)) {
 	  require("requests/AdjustPlugin.php");
 	  $result = processAdjustPluginRequest($request, 'server');
 	  break;
+      
+    case 'AdjustUserDataRequest':    	
+      require("requests/AdjustUserData.php");
+      $result = processAdjustUserDataRequest($request);
+      break;
 
 	case 'RemoveClientPluginRequest':
 	  require("requests/RemoveClientPlugin.php");

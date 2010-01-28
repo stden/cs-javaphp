@@ -5,6 +5,7 @@ class AdjustContestRequest{};
 class AdjustContestResponse{};
 class AdjustClientPluginRequest{};
 class AdjustServerPluginRequest{};
+class AdjustUserDataRequest{};
 class AvailableContestsRequest{};
 class AvailableContestsResponse{};
 class ChangePasswordRequest{};

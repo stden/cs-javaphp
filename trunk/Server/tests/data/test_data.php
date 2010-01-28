@@ -255,6 +255,16 @@ class TestData
         
         return $ud;
     }
+    
+    public static function fillRequest($name, $params = array())
+    {
+        $req = new $name();
+        
+        foreach($params as $field => $value)
+            $req->$field = $value;
+        
+        return $req;
+    }
 }
 
 
