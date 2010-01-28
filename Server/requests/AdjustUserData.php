@@ -30,13 +30,13 @@
 
     $queries = array();
     if (!is_null($request->login))
-        $queries['login'] = @serialize($request->login);
+        $queries['login'] = $request->login;
     if (!is_null($request->password))
-        $queries['password'] = @serialize($request->password);
+        $queries['password'] = $request->password;
     if (!is_null($request->userData))
         $queries['user_data'] = @serialize($request->userData);
     if (!is_null($request->newType))
-        $queries['user_type'] = @serialize($request->newType);
+        $queries['user_type'] = $request->newType;
 
     $q = composeUpdateQuery(
            "user",

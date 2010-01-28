@@ -7,7 +7,7 @@ REM phpunit --verbose --bootstrap main.php .
 ECHO ON 
 
 phpunit --log-junit dces-tests.log --bootstrap main.php requests/GetRemoveAdjustUsersRequestTest.php
-
+REM phpunit --log-junit dces-tests.log --bootstrap main.php requests/RegisterToContestRequestTest.php
 
 
 
