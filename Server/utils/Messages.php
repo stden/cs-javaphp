@@ -3,8 +3,7 @@
 class AcceptedResponse{};
 class AdjustContestRequest{};
 class AdjustContestResponse{};
-class AdjustClientPluginRequest{};
-class AdjustServerPluginRequest{};
+class AdjustPluginRequest{};
 class AdjustUserDataRequest{};
 class AvailableContestsRequest{};
 class AvailableContestsResponse{};
@@ -23,7 +22,7 @@ class DownloadPluginRequest{};
 class DownloadPluginResponse{};
 class ProblemDescription{};
 class RegisterToContestRequest{};
-class RemoveClientPluginRequest{};
+class RemovePluginRequest{};
 class RemoveContestRequest{};
 class RemoveUserRequest{};
 class RequestFailedResponse{};

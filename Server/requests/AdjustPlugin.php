@@ -4,11 +4,13 @@
     $prfx = $GLOBALS['dces_mysql_prefix'];
 
     $con = connectToDB();
-    $user_row = RequestUtils::testSession($request->sessionID);
+    $user_row = RequestUtils::testSession($request->sessionID);       
 
     //authorize
     if ($user_row['user_type'] !== 'SuperAdmin')
       throwBusinessLogicError(0);
+      
+    $plugin_type = $request->side === 'Client' ? 'client' : 'server';
 
     //test if there already is such plugin
     $where_clause = sprintf("alias=%s", Data::quote_smart($request->pluginAlias));
@@ -26,9 +28,7 @@
     if (!$modify && (is_null($request->pluginData) || is_null($request->description)))
       throwBusinessLogicError(1);
 
-    //TODO test pluginAlias to be secure
-    
-    $plugin_type = $request->side;
+    //TODO test pluginAlias to be secure      
 
     if ($plugin_type === 'client')
         $ext = '.jar';
