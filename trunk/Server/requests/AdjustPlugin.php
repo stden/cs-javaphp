@@ -1,6 +1,6 @@
 <?php
 
-  function processAdjustPluginRequest($request, $plugin_type) {
+  function processAdjustPluginRequest($request) {
     $prfx = $GLOBALS['dces_mysql_prefix'];
 
     $con = connectToDB();
@@ -27,6 +27,8 @@
       throwBusinessLogicError(1);
 
     //TODO test pluginAlias to be secure
+    
+    $plugin_type = $request->side;
 
     if ($plugin_type === 'client')
         $ext = '.jar';
