@@ -14,14 +14,14 @@ if (strpos($x, 'x=') === 0)
  $s_request = substr($x, 2);
 else
 {
-  echo "<b>DCES</b> пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n";  
+  echo "<b>DCES</b> Здесь был какой-то текст, который к сожалению, больше не прочитать из-за испорченной кодировки\n";  
   exit();  
 }
 
 //$s_request = prepare($_REQUEST['x']);
 
 //open log file
-if (isset($GLOBALS['dces_logging'])) {
+if ($GLOBALS['dces_logging']) {
   $log = fopen("messages.log", "a");
   fwrite($log, "request = $s_request\n");
 }
@@ -41,7 +41,7 @@ switch(get_class($request)) {
 
 	case 'ConnectToContestRequest':
 	  require("requests/ConnectToContest.php");
-      $result = processConnectToContestRequest($request);      
+      $result = processConnectToContestRequest($request);
 	  break;
 
 	case 'DisconnectRequest':
@@ -66,12 +66,12 @@ switch(get_class($request)) {
 
 	case 'RegisterToContestRequest':
 	  require("requests/RegisterToContest.php");
-	  $result = processRegisterToContestRequest($request);      
+	  $result = processRegisterToContestRequest($request);
 	  break;
 
-	case 'InstallClientPluginRequest':
-	  require("requests/InstallClientPlugin.php");
-	  $result = processInstallClientPluginRequest($request);
+	case 'DownloadPluginRequest':
+	  require("requests/DownloadPlugin.php");
+	  $result = processDownloadPluginRequest($request);
 	  break;
 
 	case 'CreateDataBaseRequest':
@@ -94,16 +94,11 @@ switch(get_class($request)) {
 	  $result = processRemoveContestRequest($request);
 	  break;
 
-	case 'AdjustClientPluginRequest':
+	case 'AdjustPluginRequest':
 	  require("requests/AdjustPlugin.php");
-	  $result = processAdjustPluginRequest($request, 'client');
+	  $result = processAdjustPluginRequest($request);
 	  break;
-
-	case 'AdjustServerPluginRequest':
-	  require("requests/AdjustPlugin.php");
-	  $result = processAdjustPluginRequest($request, 'server');
-	  break;
-      
+	  
     case 'AdjustUserDataRequest':    	
       require("requests/AdjustUserData.php");
       $result = processAdjustUserDataRequest($request);

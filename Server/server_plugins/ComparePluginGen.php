@@ -13,7 +13,8 @@ class ComparePluginGen extends ServerPlugin {
 
 	private function prepareString($s) {
 		$s = strtolower($s);
-		$s = preg_replace('/ /', '', $s);
+		$s = preg_replace('/[[:space:]]/', '', $s);
+                return $s;
 	}
 	
 	private function getRightAnswer($answer_data, $user_id) {
@@ -95,7 +96,7 @@ class ComparePluginGen extends ServerPlugin {
 		$ans = "";
 		$ind = 0;
 		for ($i = 0; $i < strlen($p); $i++) {
-			if ($p[$i] == ';') {
+			if ($p[$i] == '@') {
 				$ad["q_$ind"] = $ans;
 				$ans = "";
 				$ind ++;
