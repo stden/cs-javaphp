@@ -156,9 +156,9 @@ public class HttpServer implements ServerFacade {
         return doRequest(GetUsersResponse.class, r);
     }
 
-    public InstallClientPluginResponse doRequest(InstallClientPluginRequest r)
+    public DownloadPluginResponse doRequest(DownloadPluginRequest r)
             throws ServerReturnedError, GeneralRequestFailureException {
-        return doRequest(InstallClientPluginResponse.class, r);
+        return doRequest(DownloadPluginResponse.class, r);
     }
 
     public AcceptedResponse doRequest(RegisterToContestRequest r)
@@ -193,11 +193,7 @@ public class HttpServer implements ServerFacade {
         return doRequest(AcceptedResponse.class, r);
     }
 
-    public AcceptedResponse doRequest(AdjustClientPluginRequest r) throws ServerReturnedError, GeneralRequestFailureException {
-        return doRequest(AcceptedResponse.class, r);
-    }
-
-    public AcceptedResponse doRequest(AdjustServerPluginRequest r) throws ServerReturnedError, GeneralRequestFailureException {
+    public AcceptedResponse doRequest(AdjustPluginRequest r) throws ServerReturnedError, GeneralRequestFailureException {
         return doRequest(AcceptedResponse.class, r);
     }
 

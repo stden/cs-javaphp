@@ -174,9 +174,9 @@
 //    assertEquals("Contest #1", cdd.contest.name);
 //    assertEquals("problem A", cdd.problems[0].name);
 //
-//    InstallClientPluginRequest r2 = new InstallClientPluginRequest();
+//    DownloadPluginRequest r2 = new DownloadPluginRequest();
 //    //r2.sessionID = curUser.sessionID;
-//    InstallClientPluginResponse dd = server.doRequest(r2);
+//    DownloadPluginResponse dd = server.doRequest(r2);
 //    assertNotNull(dd);
 //
 //    AcceptedResponse ar11 = server.doRequest(new RegisterToContestRequest());

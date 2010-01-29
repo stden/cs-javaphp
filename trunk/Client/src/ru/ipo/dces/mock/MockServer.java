@@ -159,11 +159,11 @@
 //  }
 //
 //  @Override
-//  public InstallClientPluginResponse doRequest(InstallClientPluginRequest r)
+//  public DownloadPluginResponse doRequest(DownloadPluginRequest r)
 //      throws GeneralRequestFailureException, ServerReturnedError {
 //    //getSession(r.sessionID);
 //
-//    return new InstallClientPluginResponse();
+//    return new DownloadPluginResponse();
 //  }
 //
 //  @Override

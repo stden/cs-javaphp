@@ -27,7 +27,7 @@ public interface ServerFacade {
   public GetUsersResponse doRequest(GetUsersRequest r)
       throws ServerReturnedError, GeneralRequestFailureException;
 
-  public InstallClientPluginResponse doRequest(InstallClientPluginRequest r)
+  public DownloadPluginResponse doRequest(DownloadPluginRequest r)
       throws ServerReturnedError, GeneralRequestFailureException;
 
   public AcceptedResponse doRequest(RegisterToContestRequest r)
@@ -51,10 +51,7 @@ public interface ServerFacade {
   public AcceptedResponse doRequest(RemoveContestRequest r)
       throws ServerReturnedError, GeneralRequestFailureException;
 
-  public AcceptedResponse doRequest(AdjustClientPluginRequest r)
-      throws ServerReturnedError, GeneralRequestFailureException;
-
-  public AcceptedResponse doRequest(AdjustServerPluginRequest r)
+  public AcceptedResponse doRequest(AdjustPluginRequest r)
       throws ServerReturnedError, GeneralRequestFailureException;
 
   public GetContestResultsResponse doRequest(GetContestResultsRequest r)

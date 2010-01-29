@@ -4,7 +4,6 @@ import ru.ipo.dces.clientservercommunication.ProblemDescription;
 
 import java.beans.PropertyChangeSupport;
 import java.beans.PropertyChangeListener;
-import java.io.IOException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -74,7 +73,7 @@ public class ProblemDescriptionBean {
   public void setClientPluginAlias(String clientPluginAlias) {
     String oldValue = this.clientPluginAlias;
     this.clientPluginAlias = clientPluginAlias;
-    pcs.firePropertyChange("clientPluginAlias", oldValue, clientPluginAlias);
+    pcs.firePropertyChange("pluginAlias", oldValue, clientPluginAlias);
   }
 
   public String getServerPluginAlias() {
