@@ -33,7 +33,7 @@ public interface ServerFacade {
   public AcceptedResponse doRequest(RegisterToContestRequest r)
       throws ServerReturnedError, GeneralRequestFailureException;
 
-  public AcceptedResponse doRequest(RemoveClientPluginRequest r)
+  public AcceptedResponse doRequest(RemovePluginRequest r)
       throws ServerReturnedError, GeneralRequestFailureException;
 
   public AcceptedResponse doRequest(RestorePasswordRequest r)

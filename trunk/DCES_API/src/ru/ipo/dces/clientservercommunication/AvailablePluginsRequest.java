@@ -8,12 +8,7 @@ package ru.ipo.dces.clientservercommunication;
  *
  * Запрос на выдачу плагинов стороны клиента или стороны сервера
  */
-public class AvailablePluginsRequest implements Request {
-
-  public enum PluginSide {
-    Client,
-    Server,
-  }
+public class AvailablePluginsRequest implements Request {  
 
   @PHPDefaultValue("null")
   public String sessionID;

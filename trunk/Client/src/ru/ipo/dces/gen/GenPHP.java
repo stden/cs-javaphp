@@ -15,7 +15,7 @@ public class GenPHP {
       GetUsersRequest.class, GetUsersResponse.class,
       DownloadPluginRequest.class, DownloadPluginResponse.class,
       ProblemDescription.class, RegisterToContestRequest.class,
-      RemoveClientPluginRequest.class, RemoveContestRequest.class,
+      RemovePluginRequest.class, RemoveContestRequest.class,
       RemoveUserRequest.class, RequestFailedResponse.class,
       RestorePasswordRequest.class, SubmitSolutionRequest.class,
       SubmitSolutionResponse.class,
