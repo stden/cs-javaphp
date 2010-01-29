@@ -489,8 +489,8 @@ public class ContestPluginV2 implements Plugin, ActionListener {
     DCESEditorFactory.getInstance().registerEditor(answerAsDirectoryProperty, DirectoryPropertyEditor.class);
     DCESEditorFactory.getInstance().registerEditor(statementAsFileProperty, FilePropertyEditor.class);
     DCESEditorFactory.getInstance().registerEditor(answerAsFileProperty, FilePropertyEditor.class);
-    DCESEditorFactory.getInstance().registerEditor(clientPluginAliasProperty, new DCESEditorFactory.PluginAliasEditor(AvailablePluginsRequest.PluginSide.Client));
-    DCESEditorFactory.getInstance().registerEditor(serverPluginAliasProperty, new DCESEditorFactory.PluginAliasEditor(AvailablePluginsRequest.PluginSide.Server));
+    DCESEditorFactory.getInstance().registerEditor(clientPluginAliasProperty, new DCESEditorFactory.PluginAliasEditor(PluginSide.Client));
+    DCESEditorFactory.getInstance().registerEditor(serverPluginAliasProperty, new DCESEditorFactory.PluginAliasEditor(PluginSide.Server));
 
     DCESRendererFactory.getInstance().registerRenderer(statementAsDirectoryProperty,
             DCESRendererFactory.DirectoryOnlyRenderer.class);

@@ -384,7 +384,8 @@ public class Controller {
   }
 
   public static void removeClientPlugin(String alias) throws ServerReturnedError, GeneralRequestFailureException {
-    RemoveClientPluginRequest r = new RemoveClientPluginRequest();
+    RemovePluginRequest r = new RemovePluginRequest();
+    r.side = PluginSide.Client;
     r.pluginAlias = alias;
     r.sessionID = contestConnection.getSessionID();
     server.doRequest(r);

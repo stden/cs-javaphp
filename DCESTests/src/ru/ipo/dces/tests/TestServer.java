@@ -47,7 +47,7 @@
 //   * @throws Exception if err
 //   */
 //  private void removePlugin() throws Exception {
-//    AcceptedResponse ar12 = server.doRequest(new RemoveClientPluginRequest());
+//    AcceptedResponse ar12 = server.doRequest(new RemovePluginRequest());
 //    assertNotNull(ar12);
 //  }
 //

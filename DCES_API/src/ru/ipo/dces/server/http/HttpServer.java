@@ -166,7 +166,7 @@ public class HttpServer implements ServerFacade {
         return doRequest(AcceptedResponse.class, r);
     }
 
-    public AcceptedResponse doRequest(RemoveClientPluginRequest r)
+    public AcceptedResponse doRequest(RemovePluginRequest r)
             throws ServerReturnedError, GeneralRequestFailureException {
         return doRequest(AcceptedResponse.class, r);
     }

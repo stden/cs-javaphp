@@ -173,7 +173,7 @@
 //  }
 //
 //  @Override
-//  public AcceptedResponse doRequest(RemoveClientPluginRequest r)
+//  public AcceptedResponse doRequest(RemovePluginRequest r)
 //      throws GeneralRequestFailureException, ServerReturnedError {
 //    getSession(r.sessionID);
 //

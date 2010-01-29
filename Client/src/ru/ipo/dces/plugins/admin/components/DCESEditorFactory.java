@@ -9,10 +9,7 @@ package ru.ipo.dces.plugins.admin.components;
 import com.l2fprod.common.propertysheet.PropertyEditorRegistry;
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
 import ru.ipo.dces.client.Controller;
-import ru.ipo.dces.clientservercommunication.AvailablePluginsRequest;
-import ru.ipo.dces.clientservercommunication.AvailablePluginsResponse;
-import ru.ipo.dces.clientservercommunication.ContestDescription;
-import ru.ipo.dces.clientservercommunication.ResultsAccessPolicy;
+import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.server.ServerFacade;
 
 import javax.swing.*;
@@ -57,7 +54,7 @@ public class DCESEditorFactory extends PropertyEditorRegistry {
   }
 
   public static class PluginAliasEditor extends ComboBoxPropertyEditor {
-    private final AvailablePluginsRequest.PluginSide side;
+    private final PluginSide side;
     private final HashMap<Object, PluginValue> val2plval = new HashMap<Object, PluginValue>();
 
     public static class PluginValue {
@@ -83,7 +80,7 @@ public class DCESEditorFactory extends PropertyEditorRegistry {
       }
     }
 
-    public PluginAliasEditor(AvailablePluginsRequest.PluginSide side) {
+    public PluginAliasEditor(PluginSide side) {
       this.side = side;
 
       //TODO popup menu may not work with nonstandard L&F (!!! this is a probable bug)
