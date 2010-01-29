@@ -1,9 +1,10 @@
 package ru.ipo.dces.utils;
 
+import ru.ipo.dces.clientservercommunication.DownloadPluginResponse;
+import ru.ipo.dces.clientservercommunication.PluginSide;
 import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.pluginapi.DCESPluginLoadable;
-import ru.ipo.dces.clientservercommunication.InstallClientPluginRequest;
-import ru.ipo.dces.clientservercommunication.InstallClientPluginResponse;
+import ru.ipo.dces.clientservercommunication.DownloadPluginRequest;
 import ru.ipo.dces.server.ServerFacade;
 import ru.ipo.dces.exceptions.ServerReturnedError;
 import ru.ipo.dces.exceptions.GeneralRequestFailureException;
@@ -130,14 +131,15 @@ public class PluginUtils {
 
   private static void loadPluginFromServer(ServerFacade server, String plugin_alias, File tempPluginFile) throws ServerReturnedError, GeneralRequestFailureException, IOException {
     //load file from server
-    final InstallClientPluginRequest installRequest = new InstallClientPluginRequest();
-    installRequest.clientPluginAlias = plugin_alias;
-    final InstallClientPluginResponse installResponse = server.doRequest(installRequest);
+    final DownloadPluginRequest installRequest = new DownloadPluginRequest();
+    installRequest.side = PluginSide.Client;
+    installRequest.pluginAlias = plugin_alias;
+    final DownloadPluginResponse installResponse = server.doRequest(installRequest);
 
     //write PluginFile to temporary location
 
     FileOutputStream fout = new FileOutputStream(tempPluginFile);
-    fout.write(installResponse.pluginInstaller);
+    fout.write(installResponse.pluginBytes);
     fout.close();
   }
 

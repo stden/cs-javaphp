@@ -99,7 +99,7 @@ public class TestAnonym {
     }
 
     try {
-      server.doRequest(new InstallClientPluginRequest());
+      server.doRequest(new DownloadPluginRequest());
       fail(msg_Expected_wrong_SessionID);
     } catch (Exception e) {
       //do nothing

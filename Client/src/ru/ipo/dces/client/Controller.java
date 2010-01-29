@@ -356,8 +356,9 @@ public class Controller {
   }
 
   public static void adjustClientPlugin(String alias, String description, File file) throws ServerReturnedError, GeneralRequestFailureException {
-    AdjustClientPluginRequest r = new AdjustClientPluginRequest();
+    AdjustPluginRequest r = new AdjustPluginRequest();
 
+    r.side = PluginSide.Client;
     r.pluginAlias = alias;
 
     if (description.equals(""))

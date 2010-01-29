@@ -13,7 +13,7 @@ public class GenPHP {
       DisconnectRequest.class,
       GetContestDataRequest.class, GetContestDataResponse.class,
       GetUsersRequest.class, GetUsersResponse.class,
-      InstallClientPluginRequest.class, InstallClientPluginResponse.class,
+      DownloadPluginRequest.class, DownloadPluginResponse.class,
       ProblemDescription.class, RegisterToContestRequest.class,
       RemoveClientPluginRequest.class, RemoveContestRequest.class,
       RemoveUserRequest.class, RequestFailedResponse.class,

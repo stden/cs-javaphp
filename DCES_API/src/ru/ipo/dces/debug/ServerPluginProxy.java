@@ -182,7 +182,8 @@ public class ServerPluginProxy implements ServerPluginEmulator {
 
   public void uploadServerPlugin(String alias, File phpPluginFile) throws IOException, GeneralRequestFailureException, ServerReturnedError {
     //fill request
-    AdjustServerPluginRequest aspr = new AdjustServerPluginRequest();
+    AdjustPluginRequest aspr = new AdjustPluginRequest();
+    aspr.side = PluginSide.Server;
     aspr.description = null;
     aspr.pluginAlias = alias;
     aspr.sessionID = sessionID;
@@ -199,7 +200,8 @@ public class ServerPluginProxy implements ServerPluginEmulator {
 
   public void uploadClientPlugin(String alias, File jarPluginFile) throws IOException, GeneralRequestFailureException, ServerReturnedError {
     //fill request
-    AdjustClientPluginRequest aspr = new AdjustClientPluginRequest();
+    AdjustPluginRequest aspr = new AdjustPluginRequest();
+    aspr.side = PluginSide.Client;
     aspr.description = null;
     aspr.pluginAlias = alias;
     aspr.sessionID = sessionID;
