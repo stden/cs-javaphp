@@ -68,7 +68,7 @@ switch(get_class($request)) {
 	  require("requests/RegisterToContest.php");
 	  $result = processRegisterToContestRequest($request);
 	  break;
-
+	  
 	case 'DownloadPluginRequest':
 	  require("requests/DownloadPlugin.php");
 	  $result = processDownloadPluginRequest($request);
@@ -104,9 +104,9 @@ switch(get_class($request)) {
       $result = processAdjustUserDataRequest($request);
       break;
 
-	case 'RemoveClientPluginRequest':
-	  require("requests/RemoveClientPlugin.php");
-	  $result = processRemoveClientPluginRequest($request);
+	case 'RemovePluginRequest':
+	  require("requests/RemovePlugin.php");
+	  $result = processRemovePluginRequest($request);
 	  break;
 
     case 'GetContestResultsRequest':

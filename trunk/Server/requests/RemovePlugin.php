@@ -1,6 +1,6 @@
 <?php
 
-  function processRemoveClientPluginRequest($request) {
+  function processRemovePluginRequest($request) {
     $prfx = $GLOBALS['dces_mysql_prefix'];
 
     $con = connectToDB();
@@ -9,15 +9,18 @@
     //authorize
     if ($user_row['user_type'] !== 'SuperAdmin')
       throwBusinessLogicError(0);
+      
+    $plugin_type = $request->side === 'Client' ? 'client' : 'server';
+    $plugin_ext = $request->side === 'Client' ? '.jar' : '.php';
 
     //remove from db
     mysql_query(
-      sprintf("DELETE FROM ${prfx}client_plugin WHERE alias=%s", Data::quote_smart($request->pluginAlias))
+      sprintf("DELETE FROM ${prfx}${plugin_type}_plugin WHERE alias=%s", Data::quote_smart($request->pluginAlias))
     , $con) or throwServerProblem(35, mysql_error());
 
     //remove from disk
     //TODO don't remove files outside the client plugins folder
-    unlink('client_plugins/' . $request->pluginAlias . '.jar');
+    unlink('${plugin_type}_plugins/' . $request->pluginAlias . $plugin_ext);
 
     return new AcceptedResponse();
   }
