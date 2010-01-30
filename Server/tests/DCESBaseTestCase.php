@@ -59,7 +59,9 @@ abstract class DCESWithSuperAdminTestCase extends DCESWithDBTestCase {
     
     public function apiRemoveContest($params = array()) {
         $req = TestData::fillRequest('RemoveContestRequest', $params);
-        $req->sessionID = $this->sessionID;
+        
+        if(!isset($params['contestID'])) $req->contestID = $this->contestID; 
+        if(!isset($params['sessionID'])) $req->sessionID = $this->sessionID;
         
         $this->assertEquals(new AcceptedResponse(), RequestSender::send($req));
     }

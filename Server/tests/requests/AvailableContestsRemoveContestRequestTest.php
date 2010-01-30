@@ -50,7 +50,32 @@ class AvailableContestsRemoveContestTestCase extends DCESWithSuperAdminTestCase 
         $res = RequestSender::send($req);
         
         $this->assertEquals(array_values($this->CDs), $res->contests);
+    }
+    
+    /**
+    * @dataProvider sessionContestProvider 
+    */ 
+    public function testBadContextForRemoveContestRequest($sessionID, $contestID) {
+       
+       $sessionID = ($sessionID == 'session_ok') ? $this->sessionID : $sessionID;
+       $contestID = ($contestID == 'contest_ok') ? $this->CDs[rand(0, sizeof($this->CDs) - 1)]->contestID : $contestID;
+
+       $req = TestData::fillRequest('RemoveContestRequest', array('contestID'=>$contestID, 'sessionID'=>$sessionID));
+       
+       $this->assertClassEquals(new RequestFailedResponse(), RequestSender::send($req));
     }    
+    
+    public function sessionContestProvider() 
+    {
+        $bad = array(null, '', 0, TestData::genASCIIStr(24), 'session_ok', 'contest_ok');
+        
+        for($i = 0; $i < sizeof($bad); $i++)
+            for($k = 0; $k < sizeof($bad); $k++)
+                if($bad[$i] != 'session_ok' || $bad[$k] != 'contest_ok')
+                    $res[] = array($bad[$i], $bad[$k]);
+                
+        return $res;    
+    }
 }
 
 ?>
