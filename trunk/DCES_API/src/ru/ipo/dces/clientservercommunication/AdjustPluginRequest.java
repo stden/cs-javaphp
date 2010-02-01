@@ -16,7 +16,7 @@ public class AdjustPluginRequest implements Request {
   @PHPDefaultValue("null")
   public String sessionID;
 
-  @PHPDefaultValue("Client")
+  @PHPDefaultValue("'Client'")
   public PluginSide side;
 
   /**
