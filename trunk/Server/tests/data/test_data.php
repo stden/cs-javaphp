@@ -145,6 +145,34 @@ class TestData
                                            array(BAD_DATA, 'other', ''),                                           
                                            array(BAD_DATA, 'other', 42),                                                                                     
                                       ),
+          'createPluginFilename' => array(
+                                           array(BAD_DATA, 'Client', 'a?b'),
+                                           array(BAD_DATA, 'Server', 'a?b'),
+                                           
+                                           array(BAD_DATA, 'Client', 'a/b'),
+                                           array(BAD_DATA, 'Server', 'a/b'),
+                                           
+                                           array(BAD_DATA, 'Client', 'a"b'),
+                                           array(BAD_DATA, 'Server', 'a"b'),
+                                           
+                                           array(BAD_DATA, 'Client', 'a*b'),
+                                           array(BAD_DATA, 'Server', 'a*b'),
+
+                                           array(BAD_DATA, 'Client', 'a\\b'),
+                                           array(BAD_DATA, 'Server', 'a\\b'),
+
+                                           array(BAD_DATA, 'Client', 'a|b'),
+                                           array(BAD_DATA, 'Server', 'a|b'),
+                                           
+                                           array(BAD_DATA, 'Client', 'a:b'),
+                                           array(BAD_DATA, 'Server', 'a:b'),
+
+                                           array(BAD_DATA, 'Client', 'a<b'),
+                                           array(BAD_DATA, 'Server', 'a<b'),
+
+                                           array(BAD_DATA, 'Client', 'a>b'),
+                                           array(BAD_DATA, 'Server', 'a>b')
+                                         ),
         );
                                       
     public static function getData($name)

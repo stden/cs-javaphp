@@ -88,38 +88,18 @@ abstract class DCESWithAllRolesTestCase extends DCESWithSuperAdminTestCase {
         $this->userDataColumns = unserialize(serialize($cd->data));
          
         //creating sample contest admin
-        /*$req = new RegisterToContestRequest();
-        $req->sessionID = $this->connect->sessionID;
-        $req->contestID = $this->contestID;
-        
-        $req->user = createUser($td['ContestAdmin'][0], $td['ContestAdmin'][1], 'ContestAdmin');
-        
-        $this->assertEquals(new AcceptedResponse(), RequestSender::send($req));
-        */
-        
         $this->apiRegisterUser(array('user'=> createUser($td['ContestAdmin'][0], 
                                                          $td['ContestAdmin'][1], 
                                                          'ContestAdmin', 
                                                          TestData::genStrArray(sizeof($this->userDataColumns), TestData::MAX_DATA_LENGTH))));
                                                    
         //create sample user with type Participant
-    
-        /*$req = new RegisterToContestRequest();
-        $req->sessionID = $this->connect->sessionID;
-        $req->contestID = $this->contestID;
-        
-        $req->user = createUser($td['Participant'][0], $td['Participant'][1]); 
-
-        $this->assertEquals(new AcceptedResponse(), RequestSender::send($req));
-        */
-        
         $this->apiRegisterUser(array('user'=> createUser($td['Participant'][0], 
                                                          $td['Participant'][1], 
                                                          'Participant', 
                                                          TestData::genStrArray(sizeof($this->userDataColumns), TestData::MAX_DATA_LENGTH))));
                     
         //create contest admin connect
-        
         $ca_req = new ConnectToContestRequest();
         
         $ca_req->login = $td['ContestAdmin'][0];
@@ -176,7 +156,7 @@ abstract class DCESWithAllRolesTestCase extends DCESWithSuperAdminTestCase {
         return $res->users;
     }    
     
-    protected function adjustContest($params) {
+    protected function apiAdjustContest($params) {
         //adjust contest
         $req = new AdjustContestRequest();
         $req->sessionID = $this->sessionID;

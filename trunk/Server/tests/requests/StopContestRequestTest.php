@@ -24,7 +24,7 @@ class StopContestTestCase extends DCESWithAllRolesTestCase
         $ct = new ContestTiming(); 
         $ct->selfContestStart = true;
          
-        $this->adjustContest(array('contestTiming' => $ct));
+        $this->apiAdjustContest(array('contestTiming' => $ct));
         
         $req = new StopContestRequest();
         $req->sessionID = $this->pConnect->sessionID;
