@@ -20,7 +20,7 @@
 
     //remove from disk
     //TODO don't remove files outside the client plugins folder
-    unlink('${plugin_type}_plugins/' . $request->pluginAlias . $plugin_ext);
+    unlink("${plugin_type}_plugins/" . $request->pluginAlias . $plugin_ext);
 
     return new AcceptedResponse();
   }

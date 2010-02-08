@@ -38,7 +38,7 @@ class ConnectToContestTestCase extends DCESWithAllRolesTestCase
     
     public function testStartBeforeContestStarted()
     {
-        $this->adjustContest(array('start'=> time() + 3600, 'finish' => time() + 7200));
+        $this->apiAdjustContest(array('start'=> time() + 3600, 'finish' => time() + 7200));
         
         $td = TestData::getData('userTestData');
         
