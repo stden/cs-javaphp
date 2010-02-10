@@ -204,6 +204,25 @@ class TestData
         return $res;
     }
     
+    public static function genFileName($length)
+    {
+        $res = '';
+        
+        $i = 0;
+        while($i < $length) 
+        {
+            $ch = rand(32, 127);
+            
+            if(array_search($ch, array(63, 47, 34, 42, 92, 124, 58, 60, 62, 37)))
+                continue;
+            
+            $res .= chr($ch);    
+            $i++;
+        }
+        
+        return $res;
+    }
+    
     public static function gB()
     {
         return rand(0,1) ? TRUE : FALSE;
