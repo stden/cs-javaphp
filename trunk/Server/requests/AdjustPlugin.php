@@ -10,6 +10,10 @@
     if ($user_row['user_type'] !== 'SuperAdmin')
       throwBusinessLogicError(0);
       
+    //test plugin alias
+    if (preg_match('/^[\p{L}0-9 ]+$/', $request->pluginAlias) === 0)
+        throwBusinessLogicError(238);
+      
     $plugin_type = $request->side === 'Client' ? 'client' : 'server';
 
     //test if there already is such plugin

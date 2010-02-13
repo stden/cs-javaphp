@@ -7,6 +7,10 @@
     	if ($user['user_type'] !== 'SuperAdmin')
     		throwBusinessLogicError(0); 
     }
+    
+    //test plugin alias
+    if (preg_match('/^[\p{L}0-9 ]+$/', $request->pluginAlias) === 0)
+        throwBusinessLogicError(238);
 
     //test file name to be a pure file name
     if (strpos($request->pluginAlias, '/') ||

@@ -4,8 +4,11 @@ class GetRemoveAdjustPluginsTestCase extends DCESWithAllRolesTestCase {
     
     protected $clientPluginAliases = array();
     protected $clientPluginDescriptions = array();
+    protected $clientPluginData = array();
+    
     protected $serverPluginAliases = array();
     protected $serverPluginDescriptions = array();
+    protected $serverPluginData = array();
     
     public function setUp()
     {
@@ -16,11 +19,12 @@ class GetRemoveAdjustPluginsTestCase extends DCESWithAllRolesTestCase {
             $req = TestData::fillRequest('AdjustPluginRequest', array('sessionID'=>$this->sessionID,
                                                                       'side'=>'Client',
                                                                       'description'=>TestData::genUnicodeStr(42),
-                                                                      'pluginAlias'=>TestData::genFileName(255),
+                                                                      'pluginAlias'=>TestData::genFileName(12),
                                                                       'pluginData'=>TestData::genUnicodeStr(42)));
             
             $this->clientPluginAliases[] = $req->pluginAlias;
             $this->clientPluginDescriptions[] = $req->description;
+            $this->clientPluginData[] = $req->pluginData;
             
             
             $this->assertEquals(new AcceptedResponse(), RequestSender::send($req));
@@ -29,11 +33,12 @@ class GetRemoveAdjustPluginsTestCase extends DCESWithAllRolesTestCase {
             $req = TestData::fillRequest('AdjustPluginRequest', array('sessionID'=>$this->sessionID,
                                                                       'side'=>'Server',
                                                                       'description'=>TestData::genUnicodeStr(42),
-                                                                      'pluginAlias'=>TestData::genFileName(255),
+                                                                      'pluginAlias'=>TestData::genFileName(12),
                                                                       'pluginData'=>TestData::genUnicodeStr(42)));
         
             $this->serverPluginAliases[] = $req->pluginAlias;
             $this->serverPluginDescriptions[] = $req->description;
+            $this->serverPluginData[] = $req->pluginData;
         
             $this->assertEquals(new AcceptedResponse(), RequestSender::send($req));
         }
@@ -47,7 +52,7 @@ class GetRemoveAdjustPluginsTestCase extends DCESWithAllRolesTestCase {
         $pluginAliases = $side.'PluginAliases';
         $pluginDescriptions = $side.'PluginDescriptions';
         
-        $req = TestData::fillRequest('AvailablePluginsRequest', array('pluginSide'=>$side, 'sessionID'=>$this->sessionID));
+        $req = TestData::fillRequest('AvailablePluginsRequest', array('pluginSide'=>ucfirst($side), 'sessionID'=>$this->sessionID));
         $res = RequestSender::send($req);
         
         sort($this->$pluginAliases);
@@ -73,13 +78,13 @@ class GetRemoveAdjustPluginsTestCase extends DCESWithAllRolesTestCase {
             
             $req = TestData::fillRequest('RemovePluginRequest', array('pluginAlias'=>$alias, 
                                                                       'sessionID'=>$this->sessionID,
-                                                                      'side'=>$side));
+                                                                      'side'=>ucfirst($side)));
             //assert that request completed successfully                                                                      
             $this->assertEquals(new AcceptedResponse(), RequestSender::send($req));
             $removedAliases[] = $alias;
             
             //check
-            $req = TestData::fillRequest('AvailablePluginsRequest', array('pluginSide'=>$side, 'sessionID'=>$this->sessionID));
+            $req = TestData::fillRequest('AvailablePluginsRequest', array('pluginSide'=>ucfirst($side), 'sessionID'=>$this->sessionID));
             $res = RequestSender::send($req);
             
             $union = array_merge($removedAliases, $res->aliases);
@@ -89,23 +94,48 @@ class GetRemoveAdjustPluginsTestCase extends DCESWithAllRolesTestCase {
     }
     
     /**
+     *@dataProvider pluginSideProvider
+     */
+    public function testDownloadPlugin($side) {
+        $pluginData = $side.'PluginData';
+        $pluginAlias = $side.'PluginAliases';
+        
+        $i = rand(0, count($this->$pluginAlias) - 1);
+                
+        $al = $this->$pluginAlias;
+        $req = TestData::fillRequest('DownloadPluginRequest', array('pluginAlias'=>$al[$i], 
+                                                                    'sessionID'=>$this->sessionID,
+                                                                    'side'=>ucfirst($side)));
+                                    
+        $dt = $this->$pluginData;                                
+        $this->assertEquals($dt[$i], RequestSender::send($req)->pluginBytes);
+    }
+    
+    /**
      *@dataProvider badFilenameProvider
      */
-    public function testBadAliases($isGood, $type, $fn) 
+    public function testBadAliases($isGood, $side, $fn) 
     {
         $req = TestData::fillRequest('AdjustPluginRequest', array('sessionID'=>$this->sessionID,
-                                                                      'side'=>$type,
+                                                                      'side'=>$side,
                                                                       'description'=>TestData::genUnicodeStr(42),
                                                                       'pluginAlias'=>$fn,
                                                                       'pluginData'=>TestData::genUnicodeStr(42)));
         $this->assertEquals(createFailRes(239), RequestSender::send($req));    
         
-        //TODO: test other requests for bad pluginAliasNames and for null, '', 0, etc.
-        /*$req = TestData::fillRequest('RemovePluginRequest', array('pluginAlias'=>TestData::getRandomValue(array(null, '', 0)), 
+        
+        $req = TestData::fillRequest('RemovePluginRequest', array('pluginAlias'=>$fn, 
                                                                       'sessionID'=>$this->sessionID,
                                                                       'side'=>$side));
-          $this->assertEquals(createFailRes(239), RequestSender::send($req));
-        */ 
+        $this->assertEquals(createFailRes(239), RequestSender::send($req));
+
+        $req = TestData::fillRequest('DownloadPluginRequest', array('pluginAlias'=>$fn, 
+                                                                      'sessionID'=>$this->sessionID,
+                                                                      'side'=>$side));
+        $this->assertEquals(createFailRes(239), RequestSender::send($req));
+        
+        //TODO: test other requests for bad pluginAliasNames and for null, '', 0, etc.
+        
     }
     
     
@@ -118,19 +148,24 @@ class GetRemoveAdjustPluginsTestCase extends DCESWithAllRolesTestCase {
         
         foreach($bad as $sessionID)
         {
-            $req = TestData::fillRequest('AvailablePluginsRequest', array('pluginSide'=>$side, 'sessionID'=>$sessionID));
+            $req = TestData::fillRequest('AvailablePluginsRequest', array('pluginSide'=>ucfirst($side), 'sessionID'=>$sessionID));
             $this->assertEquals(createFailRes(239), RequestSender::send($req));
             
             $req = TestData::fillRequest('AdjustPluginRequest', array('sessionID'=>$sessionID,
-                                                                      'side'=>$side,
+                                                                      'side'=>ucfirst($side),
                                                                       'description'=>TestData::genUnicodeStr(42),
-                                                                      'pluginAlias'=>TestData::genFileName(255),
+                                                                      'pluginAlias'=>TestData::genFileName(12),
                                                                       'pluginData'=>TestData::genUnicodeStr(42)));
             $this->assertEquals(createFailRes(239), RequestSender::send($req));
             
-            $req = TestData::fillRequest('RemovePluginRequest', array('pluginAlias'=>TestData::genFileName(255), 
+            $req = TestData::fillRequest('RemovePluginRequest', array('pluginAlias'=>TestData::genFileName(12), 
                                                                       'sessionID'=>$sessionID,
-                                                                      'side'=>$side));
+                                                                      'side'=>ucfirst($side)));
+            $this->assertEquals(createFailRes(239), RequestSender::send($req));
+            
+            $req = TestData::fillRequest('DownloadPluginRequest', array('pluginAlias'=>TestData::genFileName(12), 
+                                                                      'sessionID'=>$sessionID,
+                                                                      'side'=>ucfirst($side)));
             $this->assertEquals(createFailRes(239), RequestSender::send($req));
         }
     }
@@ -142,7 +177,7 @@ class GetRemoveAdjustPluginsTestCase extends DCESWithAllRolesTestCase {
     
     public function pluginSideProvider()
     {
-        return array(array('Client'), array('Server'));    
+        return array(array('client'), array('server'));    
     }
 }
 

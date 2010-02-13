@@ -38,9 +38,10 @@ class RequestSender {
             
         $obj = @unserialize($res);
         
-        if (!$obj)
+        if (!$obj){
             throw new Exception('Captain Obvious reports: deserialization epicly failed: '. $res);
-            
+            //TODO fail a test instead of calling exception
+        }
         return $obj;
     }
 }

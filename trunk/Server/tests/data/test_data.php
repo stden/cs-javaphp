@@ -210,13 +210,27 @@ class TestData
         
         $i = 0;
         while($i < $length) 
-        {
-            $ch = rand(32, 127);
+        {            
+            switch (rand(1,2)) {
+                case 1:
+                    $ch = rand(ord('a'), ord('z'));
+                    break;
+                case 2:
+                	$ch = rand(ord('A'), ord('Z'));
+                    break;
+             //TODO generate russian, greek and other L-class UNICODE letters
+             /*   case 3:
+                    $ch = rand(ord('А'), ord('Я'));
+                    break;
+                case 4:
+                    $ch = rand(ord('а'), ord('я'));
+                    break;*/                    
+            }                       
             
-            if(array_search($ch, array(63, 47, 34, 42, 92, 124, 58, 60, 62, 37)))
+            if(FALSE !== array_search($ch, array(ord('?'), ord('\\'), ord('/'), ord('|'), ord('*'), ord('"'), ord('<'), ord('>'), ord('?'), ord('?'), ord(':'))))
                 continue;
             
-            $res .= chr($ch);    
+            $res .= chr($ch);
             $i++;
         }
         
