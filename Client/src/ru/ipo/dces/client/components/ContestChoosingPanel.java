@@ -3,16 +3,19 @@ package ru.ipo.dces.client.components;
 import info.clearthought.layout.TableLayout;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.*;
+import java.util.Arrays;
 import java.util.HashSet;
 
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import ru.ipo.dces.clientservercommunication.ContestDescription;
 import ru.ipo.dces.plugins.admin.beans.ContestsListBean;
-import ru.ipo.dces.client.components.ChooseContestDialog;
 import ru.ipo.dces.client.Controller;
 
 /**
@@ -34,6 +37,7 @@ public class ContestChoosingPanel extends JPanel {
   private final JButton selectContestButton;
   private final JButton refreshContestListButton;
   private final JLabel titleLabel;
+  private final JTextField searchContestField;
 
   private HashSet<ActionListener> contestChangedListeners = new HashSet<ActionListener>();
 
@@ -48,6 +52,7 @@ public class ContestChoosingPanel extends JPanel {
     refreshContestListButton = new JButton("Обновить");
     selectContestList = new JList();
     titleLabel = new JLabel("Доступные соревнования");
+    searchContestField = new JTextField();
 
     selectContestButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -70,10 +75,46 @@ public class ContestChoosingPanel extends JPanel {
         ContestsListBean bean = (ContestsListBean) selectContestList.getSelectedValue();
         if (bean == null) return;
         setContest(bean.getDescription());
+
+        //searchContestField.setText(bean.toString());
+      }
+    });
+
+    searchContestField.getDocument().addDocumentListener(new DocumentListener() {
+      public void insertUpdate(DocumentEvent e) {
+        doSearchContest();
+      }
+
+      public void removeUpdate(DocumentEvent e) {
+        doSearchContest();
+      }
+
+      public void changedUpdate(DocumentEvent e) {
+        //do nothing
       }
     });
 
     setInterface();
+
+  }
+
+  private void doSearchContest() {
+    final String inp = searchContestField.getText();
+
+    final ListModel listModel = selectContestList.getModel();
+    final int size = listModel.getSize();
+    for (int i = 0; i < size; i++) {
+      final String name = listModel.getElementAt(i).toString();
+      if (name.startsWith(inp)) {
+        //select element in list
+        selectContestList.setSelectedIndex(i);
+        selectContestList.ensureIndexIsVisible(i);
+
+        break;
+      }
+    }
+
+    selectContestList.setSelectedIndex(-1);
   }
 
   public void refreshContestList() {
@@ -101,12 +142,15 @@ public class ContestChoosingPanel extends JPanel {
       dcr.setForeground(Color.GRAY);
       cellRenderer = dcr;
 
+      AutoCompleteDecorator.decorate(searchContestField, Arrays.asList(), true);
+
     } else {
       listModel = new DefaultComboBoxModel(contestDescriptions);
       cellRenderer = new DefaultListCellRenderer();
+      AutoCompleteDecorator.decorate(searchContestField, Arrays.asList(contestDescriptions), true);
     }
 
-    selectContestList.setEnabled(! noContestsAvailable);
+    selectContestList.setEnabled(!noContestsAvailable);
     selectContestList.setCellRenderer(cellRenderer);
     selectContestList.setModel(listModel);
     selectContestList.setSelectedIndex(-1);
@@ -132,12 +176,13 @@ public class ContestChoosingPanel extends JPanel {
 
     } else {
       setLayout(new TableLayout(new double[][]{
-              {TableLayout.FILL, TableLayout.PREFERRED}, {TableLayout.PREFERRED, TableLayout.FILL}
+              {TableLayout.FILL, TableLayout.PREFERRED}, {TableLayout.PREFERRED, TableLayout.FILL, TableLayout.PREFERRED}
       }));
 
       add(titleLabel, "0, 0");
       add(refreshContestListButton, "1, 0");
       add(new JScrollPane(selectContestList), "0, 1, 1, 1");
+      add(searchContestField, "0, 2, 1, 2");
     }
 
     validate();
@@ -166,6 +211,7 @@ public class ContestChoosingPanel extends JPanel {
   }
 
   //TODO move selection in list if the list is visible
+
   public void setContest(ContestDescription contest) {
     this.contest = contest;
     String contestDisplayName = contest == null ? "" : contest.name;

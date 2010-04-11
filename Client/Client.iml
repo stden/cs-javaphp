@@ -47,6 +47,17 @@
     </orderEntry>
     <orderEntry type="library" name="L2FProd" level="project" />
     <orderEntry type="library" name="JCalendar" level="project" />
+    <orderEntry type="module-library">
+      <library name="SwingX">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../libs/swingx-1.6.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$MODULE_DIR$/../libs/swingx-docs.zip!/" />
+        </JAVADOC>
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
 
