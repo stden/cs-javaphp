@@ -527,7 +527,11 @@ public class ContestPluginV2 implements Plugin, ActionListener {
   }
 
   public void activate() {
-    contestChoosingPanel.setVisible(Controller.isContestUnknownMode());
+    final boolean contestUnknown = Controller.isContestUnknownMode();
+    contestChoosingPanel.setVisible(contestUnknown);
+
+    if (!contestUnknown)
+      contestChoosingPanel.setContest(Controller.getContestConnection().getContest());
   }
 
   public void deactivate() {
