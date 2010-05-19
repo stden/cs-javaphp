@@ -200,10 +200,10 @@
     $res = mysql_query(
              sprintf("SELECT id FROM ${prfx}problem WHERE contest_id=%s", Data::quote_smart($contest_id))
            , $con) or throwServerProblem(13, mysql_error());
-    while ($row = mysql_fetch_array($res))
-      if ($changed_probs[$row['id']] != 1) {
+    while ($row = mysql_fetch_array($res))           
+      if (!isset($changed_probs[$row['id']])) {
         $pid = $row['id']; 
-        $queries[] = "DELETE FROM problem WHERE id='$pid'";
+        $queries[] = "DELETE FROM ${prfx}problem WHERE id='$pid'";
       }
 
     return $queries;
@@ -254,8 +254,8 @@
 
     //run transaction
     if (count($queries) != 0) {
-      $inserted_ids = array();
-      transaction($con, $queries, $inserted_ids) or throwServerProblem(60);
+      $inserted_ids = array();      
+      transaction($con, $queries, $inserted_ids) or throwServerProblem(60);      
 
       //rename temporary dirs
       if ( count($temp_dirs) != count($inserted_ids) ||
