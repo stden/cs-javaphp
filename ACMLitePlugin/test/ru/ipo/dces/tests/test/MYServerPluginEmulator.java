@@ -10,7 +10,6 @@ import java.io.File;
  * User: Admin
  * Date: 25.04.2009
  * Time: 15:37:53
- * To change this template use File | Settings | File Templates.
  */
    public class MYServerPluginEmulator implements ServerPluginEmulator {
 

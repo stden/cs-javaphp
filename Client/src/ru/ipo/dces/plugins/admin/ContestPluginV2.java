@@ -429,7 +429,7 @@ public class ContestPluginV2 implements Plugin, ActionListener {
             "Название задачи"
     );
     DefaultProperty clientPluginAliasProperty = newProperty(
-            "pluginAlias",
+            "clientPluginAlias",
             String.class,
             "Плагин клиента",
             "Имя плагина стороны клиента"

@@ -35,7 +35,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$JUNIT_HOME$/junit-4.5.jar!/" />
+          <root url="jar://$MODULE_DIR$/../test-kverify/pupil.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

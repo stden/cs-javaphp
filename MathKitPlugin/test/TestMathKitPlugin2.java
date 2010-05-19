@@ -13,7 +13,7 @@ import ru.ipo.dces.plugins.PluginInt;
 public class TestMathKitPlugin2 {
 
 	/**
-	 * @param args
+	 * @param args command line parameters
 	 */
 	 public static void main(String[] args) {
 
@@ -24,7 +24,7 @@ public class TestMathKitPlugin2 {
 		      }
 
 		      public File getStatement() throws GeneralRequestFailureException, IOException {
-		        return new File("MathKitPlugin/debug/c11");
+		        return new File("MathKitPlugin/debug/cc1");
 		      }
 		    };
 

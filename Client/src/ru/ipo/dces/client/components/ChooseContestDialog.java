@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.event.*;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import ru.ipo.dces.clientservercommunication.ContestDescription;
 import ru.ipo.dces.plugins.admin.beans.ContestsListBean;
@@ -12,7 +14,8 @@ import ru.ipo.dces.client.Controller;
 
 public class ChooseContestDialog extends JDialog {
 
-  private JList   contestsList;
+  private JList contestsList;
+  private JLabel idLabel;
   private ContestDescription selectedContest;
 
   public ChooseContestDialog(/*JFrame frame*/) {
@@ -25,6 +28,10 @@ public class ChooseContestDialog extends JDialog {
 
     JPanel buttonsPanel = new JPanel();
     add(buttonsPanel, BorderLayout.SOUTH);
+
+    idLabel = new JLabel();
+    buttonsPanel.add(idLabel);
+    idLabel.setText("");
 
     JButton okButton = new JButton();
     buttonsPanel.add(okButton);
@@ -62,6 +69,14 @@ public class ChooseContestDialog extends JDialog {
     this.addWindowListener(new WindowAdapter() {     
       public void windowClosing(WindowEvent e) {
         cancelClick();
+      }
+    });
+
+    contestsList.addListSelectionListener(new ListSelectionListener() {
+      public void valueChanged(ListSelectionEvent e) {
+        final ContestsListBean value = (ContestsListBean)contestsList.getSelectedValue();
+        if (value == null) return;
+        idLabel.setText("contest id = " + value.getDescription().contestID);
       }
     });
   }
