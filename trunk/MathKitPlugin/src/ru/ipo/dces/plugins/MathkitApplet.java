@@ -3,10 +3,8 @@ package ru.ipo.dces.plugins;
 import java.applet.Applet;
 import java.applet.AppletContext;
 import java.applet.AudioClip;
-import java.awt.Image;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -26,15 +24,11 @@ import netscape.javascript.JSObject;
 
 
 public class MathkitApplet extends JPanel implements Runnable, AppletContext, JSContext {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
   Thread t;
   JApplet myApplet = null;
   MyAppletStub myStub = null;
   //JFrame frame;
-  String path;
+  //String path;
   DCESJSObject obj = new DCESJSObject();
   PluginEnvironment e;
   HashMap<String, String> solution = new HashMap<String, String>();
@@ -73,7 +67,6 @@ public class MathkitApplet extends JPanel implements Runnable, AppletContext, JS
 
       for (char arg : args) {
         if (arg != '(' && arg != ')') {
-
           if (arg == ',') {
             arg1 = arg2;
             arg2 = "";
@@ -84,8 +77,10 @@ public class MathkitApplet extends JPanel implements Runnable, AppletContext, JS
       }
       arg1=arg1.trim();
       arg2=arg2.trim();
-      if(arg1.endsWith("'") && arg1.startsWith("'"))arg1=(arg1.substring(1,arg1.length()-1));
-      if(arg2.endsWith("'") && arg2.startsWith("'"))arg2=(arg2.substring(1,arg2.length()-1));
+      if (arg1.endsWith("'") && arg1.startsWith("'"))
+        arg1 = arg1.substring(1, arg1.length() - 1);
+      if (arg2.endsWith("'") && arg2.startsWith("'"))
+        arg2 = arg2.substring(1, arg2.length() - 1);
   	  if (m.equals("SCORM.setDataValue")) {
         solution.put(arg1, arg2);
 
@@ -108,7 +103,7 @@ public class MathkitApplet extends JPanel implements Runnable, AppletContext, JS
 
   }
 
-  class NameFilter implements FileFilter {
+  /*class NameFilter implements FileFilter {
     private String mask;
 
     NameFilter(String mask) {
@@ -118,11 +113,11 @@ public class MathkitApplet extends JPanel implements Runnable, AppletContext, JS
     public boolean accept(File file) {
       return (file.getName().indexOf(mask) != -1);
     }
-  }
+  }*/
 
-  File result = null;
+  //File result = null;
 
-  public void getFolderName(File file, FileFilter filter)
+  /*public void getFolderName(File file, FileFilter filter)
           throws IOException {
     if (file.isDirectory()) {
       File[] list = file.listFiles();
@@ -135,17 +130,16 @@ public class MathkitApplet extends JPanel implements Runnable, AppletContext, JS
 
       }
     }
+  }*/
 
-  }
-
-  public File getProblemFolder(File file, FileFilter filter)
+  /*public File getProblemFolder(File file, FileFilter filter)
           throws IOException {
     getFolderName(file, filter);
     return result;
 
-  }
+  }*/
 
-  void setPathApplet() throws IOException {
+  public void setPathApplet() throws IOException {
     try {
       Class<?> c;
       e = PluginInt.pe;
@@ -160,16 +154,15 @@ public class MathkitApplet extends JPanel implements Runnable, AppletContext, JS
       t = new Thread() {
         public void run() {
           myApplet.init();
-          validate();
+          //validate();
           myApplet.start();
-          validate();
-
-
+          //validate();          
         }
       };
-      this.add(myApplet);
-      t.start();
 
+      setLayout(new BorderLayout());
+      add(myApplet, BorderLayout.CENTER);
+      t.start();
     }
     catch (MalformedURLException ex) {
       Logger.getLogger(MathkitApplet.class.getName()).log(Level.SEVERE, null, ex);
@@ -182,7 +175,7 @@ public class MathkitApplet extends JPanel implements Runnable, AppletContext, JS
     }
     catch (IllegalAccessException ex) {
       Logger.getLogger(MathkitApplet.class.getName()).log(Level.SEVERE, null, ex);
-    }
+    }      
   }
 
   public void showStatus(String s) {

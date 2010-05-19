@@ -199,7 +199,7 @@ public class ServerPluginProxy implements ServerPluginEmulator {
   }
 
   public void uploadClientPlugin(String alias, File jarPluginFile) throws IOException, GeneralRequestFailureException, ServerReturnedError {
-    //fill request
+    //fill request    
     AdjustPluginRequest aspr = new AdjustPluginRequest();
     aspr.side = PluginSide.Client;
     aspr.description = null;

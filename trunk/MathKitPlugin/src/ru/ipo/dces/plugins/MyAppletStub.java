@@ -1,10 +1,6 @@
 package ru.ipo.dces.plugins;
 
-
-
 import java.applet.*;
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.io.File;
 import java.net.*;
 import java.util.Hashtable;
@@ -23,13 +19,16 @@ public class MyAppletStub implements AppletStub{
         this.ac=ac;
         this.parameters=params;
     }
+
+    /*
     public void activate(){
         isActive=true;
-
     }
+
     public void disactiate(){
         isActive=false;
     }
+    */
 
     public boolean isActive() {
         return isActive;
@@ -51,7 +50,7 @@ public class MyAppletStub implements AppletStub{
     public URL getCodeBase() {
         URL url = null;
         try {
-            String db=(String)parameters.get("documentBase");
+            String db = parameters.get("documentBase");
             File file = new File(db);
             url = file.toURI().toURL();
         } catch (MalformedURLException e){
@@ -63,8 +62,7 @@ public class MyAppletStub implements AppletStub{
    }
 
     public String getParameter(String name) {
-
-       return (String)parameters.get(name);
+       return parameters.get(name);
     }
 
     public AppletContext getAppletContext() {
@@ -72,11 +70,9 @@ public class MyAppletStub implements AppletStub{
     }
 
     public void appletResize(int width, int height) {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        applet.setPreferredSize(new Dimension(660, 500));
+      System.out.printf("%d x %d\n", width, height);
+        //Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        //applet.setPreferredSize(new Dimension(660, 500));
     }
-
-
-
 
 }
