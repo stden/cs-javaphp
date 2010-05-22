@@ -34,30 +34,12 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="DCES_API" />
-    <orderEntry type="library" name="FormLayout" level="project" />
     <orderEntry type="library" name="TableLayout" level="project" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../libs/looks-2.2.2.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
+    <orderEntry type="library" name="SwingX" level="project" />
+    <orderEntry type="library" name="Looks" level="project" />
     <orderEntry type="library" name="L2FProd" level="project" />
     <orderEntry type="library" name="JCalendar" level="project" />
-    <orderEntry type="module-library">
-      <library name="SwingX">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../libs/swingx-1.6.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$MODULE_DIR$/../libs/swingx-docs.zip!/" />
-        </JAVADOC>
-        <SOURCES />
-      </library>
-    </orderEntry>
+    <orderEntry type="library" name="Forms" level="project" />
   </component>
 </module>
 

@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
-Class-Path: libs/forms.jar libs/looks-2.2.2.jar libs/l2fprod-common-al
- l.jar libs/jcalendar-1.3.3.jar libs/TableLayout.jar libs/swingx-1.6.j
+Class-Path: libs/looks-2.2.2.jar libs/l2fprod-common-all.jar libs/jcal
+ endar-1.3.3.jar libs/TableLayout.jar libs/swingx-1.6.jar libs/forms.j
  ar
 Main-Class: ru.ipo.dces.client.Controller
 

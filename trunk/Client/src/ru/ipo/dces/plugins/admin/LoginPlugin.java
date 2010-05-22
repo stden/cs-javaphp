@@ -30,7 +30,8 @@ import java.io.IOException;
  * Time: 15:20:38
  */
 
-public class LoginPlugin extends JPanel implements Plugin {
+public class
+        LoginPlugin extends JPanel implements Plugin {
   private JPanel loginPanel;
   private JPasswordField passwordEdit;
   private JTextField loginEdit;

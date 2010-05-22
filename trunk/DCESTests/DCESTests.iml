@@ -22,7 +22,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="DCES_API" />
-    <orderEntry type="module" module-name="Client" exported="" />
+    <orderEntry type="module" module-name="Client" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
@@ -32,15 +32,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../test-kverify/pupil.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
+    <orderEntry type="library" name="TableLayout" level="project" />
   </component>
 </module>
 
