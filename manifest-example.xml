@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<manifest>
-    <statement path="./asdf.html"/>
-    <answer path="./statement.html"/>
-    <src path="./.idea"/>
-</manifest>

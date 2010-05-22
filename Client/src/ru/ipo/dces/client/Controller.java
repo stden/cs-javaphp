@@ -20,6 +20,7 @@ import ru.ipo.dces.client.components.TextPaneUserMessagesLogger;
 import javax.swing.*;
 import java.io.*;
 import java.lang.reflect.Constructor;
+import java.net.Proxy;
 import java.util.HashSet;
 
 import com.jgoodies.looks.plastic.Plastic3DLookAndFeel;
@@ -157,7 +158,13 @@ public class Controller {
       System.exit(1);
     }
 
-    server = new HttpServer(Settings.getInstance().getHost());
+    final Proxy proxy = Settings.getInstance().getProxy();
+    final String host = Settings.getInstance().getHost();
+    if (proxy == null)
+      server = new HttpServer(host);
+    else
+      server = new HttpServer(host, proxy);
+      server = new HttpServer(host, proxy);
 
     processArgs(args);
 
