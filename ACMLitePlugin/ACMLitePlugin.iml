@@ -23,6 +23,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="DCES_API" />
+    <orderEntry type="library" name="TableLayout" level="project" />
   </component>
 </module>
 

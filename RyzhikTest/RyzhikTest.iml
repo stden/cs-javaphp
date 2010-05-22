@@ -24,16 +24,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="DCES_API" />
     <orderEntry type="module" module-name="RyzhikResults" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../libs/TableLayout.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="module" module-name="Client" />
+    <orderEntry type="library" name="TableLayout" level="project" />
   </component>
 </module>
 
