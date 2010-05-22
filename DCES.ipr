@@ -25,11 +25,11 @@
     <artifact type="jar" name="DCESClient">
       <output-path>$PROJECT_DIR$/out/artifacts/DCESClient</output-path>
       <root id="archive" name="DCESClient.jar">
-        <element id="module-output" name="Client" />
         <element id="directory" name="META-INF">
           <element id="file-copy" path="$PROJECT_DIR$/Client/META-INF/MANIFEST.MF" />
         </element>
         <element id="module-output" name="DCES_API" />
+        <element id="module-output" name="Client" />
       </root>
     </artifact>
     <artifact name="DCES">
@@ -37,12 +37,12 @@
       <root id="root">
         <element id="artifact" artifact-name="DCESClient" />
         <element id="directory" name="libs">
-          <element id="file-copy" path="$PROJECT_DIR$/libs/swingx-1.6.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/libs/l2fprod-common-all.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/libs/TableLayout.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/libs/looks-2.2.2.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/libs/jcalendar-1.3.3.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/libs/forms.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/Client/libs/swingx-1.6.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/Client/libs/l2fprod-common-all.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/Client/libs/TableLayout.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/Client/libs/looks-2.2.2.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/Client/libs/jcalendar-1.3.3.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/Client/libs/forms.jar" />
         </element>
         <element id="file-copy" path="$PROJECT_DIR$/Client/dces-settings.txt" />
         <element id="file-copy" path="$PROJECT_DIR$/run-dces.bat" />
@@ -58,8 +58,8 @@
       <root id="archive" name="MathKit.jar">
         <element id="module-output" name="MathKitPlugin" />
         <element id="directory" name="dependencies">
-          <element id="file-copy" path="$PROJECT_DIR$/MathKitPlugin/mathkit-applet.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/libs/plugin.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/MathKitPlugin/lib/mathkit-applet.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/MathKitPlugin/lib/plugin.jar" />
         </element>
       </root>
     </artifact>
