@@ -1,5 +1,6 @@
 package ru.ipo.dces.client;
 
+import ru.ipo.dces.client.resources.Resources;
 import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
 import ru.ipo.dces.pluginapi.Plugin;
@@ -9,18 +10,19 @@ import ru.ipo.dces.log.LogMessageType;
 import ru.ipo.dces.server.ServerFacade;
 
 import javax.swing.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.io.File;
 
 public class PluginEnvironmentImpl implements PluginEnvironment {
 
-  private final ProblemDescription pd;
-  public static final String PROBLEMS_DIR = "problems";
+  private final ProblemDescription pd;  
   private int tabIndex = -1;
   private String cachedTitle = null;
 
-  private static final Icon TAB_ICON = new ImageIcon("TabIcon.gif");
-
+  private static final Icon TAB_ICON = new ImageIcon(Resources.getInstance().getResourceAsByteArray("TabIcon.gif"));
+  
   private static HashMap<JPanel, Plugin> panel2plugin = new HashMap<JPanel, Plugin>();
 
   public PluginEnvironmentImpl(ProblemDescription pd) {

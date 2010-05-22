@@ -1,6 +1,7 @@
 package ru.ipo.dces.plugins.admin;
 
 import ru.ipo.dces.client.Localization;
+import ru.ipo.dces.client.resources.Resources;
 import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
 import ru.ipo.dces.client.components.ContestChoosingPanel;
@@ -97,11 +98,13 @@ public class ContestPluginV2 implements Plugin, ActionListener {
     mainPanel.add(contestChoosingPanel, "0, 0");
 
     JButtonBar contestToolBar = new JButtonBar(JButtonBar.HORIZONTAL);
-    //TODO get data from resources
-    addContestButton = addButtonToContestToolBar(contestToolBar, "Добавить", new ImageIcon("images/add.gif"));
-    removeContestButton = addButtonToContestToolBar(contestToolBar, "Удалить", new ImageIcon("images/remove.gif"));
-    applyContestChangesButton = addButtonToContestToolBar(contestToolBar, "Применить", new ImageIcon("images/bigApply.gif"));
-    undoContestChangesButton = addButtonToContestToolBar(contestToolBar, "Отменить", new ImageIcon("images/cancel.gif"));
+
+    final Resources res = Resources.getInstance();
+
+    addContestButton = addButtonToContestToolBar(contestToolBar, "Добавить", new ImageIcon(res.getResourceAsByteArray("images/add.gif")));
+    removeContestButton = addButtonToContestToolBar(contestToolBar, "Удалить", new ImageIcon(res.getResourceAsByteArray("images/remove.gif")));
+    applyContestChangesButton = addButtonToContestToolBar(contestToolBar, "Применить", new ImageIcon(res.getResourceAsByteArray("images/bigApply.gif")));
+    undoContestChangesButton = addButtonToContestToolBar(contestToolBar, "Отменить", new ImageIcon(res.getResourceAsByteArray("images/cancel.gif")));
     mainPanel.add(contestToolBar, "0, 1");
 
     //start center
@@ -122,22 +125,22 @@ public class ContestPluginV2 implements Plugin, ActionListener {
     contestSplitPane.setRightComponent(rightPanel);
 
     JButtonBar userFieldsToolBar = new JButtonBar(JButtonBar.HORIZONTAL);
-    addUserField = addButtonToContestToolBar(userFieldsToolBar, "Добавить", new ImageIcon("images/add.gif"));
-    removeUserField = addButtonToContestToolBar(userFieldsToolBar, "Удалить", new ImageIcon("images/remove.gif"));
-    upUserField = addButtonToContestToolBar(userFieldsToolBar, "Вверх", new ImageIcon("images/up.gif"));
-    downUserField = addButtonToContestToolBar(userFieldsToolBar, "Вниз", new ImageIcon("images/down.gif"));
+    addUserField = addButtonToContestToolBar(userFieldsToolBar, "Добавить", new ImageIcon(res.getResourceAsByteArray("images/add.gif")));
+    removeUserField = addButtonToContestToolBar(userFieldsToolBar, "Удалить", new ImageIcon(res.getResourceAsByteArray("images/remove.gif")));
+    upUserField = addButtonToContestToolBar(userFieldsToolBar, "Вверх", new ImageIcon(res.getResourceAsByteArray("images/up.gif")));
+    downUserField = addButtonToContestToolBar(userFieldsToolBar, "Вниз", new ImageIcon(res.getResourceAsByteArray("images/down.gif")));
     rightPanel.add(userFieldsToolBar, "0, 0");
 
     userFieldsTable = new UserFieldsTable();
     rightPanel.add(userFieldsTable, "0, 1");
 
     JButtonBar problemToolBar = new JButtonBar(JButtonBar.HORIZONTAL);
-    addProblemButton = addButtonToContestToolBar(problemToolBar, "Добавить", new ImageIcon("images/add.gif"));
-    removeProblemButton = addButtonToContestToolBar(problemToolBar, "Удалить", new ImageIcon("images/remove.gif"));
-    upProblemButton = addButtonToContestToolBar(problemToolBar, "Вверх", new ImageIcon("images/up.gif"));
-    downProblemButton = addButtonToContestToolBar(problemToolBar, "Вниз", new ImageIcon("images/down.gif"));
-    debugProblemButton = addButtonToContestToolBar(problemToolBar, "Отладить", new ImageIcon("images/debug.gif"));
-    downloadProblemButton = addButtonToContestToolBar(problemToolBar, "Скачать", new ImageIcon("images/download.gif"));
+    addProblemButton = addButtonToContestToolBar(problemToolBar, "Добавить", new ImageIcon(res.getResourceAsByteArray("images/add.gif")));
+    removeProblemButton = addButtonToContestToolBar(problemToolBar, "Удалить", new ImageIcon(res.getResourceAsByteArray("images/remove.gif")));
+    upProblemButton = addButtonToContestToolBar(problemToolBar, "Вверх", new ImageIcon(res.getResourceAsByteArray("images/up.gif")));
+    downProblemButton = addButtonToContestToolBar(problemToolBar, "Вниз", new ImageIcon(res.getResourceAsByteArray("images/down.gif")));
+    debugProblemButton = addButtonToContestToolBar(problemToolBar, "Отладить", new ImageIcon(res.getResourceAsByteArray("images/debug.gif")));
+    downloadProblemButton = addButtonToContestToolBar(problemToolBar, "Скачать", new ImageIcon(res.getResourceAsByteArray("images/download.gif")));
     rightPanel.add(problemToolBar, "0, 2");
 
     JSplitPane problemSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
