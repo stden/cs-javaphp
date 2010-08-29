@@ -13,7 +13,7 @@
         <element id="module-output" name="SamplePlugin" />
       </root>
     </artifact>
-    <artifact type="jar" name="ACMLitePlugin">
+    <artifact type="jar" build-on-make="true" name="ACMLitePlugin">
       <output-path>$PROJECT_DIR$/Client/plugins</output-path>
       <root id="archive" name="ACMLitePlugin.jar">
         <element id="module-output" name="ACMLitePlugin" />
@@ -32,7 +32,7 @@
         <element id="module-output" name="DCES_API" />
       </root>
     </artifact>
-    <artifact name="DCES">
+    <artifact build-on-make="true" name="DCES">
       <output-path>$PROJECT_DIR$/out/artifacts/DCES</output-path>
       <root id="root">
         <element id="artifact" artifact-name="DCESClient" />
@@ -53,7 +53,7 @@
         <element id="file-copy" path="$PROJECT_DIR$/Client/run-dces.bat" />
       </root>
     </artifact>
-    <artifact type="jar" name="MathKit">
+    <artifact type="jar" build-on-make="true" name="MathKit">
       <output-path>$PROJECT_DIR$/Client/plugins</output-path>
       <root id="archive" name="MathKit.jar">
         <element id="module-output" name="MathKitPlugin" />
@@ -63,7 +63,7 @@
         </element>
       </root>
     </artifact>
-    <artifact type="jar" name="DCES_API">
+    <artifact type="jar" build-on-make="true" name="DCES_API">
       <output-path>$PROJECT_DIR$/out/artifacts/DCES_API</output-path>
       <root id="archive" name="DCES_API.jar">
         <element id="module-output" name="DCES_API" />
