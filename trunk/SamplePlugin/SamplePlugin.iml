@@ -23,6 +23,15 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="module" module-name="DCES_API" />
     <orderEntry type="library" name="TableLayout" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../Client/libs/forms.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
 

@@ -8,6 +8,7 @@ import ru.ipo.dces.log.LogMessageType;
 import ru.ipo.dces.log.LoggerFactory;
 import ru.ipo.dces.log.UserMessagesLogger;
 import ru.ipo.dces.server.ServerFacade;
+import ru.ipo.problemsapi.Problem;
 
 import javax.swing.*;
 import java.awt.*;
@@ -218,7 +219,15 @@ public class PluginBox extends JFrame {
       return problemFolder;
     }
 
-    public String getProblemName() {
+      public Problem getProblem() {
+          return null;  //To change body of implemented methods use File | Settings | File Templates.
+      }
+
+      public JComponent getStatementPanel() {
+          return null;  //To change body of implemented methods use File | Settings | File Templates.
+      }
+
+      public String getProblemName() {
       return problemName;
     }
 

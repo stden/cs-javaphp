@@ -1,28 +1,22 @@
 package ru.ipo.dces.plugins.admin;
 
-import com.l2fprod.common.demo.Main;
-import com.l2fprod.common.propertysheet.Property;
-import com.l2fprod.common.propertysheet.PropertySheetPanel;
-import com.l2fprod.common.demo.PropertySheetPage3;
 import com.jgoodies.looks.plastic.Plastic3DLookAndFeel;
-
-import javax.swing.*;
-import java.awt.*;
-import java.io.File;
-import java.util.Date;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.beans.*;
-import java.util.HashMap;
-
+import com.l2fprod.common.propertysheet.PropertySheetPanel;
 import ru.ipo.dces.client.Controller;
 import ru.ipo.dces.client.Settings;
 import ru.ipo.dces.exceptions.GeneralRequestFailureException;
-import ru.ipo.dces.exceptions.ServerReturnedError;
 import ru.ipo.dces.log.LogMessageType;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
 import ru.ipo.dces.server.ServerFacade;
 import ru.ipo.dces.server.http.HttpServer;
+import ru.ipo.problemsapi.Problem;
+
+import javax.swing.*;
+import java.awt.*;
+import java.beans.BeanInfo;
+import java.beans.Introspector;
+import java.io.File;
+import java.util.HashMap;
 
 /**
  * Created by IntelliJ IDEA.
@@ -68,7 +62,15 @@ public class PropertiesEditor extends JPanel {
         return null;
       }
 
-      public String getProblemName() {
+        public Problem getProblem() {
+            return null;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public JComponent getStatementPanel() {
+            return null;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public String getProblemName() {
         return null;
       }
 
