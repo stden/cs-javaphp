@@ -1,0 +1,51 @@
+Различные типы ошибок:
+
+а. Server не может с собой сладить и сообщает это ServerProxy
+б. ServerPlugin с собой не сладил
+
+в. ServerProxy не может соединиться с Server
+г. ServerProxy не понимает, что идет от Server
+
+д. Server возвращает осмысленную ошибку (предусмотренную логикой проведения контестов)
+//е. ServerPlugin возвращает осмысленную ошибку (предусмотренную логикой взаимодействия с сервером)
+
+Обработчики:
+
+а: ServerProxy просит UI показать, что произошла серьезная ошибка и предложить юзеру отослать ее разработчикам (идентификатор)
+а: ServerProxy бросает исключение ServerException нижним слоям
+
+б: ServerProxy просит UI показать, что произошла серьезная ошибка и предложить юзеру отослать ее разработчикам плагина(идентификатор)
+б: ServerProxy бросает исключение ServerException нижним слоям
+
+в: ServerProxy просит UI показать, что соединение установить не удалось (проверьте подключение, бла-бла-бла)
+в: ServerProxy бросает исключение ServerException нижним слоям
+
+г: ServerProxy просит UI показать, что соединение установить не удалось (проверьте подключение, бла-бла-бла)
+г: ServerProxy бросает исключение ServerException нижним слоям
+
+// UsususException() %)
+
+д: ? Как обрабатывать типизированную ошибку - это когда посмотрим на логику
+д: Пропускаем ее дальше
+
+//е: Зависит от логики реализации плагина (возможно,ограничения на спецификацию плагина)
+//е: Без изменений отдаем ClientPlugin
+
+ъ: GeneralRequestFailureException // for all clients that don't need to handle lower exceptions
+а: BrokenServerException, //Server не может с собой сладить и сообщает это ServerProxy
+б: BrokenServerPluginException, //ServerPlugin с собой не сладил
+в: ConnectionFailedException, //ServerProxy не может соединиться с Server
+г: CommunicationFailedException, //ServerProxy не понимает, что идет от Server
+//д: ServerReturn //Server возвращает осмысленную ошибку (предусмотренную логикой проведения контестов)
+
+Full debug sequence
+ 1. copy .php to server
+    (SuperAdmin)
+ 2. create contest with ContestData
+    (SuperAdmin)
+ 2. create the problem with debugged client-plugin and server-plugin, submit statement and answer data
+    (ContestAdmin)
+ 3. create an ordinary participant
+    (ContestAdmin)
+ 4. connect as a participant, start test
+ 5. watch results as a participant / as an admin

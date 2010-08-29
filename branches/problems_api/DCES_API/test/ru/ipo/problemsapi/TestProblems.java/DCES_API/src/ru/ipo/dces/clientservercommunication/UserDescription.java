@@ -1,0 +1,57 @@
+package ru.ipo.dces.clientservercommunication;
+
+/**
+ * Информация о пользователе. Не является запросом или ответом, но содержится в них
+ */
+public class UserDescription {
+
+  /**
+   * Тип пользователя в системе. От типа зависит набор доступных пользователю действий
+   */
+  public enum UserType {
+    /**
+     * Участник
+     */
+    Participant,
+    /**
+     * Администратор соревнования
+     */
+    ContestAdmin,
+    /**
+     * Администратор сервера
+     */
+    SuperAdmin,
+  }
+
+  /**
+   * Идентификатор пользователя
+   */
+  @PHPDefaultValue("null")
+  public int      userID;
+
+  /**
+   * Логин
+   */
+  @PHPDefaultValue("'test_login'")
+  public String   login;
+
+  /**
+   * Пароль. В ответах сервера это поле не заполняется
+   */
+  @PHPDefaultValue("'test_password'")
+  public String   password;
+
+  /**
+   * Данные об участнике. Имя, школа, класс и все что угодно. Смыслы каждого
+   * элемента массива хранятся в описании контеста. ContestDescription содержит
+   * UserDataField[] data c информацией о полях с данными
+   */
+  @PHPDefaultValue("array()")
+  public String[] dataValue;
+
+  /** Тип пользователя */
+  //TODO избавиться от инициализатора
+  @PHPDefaultValue("'Participant'")
+  public UserType userType = UserType.Participant;
+
+}
