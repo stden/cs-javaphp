@@ -59,7 +59,7 @@ public class RyzhikResults implements Plugin {
       GetContestResultsResponse response = server.doRequest(r);
       String[][] getResults = response.table[response.userLine];
 
-      //remove admin and pdarticipant info if there is some
+      //remove admin and participant info if there is some
 
       int removeFirstColumns = response.headers[0].equals("admin info") ? 2 : 1;
       results = new String[getResults.length - removeFirstColumns - 1][]; //1 column is removed from the end
