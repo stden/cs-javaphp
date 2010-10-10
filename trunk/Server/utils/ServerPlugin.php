@@ -1,76 +1,36 @@
 <?php
+  
+  class ServerPlugin {
 
-  //TODO when one includes ServerPlugins, it name should be uniqe, otherwise php error occurs, this error is to be caught somehow
-  /*abstract*/ class ServerPlugin {
+    protected $problem;    
 
-    //plugin folder
-    protected $folder;
-
-    public function __construct($folder) {
+    public function __construct($problem) {
       //may be overriden, but must call parent constructor      
-      $this->folder = $folder;
+      $this->problem = $problem;
+    }
+    
+    /** saves state */
+    protected function saveState($state) {
+    	//TODO implement
     }
 
-    protected function testTime() {
-      $row = RequestUtils::getSessionUserRow();
-      $contest_start = DateMySQLToPHP($row['contest_start']);
-      $contest_finish = DateMySQLToPHP($row['contest_finish']);
-      $settings = Data::_unserialize($row['settings']);
-      $time = getCurrentContestTime($settings, $contest_start, $contest_finish);
-
-      if ($time['interval'] === 'before')
-        throwBusinessLogicError(19);
-      if ($time['interval'] === 'after')
-        throwBusinessLogicError(20);
+    /** Must be overriden.     
+     * @param $solution
+     * @param $submission 
+     * @return hash map string->string with columns data
+     */
+    public function checkSolution($solution, $submission) {
+      
     }
 
-    protected function getTime() {
-      $row = RequestUtils::getSessionUserRow();
-      $contest_start = DateMySQLToPHP($row['contest_start']);
-      $now = getdate();
-      return $now[0] - $contest_start;
-    }
-
-    //returns submission result
-    public function checkSolution($solution, $user_id, $answer_data, &$current_result, &$table_cols) {
-      //Needs to be overriden
-    }
-
-    public function getStatement($user_id, $statement_data) {
-      //May be overriden
-      return $this->getStatementData(basename($this->folder));
-    }
-
-    //returns string to configure db statement settings
-    //params:
-    // $statement_zip - already open zip file
-    public function updateStatementData($statement_zip) {
-      //May be overriden
-      return null;
-    }
-
-    //returns string to configure db answer settings
-    //params:
-    // $answer_zip - already open zip file
-    public function updateAnswerData($answer_zip) {
-      //May be overriden
-      return null;
-    }
-
-    public function getStatementData($problem_id) {
-      //May NOT be overriden
-      return @file_get_contents($GLOBALS['dces_dir_problems'] . '/' . $problem_id . "_statement.zip");
-    }
-
-    public function getAnswerData($problem_id) {
-      //May NOT be overriden
-      return @file_get_contents($GLOBALS['dces_dir_problems'] . '/' . $problem_id . "_answer.zip");
-    }
-
-    //return column names
-    public function getColumnNames($statementData) {
-      //May and usually should be overriden
-      return array("");
+    /** Must be overriden
+     * array of the form array('rt'=>arrayRT, 'ad'=>arrayAD);
+     * where arrayRT is a list of column names that are in results table
+     * and arrayAD list of additional column names 
+     * @return array of described type
+     */
+    public function getColumnNames() {      
+      return array('rt'=>array(), 'ad'=>array());
     }
 
   }

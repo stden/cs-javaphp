@@ -4,6 +4,7 @@ class Data {
 
     private static $con = null; //dbase connection    
     private static $queries = array(); //pending modification queries
+    private static $inserted_ids = array();
 
     private static function connectToDB() {
         $con = mysql_connect($GLOBALS["dces_mysql_host"], $GLOBALS["dces_mysql_user"], $GLOBALS["dces_mysql_password"]);
@@ -49,6 +50,8 @@ class Data {
     }
 
     public static function execPendingQueries() {
+    	$inserted_ids = array();    	
+    	
         if (is_null(Data::$con))
             Data::$con = connectToDB();
 
@@ -56,13 +59,15 @@ class Data {
 
         mysql_query("START TRANSACTION", Data::$con) or throwServerProblem(101, mysql_error());
 
-        foreach(Data::$queries as $qa){
-            //echo "query = $qa\n";
+        foreach(Data::$queries as $qa) {        	
             $res = mysql_query($qa, Data::$con);
             if ( ! $res ) {
                 $error_msg = mysql_error();
                 break;
             }
+            $iid = mysql_insert_id();
+            if ($iid)
+            	Data::$inserted_ids[] = $iid;
         }
 
         if($error_msg !== false){
@@ -70,7 +75,12 @@ class Data {
             throwServerProblem(104, $error_msg);
         } else {
             mysql_query("COMMIT", Data::$con) or throwServerProblem(103, mysql_error());
+            Data::$queries = array();
         }
+    }
+    
+    public static function getInsertedIDs() {
+    	return Data::$inserted_ids;
     }
 
     // Функция экранирования переменных
@@ -89,6 +99,8 @@ class Data {
         // Если переменная - число, то экранировать её не нужно
         // если нет - то окружем её кавычками, и экранируем
         if (!is_numeric($value)) {
+        	if (!is_string($value))
+        		throwServerProblem(203);
             $value = "'" . mysql_real_escape_string($value, Data::$con) . "'";
         }
         return $value;
