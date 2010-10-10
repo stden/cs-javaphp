@@ -63,6 +63,6 @@ public class ContestDescription {
    * Тонкая настройка времени проведения соревнования
    */
   @PHPDefaultValue("")
-  public ContestTiming contestTiming;
+  public ContestTiming contestTiming;     
 
 }

@@ -1,7 +1,7 @@
 <?php
 
   function processRemoveContestRequest($request) {
-    $prfx = $GLOBALS['dces_mysql_prefix'];
+    $prfx = DB_PREFIX;
 
     $user_row = RequestUtils::testSession($request->sessionID);
     $contest_id = $request->contestID;

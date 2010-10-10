@@ -5,39 +5,68 @@ package ru.ipo.dces.clientservercommunication;
  */
 public class ProblemDescription {
 
-  /** идентификатор задачи*/
-  @PHPDefaultValue("-1")
-  public int    id;
+    /**
+     * идентификатор задачи
+     */
+    @PHPDefaultValue("-1")
+    public int id;
 
-  /** Идентификатор плагина стороны клиента, с помощью которого участник будет решать задачу */
-  @PHPDefaultValue("'Test client plugin'")
-  public String clientPluginAlias;
+    /**
+     * Binary data with ZipProblem
+     */
+    @PHPDefaultValue("null")
+    public byte[] problem;
 
-  /** Идентификатор плагина стороны сервера, который будет обрабатывать ответы участника */
-  @PHPDefaultValue("'Test server plugin'")
-  public String serverPluginAlias;
+    @PHPDefaultValue("")
+    public ContestSpecificSettings settings;
 
-  /** Название задачи */
-  @PHPDefaultValue("'Test problem'.rand(0,239239)")
-  public String name;
+    /**
+     * Идентификатор плагина стороны клиента, с помощью которого участник будет решать задачу
+     *
+     * @deprecated используется поле problem
+     */
+    @PHPDefaultValue("'Test client plugin'")
+    public String clientPluginAlias;
 
-  /**
-   * Условие задачи. Это конкретное условие задачи для некоторого участника. Поле заполняется сервером в его
-   * ответах, в запросах клиента поле игнорируется
-   */
-  @PHPDefaultValue("null")
-  public byte[] statement;
+    /**
+     * Идентификатор плагина стороны сервера, который будет обрабатывать ответы участника
+     *
+     * @deprecated используется поле problem
+     */
+    @PHPDefaultValue("'Test server plugin'")
+    public String serverPluginAlias;
 
-  /**
-   * Условие задачи. Это данные, которые используются для создания условия.
-   */
-  @PHPDefaultValue("null")
-  public byte[] statementData;
+    /**
+     * Название задачи
+     *
+     * @deprecated используется поле problem
+     */
+    @PHPDefaultValue("'Test problem'.rand(0,239239)")
+    public String name;
 
-  /**
-   * Ответ к задаче. Это данные, которые используются для создания ответа
-   */
-  @PHPDefaultValue("null")
-  public byte[] answerData;
+    /**
+     * Условие задачи. Это конкретное условие задачи для некоторого участника. Поле заполняется сервером в его
+     * ответах, в запросах клиента поле игнорируется
+     *
+     * @deprecated используется поле problem
+     */
+    @PHPDefaultValue("null")
+    public byte[] statement;
+
+    /**
+     * Условие задачи. Это данные, которые используются для создания условия.
+     *
+     * @deprecated используется поле problem
+     */
+    @PHPDefaultValue("null")
+    public byte[] statementData;
+
+    /**
+     * Ответ к задаче. Это данные, которые используются для создания ответа
+     *
+     * @deprecated используется поле problem
+     */
+    @PHPDefaultValue("null")
+    public byte[] answerData;
 
 }

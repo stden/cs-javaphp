@@ -8,7 +8,7 @@
     $user_row = RequestUtils::testSession($request->sessionID);
     $user_id = $user_row['id'];
 
-    $prfx = $GLOBALS['dces_mysql_prefix'];
+    $prfx = DB_PREFIX;
 
     $user_type = $user_row['user_type'];
     $contest_id = RequestUtils::getRequestedContest($request->contestID, $user_row['contest_id'], $user_type);

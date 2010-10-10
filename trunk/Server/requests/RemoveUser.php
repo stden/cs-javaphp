@@ -1,7 +1,7 @@
 <?php
 
   function processRemoveUserRequest($request) {
-    $prfx = $GLOBALS['dces_mysql_prefix'];
+    $prfx = DB_PREFIX;
 
     $user_row = RequestUtils::testSession($request->sessionID);
     $user_id = $user_row['id'];
@@ -23,7 +23,7 @@
 
     //remove user $remove_user_id
 
-    $prfx = $GLOBALS['dces_mysql_prefix'];
+    $prfx = DB_PREFIX;
 
     //from 'users' table
     Data::submitModificationQuery(sprintf("DELETE FROM ${prfx}user WHERE id=%s", Data::quote_smart($remove_user_id)));

@@ -74,7 +74,7 @@
   $dces_mysql_prefix = "pr_";
   $dces_logging = true;
 
-  $prfx = $GLOBALS['dces_mysql_prefix'];
+  $prfx = DB_PREFIX;
 
   //find user in table
   //test if there is at least one such user

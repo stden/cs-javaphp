@@ -1,26 +1,15 @@
 <?php
 
-  function getUserRow($con, $user_id) {
-      $prfx = $GLOBALS['dces_mysql_prefix'];
-      $user_rows = mysql_query(
-                       sprintf("SELECT * FROM ${prfx}user WHERE id=%s", Data::quote_smart($user_id))
-                     , $con) or throwServerProblem(63, mysql_error());
-      if (! ($user_row = mysql_fetch_array($user_rows)))
-        return false;
-      return $user_row;
-  }
-
-  function processAdjustUserDataRequest($request) {
-    $con = connectToDB();
+function processAdjustUserDataRequest($request) {
+    $prfx = DB_PREFIX;
 
     $user_row = RequestUtils::testSession($request->sessionID);
-    $user_id = $user_row['id'];
 
     $adjust_user_id = $request->userID;
-    $adjust_user_row = getUserRow($con, $adjust_user_id);
+    $adjust_user_row = Data::getRow(sprintf("SELECT * FROM ${prfx}user WHERE id=%s", Data::quote_smart($adjust_user_id)));
 
     if (!$adjust_user_row)
-      throwBusinessLogicError(2);
+        throwBusinessLogicError(2);
 
     if ($user_row['user_type'] === 'Participant')
         throwBusinessLogicError(0);
@@ -38,15 +27,15 @@
     if (!is_null($request->newType))
         $queries['user_type'] = $request->newType;
 
-    $q = composeUpdateQuery(
-           "user",
-           $queries,
-           sprintf("id=%s",Data::quote_smart($adjust_user_id))
-         );
+    $q = Data::composeUpdateQuery(
+        "user",
+        $queries,
+        sprintf("id=%s", Data::quote_smart($adjust_user_id))
+    );
 
-    mysql_query($q, $con) or throwServerProblem(47, mysql_error());
+    Data::submitModificationQuery($q);
 
-    return new AcceptedResponse();     
-  }
+    return new AcceptedResponse();
+}
 
 ?>

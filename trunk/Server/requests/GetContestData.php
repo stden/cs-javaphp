@@ -1,10 +1,10 @@
 <?php
 
-  require_once(getServerPluginFile());
-  require_once('utils/Problem.php');
+require_once(getServerPluginFile());
+require_once('utils/Problem.php');
 
-  function processGetContestDataRequest($request) {
-    $prfx = $GLOBALS['dces_mysql_prefix'];    
+function processGetContestDataRequest($request) {
+    $prfx = DB_PREFIX;
 
     $is_anonymous = is_null($request->sessionID);
     if (!$is_anonymous) {
@@ -31,53 +31,61 @@
     //fill contest description with data
     //query db    
     $row = Data::getRow(
-                      sprintf("SELECT * FROM ${prfx}contest WHERE id=%s", Data::quote_smart($contest_id))
-                    ) or throwBusinessLogicError(14);
+        sprintf("SELECT * FROM ${prfx}contest WHERE id=%s", Data::quote_smart($contest_id))
+    ) or throwBusinessLogicError(14);
 
-    //TODO remove this code duplication, the code is simular to AvailableContests.php
+    //TODO remove this code duplication, the code is similar to AvailableContests.php
     $c = Data::_unserialize($row['settings']);
-    $c->contestID = (int)$row['id'];
+    $c->contestID = (int) $row['id'];
     $res->contest = $c;
 
     //fill problem data
-    $res->problems = array();
 
     if ($is_anonymous) return $res;
-                                  
-    //get type of requested data
-    $info_type = $request->infoType;
-    $extended_data = $request->extendedData;
+
     //query db to find out problems
     $problems_rows = Data::getRows(
-                       sprintf("SELECT * FROM ${prfx}problem WHERE contest_id=%s ORDER BY contest_pos ASC", Data::quote_smart($contest_id))
-                     );
+        sprintf("SELECT * FROM ${prfx}problem WHERE contest_id=%s ORDER BY contest_pos ASC", Data::quote_smart($contest_id))
+    );
 
+    //fill problems data
+    $res->problems = array();
+    $info_type = $request->infoType;
+    $extended_data = $request->extendedData;
     while ($row = Data::getNextRow($problems_rows)) {
-      $pd = new ProblemDescription();
-      $pd->id = (int)$row['id'];
-      $problem = new Problem(getProblemFile($pd->id));
-     
-      //load plugin
-      $pluginName = $problem->getServerPlugin();
-      require_once(getServerPluginFile($pluginName));      
-      $plugin = new $pluginName ($problem);
-      
-      $pd->settings = Data::_unserialize($row['contest_settings']);
+        $pd = new ProblemDescription();
+        $res->problems[] = $pd;
 
-      //fill extended data: statement or statementData and answerData
-      if ((!is_null($extended_data) && in_array($pd->id, $extended_data)) || is_null($extended_data)) {
-        if ($info_type === "ParticipantInfo")          
-          $pd->problem = $problem->getParticipantVersion($user_id)->getProblemBytes();
-        elseif ($info_type === "AdminInfo") {
-          if ($user_type === "Participant") throwBusinessLogicError(0);          
-          $pd->problem = $problem->getProblemBytes();
+        $pd->id = (int) $row['id'];
+        $pd->settings = Data::_unserialize($row['contest_settings']);
+
+        //do we need any information
+        if ($info_type == 'NoInfo')
+            continue;
+        //do we need to return some info for this problem
+        if (!is_null($extended_data) && !in_array($pd->id, $extended_data))
+            continue;
+
+        $problem = new Problem(getProblemFile($pd->id));
+
+        if ($info_type !== 'NoInfo') {
+            //fill extended data: statement or statementData and answerData
+            if ($info_type === "ParticipantInfo")
+                $pd->problem = $problem->getParticipantVersion($user_id)->getProblemBytes();
+            elseif ($info_type === "AdminInfo") {
+                if ($user_type === "Participant") throwBusinessLogicError(0);
+                $pd->problem = $problem->getProblemBytes();
+            }
         }
-      }
-      
-      $res->problems[] = $pd;
     }
 
     return $res;
-  }
+}
+
+/*
+ load plugin
+ $pluginName = $problem->getServerPlugin();
+ require_once(getServerPluginFile($pluginName));
+ */
 
 ?>

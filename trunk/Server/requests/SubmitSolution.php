@@ -14,7 +14,7 @@
   }
 
   function processSubmitSolutionRequest($request) {
-    $prfx = $GLOBALS['dces_mysql_prefix'];
+    $prfx = DB_PREFIX;
 
     //get user_id or die, if session is invalid
     $userRow = RequestUtils::testSession($request->sessionID);
