@@ -1,12 +1,10 @@
 <?php
 
   require_once(getServerPluginFile());
+  require_once('utils/Problem.php');
 
   function processGetContestDataRequest($request) {
-    $prfx = $GLOBALS['dces_mysql_prefix'];
-
-    //get db connection
-    $con = connectToDB();
+    $prfx = $GLOBALS['dces_mysql_prefix'];    
 
     $is_anonymous = is_null($request->sessionID);
     if (!$is_anonymous) {
@@ -31,16 +29,14 @@
     $res = new GetContestDataResponse();
 
     //fill contest description with data
-    //query db
-    $contest_rows = mysql_query(
+    //query db    
+    $row = Data::getRow(
                       sprintf("SELECT * FROM ${prfx}contest WHERE id=%s", Data::quote_smart($contest_id))
-                    , $con) or throwServerProblem(15, mysql_error());
-    $row = mysql_fetch_array($contest_rows) or throwBusinessLogicError(14);
+                    ) or throwBusinessLogicError(14);
 
     //TODO remove this code duplication, the code is simular to AvailableContests.php
     $c = Data::_unserialize($row['settings']);
-    $c->contestID = (int)$row['id'];    
-
+    $c->contestID = (int)$row['id'];
     $res->contest = $c;
 
     //fill problem data
@@ -52,42 +48,33 @@
     $info_type = $request->infoType;
     $extended_data = $request->extendedData;
     //query db to find out problems
-    $problems_rows = mysql_query(
+    $problems_rows = Data::getRows(
                        sprintf("SELECT * FROM ${prfx}problem WHERE contest_id=%s ORDER BY contest_pos ASC", Data::quote_smart($contest_id))
-                     , $con) or throwServerProblem(16, mysql_error());
+                     );
 
-    while ($row = mysql_fetch_array($problems_rows)) {
-      $p = new ProblemDescription();
-
-      $p->id = (int)$row['id'];
-      $p->clientPluginAlias = $row['client_plugin_alias'];
-      $p->serverPluginAlias = $row['server_plugin_alias'];
-      $p->name = $row['name'];
-
-      $p->statement = null;
-      $p->statementData = null;
-      $p->answerData = null;
-
+    while ($row = Data::getNextRow($problems_rows)) {
+      $pd = new ProblemDescription();
+      $pd->id = (int)$row['id'];
+      $problem = new Problem(getProblemFile($pd->id));
+     
       //load plugin
-      require_once(getServerPluginFile($p->serverPluginAlias));      
-      $plugin = new $p->serverPluginAlias ($GLOBALS['dces_dir_problems'] . "/$p->id");
+      $pluginName = $problem->getServerPlugin();
+      require_once(getServerPluginFile($pluginName));      
+      $plugin = new $pluginName ($problem);
+      
+      $pd->settings = Data::_unserialize($row['contest_settings']);
 
       //fill extended data: statement or statementData and answerData
-      if ((!is_null($extended_data) && in_array($p->id, $extended_data)) || is_null($extended_data)) {
-        if ($info_type === "ParticipantInfo") {
-          $statement = Data::_unserialize($row['statement']);
-          //TODO process error: statement not found and return correct error info
-          $p->statement = $plugin->getStatement($user_id, $statement);
-        }
+      if ((!is_null($extended_data) && in_array($pd->id, $extended_data)) || is_null($extended_data)) {
+        if ($info_type === "ParticipantInfo")          
+          $pd->problem = $problem->getParticipantVersion($user_id)->getProblemBytes();
         elseif ($info_type === "AdminInfo") {
-          if ($user_type === "Participant") throwBusinessLogicError(0);
-          //TODO process error: statement not found and return correct error info
-          $p->statementData = $plugin->getStatementData($p->id);
-          $p->answerData = $plugin->getAnswerData($p->id);
+          if ($user_type === "Participant") throwBusinessLogicError(0);          
+          $pd->problem = $problem->getProblemBytes();
         }
       }
       
-      $res->problems[] = $p;
+      $res->problems[] = $pd;
     }
 
     return $res;

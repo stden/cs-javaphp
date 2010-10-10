@@ -18,4 +18,22 @@ function getServerPluginFile($alias = '') {
     }
 }
 
+/**
+ * returns a temporary file for the problem with the specified id 
+ * @param $id
+ * @return unknown_type
+ */
+function getTemporaryProblemFile() {	
+	return $GLOBALS['dces_dir_temp'] . '/' . RequestUtils::random_str(10) . '.problem';
+}
+
+/**
+ * returns the file for the problem with the specified id 
+ * @param $id
+ * @return unknown_type
+ */
+function getProblemFile($id) {	
+	return $GLOBALS['dces_dir_temp'] . "/$id.problem";
+}
+
 ?>

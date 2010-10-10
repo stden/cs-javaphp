@@ -1,5 +1,7 @@
 <?php
 
+  require_once 'utils/Problem.php';
+
   function setResultsColumns($user_row, $problem_id, $new_cols) {
     //get old results       
     $new_results = Data::_unserialize($user_row['results']);    
@@ -12,7 +14,7 @@
   }
 
   function processSubmitSolutionRequest($request) {
-    $prfx = $GLOBALS['dces_mysql_prefix'];    
+    $prfx = $GLOBALS['dces_mysql_prefix'];
 
     //get user_id or die, if session is invalid
     $userRow = RequestUtils::testSession($request->sessionID);
@@ -35,26 +37,31 @@
     $contest_id = RequestUtils::getRequestedContest($problem_contest_id, $userRow['contest_id'], $user_type);
 
     if ($contest_id < 0) throwBusinessLogicError(0);
+    
+    //get problem
+    $problem = new Problem(getProblemFile($request->problemID));
+        
+    $problem_settings = Data::_unserialize($problem_row['contest_settings']);
 
     //get plugin_alias
-    $plugin_alias = $problem_row['server_plugin_alias'];
+    $plugin_alias = $problem->getServerPlugin();
 
     //get plugin
     require_once(getServerPluginFile());
     require_once(getServerPluginFile($plugin_alias));
 
-    $plugin = new $plugin_alias($GLOBALS['dces_dir_problems'] . '/' . $request->problemID);
+    $plugin = new $plugin_alias($problem);
 
     //get answer data    
     $answer_data = Data::_unserialize($problem_row['answer']);       
 
     //get previous result
+    /*
     $problem_status_row = Data::getRow(
                                sprintf("SELECT * FROM ${prfx}problem_status WHERE problem_id=%s AND user_id=%s",
                                        Data::quote_smart($request->problemID),
                                        Data::quote_smart($user_id)
                                ));
-
     if (!$problem_status_row) {
       $current_result = null;
       $do_status_update = false;
@@ -63,11 +70,24 @@
       $current_result = Data::_unserialize($problem_status_row['status'], null);      
       $do_status_update = true;
     }
-    $current_cols = null;
+    */
+    //get submissions history
+    $hist = Data::getRow(
+    	sprintf(
+    		"SELECT COUNT(*) AS cnt FROM ${prfx}submission_history WHERE (problem_id=%s) AND (user_id=%s)",
+    		Data::quote_smart($request->problemID),
+    		Data::quote_smart($user_id)
+    	)
+    );
+    
+    //test that not all submission attempts were used
+    if ($hist >= $problem_settings->sendCount)
+    	throwBusinessLogicError(21);
 
     //call plugin to check solution
     //public function checkSolution($solution, $user_id, $answer_data, &$current_result, &$table_cols) {
-    $check_result = $plugin->checkSolution($request->problemResult, $user_id, $answer_data, $current_result, $current_cols);
+    //??????????? $submission
+    $check_result = $plugin->checkSolution($request->problemResult, $submission);
 
     //if result columns changed, set them
     if (!is_null($current_cols))

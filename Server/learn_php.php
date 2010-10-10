@@ -1,5 +1,51 @@
 <?php
 
+  $a = array('a','b','c');
+  echo $a[1];  
+
+  die();
+  
+  class A{};
+  
+  $a = new A;
+  $a->a = array();  
+  $b = $a;
+  $a->a[42] = 239;
+    
+  /*
+  $a->f1 = new A();
+  $a->f2 = new A();
+  
+  $a->f1->v = 'q';
+  
+  $b = $a;
+  */
+  
+  var_dump($a);
+  echo "<br>";
+  var_dump($b);
+  
+  
+  die();
+
+  var_dump(null);
+  //var_dump($a);
+
+  die();
+
+	require_once 'utils/Problems.php';
+
+	$p = new Problem('/home/ilya/tmp/probs/prob.zip');
+	var_dump($p->getClientPlugin());
+	var_dump($p->getServerPlugin());
+	//var_dump($p->getProblemBytes());
+	var_dump($p->getResource('ANSWER'));	
+	var_dump($p->isTeacher('EXE'));
+	var_dump($p->isTeacher('ANSWER'));
+	var_dump($p->getResource('STATEMENT'));
+
+	die();
+
   echo $_SERVER['DOCUMENT_ROOT'];
 
   die();

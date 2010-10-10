@@ -1,287 +1,184 @@
 <?php
 
+  require_once('utils/Problem.php');
   require_once(getServerPluginFile());
-
-  //gets contents of $s, treats it as a zip, opens zip and returns it.
-  //remove_handle is a value to be passed to closeZip() function
-  function openZip($s, $zip_file) {
-    if (!file_put_contents($zip_file, $s)) return false;
-    $zip = new ZipArchive();
-    $res = $zip->open($zip_file);
-    if ($res === true)
-      return $zip;
-    else
-      return false;
+  
+  /**
+   * Copies fields from from to to, doesn't copy values that have 'ignore' values 
+   * @param $from from
+   * @param $to to
+   * @return int, number of copied (non-default) values
+   */
+  function copyValues($from, $to) {
+  	if (!$from)
+  		return 0;  	
+  	
+  	$res = 0;
+  	foreach ($from as $fld => $val) {
+  		//test val to be default value  $a = array();		
+  		$is_default = $val === -1 || $val === NULL;
+  		if (!$is_default) {
+  			//copy values, recurse if val is an object
+  			if (is_object($val))
+  				$res += copySettings($val, $to->$fld);
+  			else
+  		    	$to->$fld = $val;
+  		    $res++;
+  		}  		
+  	}
+  	
+  	return $res;
   }
 
-  function queryForContestDescription($c, $contest_id, $con) {
+  function queryForContestDescription($c, $contest_id) {
     //get current contest settings
-    $prfx = $GLOBALS['dces_mysql_prefix'];
-    $rows = mysql_query("SELECT settings FROM ${prfx}contest WHERE id=$contest_id", $con) or throwServerProblem(84, mysql_error());
-    $row = mysql_fetch_array($rows) or throwBusinessLogicError(14);    
+    $prfx = $GLOBALS['dces_mysql_prefix'];    
+    $row = Data::getRow("SELECT settings FROM ${prfx}contest WHERE id=$contest_id");    
     $settings = Data::_unserialize($row['settings']);
-
-    //TODO make normal copy of settings
-
-    //adjust name
-    if (!is_null($c->name))
-      $settings->name = $c->name;
-
-    //adjust description
-    if (!is_null($c->description))
-      $settings->description = $c->description;
-
-    //adjust start
-    if (!is_null($c->start))
-      $settings->start = $c->start;
-
-    //adjust finish
-    if (!is_null($c->finish))
-      $settings->finish = $c->finish;
-
-    //adjust registration type
-    if (!is_null($c->registrationType)) {
-      $settings->registrationType = $c->registrationType;
-    }  
-
-    //adjust result access policy
-    if (!is_null($c->resultsAccessPolicy)) {
-      if (!is_null($c->resultsAccessPolicy->contestPermission))
-        $settings->resultsAccessPolicy->contestPermission = $c->resultsAccessPolicy->contestPermission;
-
-      if (!is_null($c->resultsAccessPolicy->contestEndingPermission))
-        $settings->resultsAccessPolicy->contestEndingPermission = $c->resultsAccessPolicy->contestEndingPermission;
-
-      if (!is_null($c->resultsAccessPolicy->afterContestPermission))
-        $settings->resultsAccessPolicy->afterContestPermission = $c->resultsAccessPolicy->afterContestPermission;
-    }
-
-    //adjust submission policy
-    if (!is_null($c->contestTiming)) {
-      $settings->contestTiming->selfContestStart = $c->contestTiming->selfContestStart;
-
-      if ($c->contestTiming->maxContestDuration !== -1)
-        $settings->contestTiming->maxContestDuration = $c->contestTiming->maxContestDuration;
-
-      if ($c->contestTiming->contestEndingFinish !== -1)
-        $settings->contestTiming->contestEndingFinish = $c->contestTiming->contestEndingFinish;
-
-      if ($c->contestTiming->contestEndingStart !== -1)
-        $settings->contestTiming->contestEndingStart = $c->contestTiming->contestEndingStart;                  
-    }
+    
+    copyValues($c, $settings);
     
     RequestUtils::assertContestSettingsIntegrity($settings);
 
     $col_value = array('settings' => @serialize($settings));
-    return composeUpdateQuery("contest", $col_value, "id=$contest_id");
+    Data::submitModificationQuery(
+    	composeUpdateQuery("contest", $col_value, "id=$contest_id")
+    );
   }
 
-  function queriesToAdjustProblems($con, $problems, $contest_id, &$temp_dirs, &$temp_statement_zips, &$temp_answer_zips) {
+  /**
+   * creates queries to change problem set
+   * @param $problems new problems
+   * @param $contest_id contest id
+   * @return array() list of temporary files. NULL if the existing file was used
+   */
+  function queriesToAdjustProblems($problems, $contest_id) {
     $prfx = $GLOBALS['dces_mysql_prefix'];
 
-    $changed_probs = array(); //problems that will be changed by request
-    $queries = array();
+    $changed_probs = array(); //problems that will be changed by request    
+    $temp_probs = array();
+    
+    //find all contest problems
+    $prob2settings = array();
+    $res = Data::getRows(sprintf("SELECT * FROM ${prfx}problem WHERE contest_id=%s", Data::quote_smart($contest_id)));
+    while ($row = Data::getNextRow($res))
+      $prob2settings[$row['id']] = Data::_unserialize($row['contest_settings']);    
 
     $contest_pos = 1;
     foreach ($problems as $p) {
-      $col_value = array(); 
-      $all_set = true;
+      $col_value = array();      
+      //new problem must have 1) data 2) settings 
 
       //set contest id
       $col_value['contest_id'] = $contest_id;
-
-      //set client plugin
-      if (!is_null($p->clientPluginAlias)) {
-        $col_value['client_plugin_alias'] = $p->clientPluginAlias;
-        $cp = Data::quote_smart($p->clientPluginAlias);
-        if (!Data::hasRows("SELECT alias FROM ${prfx}client_plugin WHERE alias=$cp"))
-            throwBusinessLogicError(6);
-      } else $all_set = false;
-
-      //set server plugin
-      if (!is_null($p->serverPluginAlias)) {
-        $col_value['server_plugin_alias'] = $p->serverPluginAlias;
-        $sp = Data::quote_smart($p->serverPluginAlias);
-        if (!Data::hasRows("SELECT alias FROM ${prfx}server_plugin WHERE alias=$sp"))
-            throwBusinessLogicError(5);
-      } else $all_set = false;
-
-      //set name
-      if (!is_null($p->name)) {
-        $col_value['name'] = $p->name;
-      } else $all_set = false;
-
-      //skip statement value
-
-      //get current server plugin alias
-      if ( !is_null($p->serverPluginAlias) )
-        $plugin_alias = $p->serverPluginAlias;
-      if ($p->id != -1 && is_null($p->serverPluginAlias) ) {
-        $rows = mysql_query(
-                  sprintf("SELECT server_plugin_alias FROM ${prfx}problem WHERE id=%s", Data::quote_smart($p->id))
-                , $con) or throwServerProblem(12, mysql_error());
-        $row = mysql_fetch_array($rows) or throwBusinessLogicError(4);
-        $plugin_alias = $row['server_plugin_alias'];
-      }
-      elseif ($p->id == -1 && is_null($p->serverPluginAlias))
-        throwBusinessLogicError(1);             
-
-      //get current server plugin
-      //TODO improve security here            
-      require_once(getServerPluginFile($plugin_alias));
-              
-      if ($p->id == -1) {
-        //We are to create a directory for new problem
-        //New dir is temporary because we don't know problem id 
-        $temp = $GLOBALS['dces_dir_temp'] . '/' . RequestUtils::random_str(10);
-        $temp_dirs[] = $temp;
-        mkdir($temp);
-        $plugin = new $plugin_alias($temp);
-      }
-      else //here plugin dir is made from the known problem id
-        $plugin = new $plugin_alias($GLOBALS['dces_dir_problems'] . "/$p->id");
-
-      //set statementData
-      if (!is_null($p->statementData)) {
-        if ($p->id == -1)
-          $zip_file = $GLOBALS['dces_dir_temp'] . '/' . RequestUtils::random_str(10) . '.zip';
-        else {
-          $problem_id = $p->id;
-          $zip_file = $GLOBALS['dces_dir_problems'] . "/${problem_id}_statement.zip";
-        }
-        $zip = openZip($p->statementData, $zip_file);
-        if ($zip === false) throwBusinessLogicError(7);
-        $data_updated = $plugin->updateStatementData($zip);        
-        if ($data_updated === false) throwBusinessLogicError(9);        
-        $col_value['statement'] = serialize($data_updated);
-        $col_value['column_names'] = serialize($plugin->getColumnNames($data_updated));
-        if ($p->id == -1)
-          $temp_statement_zips[] = $zip_file;
-      } else $all_set = false;
-
-      //set answerData
-      //TODO think abount code duplication. May be there is no need in two concepts: statement and answer 
-      if (!is_null($p->answerData)) {
-        if ($p->id == -1)
-          $zip_file = $GLOBALS['dces_dir_temp'] . '/' . RequestUtils::random_str(10) . '.zip';
-        else {
-          $problem_id = $p->id;
-          $zip_file = $GLOBALS['dces_dir_problems'] . "/${problem_id}_answer.zip";
-        }
-        $zip = openZip($p->answerData, $zip_file);
-        if ($zip === false) throwBusinessLogicError(8);
-        $data_updated = $plugin->updateAnswerData($zip);
-        if ($data_updated === false) throwBusinessLogicError(10);
-        $col_value['answer'] = serialize($data_updated);
-        if ($p->id == -1)
-          $temp_answer_zips[] = $zip_file;
-      } else $all_set = false;
-
-      //set contest position
       $col_value['contest_pos'] = $contest_pos ++;
-
-      if ($p->id == -1)
-      {
-        //create new task
-        if (!$all_set) throwBusinessLogicError(1);
-
-        $queries[] = composeInsertQuery('problem', $col_value);
+      
+      if ($p->id != -1 && !isset($prob2settings[$p->id]))
+      	throwBusinessLogicError(4);
+      
+      //find problem file or make temporary if a new problem was sent       
+      if ($p->problem) {
+      	$problem_file = getTemporaryProblemFile();      	
+      	@file_put_contents($problem_file, $p->problem) or throwServerProblem('200', 'failed to write problem file');
+      	$temp_probs[] = $problem_file;      	
+      } else {
+      	if ($p->id < 0)
+      		throwBusinessLogicError(1);
+      	$problem_file = getProblemFile($p->id);
+      	$temp_probs[] = NULL;
       }
-      else
-      {
-        //update the task
-        $queries[] = composeUpdateQuery('problem', $col_value, "id='$p->id'");
+
+      $problem = new Problem($problem_file);
+
+      //get server plugin
+      //TODO improve security here      
+      $plugin_alias = $problem->getServerPlugin();            
+      require_once(getServerPluginFile($plugin_alias));
+      $plugin = new $plugin_alias($problem);
+      $col_value['column_names'] = serialize($plugin->getColumnNames());
+      
+      //copy per contest settings      
+      if ($p->settings)	{      
+      	if ($p->id != -1) {
+      		$new_settings = $prob2settings[$p->id];      		
+      		copyValues($p->settings, $new_settings);
+      	} else $new_settings = $p->settings;
+      	$col_value['contest_settings'] = serialize($new_settings);      	      	
+      } else if ($p->id < 0) throwBusinessLogicError(1);
+
+      //query depends on whether we add or change a problem 
+      if ($p->id == -1) {        
+        Data::submitModificationQuery(
+        	composeInsertQuery('problem', $col_value)
+        );
+      } else {
+        Data::submitModificationQuery(
+        	composeUpdateQuery('problem', $col_value, "id='$p->id'")
+        );
         $changed_probs[$p->id] = 1;
       }
 
     }
-
-    //queries to remove problems
-    $res = mysql_query(
-             sprintf("SELECT id FROM ${prfx}problem WHERE contest_id=%s", Data::quote_smart($contest_id))
-           , $con) or throwServerProblem(13, mysql_error());
-    while ($row = mysql_fetch_array($res))           
-      if (!isset($changed_probs[$row['id']])) {
-        $pid = $row['id']; 
-        $queries[] = "DELETE FROM ${prfx}problem WHERE id='$pid'";
-      }
-
-    return $queries;
+    
+    //delete extra problems
+    foreach (array_keys($prob2settings) as $id)
+    	if (!isset($changed_probs[$id])) {        
+        	Data::submitModificationQuery( 
+        		"DELETE FROM ${prfx}problem WHERE id='$id'"
+        	);
+      	}
+      	
+	return $temp_probs;      	
   }
 
   function processAdjstContestRequest($request) {
-    //get db connection
-    $con = connectToDB();
-
+  	
+  	if (!$request->contest)
+  		throwBusinessLogicError(1, 'contest is null');
+  	
     //get user_id or die, if session is invalid
     $userRow = RequestUtils::testSession($request->sessionID);
-    $user_id = $userRow['id'];
+    $user_id = $userRow['id'];      
 
     //authorize user for this operation
     // get contest ID
-    $user_type = $userRow['user_type'];
-        
+    $user_type = $userRow['user_type'];        
     $contest_id = RequestUtils::getRequestedContest($request->contest->contestID, $userRow['contest_id'], $user_type);
     if ($user_type === "Participant") $contest_id = -1;
-
     if ($contest_id < 0) throwBusinessLogicError(0);
 
-    //get elements to adjust
-    $queries = array();
-
-    //adjust contest description    
-    $query_1 = queryForContestDescription($request->contest, $contest_id, $con);    
-    if ($query_1 != "")
-        $queries[] = $query_1;
+    queryForContestDescription($request->contest, $contest_id);    
 
     //now adjust problems
-    $temp_dirs = array(); // will contain set of created temporary plugin directories
-    $queries_2 = array();    
-    $temp_answer_zips = array();
-    $temp_statement_zips = array();    
-    if (!is_null($request->problems))
-      $queries_2 = queriesToAdjustProblems($con, $request->problems, $contest_id, $temp_dirs, $temp_statement_zips, $temp_answer_zips);
+    if (!is_null($request->problems))    	
+    	$tmp_files = queriesToAdjustProblems($request->problems, $contest_id);
 
-    foreach ($queries_2 as $q)
-      $queries[] = $q;
-
-    $responseIDs = array();
-    //TODO make this code right
-    if (!is_null($request->problems))
-        foreach ($request->problems as $p)
-            $responseIDs[] = $p->id;
-    $skipped_index = 0;
-
-    //run transaction
-    if (count($queries) != 0) {
-      $inserted_ids = array();      
-      transaction($con, $queries, $inserted_ids) or throwServerProblem(60);      
-
-      //rename temporary dirs
-      if ( count($temp_dirs) != count($inserted_ids) ||
-           count($temp_dirs) != count($temp_statement_zips) ||
-           count($temp_dirs) != count($temp_answer_zips) ) {
-             throwServerProblem(61);
-           }
-
-      for ($i = 0; $i < count($temp_dirs); $i++) {
-        $temp_dir = $temp_dirs[$i];
-        $inserted_id = $inserted_ids[$i];
-        $stat_zip = $temp_statement_zips[$i];
-        $ans_zip = $temp_answer_zips[$i];
-        @rename($temp_dir, $GLOBALS['dces_dir_problems'] . "/${inserted_id}") /*or do nothing*/;
-        @rename($stat_zip, $GLOBALS['dces_dir_problems'] . "/${inserted_id}_statement.zip") /*or do nothing*/;
-        @rename($ans_zip,  $GLOBALS['dces_dir_problems'] . "/${inserted_id}_answer.zip") /*or do nothing*/;
-
-        //insert index into new problem ids list
-        while ($skipped_index < count($responseIDs) && $responseIDs[$skipped_index] != -1)
-            $skipped_index ++;
-        if ($skipped_index >= count($responseIDs)) throwServerProblem(159);
-        $responseIDs[$skipped_index] = $inserted_id;
-      }
-    }
-    else
-      throwBusinessLogicError(11);
+    Data::execPendingQueries();
+    $new_ids = Data::getInsertedIDs();
+    $id_ind = 0;
+    
+    //rename temporary files and fill responseIDs
+    if (!is_null($request->problems)) {
+    	$responseIDs = array();
+    	$probs_cnt = count($request->problems);
+    	for ($i = 0; $i < $probs_cnt; $i++) {
+    		$p = $request->problems[$i];
+    		$tmp = $tmp_files[$i];
+    		if ($tmp) {
+    			$new_id = $p->id;
+    			if ($new_id < 0)
+    				$new_id = $new_ids[$id_ind++];
+    			@rename($tmp, getProblemFile($new_id));
+    			$responseIDs[] = $new_id;
+    		} else {
+    			$responseIDs[] = $p->id;
+    			if ($p->id < 0) //for new tasks it must have been created a temporary file
+    				throwServerProblem(202);
+    		}
+    	}
+    	
+    } else
+    	$responseIDs = NULL;
 
     $response = new AdjustContestResponse();
     $response->problemIDs = $responseIDs;

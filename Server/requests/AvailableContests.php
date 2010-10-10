@@ -2,14 +2,13 @@
 
 function processAvailableContestsRequest($request) {
   $prfx = $GLOBALS['dces_mysql_prefix'];
-  $con = connectToDB();
 
   $res = new AvailableContestsResponse();
   $res->contests = array();
 
-  $contest_rows = mysql_query("SELECT * FROM ${prfx}contest") or throwServerProblem(27, mysql_error());
+  $contest_rows = Data::getRows("SELECT * FROM ${prfx}contest");
 
-  while($row = mysql_fetch_array($contest_rows))
+  while($row = Data::getNextRow($contest_rows))
   {
     $c = Data::_unserialize($row['settings']);
 
