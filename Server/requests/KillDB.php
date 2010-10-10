@@ -28,7 +28,7 @@ function processKillDBRequest($request) {
         'user'
     );
 
-    $prfx = $GLOBALS['dces_mysql_prefix'];
+    $prfx = DB_PREFIX;
     
     foreach ($tables as $t)
         Data::submitModificationQuery("DROP TABLE $prfx" . $t);

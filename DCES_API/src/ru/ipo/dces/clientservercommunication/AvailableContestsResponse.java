@@ -8,6 +8,7 @@ public class AvailableContestsResponse implements Response {
   /**
    * Массив с описаниями всех зарегистрированных в системе соревнованиях
    */
+  @PHPDefaultValue("array()")
   public ContestDescription[] contests;
 
 }

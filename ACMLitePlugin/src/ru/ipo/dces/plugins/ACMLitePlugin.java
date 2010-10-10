@@ -49,7 +49,7 @@ public class ACMLitePlugin extends JPanel implements Plugin {
         showStatement();
         showIn();
         textArea1.setEnabled(false);
-        textArea1.setText("Решение ещё не отправлено");
+        textArea1.setText("пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
 
 
         ButtonSubmit.addActionListener(new ActionListener() {
@@ -80,7 +80,7 @@ public class ACMLitePlugin extends JPanel implements Plugin {
         */
         File folder = env.getProblemFolder();
 
-        final String title = "Заголовок";
+        final String title = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ";
         String resName = "";
         String resExt = "";
         int curPriority = 1;
@@ -93,7 +93,7 @@ public class ACMLitePlugin extends JPanel implements Plugin {
         }
         catch (IOException e) {
 
-            statementTextPane.setText("Не удается отобразить условие, свяжитесь с организаторами");
+            statementTextPane.setText("пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
 
         }
 
@@ -111,7 +111,7 @@ public class ACMLitePlugin extends JPanel implements Plugin {
         */
         File folder = env.getProblemFolder();
 
-        final String title = "Заголовок";
+        final String title = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ";
 
         String resExt = "";
         int curPriority = 1;
@@ -134,7 +134,7 @@ public class ACMLitePlugin extends JPanel implements Plugin {
         }
         catch (IOException e) {
 
-            textArea2.setText("Не удается отобразить входной файл, свяжитесь с организаторами");
+            textArea2.setText("пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
 
         }
 
@@ -178,12 +178,12 @@ public class ACMLitePlugin extends JPanel implements Plugin {
                 }
 
                 public String getDescription() {
-                    return "Только .txt";
+                    return "пїЅпїЅпїЅпїЅпїЅпїЅ .txt";
                 }
             });
 
 
-            //jFileChooser.setDialogTitle("Выбор файла с решением");
+            //jFileChooser.setDialogTitle("пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
 
 
         }
@@ -256,14 +256,14 @@ public class ACMLitePlugin extends JPanel implements Plugin {
 
 
             if (ans.get("result").equals("yes"))
-                JOptionPane.showMessageDialog(null, "Вы дали правильный ответ!");
+                JOptionPane.showMessageDialog(null, "пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ!");
             else if (ans.get("result").equals("no"))
-                JOptionPane.showMessageDialog(null, "Вы дали неправильный ответ!!");
+                JOptionPane.showMessageDialog(null, "пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ!!");
             else
-                JOptionPane.showMessageDialog(null, "Ответ сервера: " + ans.get("result"));
+                JOptionPane.showMessageDialog(null, "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: " + ans.get("result"));
         }
         catch (GeneralRequestFailureException e1) {
-            JOptionPane.showMessageDialog(null, "Не удалось связаться с сервером. Ошибка: " + e1.getMessage());
+            JOptionPane.showMessageDialog(null, "пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅ: " + e1.getMessage());
         }
 
     }
@@ -280,8 +280,8 @@ public class ACMLitePlugin extends JPanel implements Plugin {
         pluginPanel.setLayout(new GridBagLayout());
         ButtonVh = new JButton();
         ButtonVh.setHorizontalAlignment(0);
-        ButtonVh.setLabel("Сохранить входные данные");
-        ButtonVh.setText("Сохранить входные данные");
+        ButtonVh.setLabel("РЎРѕС…СЂР°РЅРёС‚СЊ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ");
+        ButtonVh.setText("РЎРѕС…СЂР°РЅРёС‚СЊ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ");
         ButtonVh.setVerticalAlignment(0);
         GridBagConstraints gbc;
         gbc = new GridBagConstraints();
@@ -300,13 +300,13 @@ public class ACMLitePlugin extends JPanel implements Plugin {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(0, 3, 0, 2);
         pluginPanel.add(scrollPane1, gbc);
-        scrollPane1.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(-10053121)), "Текст задания", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(-16777216)));
+        scrollPane1.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(-10053121)), "РўРµРєСЃС‚ Р·Р°РґР°РЅРёСЏ", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(-16777216)));
         statementTextPane = new JTextPane();
         statementTextPane.setContentType("text/html");
         statementTextPane.setEditable(false);
         scrollPane1.setViewportView(statementTextPane);
         ButtonSubmit = new JButton();
-        ButtonSubmit.setText("Отправить решение");
+        ButtonSubmit.setText("РћС‚РїСЂР°РІРёС‚СЊ СЂРµС€РµРЅРёРµ");
         gbc = new GridBagConstraints();
         gbc.gridx = 6;
         gbc.gridy = 2;
@@ -324,7 +324,7 @@ public class ACMLitePlugin extends JPanel implements Plugin {
         gbc.weightx = 0.5;
         gbc.fill = GridBagConstraints.BOTH;
         pluginPanel.add(scrollPane2, gbc);
-        scrollPane2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(-10053121)), "Входные данные"));
+        scrollPane2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(-10053121)), "Р’С…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ"));
         textArea2 = new JTextArea();
         textArea2.setEditable(false);
         scrollPane2.setViewportView(textArea2);
@@ -341,7 +341,7 @@ public class ACMLitePlugin extends JPanel implements Plugin {
         gbc.weightx = 0.5;
         gbc.fill = GridBagConstraints.BOTH;
         pluginPanel.add(scrollPane3, gbc);
-        scrollPane3.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(-13395457)), "Выходные данные"));
+        scrollPane3.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(-13395457)), "Р’С‹С…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ"));
         textArea1 = new JTextArea();
         textArea1.setEditable(false);
         textArea1.setEnabled(false);

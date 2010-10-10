@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by IntelliJ IDEA.
- * User: Посетитель
+ * User: ??????????
  * Date: 23.03.2009
  * Time: 21:56:14
  */
@@ -43,7 +43,7 @@ function getTableRow($user_row, $is_admin, $problem_ids, $problem_cols_sizes, $u
 
 function processGetContestResultsRequest($request) {
 
-    $prfx = $GLOBALS['dces_mysql_prefix'];
+    $prfx = DB_PREFIX;
 
     //get $is_anonymous, $contest_id, $user_contest_row, $user_contest_start_time
     if (!is_null($request->sessionID)) {

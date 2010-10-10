@@ -19,7 +19,7 @@ import java.util.HashMap;
 
 /**
  * Created by IntelliJ IDEA.
- * User: Илья
+ * User: пїЅпїЅпїЅпїЅ
  * Date: 07.12.2008
  * Time: 20:08:15
  */
@@ -77,7 +77,7 @@ public class Main extends JPanel implements Plugin {
             return;
         }
 
-        final String title = "Заголовок";
+        final String title = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ";
         String resName = "";
         String resExt = "";
         int curPriority = 0;
@@ -140,7 +140,7 @@ public class Main extends JPanel implements Plugin {
                                 "</head>" +
                                 "<body>" +
                                 "<base href=\"" + "file:///" + folder.getCanonicalPath() + '/' + "\"/>" +
-                                "<img width=100% height=100% src=\"" + filename.toLowerCase() + "\" alt=\"Условие задачи\" />" +
+                                "<img width=100% height=100% src=\"" + filename.toLowerCase() + "\" alt=\"пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ\" />" +
                                 "</body>" +
                                 "</html>"), null);
             } else if (curPriority != 0) {
@@ -153,7 +153,7 @@ public class Main extends JPanel implements Plugin {
             Document d = statementTextPane.getDocument();
             try {
                 d.remove(0, d.getLength());
-                d.insertString(0, "Не удается отобразить условие", null);
+                d.insertString(0, "пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", null);
             } catch (BadLocationException e1) {
                 //do nothing
             }
@@ -166,7 +166,7 @@ public class Main extends JPanel implements Plugin {
             Document d = statementTextPane.getDocument();
             try {
                 d.remove(0, d.getLength());
-                d.insertString(0, "Не удается отобразить условие", null);
+                d.insertString(0, "пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", null);
             } catch (BadLocationException e1) {
                 //do nothing
             }
@@ -184,29 +184,29 @@ public class Main extends JPanel implements Plugin {
                  *
                  * Represent a status (see SamplePluginProtocol.txt) with a label on the form (= status of a problem being solved)
                  * Statuses: not sent (can send), sent but wrong (can send), correct (can't send)
-                 * If 'solved' from a server then green color and "Задача решена" message else red and other message
+                 * If 'solved' from a server then green color and "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ" message else red and other message
                  */
 
                 if (answerTextField.getText().length() == 0) {
-                    JOptionPane.showMessageDialog(null, "Вы не ввели ответ");
+                    JOptionPane.showMessageDialog(null, "пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ");
                     return;
                 }
-                if (JOptionPane.showConfirmDialog(null, "Подтвердите отсылку решения") == JOptionPane.YES_OPTION) {
+                if (JOptionPane.showConfirmDialog(null, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ") == JOptionPane.YES_OPTION) {
                     HashMap<String, String> res = new HashMap<String, String>();
                     res.put("answer", answerTextField.getText());
                     try {
                         final HashMap<String, String> ans = env.submitSolution(res);
                         if (ans.get("result").equals("answer accepted"))
-                            JOptionPane.showMessageDialog(null, "Вы дали правильный ответ!");
+                            JOptionPane.showMessageDialog(null, "пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ!");
                         else if (ans.get("result").equals("wrong answer"))
-                            JOptionPane.showMessageDialog(null, "Вы дали неправильный ответ!!");
+                            JOptionPane.showMessageDialog(null, "пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ!!");
                         else if (ans.get("result").equals("no submissions left"))
-                            JOptionPane.showMessageDialog(null, "У Вас более не осталось попыток");
+                            JOptionPane.showMessageDialog(null, "пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
                         else
-                            JOptionPane.showMessageDialog(null, "Ответ сервера: " + ans.get("result"));
+                            JOptionPane.showMessageDialog(null, "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: " + ans.get("result"));
                     }
                     catch (GeneralRequestFailureException e1) {
-                        JOptionPane.showMessageDialog(null, "Не удалось связаться с сервером. Ошибка: " + e1.getMessage());
+                        JOptionPane.showMessageDialog(null, "пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅ: " + e1.getMessage());
                     }
                 }
             }
@@ -240,16 +240,16 @@ public class Main extends JPanel implements Plugin {
         createUIComponents();
         pluginPanel.setLayout(new FormLayout("fill:0dlu:noGrow,left:4dlu:noGrow,fill:40dlu:noGrow,left:4dlu:noGrow,fill:140dlu:grow,left:4dlu:noGrow,fill:60dlu:noGrow,left:4dlu:noGrow,fill:0dlu:noGrow", "center:max(d;0px):noGrow,top:4dlu:noGrow,center:12dlu:noGrow,top:4dlu:noGrow,center:80dlu:grow,top:4dlu:noGrow,center:20dlu:noGrow,top:4dlu:noGrow,center:20dlu:noGrow"));
         submitButton = new JButton();
-        submitButton.setText("Ответить");
+        submitButton.setText("РћС‚РІРµС‚РёС‚СЊ");
         CellConstraints cc = new CellConstraints();
         pluginPanel.add(submitButton, cc.xy(7, 7));
         answerTextField = new JTextField();
         pluginPanel.add(answerTextField, cc.xy(5, 7, CellConstraints.FILL, CellConstraints.DEFAULT));
         final JLabel label1 = new JLabel();
-        label1.setText("Условие задачи");
+        label1.setText("РЈСЃР»РѕРІРёРµ Р·Р°РґР°С‡Рё");
         pluginPanel.add(label1, cc.xyw(3, 3, 5));
         final JLabel label2 = new JLabel();
-        label2.setText("Ответ");
+        label2.setText("РћС‚РІРµС‚");
         pluginPanel.add(label2, cc.xy(3, 7));
         final JScrollPane scrollPane1 = new JScrollPane();
         pluginPanel.add(scrollPane1, cc.xyw(3, 5, 5, CellConstraints.FILL, CellConstraints.FILL));

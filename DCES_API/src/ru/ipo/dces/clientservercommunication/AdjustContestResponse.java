@@ -12,8 +12,10 @@ public class AdjustContestResponse implements Response {
 
   /**
    * Информация о задачах соревнования. При запросе на изменение могли добавится новые задачи, поле problemIDs
-   * содержит id всех задач, в частности только что созданные id новых задач
+   * содержит id всех задач, в частности только что созданные id новых задач. Если в запросе problems был null, в
+   * этом поле тоже возвращается как null
    */
+  @PHPDefaultValue("array()")
   public int[] problemIDs;
 
 }

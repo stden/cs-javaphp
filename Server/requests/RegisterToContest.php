@@ -1,7 +1,7 @@
 <?php
 
   function processRegisterToContestRequest($request) {
-    $prfx = $GLOBALS['dces_mysql_prefix'];
+    $prfx = DB_PREFIX;
 
     //get db connection
     $con = connectToDB();

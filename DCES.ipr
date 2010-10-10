@@ -13,7 +13,7 @@
         <element id="module-output" name="SamplePlugin" />
       </root>
     </artifact>
-    <artifact type="jar" name="ACMLitePlugin">
+    <artifact type="jar" build-on-make="true" name="ACMLitePlugin">
       <output-path>$PROJECT_DIR$/Client/plugins</output-path>
       <root id="archive" name="ACMLitePlugin.jar">
         <element id="module-output" name="ACMLitePlugin" />
@@ -32,7 +32,7 @@
         <element id="module-output" name="DCES_API" />
       </root>
     </artifact>
-    <artifact name="DCES">
+    <artifact build-on-make="true" name="DCES">
       <output-path>$PROJECT_DIR$/out/artifacts/DCES</output-path>
       <root id="root">
         <element id="artifact" artifact-name="DCESClient" />
@@ -53,7 +53,7 @@
         <element id="file-copy" path="$PROJECT_DIR$/Client/run-dces.bat" />
       </root>
     </artifact>
-    <artifact type="jar" name="MathKit">
+    <artifact type="jar" build-on-make="true" name="MathKit">
       <output-path>$PROJECT_DIR$/Client/plugins</output-path>
       <root id="archive" name="MathKit.jar">
         <element id="module-output" name="MathKitPlugin" />
@@ -63,7 +63,7 @@
         </element>
       </root>
     </artifact>
-    <artifact type="jar" name="DCES_API">
+    <artifact type="jar" build-on-make="true" name="DCES_API">
       <output-path>$PROJECT_DIR$/out/artifacts/DCES_API</output-path>
       <root id="archive" name="DCES_API.jar">
         <element id="module-output" name="DCES_API" />
@@ -112,6 +112,42 @@
         </ADDITIONAL_INDENT_OPTIONS>
         <ADDITIONAL_INDENT_OPTIONS fileType="java">
           <option name="INDENT_SIZE" value="4" />
+          <option name="CONTINUATION_INDENT_SIZE" value="8" />
+          <option name="TAB_SIZE" value="4" />
+          <option name="USE_TAB_CHARACTER" value="false" />
+          <option name="SMART_TABS" value="false" />
+          <option name="LABEL_INDENT_SIZE" value="0" />
+          <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+        </ADDITIONAL_INDENT_OPTIONS>
+        <ADDITIONAL_INDENT_OPTIONS fileType="js">
+          <option name="INDENT_SIZE" value="4" />
+          <option name="CONTINUATION_INDENT_SIZE" value="8" />
+          <option name="TAB_SIZE" value="4" />
+          <option name="USE_TAB_CHARACTER" value="false" />
+          <option name="SMART_TABS" value="false" />
+          <option name="LABEL_INDENT_SIZE" value="0" />
+          <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+        </ADDITIONAL_INDENT_OPTIONS>
+        <ADDITIONAL_INDENT_OPTIONS fileType="jsp">
+          <option name="INDENT_SIZE" value="4" />
+          <option name="CONTINUATION_INDENT_SIZE" value="8" />
+          <option name="TAB_SIZE" value="4" />
+          <option name="USE_TAB_CHARACTER" value="false" />
+          <option name="SMART_TABS" value="false" />
+          <option name="LABEL_INDENT_SIZE" value="0" />
+          <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+        </ADDITIONAL_INDENT_OPTIONS>
+        <ADDITIONAL_INDENT_OPTIONS fileType="php">
+          <option name="INDENT_SIZE" value="4" />
+          <option name="CONTINUATION_INDENT_SIZE" value="8" />
+          <option name="TAB_SIZE" value="4" />
+          <option name="USE_TAB_CHARACTER" value="false" />
+          <option name="SMART_TABS" value="false" />
+          <option name="LABEL_INDENT_SIZE" value="0" />
+          <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+        </ADDITIONAL_INDENT_OPTIONS>
+        <ADDITIONAL_INDENT_OPTIONS fileType="sql">
+          <option name="INDENT_SIZE" value="2" />
           <option name="CONTINUATION_INDENT_SIZE" value="8" />
           <option name="TAB_SIZE" value="4" />
           <option name="USE_TAB_CHARACTER" value="false" />
@@ -361,7 +397,6 @@
       </regional-settings>
     </general-settings>
   </component>
-  <component name="DataSourceManagerImpl" compressed="false" />
   <component name="DependenciesAnalyzeManager">
     <option name="myForwardDirection" value="false" />
   </component>
@@ -379,7 +414,9 @@
     <option name="ADDITIONAL_OPTIONS_STRING" value="" />
     <option name="MAXIMUM_HEAP_SIZE" value="128" />
   </component>
-  <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false" />
+  <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
+    <file url="PROJECT" charset="windows-1251" />
+  </component>
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
   </component>
@@ -528,6 +565,8 @@
   <component name="ProjectDictionaryState">
     <dictionary name="ilya">
       <words>
+        <w>globals</w>
+        <w>prfx</w>
         <w>xformer</w>
       </words>
     </dictionary>

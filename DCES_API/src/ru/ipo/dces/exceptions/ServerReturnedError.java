@@ -48,6 +48,7 @@ public class ServerReturnedError extends Exception {
       case 18: return "Суперадминистратор может быть зарегитрирован только для нулевого контеста";
       case 19: return "Соревнование еще не началось";
       case 20: return "Соревнование уже закончилось";
+      case 21: return "Больше не осталось попыток";
       default: return "Неизвестная ошибка";
     }
   }

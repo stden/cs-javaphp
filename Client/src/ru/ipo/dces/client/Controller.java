@@ -1,29 +1,31 @@
 package ru.ipo.dces.client;
 
+import com.jgoodies.looks.plastic.Plastic3DLookAndFeel;
+import ru.ipo.dces.client.components.TextPaneUserMessagesLogger;
 import ru.ipo.dces.clientservercommunication.*;
 import ru.ipo.dces.debug.PluginBox;
-import ru.ipo.dces.pluginapi.Plugin;
-import ru.ipo.dces.pluginapi.PluginEnvironment;
-import ru.ipo.dces.plugins.admin.*;
-import ru.ipo.dces.exceptions.ServerReturnedError;
 import ru.ipo.dces.exceptions.GeneralRequestFailureException;
-import ru.ipo.dces.server.ServerFacade;
-import ru.ipo.dces.server.http.HttpServer;
+import ru.ipo.dces.exceptions.ServerReturnedError;
 import ru.ipo.dces.log.ConsoleUserMessagesLogger;
 import ru.ipo.dces.log.LogMessageType;
 import ru.ipo.dces.log.UserMessagesLogger;
+import ru.ipo.dces.pluginapi.Plugin;
+import ru.ipo.dces.pluginapi.PluginEnvironment;
+import ru.ipo.dces.plugins.admin.LogoutPlugin;
+import ru.ipo.dces.plugins.admin.ResultsPlugin;
+import ru.ipo.dces.server.ServerFacade;
+import ru.ipo.dces.server.http.HttpServer;
 import ru.ipo.dces.utils.FileSystemUtils;
 import ru.ipo.dces.utils.ZipUtils;
-import ru.ipo.dces.client.ContestConnection;
-import ru.ipo.dces.client.components.TextPaneUserMessagesLogger;
 
 import javax.swing.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.net.Proxy;
 import java.util.HashSet;
-
-import com.jgoodies.looks.plastic.Plastic3DLookAndFeel;
 
 /**
  * Контроллер, который хранит данные о соединении с сервером и позволяет

@@ -1,7 +1,7 @@
 <?php
 
   function processRemovePluginRequest($request) {
-    $prfx = $GLOBALS['dces_mysql_prefix'];
+    $prfx = DB_PREFIX;
 
     $con = connectToDB();
     $user_row = RequestUtils::testSession($request->sessionID);

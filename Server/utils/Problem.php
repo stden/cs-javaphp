@@ -120,12 +120,12 @@ class Problem {
 	/* returns Problem. This is a variant that is sent to participant */
 	function getParticipantVersion($user_id) {
 		//TODO implement generation of statement, removing of teacher resources
-		return this;
+		return $this;
 	}
 	
 	function getAnswerVersion($user_id) {
 		//TODO implement generation
-		return this;
+		return $this;
 	}
 
 }
