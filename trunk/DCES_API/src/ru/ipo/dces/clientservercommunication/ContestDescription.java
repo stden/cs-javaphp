@@ -7,62 +7,85 @@ import java.util.Date;
  */
 public class ContestDescription {
 
-  /**
-   * Тип регистрации на соревнование. Регистрироваться можно либо самостоятельно, либо только через администратора
-   * соревнования (сервера)
-   */
-  public static enum RegistrationType {
-    /** Можно регистрироваться самому с помощью запроса RegisterToContestRequest */
-    Self,
-    /** Регистриуют пользователей только администраторы */
-    ByAdmins,    
-  }
+    /**
+     * Тип регистрации на соревнование. Регистрироваться можно либо самостоятельно, либо только через администратора
+     * соревнования (сервера)
+     */
+    public static enum RegistrationType {
 
-  /** ID соревнования */
-  @PHPDefaultValue("-1")
-  public int              contestID;
+        /**
+         * Можно регистрироваться самому с помощью запроса RegisterToContestRequest
+         */
+        Self,
+        /**
+         * Регистриуют пользователей только администраторы
+         */
+        ByAdmins,
+    }
 
-  /** Название соревнования */
-  @PHPDefaultValue("'Sample contest'")
-  public String           name;
+    /**
+     * ID соревнования
+     */
+    @PHPDefaultValue("-1")
+    public int contestID;
 
-  /** Расширенное описание соревнования */
-  @PHPDefaultValue("'Description of sample contest'")
-  public String           description;
+    /**
+     * Название соревнования
+     */
+    @PHPDefaultValue("'Sample contest'")
+    public String name;
 
-  /** Время начала соревнования. До этого времени подключение участников к соревнованию
-   * физически невозможно */
-  @PHPDefaultValue("time()")
-  public Date             start;
+    /**
+     * Расширенное описание соревнования
+     */
+    @PHPDefaultValue("'Description of sample contest'")
+    public String description;
 
-  /** Время окончания соревнования. После этого времени участники могут подключаться к соревнованию,
-   * но отсылка решений более невозможна. (Под отсылкой решений понимаются запросы SubmitSolutinRequest, которые
-   * при обработке плагином стороны сервера помечаются плагином как "решение") */
-  @PHPDefaultValue("time() + 3600")
-  public Date             finish;
+    /**
+     * Время начала соревнования. До этого времени подключение участников к соревнованию
+     * физически невозможно
+     */
+    @PHPDefaultValue("time()")
+    public Date start;
 
-  /** Способ регистрации на соревнование */
-  @PHPDefaultValue("'ByAdmins'")
-  public RegistrationType registrationType;
+    /**
+     * Время окончания соревнования. После этого времени участники могут подключаться к соревнованию,
+     * но отсылка решений более невозможна. (Под отсылкой решений понимаются запросы SubmitSolutinRequest, которые
+     * при обработке плагином стороны сервера помечаются плагином как "решение")
+     */
+    @PHPDefaultValue("time() + 3600")
+    public Date finish;
 
-  /**
-   * Набор данных об участнике
-   */
-  @PHPDefaultValue("array()")
-  public UserDataField[]  data;
+    /**
+     * Способ регистрации на соревнование
+     */
+    @PHPDefaultValue("'ByAdmins'")
+    public RegistrationType registrationType;
 
-  /**
-   * Настройка прав доступа к результатам соревнования. Описывает, когда
-   * участникам и анонимным пользователям разрешен доступ к результатам соревнования.
-   * Администраторы всегда имеют доступ к результатам
-   */
-  @PHPDefaultValue("")
-  public ResultsAccessPolicy resultsAccessPolicy;
+    /**
+     * Набор данных об участнике
+     */
+    @PHPDefaultValue("array()")
+    public UserDataField[] data;
 
-  /**
-   * Тонкая настройка времени проведения соревнования
-   */
-  @PHPDefaultValue("")
-  public ContestTiming contestTiming;     
+    /**
+     * Настройка прав доступа к результатам соревнования. Описывает, когда
+     * участникам и анонимным пользователям разрешен доступ к результатам соревнования.
+     * Администраторы всегда имеют доступ к результатам
+     */
+    @PHPDefaultValue("")
+    public ResultsAccessPolicy resultsAccessPolicy;
+
+    /**
+     * Тонкая настройка времени проведения соревнования
+     */
+    @PHPDefaultValue("")
+    public ContestTiming contestTiming;
+
+    /**
+     * Настройки задач по умолчанию
+     */
+    @PHPDefaultValue("")
+    public ContestSpecificSettings problemsDefaultSettings;
 
 }

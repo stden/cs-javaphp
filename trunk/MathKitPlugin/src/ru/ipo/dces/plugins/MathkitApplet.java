@@ -222,4 +222,8 @@ public class MathkitApplet extends JPanel implements Runnable, AppletContext, JS
   public JSObject getJSObject() {
     return obj;
   }
+
+    public JSObject getOneWayJSObject() {
+        return null;
+    }
 }

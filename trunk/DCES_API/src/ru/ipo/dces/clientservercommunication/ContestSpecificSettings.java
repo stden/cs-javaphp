@@ -8,10 +8,27 @@ package ru.ipo.dces.clientservercommunication;
  */
 public class ContestSpecificSettings {
 
+    public enum TableResultChoice {
+        Best,
+        Last
+    }
+
     /**
      * Максимальное количество посылок задачи
      */
     @PHPDefaultValue("1000")
     public int sendCount;
 
+    /**
+     * Преобразование результатов в таблицу
+     */
+    @PHPDefaultValue("''")
+    public String resultTransition;
+
+
+    /**
+     * Выбор результата для таблицы
+     */
+    @PHPDefaultValue("'Best'")
+    public TableResultChoice tableResultChoice;
 }

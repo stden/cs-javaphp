@@ -49,6 +49,8 @@ public class ServerReturnedError extends Exception {
       case 19: return "Соревнование еще не началось";
       case 20: return "Соревнование уже закончилось";
       case 21: return "Больше не осталось попыток";
+      case 22: return "Недопустимый логин";
+      case 23: return "Недопустимый пароль";      
       default: return "Неизвестная ошибка";
     }
   }

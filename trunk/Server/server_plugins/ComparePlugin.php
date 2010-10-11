@@ -1,38 +1,17 @@
 <?php
 
-  //this plugin doesn't use a plugin folder to store any info
+//this plugin doesn't use a plugin folder to store any info
 
-  class ComparePlugin extends ServerPlugin {
-    
-    public function checkSolution($solution, $user_id, $answer_data, &$current_result, &$table_cols) {
+class ComparePlugin extends ServerPlugin {    
 
-      if (is_null($current_result))
-        $current_result = 1;
-      else
-        $current_result ++;
-
-      $res = array();
-      $ok = $solution['answer'] === $answer_data;
-      $res['result'] = $ok ? "yes" : "no";
-      if ($ok) {
-        $table_cols = array("+");
-      } else {
-        $table_cols = array("-");
-      }
-
-      return $res;
+    public function checkSolution($solution) {
+        $accepted = $solution === $this->problem->getAnswer();
+        return array('accepted' => $accepted ? 1 : 0);
     }
 
-    public function updateStatementData($statement_zip) {
-      return true;
+    public function compareResults($res1, $res2) {        
+        return $res1['accepted'] - $res2['accepted'];
     }
-
-    public function updateAnswerData($answer_zip) {
-      //$p = $answer_zip->getFromName('answer.txt');
-      $p = $answer_zip->getFromIndex(0);
-      if (! $p) return false;
-           else return $p;
-    }
-  }
+}
 
 ?>
