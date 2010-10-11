@@ -6,6 +6,7 @@
  * Time: 21:56:14
  */
 
+//TODO REWRITE
 function getTableRow($user_row, $is_admin, $problem_ids, $problem_cols_sizes, $user_data_cols) {
     //fill id and login
     $row = array();
@@ -70,7 +71,7 @@ function processGetContestResultsRequest($request) {
 
     //get $serialized_contest_settings
     $need_request_for_contest_data = $is_anonymous || ($user_contest_row['user_type'] === 'SuperAdmin');
-    if ($need_request_for_contest_data) {
+                                                                                                                                                                                                                                                                                                                                                                                                                              if ($need_request_for_contest_data) {
         if ($contest_id === 0) throwBusinessLogicError(14);
         $contest_row = Data::getRow(sprintf(
             "SELECT *

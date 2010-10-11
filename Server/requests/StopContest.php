@@ -35,7 +35,7 @@ function processStopContestRequest($request) {
     $now = getdate();
     $now = $now[0];
     Data::submitModificationQuery(
-        composeUpdateQuery(
+        Data::composeUpdateQuery(
             'user',
             array('contest_finish' => DatePHPToMySQL($now)),
             "id=${user_row['id']}"

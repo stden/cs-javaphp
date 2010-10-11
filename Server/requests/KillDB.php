@@ -10,12 +10,10 @@
 function processKillDBRequest($request) {
 	
 	//Uncomment to check permissions
-	/*
 	$user_row = RequestUtils::testSession($request->sessionID);
 	
 	if ($user_row['user_type'] !== 'SuperAdmin')
-		throwBusinessLogicError(0);
-	*/
+		throwBusinessLogicError(0);	
 	
     $tables = array(
         'client_plugin',

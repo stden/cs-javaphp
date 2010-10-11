@@ -1,19 +1,25 @@
 <?php
 
-  require_once 'utils/Problem.php';
+require_once 'utils/Problem.php';
 
-  function setResultsColumns($user_row, $problem_id, $new_cols) {
+/*
+function setResultsColumns($user_row, $problem_id, $new_cols) {
     //get old results       
-    $new_results = Data::_unserialize($user_row['results']);    
+    $new_results = Data::_unserialize($user_row['results']);
     //set new columns for the problem    
     $new_results[$problem_id] = $new_cols;
     //compose query
-    $q = composeUpdateQuery('user', array('results' => serialize($new_results)), "id=${user_row['id']}");
+    $q = Data::composeUpdateQuery('user', array('results' => serialize($new_results)), "id=${user_row['id']}");
     //put query to the queue
     Data::submitModificationQuery($q);
-  }
+}
+*/
 
-  function processSubmitSolutionRequest($request) {
+function getSetting($contest_setting, $problem_setting) {
+    return is_null($problem_setting) ? $contest_setting : $problem_setting;
+}
+
+function processSubmitSolutionRequest($request) {
     $prfx = DB_PREFIX;
 
     //get user_id or die, if session is invalid
@@ -26,9 +32,10 @@
 
     //get problem row
     $problem_row = Data::getRow(
-                      sprintf("SELECT * FROM ${prfx}problem WHERE id=%s", Data::quote_smart($request->problemID))
-                    );
-    if ( !$problem_row ) throwBusinessLogicError(4);
+        sprintf("SELECT * FROM ${prfx}problem WHERE id=%s", Data::quote_smart($request->problemID))
+    );
+    if (!$problem_row)
+        throwBusinessLogicError(4);
 
     //get contest id of a problem
     $problem_contest_id = $problem_row['contest_id'];
@@ -36,11 +43,14 @@
     //test if we have rights to submit solution for the contest
     $contest_id = RequestUtils::getRequestedContest($problem_contest_id, $userRow['contest_id'], $user_type);
 
-    if ($contest_id < 0) throwBusinessLogicError(0);
-    
+    $contest_settings = $userRow['settings'];
+
+    if ($contest_id < 0)
+        throwBusinessLogicError(0);
+
     //get problem
     $problem = new Problem(getProblemFile($request->problemID));
-        
+
     $problem_settings = Data::_unserialize($problem_row['contest_settings']);
 
     //get plugin_alias
@@ -52,48 +62,23 @@
 
     $plugin = new $plugin_alias($problem);
 
-    //get answer data    
-    $answer_data = Data::_unserialize($problem_row['answer']);       
-
-    //get previous result
-    /*
-    $problem_status_row = Data::getRow(
-                               sprintf("SELECT * FROM ${prfx}problem_status WHERE problem_id=%s AND user_id=%s",
-                                       Data::quote_smart($request->problemID),
-                                       Data::quote_smart($user_id)
-                               ));
-    if (!$problem_status_row) {
-      $current_result = null;
-      $do_status_update = false;
-    }
-    else {    	
-      $current_result = Data::_unserialize($problem_status_row['status'], null);      
-      $do_status_update = true;
-    }
-    */
     //get submissions history
     $hist = Data::getRow(
-    	sprintf(
-    		"SELECT COUNT(*) AS cnt FROM ${prfx}submission_history WHERE (problem_id=%s) AND (user_id=%s)",
-    		Data::quote_smart($request->problemID),
-    		Data::quote_smart($user_id)
-    	)
+        sprintf(
+            "SELECT COUNT(*) AS cnt FROM ${prfx}submission_history WHERE (problem_id=%s) AND (user_id=%s)",
+            Data::quote_smart($request->problemID),
+            Data::quote_smart($user_id)
+        )
     );
-    
+
     //test that not all submission attempts were used
-    if ($hist >= $problem_settings->sendCount)
-    	throwBusinessLogicError(21);
+    if ($hist >= getSetting($contest_settings->problemsDefaultSettings->sendCount, $problem_settings->sendCount))
+        throwBusinessLogicError(21);
 
     //call plugin to check solution
-    //public function checkSolution($solution, $user_id, $answer_data, &$current_result, &$table_cols) {
-    //??????????? $submission
-    $check_result = $plugin->checkSolution($request->problemResult, $submission);
+    $check_result = $plugin->checkSolution($request->problemResult);
 
-    //if result columns changed, set them
-    if (!is_null($current_cols))
-        setResultsColumns($userRow, $request->problemID, $current_cols);    
-
-    //save submition result in db
+    //save submition result in history
     $cur_php_time = getdate();
 
     $col_value = array();
@@ -103,25 +88,13 @@
     $col_value['result'] = serialize($check_result);
     $col_value['submission_time'] = DatePHPToMySQL($cur_php_time[0]);
 
-    Data::submitModificationQuery(composeInsertQuery('submission_history', $col_value));
-
-    $col_value = array();
-    $col_value['problem_id'] = $request->problemID;
-    $col_value['user_id'] = $user_id;
-    $col_value['status'] = serialize($current_result);    
-
-    if ($do_status_update) {
-      $where = sprintf("problem_id=%s AND user_id=%s", $request->problemID, $user_id);
-      Data::submitModificationQuery(composeUpdateQuery('problem_status', $col_value, $where));
-    }
-    else
-      Data::submitModificationQuery(composeInsertQuery('problem_status', $col_value));    
+    Data::submitModificationQuery(Data::composeInsertQuery('submission_history', $col_value));
 
     //return submission result
     $res = new SubmitSolutionResponse();
     $res->problemResult = $check_result;
 
     return $res;
-  }
+}
 
 ?>

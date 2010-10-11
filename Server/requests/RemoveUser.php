@@ -3,8 +3,7 @@
   function processRemoveUserRequest($request) {
     $prfx = DB_PREFIX;
 
-    $user_row = RequestUtils::testSession($request->sessionID);
-    $user_id = $user_row['id'];
+    $user_row = RequestUtils::testSession($request->sessionID);    
 
     $remove_user_id = $request->userID;
     $remove_user_row = Data::getRow(sprintf(
