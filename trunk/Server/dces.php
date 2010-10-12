@@ -129,6 +129,11 @@ switch (get_class($request)) {
         $result = processAvailablePluginsRequest($request);
         break;
 
+    case 'CheckerRequest':
+        require("requests/Checker.php");
+        $result = processCheckerRequest($request);
+        break;
+
     default:
         throwBusinessLogicError(15, get_class($request));
 }
@@ -136,7 +141,6 @@ switch (get_class($request)) {
 
 Data::execPendingQueries();
 
-//$magic = chr(4) . chr(2) . chr(3) . chr(9);
 $nil = serialize(null);
 $s_result = serialize($result);
 //echo $magic;

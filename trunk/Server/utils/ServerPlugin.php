@@ -1,6 +1,8 @@
 <?php
 
-class ServerPlugin {
+require_once 'utils/SubmissionHistoryUtils.php';
+
+abstract class ServerPlugin {
 
     protected $problem;
 
@@ -14,24 +16,30 @@ class ServerPlugin {
         //TODO implement
     }
 
-    /** Must be overriden.
-     * @param $solution
+    /**
+     * Submits solution if result may be obtained without delay
+     * @param  $submission_id
+     * @param  $result
+     * @return void
+     */
+    protected final function submitResult($submission_id, $result) {
+        //SubmissionHistoryUtils::
+    }
+
+    /** Must be overridden.
+     * @param $submissionID
      * @param $submission
      * @return hash map string->string with columns data
      */
-    public function checkSolution($solution) {
-
-    }
+    public abstract function checkSolution($submission_id, $submission);
 
     /**
-     * Should usually be overriden
+     * Should usually be overridden
      * @param  $res1 the first result
      * @param  $res2 the second result
      * @return int 0 if res1 = res2, 1 if res1 > res2 and -1 if res1 < res2
      */
-    public function compareResults($res1, $res2) {
-        return 0;
-    }
+    public abstract function compareResults($res1, $res2);
 
 }
 
