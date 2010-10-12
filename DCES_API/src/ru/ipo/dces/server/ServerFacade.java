@@ -6,60 +6,63 @@ import ru.ipo.dces.exceptions.GeneralRequestFailureException;
 
 public interface ServerFacade {
 
-  public AdjustContestResponse doRequest(AdjustContestRequest r)
-      throws ServerReturnedError, GeneralRequestFailureException;
+    public AdjustContestResponse doRequest(AdjustContestRequest r)
+            throws ServerReturnedError, GeneralRequestFailureException;
 
-  public AvailableContestsResponse doRequest(AvailableContestsRequest r)
-      throws ServerReturnedError, GeneralRequestFailureException;
+    public AvailableContestsResponse doRequest(AvailableContestsRequest r)
+            throws ServerReturnedError, GeneralRequestFailureException;
 
-  public ConnectToContestResponse doRequest(ConnectToContestRequest r)
-      throws ServerReturnedError, GeneralRequestFailureException;
+    public ConnectToContestResponse doRequest(ConnectToContestRequest r)
+            throws ServerReturnedError, GeneralRequestFailureException;
 
-  public CreateContestResponse doRequest(CreateContestRequest r)
-      throws ServerReturnedError, GeneralRequestFailureException;  
+    public CreateContestResponse doRequest(CreateContestRequest r)
+            throws ServerReturnedError, GeneralRequestFailureException;
 
-  public AcceptedResponse doRequest(DisconnectRequest r)
-      throws ServerReturnedError, GeneralRequestFailureException;
+    public AcceptedResponse doRequest(DisconnectRequest r)
+            throws ServerReturnedError, GeneralRequestFailureException;
 
-  public GetContestDataResponse doRequest(GetContestDataRequest r)
-      throws ServerReturnedError, GeneralRequestFailureException;
+    public GetContestDataResponse doRequest(GetContestDataRequest r)
+            throws ServerReturnedError, GeneralRequestFailureException;
 
-  public GetUsersResponse doRequest(GetUsersRequest r)
-      throws ServerReturnedError, GeneralRequestFailureException;
+    public GetUsersResponse doRequest(GetUsersRequest r)
+            throws ServerReturnedError, GeneralRequestFailureException;
 
-  public DownloadPluginResponse doRequest(DownloadPluginRequest r)
-      throws ServerReturnedError, GeneralRequestFailureException;
+    public DownloadPluginResponse doRequest(DownloadPluginRequest r)
+            throws ServerReturnedError, GeneralRequestFailureException;
 
-  public AcceptedResponse doRequest(RegisterToContestRequest r)
-      throws ServerReturnedError, GeneralRequestFailureException;
+    public AcceptedResponse doRequest(RegisterToContestRequest r)
+            throws ServerReturnedError, GeneralRequestFailureException;
 
-  public AcceptedResponse doRequest(RemovePluginRequest r)
-      throws ServerReturnedError, GeneralRequestFailureException;
+    public AcceptedResponse doRequest(RemovePluginRequest r)
+            throws ServerReturnedError, GeneralRequestFailureException;
 
-  public AcceptedResponse doRequest(RestorePasswordRequest r)
-      throws ServerReturnedError, GeneralRequestFailureException;
+    public AcceptedResponse doRequest(RestorePasswordRequest r)
+            throws ServerReturnedError, GeneralRequestFailureException;
 
-  public SubmitSolutionResponse doRequest(SubmitSolutionRequest r)
-      throws ServerReturnedError, GeneralRequestFailureException;
+    public SubmitSolutionResponse doRequest(SubmitSolutionRequest r)
+            throws ServerReturnedError, GeneralRequestFailureException;
 
-  public AcceptedResponse doRequest(CreateDataBaseRequest r)
-      throws ServerReturnedError, GeneralRequestFailureException;
+    public AcceptedResponse doRequest(CreateDataBaseRequest r)
+            throws ServerReturnedError, GeneralRequestFailureException;
 
-  public AcceptedResponse doRequest(RemoveUserRequest r)
-      throws ServerReturnedError, GeneralRequestFailureException;
+    public AcceptedResponse doRequest(RemoveUserRequest r)
+            throws ServerReturnedError, GeneralRequestFailureException;
 
-  public AcceptedResponse doRequest(RemoveContestRequest r)
-      throws ServerReturnedError, GeneralRequestFailureException;
+    public AcceptedResponse doRequest(RemoveContestRequest r)
+            throws ServerReturnedError, GeneralRequestFailureException;
 
-  public AcceptedResponse doRequest(AdjustPluginRequest r)
-      throws ServerReturnedError, GeneralRequestFailureException;
+    public AcceptedResponse doRequest(AdjustPluginRequest r)
+            throws ServerReturnedError, GeneralRequestFailureException;
 
-  public GetContestResultsResponse doRequest(GetContestResultsRequest r)
-      throws ServerReturnedError, GeneralRequestFailureException;
+    public GetContestResultsResponse doRequest(GetContestResultsRequest r)
+            throws ServerReturnedError, GeneralRequestFailureException;
 
-  public AcceptedResponse doRequest(StopContestRequest r)
-      throws ServerReturnedError, GeneralRequestFailureException;
+    public AcceptedResponse doRequest(StopContestRequest r)
+            throws ServerReturnedError, GeneralRequestFailureException;
 
-  public AvailablePluginsResponse doRequest(AvailablePluginsRequest r)      
-      throws ServerReturnedError, GeneralRequestFailureException;
+    public AvailablePluginsResponse doRequest(AvailablePluginsRequest r)
+            throws ServerReturnedError, GeneralRequestFailureException;
+
+    public AcceptedResponse doRequest(CheckerRequest r)
+            throws ServerReturnedError, GeneralRequestFailureException;
 }
