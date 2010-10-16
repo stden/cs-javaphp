@@ -8,5 +8,5 @@
  */
 
 function processCheckerRequest($request) {
-
+    RequestUtils::testSession($request->sessionID);
 }

@@ -3,13 +3,10 @@ package ru.ipo.dces.plugins;
 import ru.ipo.dces.pluginapi.PluginEnvironment;
 import ru.ipo.dces.pluginapi.Plugin;
 import ru.ipo.dces.pluginapi.DCESPluginLoadable;
-import ru.ipo.dces.utils.SubmissionUtils;
 import ru.ipo.dces.exceptions.GeneralRequestFailureException;
 
 import javax.swing.*;
 import java.util.HashMap;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.*;
 import java.io.FilenameFilter;
 import java.io.File;
@@ -42,9 +39,9 @@ public class RyzhikPlugin implements Plugin {
 
     //send 'init'
     try {
-      myEnvironment.submitSolution(
-              SubmissionUtils.setAction("init", new HashMap<String, String>())
-      );
+        HashMap<String, String> res = new HashMap<String, String>();
+        res.put("action", "init");
+        myEnvironment.submitSolution(res);
     } catch (GeneralRequestFailureException e) {
       //DO NOTHING
     }
