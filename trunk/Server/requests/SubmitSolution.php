@@ -50,18 +50,6 @@ function processSubmitSolutionRequest($request) {
     if ($hist >= getSetting($contest_settings->problemsDefaultSettings->sendCount, $problem_settings->sendCount))
         throwBusinessLogicError(21);
 
-    //get problem
-    $problem = new Problem(getProblemFile($request->problemID));
-
-    //create plugin
-    $plugin_alias = $problem->getServerPlugin();
-
-    //get plugin
-    require_once(getServerPluginFile());
-    require_once(getServerPluginFile($plugin_alias));
-
-    $plugin = new $plugin_alias($problem);
-
     //save submission result in history
     $cur_php_time = getdate();
 
@@ -72,14 +60,60 @@ function processSubmitSolutionRequest($request) {
     $col_value['result'] = null;//serialize($check_result);
     $col_value['submission_time'] = DatePHPToMySQL($cur_php_time[0]);
 
-    Data::submitModificationQuery(Data::composeInsertQuery('submission_history', $col_value));
-    Data::execPendingQueries();
+    //TODO implement plugin that run asynchronously
+    //synchronous plugin
 
-    //call plugin to check solution
-    $plugin->checkSolution(Data::getInsertedID(), $request->problemResult);
+    //get problem and create plugin
+    $problem = new Problem(getProblemFile($request->problemID));
+    $plugin_alias = $problem->getServerPlugin();
+    require_once(getServerPluginFile());
+    require_once(getServerPluginFile($plugin_alias));
+    $plugin = new $plugin_alias($problem);
+
+    $last_result = $plugin->checkSolution(Data::getInsertedID(), $request->problemResult);
+    $col_value['result'] = serialize($last_result);
+
+    //update results table
+    $choice = getSetting($contest_settings->problemsDefaultSettings->tableResultChoice, $problem_settings->tableResultChoice);
+    $user_results = Data::_unserialize($userRow['results']);
+    if (!isset($user_results[$request->problemID])) {
+        $user_results[$request->problemID] = array();
+    }
+
+    //get new result
+    $result_changed = false;
+
+    if ($choice === 'Last') {
+        $new_result = $last_result;
+        $result_changed = true;
+    } else { // $choice === 'Best'
+        if (isset($user_results[$request->problemID]['r'])) {
+            if ($plugin->compareResults($last_result, $user_results[$request->problemID]['r']) === 1) {
+                $new_result = $last_result;
+                $result_changed = true;
+            }
+        } else {
+            $new_result = $last_result;
+            $result_changed = true;
+        }
+    }
+
+    if ($result_changed) {
+        $user_results[$request->problemID]['r'] = $new_result;
+        require_once 'utils/SubmissionHistoryUtils.php';
+        $user_results[$request->problemID]['rt'] = SubmissionHistoryUtils::convertToTable(
+            $new_result,
+            getSetting($contest_settings->problemsDefaultSettings->resultTransition, $problem_settings->resultTransition)
+        );
+    }
+
+    Data::submitModificationQuery(Data::composeInsertQuery('submission_history', $col_value));
+    Data::submitModificationQuery(Data::composeUpdateQuery(
+        'user', array('results' => serialize($user_results)), "id=$user_id"
+    ));
 
     //return submission result
-    $res = new SubmitSolutionResponse();    
+    $res = new AcceptedResponse();
 
     return $res;
 }

@@ -566,6 +566,7 @@
     <dictionary name="ilya">
       <words>
         <w>globals</w>
+        <w>param</w>
         <w>prfx</w>
         <w>xformer</w>
       </words>
@@ -583,8 +584,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ACMLitePlugin/ACMLitePlugin.iml" filepath="$PROJECT_DIR$/ACMLitePlugin/ACMLitePlugin.iml" group="Plugins" />
+      <module fileurl="file://$PROJECT_DIR$/BuildUtils/BuildUtils.iml" filepath="$PROJECT_DIR$/BuildUtils/BuildUtils.iml" />
       <module fileurl="file://$PROJECT_DIR$/Client/Client.iml" filepath="$PROJECT_DIR$/Client/Client.iml" />
-      <module fileurl="file://$PROJECT_DIR$/DCESTests/DCESTests.iml" filepath="$PROJECT_DIR$/DCESTests/DCESTests.iml" />
       <module fileurl="file://$PROJECT_DIR$/DCES_API/DCES_API.iml" filepath="$PROJECT_DIR$/DCES_API/DCES_API.iml" />
       <module fileurl="file://$PROJECT_DIR$/MathKitPlugin/MathKitPlugin.iml" filepath="$PROJECT_DIR$/MathKitPlugin/MathKitPlugin.iml" group="Plugins" />
       <module fileurl="file://$PROJECT_DIR$/RyzhikResults/RyzhikResults.iml" filepath="$PROJECT_DIR$/RyzhikResults/RyzhikResults.iml" group="Plugins" />

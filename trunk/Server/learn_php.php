@@ -1,5 +1,18 @@
 <?php
 
+$t = 42;
+$str = <<<'EOD'
+
+var_dump($t);
+$t = 239;
+var_dump($t);
+
+EOD;
+
+  eval($str);
+
+  die('<br> end');
+
   $a = array('a','b','c');
   echo $a[1];  
 
