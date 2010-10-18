@@ -1,5 +1,19 @@
 <?php
 
+$a = array(1, 2, 3);
+$b = array(1, 2, 3);
+
+$c = array('a'=>'x', 'bc'=>'y');
+$d = array('bc'=>'y', 'a'=>'x');
+
+var_dump($a === $b);
+var_dump($a == $b);
+
+var_dump($c == $d);
+var_dump($c == $d);
+
+die();
+
 $t = 42;
 $str = <<<'EOD'
 
@@ -68,9 +82,9 @@ EOD;
   var_dump($i);
   die();
 
-  class A{};
-  $a = new A();
-  $a->b = new A();
+  class B{};
+  $a = new B();
+  $a->b = new B();
   $a->b->c = "42";
 
   var_dump($a);

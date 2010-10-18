@@ -1,7 +1,11 @@
 <?php
 
-require_once('utils/Problem.php');
-require_once(getServerPluginFile());
+require_once 'utils/Problem.php';
+require_once getServerPluginFile();
+require_once 'utils/CalculatedFieldsUpdater.php';
+
+//global variable to store new contest problems
+$__new_contest_settings = null;
 
 /**
  * Copies fields from from to to, doesn't copy values that have 'ignore' values
@@ -39,6 +43,8 @@ function queryForContestDescription($c, $contest_id) {
     copyValues($c, $settings);
 
     RequestUtils::assertContestSettingsIntegrity($settings);
+
+    $__new_contest_settings = $settings;
 
     $col_value = array('settings' => @serialize($settings));
     Data::submitModificationQuery(
@@ -95,7 +101,10 @@ function queriesToAdjustProblems($problems, $contest_id) {
         $plugin_alias = $problem->getServerPlugin();
         require_once(getServerPluginFile($plugin_alias));
         $plugin = new $plugin_alias($problem);
-        $col_value['column_names'] = serialize($plugin->getColumnNames());
+        //TODO consider calling updaters here instead of manual insertion of values
+        //TODO recheck all values if new plugin specified
+        $col_value['checker_columns'] = serialize($plugin->getColumnNames());
+        $col_value['result_columns'] = serialize(array());
 
         //copy per contest settings
         if ($p->settings) {
