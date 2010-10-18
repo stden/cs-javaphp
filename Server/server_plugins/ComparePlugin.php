@@ -12,6 +12,10 @@ class ComparePlugin extends ServerPlugin {
     public function compareResults($res1, $res2) {        
         return $res1['accepted'] - $res2['accepted'];
     }
+
+    public static function getColumnNames() {
+        return array('accepted');
+    }
 }
 
 ?>

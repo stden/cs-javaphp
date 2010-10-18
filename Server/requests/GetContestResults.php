@@ -7,7 +7,7 @@
  */
 
 //TODO REWRITE
-function getTableRow($user_row, $is_admin, $problem_ids, $problem_cols_sizes, $user_data_cols) {
+function getTableRow($user_row, $is_admin, $problem_ids, $problem_cols, $user_data_cols) {
     //fill id and login
     $row = array();
     if ($is_admin)
@@ -29,12 +29,21 @@ function getTableRow($user_row, $is_admin, $problem_ids, $problem_cols_sizes, $u
     $results = Data::_unserialize($user_row['results']);
     $ind = 0;
     foreach ($problem_ids as $pid) {
-        $cells = @$results[$pid]; //index may be undefined
-        if (is_null($cells)) //add $problem_cols_sizes[$ind] empty cells
-            for ($i = 0; $i < $problem_cols_sizes[$ind] ; $i++)
-                $cells[] = '';
+        $cells = @$results[$pid]['rt']; //index may be undefined
 
-        $row[] = $cells;        
+        /* no more needed
+        if (is_null($cells)) {//add $problem_cols_sizes[$ind] empty cells
+            $cnt = count($problem_cols[$ind]);
+            for ($i = 0; $i < $cnt; $i++)
+                $cells[] = '';
+        }
+        */
+
+        $vals = array();
+        foreach ($problem_cols as $problem_col)
+            $vals[] = @$cells[$problem_col];
+
+        $row[] = $vals;
 
         $ind++;
     }
@@ -158,26 +167,26 @@ function processGetContestResultsRequest($request) {
 
     //columns with problems
     $problem_ids = array();
-    $problem_cols_sizes = array();
+    $problem_cols = array();
     while ($problem_row = Data::getNextRow($all_problems_rows)) {
         $problem_ids[] = $problem_row['id'];
         $result->headers[] = $problem_row['name'];
         $col_names = Data::_unserialize($problem_row['column_names']);
         $result->minorHeaders[] = $col_names;
-        $problem_cols_sizes[] = count($col_names);
+        $problem_cols[] = $col_names;
     }
 
     //fill results table
     $result->table = array();
 
     if ($permission === 'OnlySelfResults') {
-        $result->table[] = getTableRow($user_contest_row, $is_admin, $problem_ids, $problem_cols_sizes, $contest_settings->data);
+        $result->table[] = getTableRow($user_contest_row, $is_admin, $problem_ids, $problem_cols, $contest_settings->data);
         $result->userLine = 0;
     } else {
         $ind = 0;
         $result->userLine = -1;
         while ($user_row = Data::getNextRow($all_users_rows)) {
-            $result->table[] = getTableRow($user_row, $is_admin, $problem_ids, $problem_cols_sizes, $contest_settings->data);
+            $result->table[] = getTableRow($user_row, $is_admin, $problem_ids, $problem_cols, $contest_settings->data);
             if ($user_row['id'] == $user_contest_row['id'])
                 $result->userLine = $ind;
             $ind++;

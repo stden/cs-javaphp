@@ -24,6 +24,8 @@ abstract class ServerPlugin {
      */
     public abstract function compareResults($res1, $res2);
 
+    public static abstract function getColumnNames();
+
 }
 
 ?>
