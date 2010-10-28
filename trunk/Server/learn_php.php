@@ -1,5 +1,8 @@
 <?php
 
+//phpinfo();
+var_dump(mysql_connect("localhost", "root", "239"));
+
 $lines = @file_get_contents("utils/dces-create-db.sql") or die('failed to read file');
 $lines = preg_replace("/^\\s*#.*$/m", "", $lines);
 $requests = preg_split('/\\s*;\\s*$/m', $lines);
