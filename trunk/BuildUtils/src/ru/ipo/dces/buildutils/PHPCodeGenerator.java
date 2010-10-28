@@ -1,6 +1,7 @@
 package ru.ipo.dces.buildutils;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 /**
  * Created by IntelliJ IDEA.
@@ -12,13 +13,8 @@ public class PHPCodeGenerator {
 
     public static void main(String[] args) throws ClassNotFoundException, FileNotFoundException {
 
-        PHPMocks.generatePHPMocks(
-                "out/production/DCES_API/ru/ipo/dces/clientservercommunication",
-                "Server/mocks",
-                "mocks"
-        );
-
-        PHPMocks.generatePHPKeys("Server/data/Keys.php");
+        PHPMocks.generatePHPMocks();
+        PHPMocks.generatePHPKeys();
 
     }
 

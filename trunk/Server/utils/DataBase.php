@@ -45,6 +45,19 @@ class Data {
             return false;
     }
 
+    //returns array with table names
+    public static function getTables() {
+        if (is_null(Data::$con))
+            Data::$con = Data::connectToDB();
+
+        $tables = mysql_list_tables(DB_NAME, Data::$con) or throwServerProblem(207, mysql_error());
+
+        $res = array();
+        while ($table = mysql_fetch_array($tables))
+            $res[] = $table[0];
+        return $res;
+    }
+
     public static function submitModificationQuery($query) {
         Data::$queries[] = $query;
     }
@@ -70,7 +83,7 @@ class Data {
 
         if ($error_msg !== false) {
             mysql_query("ROLLBACK", Data::$con) or throwServerProblem(102, mysql_error());
-            throwServerProblem(104, $error_msg);
+            throwServerProblem(104, $error_msg . ' QUERY: "' . $qa . '"');
         } else {
             mysql_query("COMMIT", Data::$con) or throwServerProblem(103, mysql_error());
             Data::$queries = array();

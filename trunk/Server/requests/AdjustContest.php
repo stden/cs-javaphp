@@ -2,7 +2,7 @@
 
 require_once 'utils/Problem.php';
 require_once getServerPluginFile();
-require_once 'utils/CalculatedFieldsUpdater.php';
+require_once 'utils/ResultUtils.php';
 
 //global variable to store new contest problems
 $__new_contest_settings = null;

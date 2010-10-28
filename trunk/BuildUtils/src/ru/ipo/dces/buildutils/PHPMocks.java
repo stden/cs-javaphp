@@ -9,37 +9,27 @@ import java.util.ArrayList;
 
 public class PHPMocks {
 
-    public static void generatePHPMocks(String serverMsgsPath, String phpMocksDir, String reqOncePath) throws FileNotFoundException, ClassNotFoundException {
+    public static void generatePHPMocks() throws FileNotFoundException, ClassNotFoundException {
 
-        //gettting dirs
-        File f = new File(serverMsgsPath);
-
-        //getting all message classes
-        File[] files = f.listFiles(new FilenameFilter() {
-            public boolean accept(File dir, String name) {
-                return name.endsWith(".class");
-            }
-        });
-
-        PrintWriter allMocks = new PrintWriter(phpMocksDir + "all_mocks.php");
+        PrintWriter allMocks = new PrintWriter(CodeGeneratorSettings.SERVER_MOCKS_FOLDER + "all_mocks.php");
 
         allMocks.println("<?php");
+        allMocks.println("$preIP = dirname(__FILE__);");
 
         //constructing php files
-        for (File file : files) {
+        for (Class c : CodeGeneratorSettings.getBinClasses()) {
             ArrayList<String> initStatements = new ArrayList<String>();
 
-            Class c = Class.forName("ru.ipo.dces.clientservercommunication." + file.getName().substring(0, file.getName().length() - 6));
-
-            File res = new File(phpMocksDir + c.getSimpleName() + ".php");
+            File res = new File(CodeGeneratorSettings.SERVER_MOCKS_FOLDER + c.getSimpleName() + ".php");
 
             PrintWriter pw = new PrintWriter(res);
             pw.println("<?php");
 
             //print all require_once in all_mocks.php
-            allMocks.println("require_once('" + reqOncePath + c.getSimpleName() + ".php');");
+            allMocks.println("require_once(\"$preIP/" + c.getSimpleName() + ".php\");");
 
             //getting all needed require_once statements
+            boolean preIPWasPrinted = false;
             for (Field fld : c.getFields()) {
                 PHPDefaultValue a = fld.getAnnotation(PHPDefaultValue.class);
 
@@ -48,7 +38,11 @@ public class PHPMocks {
                 }
 
                 if (a.value().equals("")) {
-                    pw.println("require_once('" + reqOncePath + fld.getType().getSimpleName() + ".php');");
+                    if (!preIPWasPrinted) {
+                        preIPWasPrinted = true;
+                        pw.println("$preIP = dirname(__FILE__);");
+                    }
+                    pw.println("require_once(\"$preIP/" + fld.getType().getSimpleName() + ".php\");");
                 }
             }
 
@@ -104,9 +98,9 @@ public class PHPMocks {
         return "null";
     }
     
-    public static void generatePHPKeys(String keysFile) throws FileNotFoundException {
+    public static void generatePHPKeys() throws FileNotFoundException {
 
-        File outFile = new File(keysFile);
+        File outFile = new File(CodeGeneratorSettings.SERVER_KEYS_SETTINGS_FILE);
 
         PrintStream out = new PrintStream(outFile);
 
