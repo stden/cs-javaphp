@@ -565,9 +565,17 @@
   <component name="ProjectDictionaryState">
     <dictionary name="ilya">
       <words>
+        <w>args</w>
+        <w>dbname</w>
         <w>dces</w>
+        <w>enums</w>
         <w>globals</w>
+        <w>login</w>
+        <w>overridable</w>
         <w>param</w>
+        <w>phps</w>
+        <w>postfix</w>
+        <w>preg</w>
         <w>prfx</w>
         <w>vals</w>
         <w>xformer</w>
@@ -589,6 +597,7 @@
       <module fileurl="file://$PROJECT_DIR$/BuildUtils/BuildUtils.iml" filepath="$PROJECT_DIR$/BuildUtils/BuildUtils.iml" />
       <module fileurl="file://$PROJECT_DIR$/Client/Client.iml" filepath="$PROJECT_DIR$/Client/Client.iml" />
       <module fileurl="file://$PROJECT_DIR$/DCES_API/DCES_API.iml" filepath="$PROJECT_DIR$/DCES_API/DCES_API.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Editor/Editor.iml" filepath="$PROJECT_DIR$/Editor/Editor.iml" />
       <module fileurl="file://$PROJECT_DIR$/MathKitPlugin/MathKitPlugin.iml" filepath="$PROJECT_DIR$/MathKitPlugin/MathKitPlugin.iml" group="Plugins" />
       <module fileurl="file://$PROJECT_DIR$/RyzhikResults/RyzhikResults.iml" filepath="$PROJECT_DIR$/RyzhikResults/RyzhikResults.iml" group="Plugins" />
       <module fileurl="file://$PROJECT_DIR$/RyzhikTest/RyzhikTest.iml" filepath="$PROJECT_DIR$/RyzhikTest/RyzhikTest.iml" group="Plugins" />
@@ -596,7 +605,7 @@
       <module fileurl="file://$PROJECT_DIR$/Server/Server.iml" filepath="$PROJECT_DIR$/Server/Server.iml" />
     </modules>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_5" assert-keyword="true" jdk-15="true" project-jdk-name="1.6" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_5" assert-keyword="true" jdk-15="true" project-jdk-name="1.6 (1)" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="ResourceManagerContainer">
@@ -610,6 +619,46 @@
     <option name="myConfigurationMap">
       <map>
         <entry key="$PROJECT_DIR$">
+          <value>
+            <SvnBranchConfiguration>
+              <option name="branchMap">
+                <map>
+                  <entry key="https://cs-javaphp.googlecode.com/svn/branches">
+                    <value>
+                      <list />
+                    </value>
+                  </entry>
+                  <entry key="https://cs-javaphp.googlecode.com/svn/tags">
+                    <value>
+                      <list />
+                    </value>
+                  </entry>
+                  <entry key="https://cs-javaphp.googlecode.com/svn/wiki">
+                    <value>
+                      <list />
+                    </value>
+                  </entry>
+                </map>
+              </option>
+              <option name="branchUrls">
+                <list>
+                  <option value="https://cs-javaphp.googlecode.com/svn/branches" />
+                  <option value="https://cs-javaphp.googlecode.com/svn/tags" />
+                  <option value="https://cs-javaphp.googlecode.com/svn/wiki" />
+                </list>
+              </option>
+              <option name="trunkUrl" value="https://cs-javaphp.googlecode.com/svn/trunk" />
+            </SvnBranchConfiguration>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/DCES_API">
+          <value>
+            <SvnBranchConfiguration>
+              <option name="trunkUrl" value="" />
+            </SvnBranchConfiguration>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/Server">
           <value>
             <SvnBranchConfiguration>
               <option name="branchMap">

@@ -13,13 +13,18 @@ require_once 'utils/ResultsTransfer.php';
 /*
  * Calculated columns are:
  *   problem table
- *   - checker columns
- *   - result columns
+ *   - checker columns (*)
+ *   - result columns  (**)
  *   user table
- *   - results 
+ *   - results results (**)
+ *   history
+ *   - result (checker) (*)
+ *
+ *   (*) reevaluated only when RECHECK is called, is slow enough
+ *   (**) reevaluated when transfer policy changed. (transfer settings changed, RECHECK)
  */
 
-class CalculatedFieldsUpdater {
+class ResultUtils {
 
     /**
      * Updates user result for a specified problem
@@ -28,20 +33,13 @@ class CalculatedFieldsUpdater {
      * @param  $problem_id id of the problem
      * @param  $choice type of choice, Self of Last
      * @param  $transfer_settings settings of transfer
-     * @param  $plugin plugin associated with the problem, needed only when $choice == Best
-     * @param  $all_results all user results, as were taken from the user row
+     * @param  $plugin plugin associated with the problem, needed only when $choice == Best to find best submission     
      * @param  $last_result last result of user if present
-     * @return void
+     * @return array array with results for results table
      */
-    public static function updateUserResults($user_id, $problem_id, $choice, $transfer_settings, $plugin, $all_results, $last_result = null) {
+    public static function getUserResults($user_id, $problem_id, $choice, $transfer_settings, $plugin, $last_result = null) {
 
         $prfx = DB_PREFIX;
-
-        if (!isset($all_results[$problem_id])) {
-            $all_results[$problem_id] = array();
-            $old_result = null;
-        } else
-            $old_result = $all_results[$problem_id]; 
 
         //get new result
 
@@ -65,54 +63,39 @@ class CalculatedFieldsUpdater {
                     $new_result = Data::_unserialize($row['result']);
             }
         } else { // $choice === 'Best'
-            $all_results = array();
+            $history_results = array();
             if ($last_result)
-                $all_results[] = $last_result;
+                $history_results[] = $last_result;
             $rows = Data::getRows($all_results_request);
             while ($row = Data::getNextRow($rows))
-                $all_results[] = $row['result'];
+                $history_results[] = $row['result'];
 
-            $num_results = count($all_results);
+            $num_results = count($history_results);
 
             if ($num_results == 0)
                 $new_result = array();
             else {
-                $new_result = $all_results[$num_results - 1];
+                $new_result = $history_results[$num_results - 1];
                 for ($i = $num_results - 2; $i >= 0; $i--)
-                    if ($plugin->compareResults($all_results[$i], $new_result) === 1)
-                        $new_result = $all_results[$i];
+                    if ($plugin->compareResults($history_results[$i], $new_result) === 1)
+                        $new_result = $history_results[$i];
             }
-
-            //TODO insert optimization
-/*            if (isset($all_results[$problem_id]['r'])) {
-                if ($plugin->compareResults($last_result, $user_results[$problem_id]['r']) === 1) {
-                    $new_result = $last_result;
-                    $result_changed = true;
-                }
-            } else {
-                $new_result = $last_result;
-                $result_changed = true;
-            }*/
         }
 
-        $user_results[$problem_id]['r'] = $new_result;
-        $transfer = new ResultsTransfer($transfer_settings);
-        $user_results[$problem_id]['rt'] = $transfer->convert($new_result);
+        $transfer = new ResultsTransfer($transfer_settings);        
 
-        if ($user_results[$problem_id] !== $old_result) {
-            Data::submitModificationQuery(Data::composeUpdateQuery(
-                'user', array('results' => serialize($user_results)), "id=$user_id"
-            ));
-        }
+        return $transfer->convert($new_result);
     }
 
+
+    /*
     /**
      * Updates checker columns of the specified problem
      * @static
      * @param  $problem_id
      * @param  $plugin
-     * @return void
-     */
+     * @return string an update request
+     *
     public static function updateCheckerColumns($problem_id, $plugin_class = null) {
 
         if (! $plugin_class) {
@@ -122,9 +105,9 @@ class CalculatedFieldsUpdater {
 
         $cols = ${$plugin_class}::getColumnNames();
 
-        Data::submitModificationQuery(Data::composeUpdateQuery(
+        return Data::composeUpdateQuery(
             'problem', array('checker_columns' => serialize($cols)), "id=$problem_id"
-        ));
+        );
     }
 
     /**
@@ -133,10 +116,10 @@ class CalculatedFieldsUpdater {
      * @param  $problem_id
      * @param  $plugin
      * @return void
-     */
+     *
     public static function updateResultColumns($problem_id, $transfer_settings, $plugin_class = null) {
 
-        //TODO remove code duplications with the previous function
+        //T O D O remove code duplications with the previous function
 
         if (! $plugin_class) {
             $problem = new Problem(getProblemFile($problem_id));
@@ -148,9 +131,9 @@ class CalculatedFieldsUpdater {
         $rt = new ResultsTransfer($transfer_settings);
         $result_cols = $rt->getResultKeys($cols);
 
-        Data::submitModificationQuery(Data::composeUpdateQuery(
+        return Data::composeUpdateQuery(
             'problem', array('result_columns' => serialize($result_cols)), "id=$problem_id"
-        ));
+        );
     }
-
+    */
 }

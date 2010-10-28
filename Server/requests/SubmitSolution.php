@@ -88,15 +88,26 @@ function processSubmitSolutionRequest($request) {
 
     Data::submitModificationQuery(Data::composeInsertQuery('submission_history', $col_value));
 
-    CalculatedFieldsUpdater::updateUserResults(
+    //get result for result table and store in user
+    $all_results = Data::_unserialize($userRow['results']);
+
+    $user_result = ResultUtils::getUserResults(
         $user_id,
         $request->problemID,
         getSetting($contest_settings->problemsDefaultSettings->tableResultChoice, $problem_settings->tableResultChoice),
         getSetting($contest_settings->problemsDefaultSettings->resultTransition, $problem_settings->resultTransition),
         $plugin,
-        Data::_unserialize($userRow['results']),
         $last_result
     );
+
+    //update user result for results table
+    $all_results[$request->problemID] = $user_result;
+
+    Data::submitModificationQuery(Data::composeUpdateQuery(
+        'user',
+        array('results' => serialize($all_results)),
+        'id=' . Data::quote_smart($user_id)
+    ));
 
     //return submission result
     $res = new AcceptedResponse();

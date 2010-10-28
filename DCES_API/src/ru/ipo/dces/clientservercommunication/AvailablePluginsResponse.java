@@ -13,7 +13,7 @@ public class AvailablePluginsResponse implements Response {
   /**
    * Массив алиасов плагинов
    */
-  @PHPDefaultValue("array")
+  @PHPDefaultValue("array()")
   public String[] aliases;
 
   /**

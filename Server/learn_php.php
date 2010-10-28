@@ -1,5 +1,15 @@
 <?php
 
+$lines = @file_get_contents("utils/dces-create-db.sql") or die('failed to read file');
+$lines = preg_replace("/^\\s*#.*$/m", "", $lines);
+$requests = preg_split('/\\s*;\\s*$/m', $lines);
+foreach ($requests as $request) {
+    var_dump(preg_replace('/PREFIX_/', DB_PREFIX, $request));
+    echo("<br><br><br><br>");
+}
+
+die();
+
 $a = array(1, 2, 3);
 $b = array(1, 2, 3);
 

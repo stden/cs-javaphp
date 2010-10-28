@@ -1,50 +1,41 @@
 <?php
+//request is correct if it is not a comment of the form /*...*/ and is not empty
+//function isCorrectRequest($request) {
+//    return !preg_match('/^/\*.*/\*$/', $request) && $request !== "";
+//}
 
-//TODO rewrite with preg (not ereg) and make it easier
 function processCreateDataBaseRequest($request) {
 
-    //get connection
-    $dbname = DB_NAME;
-    $prfx = DB_PREFIX;
-
     //test if creation is necessary
-    //TODO get rid of mysql function
-    $tables = mysql_list_tables($dbname);
-    while (list ($temp) = mysql_fetch_array($tables))
-        if ($temp === "${prfx}user")
-            throwBusinessLogicError(13);
+    if (in_array(DB_PREFIX . "user", Data::getTables()))
+        throwBusinessLogicError(13);
 
-    //read query lines from files
-    $lines = @file("utils/dces-create-db.sql") or throwServerProblem(64);
-
-    //fill queries list
-    $sql = "";
-    foreach ($lines as $line)
-    {
-        $line = str_replace("PREFIX_", "$prfx", $line);
-        $sql .= $line;
-        $is_last_line = ereg(".*;[[:space:]]*$", $line) || ereg(".*;\*/[[:space:]]*$", $line);
-        if ($is_last_line) {
-            $sql = ereg_replace(";\*/[[:space:]]*$", "*/", $sql);
-            $sql = ereg_replace(";[[:space:]]*$", "", $sql);
-
-            Data::submitModificationQuery($sql);
-            $sql = "";
-        }
+    //read queries from file
+    $lines = @file_get_contents("utils/dces-create-db.sql") or throwServerProblem(64);
+    //remove # comments
+    $lines = preg_replace("/^\\s*#.*$/m", "", $lines);
+    //remove /*! ... */ comments
+    $lines = preg_replace('/\/\*!\d+.*\*\//', "", $lines);
+    //replace PREFIX_ with real prefix
+    $lines = preg_replace('/PREFIX_/', DB_PREFIX, $lines);
+    //split requests by ;
+    $requests = preg_split('/\\s*;\\s*$/m', $lines);
+    
+    foreach ($requests as $r) {
+        if (trim($r) !== "")
+            Data::submitModificationQuery($r);
     }
 
     $col_value = array(
-        'login' => "$request->login",
-        'password' => "$request->password",
+        'login' => $request->login,
+        'password' => $request->password,
         'user_data' => serialize(array()),
         'contest_id' => 0,
         'user_type' => 'SuperAdmin'
     );
     Data::submitModificationQuery(Data::composeInsertQuery('user', $col_value));
 
-
     return new AcceptedResponse();
-
 }
 
 ?>
