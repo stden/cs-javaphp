@@ -1,6 +1,11 @@
 package ru.ipo.dces.buildutils;
 
+import ru.ipo.structurededitor.model.DSLBeansRegistry;
+
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintStream;
+import java.util.LinkedList;
 
 /**
  * Created by IntelliJ IDEA.
@@ -12,17 +17,53 @@ public class GenerateBeans {
 
     public static void main(String[] args) throws FileNotFoundException, ClassNotFoundException {
 
-        String outputFolder = CodeGeneratorSettings.EDITOR_BEANS_FOLDER;
-        String outputPackage = CodeGeneratorSettings.EDITOR_BEANS_PACKAGE;
-
         BinToBeanConverter converter = new BinToBeanConverter("Bean");
         //converter.setBaseClass();
 
+        LinkedList<String> newClasses = new LinkedList<String>();
         for (Class<?> c : CodeGeneratorSettings.getBinClasses()) {
             System.out.println("Converting class " + c);
-            converter.convert(c);
+            String newClass = converter.convert(c);
+            newClasses.add(newClass);
         }
 
+        //create beans registrator class
+        createRegistratorClass(newClasses);
+    }
+
+    private static void createRegistratorClass(LinkedList<String> newClasses) throws FileNotFoundException {
+        String registratorPath = CodeGeneratorSettings.EDITOR_BEANS_FOLDER + CodeGeneratorSettings.REGISTRATOR_CLASS_NAME + ".java";
+        PrintStream out = new PrintStream(registratorPath);
+
+        out.println("package " + CodeGeneratorSettings.EDITOR_BEANS_PACKAGE + ";");
+        out.println("/*" + CodeGeneratorSettings.HEADER + "*/");
+        out.println("public class " + CodeGeneratorSettings.REGISTRATOR_CLASS_NAME + " {");
+        out.println();
+        out.println(CodeGeneratorSettings.INDENT + "public static void register() {");
+
+        //register all classes one by one
+
+        out.printf(
+                "%s%s%s reg = \n%s%s%s%s.getInstance();\n\n",
+                CodeGeneratorSettings.INDENT,
+                CodeGeneratorSettings.INDENT,
+                DSLBeansRegistry.class.getCanonicalName(),
+                CodeGeneratorSettings.INDENT,
+                CodeGeneratorSettings.INDENT,
+                CodeGeneratorSettings.INDENT,
+                DSLBeansRegistry.class.getCanonicalName()
+        );
+
+        for (String newClass : newClasses)
+            out.printf(
+                "%s%sreg.registerBean(%s.class);\n",
+                CodeGeneratorSettings.INDENT,
+                CodeGeneratorSettings.INDENT,               
+                newClass                     
+            );
+
+        out.println(CodeGeneratorSettings.INDENT + "}");
+        out.println("}");
     }
 
 }

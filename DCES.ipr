@@ -69,9 +69,68 @@
         <element id="module-output" name="DCES_API" />
       </root>
     </artifact>
-  </component>
-  <component name="BuildJarProjectSettings">
-    <option name="BUILD_JARS_ON_MAKE" value="true" />
+    <artifact name="ACMLitePlugin:jar">
+      <output-path>$PROJECT_DIR$/plugins</output-path>
+      <root id="root">
+        <element id="archive" name="ACMLitePlugin.jar">
+          <element id="module-output" name="ACMLitePlugin" />
+        </element>
+      </root>
+    </artifact>
+    <artifact name="Client:jar">
+      <output-path>$PROJECT_DIR$/Client</output-path>
+      <root id="root">
+        <element id="archive" name="Client.jar">
+          <element id="module-output" name="Client" />
+          <element id="module-output" name="DCES_API" />
+        </element>
+        <element id="library" level="project" name="FormLayout" />
+        <element id="library" level="project" name="TableLayout" />
+      </root>
+    </artifact>
+    <artifact name="DCES_API:jar">
+      <output-path>$PROJECT_DIR$/DCES_API</output-path>
+      <root id="root">
+        <element id="archive" name="DCES_API.jar">
+          <element id="module-output" name="DCES_API" />
+        </element>
+      </root>
+    </artifact>
+    <artifact name="MathKitPlugin:jar">
+      <output-path>$PROJECT_DIR$/MathKitPlugin</output-path>
+      <root id="root">
+        <element id="archive" name="MathKitPlugin.jar">
+          <element id="module-output" name="MathKitPlugin" />
+          <element id="directory" name="dependencies">
+            <element id="file-copy" path="$PROJECT_DIR$/MathKitPlugin/mathkit-applet.jar" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact name="RyzhikResults:jar">
+      <output-path>$PROJECT_DIR$/RyzhikResults</output-path>
+      <root id="root">
+        <element id="archive" name="RyzhikResults.jar">
+          <element id="module-output" name="RyzhikResults" />
+        </element>
+      </root>
+    </artifact>
+    <artifact name="RyzhikTest:jar">
+      <output-path>$PROJECT_DIR$/RyzhikTest</output-path>
+      <root id="root">
+        <element id="archive" name="RyzhikTest.jar">
+          <element id="module-output" name="RyzhikTest" />
+        </element>
+      </root>
+    </artifact>
+    <artifact name="SamplePlugin:jar">
+      <output-path>$PROJECT_DIR$/SamplePlugin</output-path>
+      <root id="root">
+        <element id="archive" name="SamplePlugin.jar">
+          <element id="module-output" name="SamplePlugin" />
+        </element>
+      </root>
+    </artifact>
   </component>
   <component name="CodeStyleProjectProfileManger">
     <option name="PROJECT_PROFILE" />
@@ -421,6 +480,22 @@
     <entry_points version="2.0" />
   </component>
   <component name="IdProvider" IDEtalkID="B64FC0AE7D6BA504767C03DE6FA2DEDA" />
+  <component name="InspectionProjectProfileManager">
+    <profiles>
+      <profile version="1.0" is_locked="false">
+        <option name="myName" value="Project Default" />
+        <option name="myLocal" value="false" />
+        <inspection_tool class="SpellCheckingInspection" enabled="false" level="TYPO" enabled_by_default="false">
+          <option name="processCode" value="true" />
+          <option name="processLiterals" value="true" />
+          <option name="processComments" value="true" />
+        </inspection_tool>
+      </profile>
+    </profiles>
+    <option name="PROJECT_PROFILE" value="Project Default" />
+    <option name="USE_PROJECT_PROFILE" value="true" />
+    <version value="1.0" />
+  </component>
   <component name="JavadocGenerationManager">
     <option name="OUTPUT_DIRECTORY" />
     <option name="OPTION_SCOPE" value="protected" />
@@ -619,6 +694,39 @@
     <option name="myConfigurationMap">
       <map>
         <entry key="$PROJECT_DIR$">
+          <value>
+            <SvnBranchConfiguration>
+              <option name="branchMap">
+                <map>
+                  <entry key="https://cs-javaphp.googlecode.com/svn/branches">
+                    <value>
+                      <list />
+                    </value>
+                  </entry>
+                  <entry key="https://cs-javaphp.googlecode.com/svn/tags">
+                    <value>
+                      <list />
+                    </value>
+                  </entry>
+                  <entry key="https://cs-javaphp.googlecode.com/svn/wiki">
+                    <value>
+                      <list />
+                    </value>
+                  </entry>
+                </map>
+              </option>
+              <option name="branchUrls">
+                <list>
+                  <option value="https://cs-javaphp.googlecode.com/svn/branches" />
+                  <option value="https://cs-javaphp.googlecode.com/svn/tags" />
+                  <option value="https://cs-javaphp.googlecode.com/svn/wiki" />
+                </list>
+              </option>
+              <option name="trunkUrl" value="https://cs-javaphp.googlecode.com/svn/trunk" />
+            </SvnBranchConfiguration>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/BuildUtils">
           <value>
             <SvnBranchConfiguration>
               <option name="branchMap">

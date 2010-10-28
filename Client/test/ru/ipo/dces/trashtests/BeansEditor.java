@@ -1,5 +1,6 @@
 package ru.ipo.dces.trashtests;
 
+import ru.ipo.dces.serverbeans.BeansRegistrator;
 import ru.ipo.dces.serverbeans.ContestDescriptionBean;
 import ru.ipo.dces.serverbeans.CreateContestRequestBean;
 import ru.ipo.structurededitor.Defaults;
@@ -22,13 +23,15 @@ public class BeansEditor {
 
     public static void main(String[] args) {
         Defaults.registerDefaultEditors();
+        BeansRegistrator.register();
+
         StructuredEditorModel model = new StructuredEditorModel();
         //CreateContestRequestBean ccrb = new CreateContestRequestBean();
         ContestDescriptionBean ccrb = new ContestDescriptionBean();
         model.setRootElement(new EditorRenderer(model, ccrb).getRenderResult());
         DSLBeansRegistry.getInstance().registerBean(ContestDescriptionBean.class);
 
-        JFrame f = new JFrame("Модуль учителя");
+        JFrame f = new JFrame("Редактирование ContestDescription");
         BorderLayout br = new BorderLayout();
         f.setLayout(br);
         StructuredEditor structuredEditor = new StructuredEditor(model, ccrb);
