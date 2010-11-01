@@ -2,7 +2,7 @@ package ru.ipo.dces.clientservercommunication;
 
 
 /**
- * Ответ сервера - интерфейс, который реализуют все ответы
+ * РћС‚РІРµС‚ СЃРµСЂРІРµСЂР° - РёРЅС‚РµСЂС„РµР№СЃ, РєРѕС‚РѕСЂС‹Р№ СЂРµР°Р»РёР·СѓСЋС‚ РІСЃРµ РѕС‚РІРµС‚С‹
  */
 public interface Response {
   // just an interface

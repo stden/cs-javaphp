@@ -14,20 +14,20 @@ public class ContestSpecificSettings {
     }
 
     /**
-     * Максимальное количество посылок задачи
+     * РњР°РєСЃРёРјР°Р»СЊРЅРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ РїРѕСЃС‹Р»РѕРє Р·Р°РґР°С‡Рё
      */
     @PHPDefaultValue("1000")
     public int sendCount;
 
     /**
-     * Преобразование результатов в таблицу
+     * РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ СЂРµР·СѓР»СЊС‚Р°С‚РѕРІ РІ С‚Р°Р±Р»РёС†Сѓ
      */
     @PHPDefaultValue("''")
     public String resultTransition;
 
 
     /**
-     * Выбор результата для таблицы
+     * Р’С‹Р±РѕСЂ СЂРµР·СѓР»СЊС‚Р°С‚Р° РґР»СЏ С‚Р°Р±Р»РёС†С‹
      */
     @PHPDefaultValue("'Best'")
     public TableResultChoice tableResultChoice;

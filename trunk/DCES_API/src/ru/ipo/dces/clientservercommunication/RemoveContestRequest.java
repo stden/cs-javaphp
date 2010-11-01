@@ -1,18 +1,18 @@
 package ru.ipo.dces.clientservercommunication;
 
 /**
- * Запрос: удалить соревнование
+ * Р—Р°РїСЂРѕСЃ: СѓРґР°Р»РёС‚СЊ СЃРѕСЂРµРІРЅРѕРІР°РЅРёРµ
  */
 public class RemoveContestRequest implements Request {
 
   /**
-   * Идентификатор сессии администратора сервера
+   * РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЃРµСЃСЃРёРё Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂР° СЃРµСЂРІРµСЂР°
    */
   @PHPDefaultValue("null")
   public String sessionID;
 
   /**
-   * Идентификатор удаляемого соревнования
+   * РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СѓРґР°Р»СЏРµРјРѕРіРѕ СЃРѕСЂРµРІРЅРѕРІР°РЅРёСЏ
    */
   @PHPDefaultValue("null")
   public int contestID;

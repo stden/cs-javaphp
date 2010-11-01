@@ -6,18 +6,18 @@ package ru.ipo.dces.clientservercommunication;
  * Date: 14.11.2009
  * Time: 2:50:45
  *
- * Ответ на запрос о доступных в системе плагинах
+ * РћС‚РІРµС‚ РЅР° Р·Р°РїСЂРѕСЃ Рѕ РґРѕСЃС‚СѓРїРЅС‹С… РІ СЃРёСЃС‚РµРјРµ РїР»Р°РіРёРЅР°С…
  */
 public class AvailablePluginsResponse implements Response {
 
   /**
-   * Массив алиасов плагинов
+   * РњР°СЃСЃРёРІ Р°Р»РёР°СЃРѕРІ РїР»Р°РіРёРЅРѕРІ
    */
   @PHPDefaultValue("array()")
   public String[] aliases;
 
   /**
-   * Массив описаний плагинов
+   * РњР°СЃСЃРёРІ РѕРїРёСЃР°РЅРёР№ РїР»Р°РіРёРЅРѕРІ
    */
   public String[] descriptions;
 

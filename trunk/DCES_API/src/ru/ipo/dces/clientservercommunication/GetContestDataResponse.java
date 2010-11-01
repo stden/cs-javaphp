@@ -3,17 +3,17 @@ package ru.ipo.dces.clientservercommunication;
 import ru.ipo.dces.clientservercommunication.ContestDescription;
 
 /**
- * Ответ: информация о соревновании, данные содержатся в массивах, одна запись для
- * каждой задачи
+ * РћС‚РІРµС‚: РёРЅС„РѕСЂРјР°С†РёСЏ Рѕ СЃРѕСЂРµРІРЅРѕРІР°РЅРёРё, РґР°РЅРЅС‹Рµ СЃРѕРґРµСЂР¶Р°С‚СЃСЏ РІ РјР°СЃСЃРёРІР°С…, РѕРґРЅР° Р·Р°РїРёСЃСЊ РґР»СЏ
+ * РєР°Р¶РґРѕР№ Р·Р°РґР°С‡Рё
  */
 public class GetContestDataResponse implements Response {
   /**
-   * Данные по запрошенным задачам
+   * Р”Р°РЅРЅС‹Рµ РїРѕ Р·Р°РїСЂРѕС€РµРЅРЅС‹Рј Р·Р°РґР°С‡Р°Рј
    */
   public ProblemDescription problems[];
 
   /**
-   * Описание соревнования 
+   * РћРїРёСЃР°РЅРёРµ СЃРѕСЂРµРІРЅРѕРІР°РЅРёСЏ 
    */
   public ContestDescription contest;
 }

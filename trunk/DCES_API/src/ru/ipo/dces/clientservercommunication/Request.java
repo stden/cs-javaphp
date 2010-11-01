@@ -2,7 +2,7 @@ package ru.ipo.dces.clientservercommunication;
 
  
 /**
- * Запрос к серверу - интерфейс, который реализуют все запросы
+ * Р—Р°РїСЂРѕСЃ Рє СЃРµСЂРІРµСЂСѓ - РёРЅС‚РµСЂС„РµР№СЃ, РєРѕС‚РѕСЂС‹Р№ СЂРµР°Р»РёР·СѓСЋС‚ РІСЃРµ Р·Р°РїСЂРѕСЃС‹
  */
 public interface Request {
   // just an interface

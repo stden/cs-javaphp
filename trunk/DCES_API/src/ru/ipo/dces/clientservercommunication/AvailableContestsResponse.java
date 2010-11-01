@@ -1,12 +1,12 @@
 package ru.ipo.dces.clientservercommunication;
 
 /**
- * Ответ на запрос о списке соревнований AvailableContestsRequest.
+ * РћС‚РІРµС‚ РЅР° Р·Р°РїСЂРѕСЃ Рѕ СЃРїРёСЃРєРµ СЃРѕСЂРµРІРЅРѕРІР°РЅРёР№ AvailableContestsRequest.
  */
 public class AvailableContestsResponse implements Response {
 
   /**
-   * Массив с описаниями всех зарегистрированных в системе соревнованиях
+   * РњР°СЃСЃРёРІ СЃ РѕРїРёСЃР°РЅРёСЏРјРё РІСЃРµС… Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅРЅС‹С… РІ СЃРёСЃС‚РµРјРµ СЃРѕСЂРµРІРЅРѕРІР°РЅРёСЏС…
    */
   @PHPDefaultValue("array()")
   public ContestDescription[] contests;
