@@ -40,7 +40,7 @@ public class ProblemDescriptionBean {
     setId(-1);
     setClientPluginAlias(null);
     setServerPluginAlias(null);
-    setName("Новая задача");
+    setName("РќРѕРІР°СЏ Р·Р°РґР°С‡Р°");
     statementData.setDefault();
     answerData.setDefault();
   }

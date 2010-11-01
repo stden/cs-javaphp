@@ -37,8 +37,8 @@ public class DCESEditorFactory extends PropertyEditorRegistry {
   public static class RegistrationTypeEditor extends ComboBoxPropertyEditor {
     public RegistrationTypeEditor() {
       setAvailableValues(new Object[]{
-              new Value(ContestDescription.RegistrationType.Self, "самостоятельно"),
-              new Value(ContestDescription.RegistrationType.ByAdmins, "администратором")
+              new Value(ContestDescription.RegistrationType.Self, "СЃР°РјРѕСЃС‚РѕСЏС‚РµР»СЊРЅРѕ"),
+              new Value(ContestDescription.RegistrationType.ByAdmins, "Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂРѕРј")
       });
     }
   }
@@ -46,9 +46,9 @@ public class DCESEditorFactory extends PropertyEditorRegistry {
   public static class ResultsAccessPolicyEditor extends ComboBoxPropertyEditor {
     public ResultsAccessPolicyEditor() {
       setAvailableValues(new Object[]{
-              new Value(ResultsAccessPolicy.AccessPermission.FullAccess, "полный доступ"),
-              new Value(ResultsAccessPolicy.AccessPermission.OnlySelfResults, "только свои"),
-              new Value(ResultsAccessPolicy.AccessPermission.NoAccess, "нет доступа")
+              new Value(ResultsAccessPolicy.AccessPermission.FullAccess, "РїРѕР»РЅС‹Р№ РґРѕСЃС‚СѓРї"),
+              new Value(ResultsAccessPolicy.AccessPermission.OnlySelfResults, "С‚РѕР»СЊРєРѕ СЃРІРѕРё"),
+              new Value(ResultsAccessPolicy.AccessPermission.NoAccess, "РЅРµС‚ РґРѕСЃС‚СѓРїР°")
       });
     }
   }
@@ -138,7 +138,7 @@ public class DCESEditorFactory extends PropertyEditorRegistry {
 
     private void setFailedValues(String msg) {
       setAvailableValues(new Object[]{
-              new Value(null, new PluginValue("... не удалось получить список плагинов", msg)),
+              new Value(null, new PluginValue("... РЅРµ СѓРґР°Р»РѕСЃСЊ РїРѕР»СѓС‡РёС‚СЊ СЃРїРёСЃРѕРє РїР»Р°РіРёРЅРѕРІ", msg)),
       });
     }
   }

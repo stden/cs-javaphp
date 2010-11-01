@@ -5,6 +5,7 @@ import ru.ipo.structurededitor.model.DSLBeansRegistry;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.lang.reflect.Modifier;
 import java.util.LinkedList;
 
 /**
@@ -15,6 +16,8 @@ import java.util.LinkedList;
  */
 public class GenerateBeans {
 
+    //TODO don't generate code for Annotations
+
     public static void main(String[] args) throws FileNotFoundException, ClassNotFoundException {
 
         BinToBeanConverter converter = new BinToBeanConverter("Bean");
@@ -22,6 +25,8 @@ public class GenerateBeans {
 
         LinkedList<String> newClasses = new LinkedList<String>();
         for (Class<?> c : CodeGeneratorSettings.getBinClasses()) {
+            if (c.isEnum() || Modifier.isAbstract(c.getModifiers()) || c.isAnnotation())
+                continue;
             System.out.println("Converting class " + c);
             String newClass = converter.convert(c);
             newClasses.add(newClass);

@@ -34,10 +34,10 @@ public class DCESRendererFactory extends PropertyRendererRegistry {
       if (value != null)
         switch ((ContestDescription.RegistrationType) value) {
           case ByAdmins:
-            value = "Администратором";
+            value = "РђРґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂРѕРј";
             break;
           case Self:
-            value = "Самостоятельно";
+            value = "РЎР°РјРѕСЃС‚РѕСЏС‚РµР»СЊРЅРѕ";
             break;
         }
 
@@ -51,13 +51,13 @@ public class DCESRendererFactory extends PropertyRendererRegistry {
       if (value != null)
         switch ((ResultsAccessPolicy.AccessPermission) value) {
           case FullAccess:
-            value = "Полный доступ";
+            value = "РџРѕР»РЅС‹Р№ РґРѕСЃС‚СѓРї";
             break;
           case NoAccess:
-            value = "Без доступа";
+            value = "Р‘РµР· РґРѕСЃС‚СѓРїР°";
             break;
           case OnlySelfResults:
-            value = "Только собственные";
+            value = "РўРѕР»СЊРєРѕ СЃРѕР±СЃС‚РІРµРЅРЅС‹Рµ";
             break;
         }
 
@@ -76,7 +76,7 @@ public class DCESRendererFactory extends PropertyRendererRegistry {
       File f = ((ZipBean) value).getFile();
 
       if (f == null)
-        super.setValue("Без изменений");
+        super.setValue("Р‘РµР· РёР·РјРµРЅРµРЅРёР№");
       else
         super.setValue(f.getAbsolutePath());
     }

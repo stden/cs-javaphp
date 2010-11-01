@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 /**
  * Created by IntelliJ IDEA.
- * User: Посетитель
+ * User: РџРѕСЃРµС‚РёС‚РµР»СЊ
  * Date: 11.04.2009
  * Time: 16:26:12
  */

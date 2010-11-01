@@ -13,7 +13,7 @@ import java.text.DateFormat;
 
 /**
  * Created by IntelliJ IDEA.
- * User: Посетитель
+ * User: РџРѕСЃРµС‚РёС‚РµР»СЊ
  * Date: 13.03.2009
  * Time: 0:45:12
  */

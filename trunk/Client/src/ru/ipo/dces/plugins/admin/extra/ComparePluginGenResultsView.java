@@ -62,7 +62,7 @@ public class ComparePluginGenResultsView extends JFrame {
 
         String[][] pdata = el2ind.get(value);
 
-        StringBuilder txt = new StringBuilder("<body BGCOLOR=\"#EEEEEE\"><center><b>Результаты</b></center><br/>");
+        StringBuilder txt = new StringBuilder("<body BGCOLOR=\"#EEEEEE\"><center><b>Р РµР·СѓР»СЊС‚Р°С‚С‹</b></center><br/>");
         for (int i = 2; i < headers.length; i++) {
           txt.append("<b>&nbsp;").append(headers[i]).append("</b><br/>");
           txt.append("<table border=\"0\">");

@@ -31,7 +31,7 @@ import info.clearthought.layout.TableLayout;
 
 /**
  * Created by IntelliJ IDEA.
- * User: Посетитель
+ * User: РџРѕСЃРµС‚РёС‚РµР»СЊ
  * Date: 13.04.2009
  * Time: 0:39:44
  */
@@ -112,9 +112,9 @@ public class ResultsPlugin implements Plugin {
 
       p.close();
 
-      JOptionPane.showMessageDialog(null, "Файл успешно записан");
+      JOptionPane.showMessageDialog(null, "Р¤Р°Р№Р» СѓСЃРїРµС€РЅРѕ Р·Р°РїРёСЃР°РЅ");
     } catch (FileNotFoundException e) {
-      JOptionPane.showMessageDialog(null, "Файл записать не удалось");
+      JOptionPane.showMessageDialog(null, "Р¤Р°Р№Р» Р·Р°РїРёСЃР°С‚СЊ РЅРµ СѓРґР°Р»РѕСЃСЊ");
     }
   }
 
@@ -145,7 +145,7 @@ public class ResultsPlugin implements Plugin {
 
   private void contestSelected(ContestDescription contest) {
     if (contest == null) {
-      showMessageInTable("Выберите соревнование");
+      showMessageInTable("Р’С‹Р±РµСЂРёС‚Рµ СЃРѕСЂРµРІРЅРѕРІР°РЅРёРµ");
       return;
     }
 

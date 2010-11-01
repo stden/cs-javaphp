@@ -35,7 +35,7 @@ public class PluginLoader {
   }
 
   /**
-   * Это Singleton и его не надо лишний раз создавать
+   * Р­С‚Рѕ Singleton Рё РµРіРѕ РЅРµ РЅР°РґРѕ Р»РёС€РЅРёР№ СЂР°Р· СЃРѕР·РґР°РІР°С‚СЊ
    */
   private PluginLoader() {
   }

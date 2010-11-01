@@ -214,13 +214,13 @@ public class
             // загружаем ему административные Plugin'ы
             switch (con.getUser().userType) {
                 case ContestAdmin:
-                    Controller.addAdminPlugin(ContestPluginV2.class);
+                    Controller.addAdminPlugin(ContestPluginV3.class);
                     Controller.addAdminPlugin(ManageUsersPlugin.class);
                     Controller.addAdminPlugin(ResultsPlugin.class);
                     Controller.addAdminPlugin(LogoutPlugin.class);
                     break;
                 case SuperAdmin:
-                    Controller.addAdminPlugin(ContestPluginV2.class);
+                    Controller.addAdminPlugin(ContestPluginV3.class);
                     Controller.addAdminPlugin(CreateContestPlugin.class);
 //          Controller.addAdminPlugin(AdjustContestsPlugin.class);
                     Controller.addAdminPlugin(ManageUsersPlugin.class);

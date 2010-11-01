@@ -28,7 +28,7 @@ public class ContestDescriptionBean {
 
   public void setDefault() {
     setContestID(-1);
-    setName("Новое соревнование");
+    setName("РќРѕРІРѕРµ СЃРѕСЂРµРІРЅРѕРІР°РЅРёРµ");
     setDescription("");
     setStart(new DateBean(new Date())); //now
     setFinish(new DateBean(new Date(new Date().getTime() + 1000 * 60 * 60))); // now + 1 hour

@@ -35,18 +35,18 @@ public class ChooseContestDialog extends JDialog {
 
     JButton okButton = new JButton();
     buttonsPanel.add(okButton);
-    okButton.setText("Выбрать");
+    okButton.setText("Р’С‹Р±СЂР°С‚СЊ");
 
     JButton cancelButton = new JButton();
     buttonsPanel.add(cancelButton);
-    cancelButton.setText("Отменить");
+    cancelButton.setText("РћС‚РјРµРЅРёС‚СЊ");
 
     contestsList = new JList();
     JScrollPane contestsListScroll = new JScrollPane(contestsList);
     add(contestsListScroll, BorderLayout.CENTER);
 
     setSize(400, 300);
-    setTitle("Выберите соревнование");
+    setTitle("Р’С‹Р±РµСЂРёС‚Рµ СЃРѕСЂРµРІРЅРѕРІР°РЅРёРµ");
         
     //add action
     okButton.addActionListener(new ActionListener() {

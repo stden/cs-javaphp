@@ -22,7 +22,7 @@ public class ClientDialog extends JFrame {
   }
 
   /**
-   * Удалить все Plugin'ы
+   * РЈРґР°Р»РёС‚СЊ РІСЃРµ Plugin'С‹
    */
   public void clearLeftPanel() {
     mainTabbedPane.removeAll();
@@ -64,13 +64,13 @@ public class ClientDialog extends JFrame {
     initialState();
 
     setSize(800, 600);
-    // Разместить окно по центру экрана
+    // Р Р°Р·РјРµСЃС‚РёС‚СЊ РѕРєРЅРѕ РїРѕ С†РµРЅС‚СЂСѓ СЌРєСЂР°РЅР°
     setLocationRelativeTo(null);
     //setTitle("DCES Client");
   }
 
   /**
-   * Начальное состояние клиента до присоединения контеста
+   * РќР°С‡Р°Р»СЊРЅРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ РєР»РёРµРЅС‚Р° РґРѕ РїСЂРёСЃРѕРµРґРёРЅРµРЅРёСЏ РєРѕРЅС‚РµСЃС‚Р°
    */
   public void initialState() {
     clearLeftPanel();

@@ -20,7 +20,7 @@ import ru.ipo.dces.client.Controller;
 
 /**
  * Created by IntelliJ IDEA.
- * User: Посетитель
+ * User: РџРѕСЃРµС‚РёС‚РµР»СЊ
  * Date: 11.04.2009
  * Time: 18:59:58
  */
@@ -48,10 +48,10 @@ public class ContestChoosingPanel extends JPanel {
   public ContestChoosingPanel() {
     selectedContestLabel = new JLabel();
     selectedContestLabel.setFont(selectedContestLabel.getFont().deriveFont(Font.BOLD));
-    selectContestButton = new JButton("Выбрать");
-    refreshContestListButton = new JButton("Обновить");
+    selectContestButton = new JButton("Р’С‹Р±СЂР°С‚СЊ");
+    refreshContestListButton = new JButton("РћР±РЅРѕРІРёС‚СЊ");
     selectContestList = new JList();
-    titleLabel = new JLabel("Доступные соревнования");
+    titleLabel = new JLabel("Р”РѕСЃС‚СѓРїРЅС‹Рµ СЃРѕСЂРµРІРЅРѕРІР°РЅРёСЏ");
     searchContestField = new JTextField();
 
     selectContestButton.addActionListener(new ActionListener() {
@@ -132,7 +132,7 @@ public class ContestChoosingPanel extends JPanel {
         }
 
         public Object getElementAt(int index) {
-          return "Нет доступных соревнований";
+          return "РќРµС‚ РґРѕСЃС‚СѓРїРЅС‹С… СЃРѕСЂРµРІРЅРѕРІР°РЅРёР№";
         }
       };
 
@@ -166,7 +166,7 @@ public class ContestChoosingPanel extends JPanel {
                 {beforeLabelGap, TableLayout.PREFERRED, TableLayout.FILL, TableLayout.PREFERRED}, {TableLayout.FILL}
         }));
 
-        add(new JLabel("Соревнование "), "1, 0");
+        add(new JLabel("РЎРѕСЂРµРІРЅРѕРІР°РЅРёРµ "), "1, 0");
         add(selectedContestLabel, "2, 0");
         add(selectContestButton, "3, 0");
       } else {

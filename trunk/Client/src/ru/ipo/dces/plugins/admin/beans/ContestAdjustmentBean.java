@@ -251,7 +251,7 @@ public class ContestAdjustmentBean {
   }
 
   public UserDataField[] getUserDataFields() {
-    String s = JOptionPane.showInputDialog("Введите список параметров через запятую");
+    String s = JOptionPane.showInputDialog("Р’РІРµРґРёС‚Рµ СЃРїРёСЃРѕРє РїР°СЂР°РјРµС‚СЂРѕРІ С‡РµСЂРµР· Р·Р°РїСЏС‚СѓСЋ");
     String[] data = s.split(",");
     UserDataField[] fields = new UserDataField[data.length];
     for (int i = 0; i < fields.length; i++) {
