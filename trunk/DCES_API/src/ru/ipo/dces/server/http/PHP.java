@@ -15,17 +15,17 @@ class PHP {
   public static final Charset SERVER_CHARSET = Charset.forName("UTF-8");
 
   static {
-    // Целые типы
+    // Р¦РµР»С‹Рµ С‚РёРїС‹
     types.put(Byte.TYPE, Byte.class);
     types.put(Integer.TYPE, Integer.class);
     types.put(Long.TYPE, Long.class);
     types.put(Short.TYPE, Short.class);
-    // Вещественные типы
+    // Р’РµС‰РµСЃС‚РІРµРЅРЅС‹Рµ С‚РёРїС‹
     types.put(Float.TYPE, Float.class);
     types.put(Double.TYPE, Double.class);
-    // Символный тип
+    // РЎРёРјРІРѕР»РЅС‹Р№ С‚РёРї
     types.put(Character.TYPE, Character.class);
-    // Логический тип
+    // Р›РѕРіРёС‡РµСЃРєРёР№ С‚РёРї
     types.put(Boolean.TYPE, Boolean.class);
   }
 
@@ -44,42 +44,42 @@ class PHP {
       out.write('N');
       out.write(';');
     }
-    // Обработка примитивных типов
+    // РћР±СЂР°Р±РѕС‚РєР° РїСЂРёРјРёС‚РёРІРЅС‹С… С‚РёРїРѕРІ
     else if (obj instanceof Integer || obj instanceof Long || obj instanceof Byte || obj instanceof Short) {
       out.write('i');
       out.write(':');
       serObjToString(obj, out);
       out.write(';');
     }
-    // Дата и время
+    // Р”Р°С‚Р° Рё РІСЂРµРјСЏ
     else if (obj instanceof Date) {
       out.write('i');
       out.write(':');
       serObjToString(((Date)obj).getTime() / 1000, out);
       out.write(';');
     }
-    //вещественные
+    //РІРµС‰РµСЃС‚РІРµРЅРЅС‹Рµ
     else if (obj instanceof Double || obj instanceof Float) {
       out.write('d');
       out.write(':');
       serObjToString(obj, out);
       out.write(';');
     }
-    //символьные типы
+    //СЃРёРјРІРѕР»СЊРЅС‹Рµ С‚РёРїС‹
     else if (obj instanceof String || obj instanceof Character) {
       out.write('s');
       out.write(':');
       serStr(obj.toString(), out);
       out.write(';');
     }
-    //логические
+    //Р»РѕРіРёС‡РµСЃРєРёРµ
     else if (obj instanceof Boolean) {
       out.write('b');
       out.write(':');
       out.write((Boolean) obj ? '1' : '0');
       out.write(';');
     }
-    // Массив байт
+    // РњР°СЃСЃРёРІ Р±Р°Р№С‚
     else if (obj.getClass().isArray() && obj.getClass().getComponentType() == byte.class) {
       out.write('s');
       out.write(':');
@@ -92,7 +92,7 @@ class PHP {
 
       out.write(';');
     }
-    // Остальные массивы
+    // РћСЃС‚Р°Р»СЊРЅС‹Рµ РјР°СЃСЃРёРІС‹
     else if (obj.getClass().isArray()) {
       int arrayLen = Array.getLength(obj);
       out.write('a');
@@ -106,7 +106,7 @@ class PHP {
       }
       out.write('}');
     }
-    // Ассоциативные массивы
+    // РђСЃСЃРѕС†РёР°С‚РёРІРЅС‹Рµ РјР°СЃСЃРёРІС‹
     else if (obj instanceof HashMap<?, ?>) {
       HashMap<?, ?> hm = (HashMap<?, ?>) obj;
       out.write('a');
@@ -127,7 +127,7 @@ class PHP {
       serStr(obj.toString(), out);
       out.write(';');
     }
-    // Классы
+    // РљР»Р°СЃСЃС‹
     else if (!obj.getClass().isPrimitive()) {
       Class<?> c = obj.getClass();
       Field[] ff = c.getFields();
@@ -284,15 +284,15 @@ class PHP {
           return cls.cast(hm);
         }
       case 'O':
-        // Можно игнорировать имя класса, тогда можно будет десериалировать в
-        // потомка
+        // РњРѕР¶РЅРѕ РёРіРЅРѕСЂРёСЂРѕРІР°С‚СЊ РёРјСЏ РєР»Р°СЃСЃР°, С‚РѕРіРґР° РјРѕР¶РЅРѕ Р±СѓРґРµС‚ РґРµСЃРµСЂРёР°Р»РёСЂРѕРІР°С‚СЊ РІ
+        // РїРѕС‚РѕРјРєР°
         String className = getString(st, ':');
         if (className.compareTo(cls.getSimpleName()) != 0)
           throw new IllegalClassException(cls.getSimpleName(), className);
-        Object obj = cls.newInstance(); // Создаём объект
+        Object obj = cls.newInstance(); // РЎРѕР·РґР°С‘Рј РѕР±СЉРµРєС‚
         int fieldsNum = Integer.parseInt(st.readToken(':'));
         st.moveTo('{');
-        for (int i = 0; i < fieldsNum; i++) { // Заполняем поля
+        for (int i = 0; i < fieldsNum; i++) { // Р—Р°РїРѕР»РЅСЏРµРј РїРѕР»СЏ
           String fieldName = unserialize(String.class, st);
           Field f = cls.getField(fieldName);
           f.set(obj, unserialize(type2Class(f.getType()), st));

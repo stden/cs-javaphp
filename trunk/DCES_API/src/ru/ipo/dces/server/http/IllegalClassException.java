@@ -1,6 +1,6 @@
 package ru.ipo.dces.server.http;
 
-/** Неверный класс при десериализации */
+/** РќРµРІРµСЂРЅС‹Р№ РєР»Р°СЃСЃ РїСЂРё РґРµСЃРµСЂРёР°Р»РёР·Р°С†РёРё */
 class IllegalClassException extends Exception {
 
   private static final long serialVersionUID = 6239273096888694801L;

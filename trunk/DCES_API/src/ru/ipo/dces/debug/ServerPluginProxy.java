@@ -22,7 +22,7 @@ import java.security.SecureRandom;
 
 /**
  * Created by IntelliJ IDEA.
- * User: Посетитель
+ * User: РџРѕСЃРµС‚РёС‚РµР»СЊ
  * Date: 29.04.2009
  * Time: 14:45:05
  */

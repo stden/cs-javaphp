@@ -22,11 +22,11 @@ import java.util.HashMap;
 
 /**
  * Created by IntelliJ IDEA.
- * User: Илья
+ * User: РР»СЊСЏ
  * Date: 12.12.2008
  * Time: 21:40:50
  *
- * Класс реализует окно для тестирования плагина
+ * РљР»Р°СЃСЃ СЂРµР°Р»РёР·СѓРµС‚ РѕРєРЅРѕ РґР»СЏ С‚РµСЃС‚РёСЂРѕРІР°РЅРёСЏ РїР»Р°РіРёРЅР°
  */
 public class PluginBox extends JFrame {  
 
@@ -41,18 +41,18 @@ public class PluginBox extends JFrame {
   private UserMessagesLogger logger = LoggerFactory.getLogger();
 
   /**
-   * Создает окно для тестирования плагина стороны клиента. Помимо
-   * тестируемого плагина в окне появляется другой плагин, на который можно переключаться.
-   * Это нужно для тестирования того, как плагин обрабатывает события <tt>activate()</tt> и
+   * РЎРѕР·РґР°РµС‚ РѕРєРЅРѕ РґР»СЏ С‚РµСЃС‚РёСЂРѕРІР°РЅРёСЏ РїР»Р°РіРёРЅР° СЃС‚РѕСЂРѕРЅС‹ РєР»РёРµРЅС‚Р°. РџРѕРјРёРјРѕ
+   * С‚РµСЃС‚РёСЂСѓРµРјРѕРіРѕ РїР»Р°РіРёРЅР° РІ РѕРєРЅРµ РїРѕСЏРІР»СЏРµС‚СЃСЏ РґСЂСѓРіРѕР№ РїР»Р°РіРёРЅ, РЅР° РєРѕС‚РѕСЂС‹Р№ РјРѕР¶РЅРѕ РїРµСЂРµРєР»СЋС‡Р°С‚СЊСЃСЏ.
+   * Р­С‚Рѕ РЅСѓР¶РЅРѕ РґР»СЏ С‚РµСЃС‚РёСЂРѕРІР°РЅРёСЏ С‚РѕРіРѕ, РєР°Рє РїР»Р°РіРёРЅ РѕР±СЂР°Р±Р°С‚С‹РІР°РµС‚ СЃРѕР±С‹С‚РёСЏ <tt>activate()</tt> Рё
    * <tt>deactivate()</tt>.
    * <p>
-   * Для тестирования плагина в него должна быть загружена задача. Условие задачи загружается с помощью
-   * методов объекта serverEmulator. Имя задачи передается в качестве отдельного параметра. Если имя
-   * задачи указывать не хочется, класс <tt>PluginBox</tt> имеет параллельный конструктор
+   * Р”Р»СЏ С‚РµСЃС‚РёСЂРѕРІР°РЅРёСЏ РїР»Р°РіРёРЅР° РІ РЅРµРіРѕ РґРѕР»Р¶РЅР° Р±С‹С‚СЊ Р·Р°РіСЂСѓР¶РµРЅР° Р·Р°РґР°С‡Р°. РЈСЃР»РѕРІРёРµ Р·Р°РґР°С‡Рё Р·Р°РіСЂСѓР¶Р°РµС‚СЃСЏ СЃ РїРѕРјРѕС‰СЊСЋ
+   * РјРµС‚РѕРґРѕРІ РѕР±СЉРµРєС‚Р° serverEmulator. РРјСЏ Р·Р°РґР°С‡Рё РїРµСЂРµРґР°РµС‚СЃСЏ РІ РєР°С‡РµСЃС‚РІРµ РѕС‚РґРµР»СЊРЅРѕРіРѕ РїР°СЂР°РјРµС‚СЂР°. Р•СЃР»Рё РёРјСЏ
+   * Р·Р°РґР°С‡Рё СѓРєР°Р·С‹РІР°С‚СЊ РЅРµ С…РѕС‡РµС‚СЃСЏ, РєР»Р°СЃСЃ <tt>PluginBox</tt> РёРјРµРµС‚ РїР°СЂР°Р»Р»РµР»СЊРЅС‹Р№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
    * @see PluginBox#PluginBox(Class, ServerPluginEmulator)   
-   * @param pluginClass класс, соответсвующий тестируемому плагину
-   * @param serverEmulator реализация заглушки плагина стороны сервера
-   * @param problemName имя задачи
+   * @param pluginClass РєР»Р°СЃСЃ, СЃРѕРѕС‚РІРµС‚СЃРІСѓСЋС‰РёР№ С‚РµСЃС‚РёСЂСѓРµРјРѕРјСѓ РїР»Р°РіРёРЅСѓ
+   * @param serverEmulator СЂРµР°Р»РёР·Р°С†РёСЏ Р·Р°РіР»СѓС€РєРё РїР»Р°РіРёРЅР° СЃС‚РѕСЂРѕРЅС‹ СЃРµСЂРІРµСЂР°
+   * @param problemName РёРјСЏ Р·Р°РґР°С‡Рё
    */
   public PluginBox(Class<? extends Plugin> pluginClass, ServerPluginEmulator serverEmulator, String problemName) {
     super();
@@ -94,15 +94,15 @@ public class PluginBox extends JFrame {
   private void setErrorPlugin() {
     plugin = new OtherPlugin(null);
     pluginButton.setText("ERROR !");
-    ((OtherPlugin)plugin).setLabel("Не удалось загрузить класс с плагином");
+    ((OtherPlugin)plugin).setLabel("РќРµ СѓРґР°Р»РѕСЃСЊ Р·Р°РіСЂСѓР·РёС‚СЊ РєР»Р°СЃСЃ СЃ РїР»Р°РіРёРЅРѕРј");
   }
 
   /**
-   * Конструктор аналогичен другому контсруктору, только здесь не указывается имя задачи, оно выбирается
-   * по умолчанию и становится равным "Unnamed problem" 
+   * РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ Р°РЅР°Р»РѕРіРёС‡РµРЅ РґСЂСѓРіРѕРјСѓ РєРѕРЅС‚СЃСЂСѓРєС‚РѕСЂСѓ, С‚РѕР»СЊРєРѕ Р·РґРµСЃСЊ РЅРµ СѓРєР°Р·С‹РІР°РµС‚СЃСЏ РёРјСЏ Р·Р°РґР°С‡Рё, РѕРЅРѕ РІС‹Р±РёСЂР°РµС‚СЃСЏ
+   * РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ Рё СЃС‚Р°РЅРѕРІРёС‚СЃСЏ СЂР°РІРЅС‹Рј "Unnamed problem" 
    * @see 	PluginBox#PluginBox(Class, ServerPluginEmulator, String)
-   * @param pluginClass класс плагина, который необходимо тестировать
-   * @param serverEmulator реализация заглушки серверного плагина
+   * @param pluginClass РєР»Р°СЃСЃ РїР»Р°РіРёРЅР°, РєРѕС‚РѕСЂС‹Р№ РЅРµРѕР±С…РѕРґРёРјРѕ С‚РµСЃС‚РёСЂРѕРІР°С‚СЊ
+   * @param serverEmulator СЂРµР°Р»РёР·Р°С†РёСЏ Р·Р°РіР»СѓС€РєРё СЃРµСЂРІРµСЂРЅРѕРіРѕ РїР»Р°РіРёРЅР°
    */
   public PluginBox(Class<? extends Plugin> pluginClass, ServerPluginEmulator serverEmulator){
     this(pluginClass, serverEmulator, "Unnamed problem");
@@ -126,12 +126,12 @@ public class PluginBox extends JFrame {
     initialState();
 
     setSize(800, 600);
-    // Разместить окно по центру экрана
+    // Р Р°Р·РјРµСЃС‚РёС‚СЊ РѕРєРЅРѕ РїРѕ С†РµРЅС‚СЂСѓ СЌРєСЂР°РЅР°
     setLocationRelativeTo(null);
     setTitle("DCES client plugin test suite");
   }
 
-  /** Начальное состояние клиента до присоединения контеста */
+  /** РќР°С‡Р°Р»СЊРЅРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ РєР»РёРµРЅС‚Р° РґРѕ РїСЂРёСЃРѕРµРґРёРЅРµРЅРёСЏ РєРѕРЅС‚РµСЃС‚Р° */
   private void initialState() {
     otherPluginButton = new JToggleButton();
     pluginButton = new JToggleButton();
@@ -171,7 +171,7 @@ public class PluginBox extends JFrame {
     @SuppressWarnings({"UnusedDeclaration", "UnusedDeclaration", "UnusedDeclaration"})
     public OtherPlugin(PluginEnvironment env) {
       this.setLayout(new GridLayout(1,1));
-      jLabel = new JLabel("Для просмотра вашего плагина нажмите кнопку слева");
+      jLabel = new JLabel("Р”Р»СЏ РїСЂРѕСЃРјРѕС‚СЂР° РІР°С€РµРіРѕ РїР»Р°РіРёРЅР° РЅР°Р¶РјРёС‚Рµ РєРЅРѕРїРєСѓ СЃР»РµРІР°");
       jLabel.setHorizontalAlignment(JLabel.CENTER);
       this.add(jLabel);
 

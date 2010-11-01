@@ -2,7 +2,7 @@ package ru.ipo.dces.log;
 
 /**
  * Created by IntelliJ IDEA.
- * User: Посетитель
+ * User: РџРѕСЃРµС‚РёС‚РµР»СЊ
  * Date: 13.04.2009
  * Time: 15:37:27
  */
