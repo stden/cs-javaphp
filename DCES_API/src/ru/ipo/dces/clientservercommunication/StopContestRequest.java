@@ -2,16 +2,16 @@ package ru.ipo.dces.clientservercommunication;
 
 /**
  * Created by IntelliJ IDEA.
- * User: Посетитель
+ * User: РџРѕСЃРµС‚РёС‚РµР»СЊ
  * Date: 16.04.2009
  * Time: 20:00:46
  *
- * Запрос на досрочное завершение соревнование. Возможен только если в описании соревнования
- * ContestDescription указано contestTiming.selfContestStart == true
+ * Р—Р°РїСЂРѕСЃ РЅР° РґРѕСЃСЂРѕС‡РЅРѕРµ Р·Р°РІРµСЂС€РµРЅРёРµ СЃРѕСЂРµРІРЅРѕРІР°РЅРёРµ. Р’РѕР·РјРѕР¶РµРЅ С‚РѕР»СЊРєРѕ РµСЃР»Рё РІ РѕРїРёСЃР°РЅРёРё СЃРѕСЂРµРІРЅРѕРІР°РЅРёСЏ
+ * ContestDescription СѓРєР°Р·Р°РЅРѕ contestTiming.selfContestStart == true
  */
 public class StopContestRequest implements Request {
   /**
-   * Идентификатор сессии участника
+   * РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЃРµСЃСЃРёРё СѓС‡Р°СЃС‚РЅРёРєР°
    */
   @PHPDefaultValue("null")
   public String sessionID;

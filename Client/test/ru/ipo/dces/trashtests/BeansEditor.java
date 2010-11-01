@@ -31,7 +31,7 @@ public class BeansEditor {
         model.setRootElement(new EditorRenderer(model, ccrb).getRenderResult());
         DSLBeansRegistry.getInstance().registerBean(ContestDescriptionBean.class);
 
-        JFrame f = new JFrame("Редактирование ContestDescription");
+        JFrame f = new JFrame("Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ ContestDescription");
         BorderLayout br = new BorderLayout();
         f.setLayout(br);
         StructuredEditor structuredEditor = new StructuredEditor(model, ccrb);

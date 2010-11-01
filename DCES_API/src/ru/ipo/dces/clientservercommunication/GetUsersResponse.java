@@ -1,11 +1,11 @@
 package ru.ipo.dces.clientservercommunication;
 
 /**
- * Ответ: список участников соревнования
+ * РћС‚РІРµС‚: СЃРїРёСЃРѕРє СѓС‡Р°СЃС‚РЅРёРєРѕРІ СЃРѕСЂРµРІРЅРѕРІР°РЅРёСЏ
  */
 public class GetUsersResponse implements Response {
   /**
-   * Массив с описаниями участников
+   * РњР°СЃСЃРёРІ СЃ РѕРїРёСЃР°РЅРёСЏРјРё СѓС‡Р°СЃС‚РЅРёРєРѕРІ
    */
   public UserDescription[] users;
 }

@@ -1,11 +1,11 @@
 package ru.ipo.dces.clientservercommunication;
 
 /**
- * Запрос: удалить плагин стороны клиента из системы
+ * Р—Р°РїСЂРѕСЃ: СѓРґР°Р»РёС‚СЊ РїР»Р°РіРёРЅ СЃС‚РѕСЂРѕРЅС‹ РєР»РёРµРЅС‚Р° РёР· СЃРёСЃС‚РµРјС‹
  */
 public class RemovePluginRequest implements Request {
   /**
-   * Идентификатор сессии администратора сервера
+   * РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЃРµСЃСЃРёРё Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂР° СЃРµСЂРІРµСЂР°
    */
   @PHPDefaultValue("null")
   public String sessionID;
@@ -14,7 +14,7 @@ public class RemovePluginRequest implements Request {
   public PluginSide side;
 
   /**
-   * Идентификатор плагина стороны клиента
+   * РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїР»Р°РіРёРЅР° СЃС‚РѕСЂРѕРЅС‹ РєР»РёРµРЅС‚Р°
    */
   @PHPDefaultValue("'Test client plugin'")
   public String pluginAlias;

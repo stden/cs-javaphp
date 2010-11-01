@@ -493,6 +493,7 @@
   </component>
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
     <file url="file://$PROJECT_DIR$/Client/src/ru/ipo/dces/plugins/admin/PluginsManagementPlugin.java" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/Client/test/ru/ipo/dces/trashtests/BeansEditor.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/DCES_API/src/ru/ipo/dces/debug/ServerPluginProxy.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/DCES_API/src/ru/ipo/dces/exceptions/ServerReturnedError.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/DCES_API/src/ru/ipo/dces/server/http/StreamTokenizer.java" charset="UTF-8" />

@@ -1,9 +1,9 @@
 package ru.ipo.dces.clientservercommunication;
 
 /**
- * Ответ с плагином стороны клиента
+ * РћС‚РІРµС‚ СЃ РїР»Р°РіРёРЅРѕРј СЃС‚РѕСЂРѕРЅС‹ РєР»РёРµРЅС‚Р°
  */
 public class DownloadPluginResponse implements Response {
-  /** Содержимое плагина */
+  /** РЎРѕРґРµСЂР¶РёРјРѕРµ РїР»Р°РіРёРЅР° */
   public byte[] pluginBytes;
 }

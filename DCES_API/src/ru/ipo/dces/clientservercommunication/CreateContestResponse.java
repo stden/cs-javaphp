@@ -2,16 +2,16 @@ package ru.ipo.dces.clientservercommunication;
 
 /**
  * Created by IntelliJ IDEA.
- * User: Посетитель
+ * User: РџРѕСЃРµС‚РёС‚РµР»СЊ
  * Date: 30.04.2009
  * Time: 12:21:09
  *
- * Ответ на запрос о создании соревнования
+ * РћС‚РІРµС‚ РЅР° Р·Р°РїСЂРѕСЃ Рѕ СЃРѕР·РґР°РЅРёРё СЃРѕСЂРµРІРЅРѕРІР°РЅРёСЏ
  */
 public class CreateContestResponse implements Response {
 
   /**
-   * ID созданного соревнования
+   * ID СЃРѕР·РґР°РЅРЅРѕРіРѕ СЃРѕСЂРµРІРЅРѕРІР°РЅРёСЏ
    */
   public int createdContestID;
 

@@ -6,7 +6,7 @@ package ru.ipo.dces.clientservercommunication;
  * Date: 14.11.2009
  * Time: 2:33:33
  *
- * Запрос на выдачу плагинов стороны клиента или стороны сервера
+ * Р—Р°РїСЂРѕСЃ РЅР° РІС‹РґР°С‡Сѓ РїР»Р°РіРёРЅРѕРІ СЃС‚РѕСЂРѕРЅС‹ РєР»РёРµРЅС‚Р° РёР»Рё СЃС‚РѕСЂРѕРЅС‹ СЃРµСЂРІРµСЂР°
  */
 public class AvailablePluginsRequest implements Request {  
 
@@ -14,7 +14,7 @@ public class AvailablePluginsRequest implements Request {
   public String sessionID;
 
   /**
-   * Выбор, какие плагины придут по запросу
+   * Р’С‹Р±РѕСЂ, РєР°РєРёРµ РїР»Р°РіРёРЅС‹ РїСЂРёРґСѓС‚ РїРѕ Р·Р°РїСЂРѕСЃСѓ
    */
   @PHPDefaultValue("'Client'")
   public PluginSide pluginSide;
