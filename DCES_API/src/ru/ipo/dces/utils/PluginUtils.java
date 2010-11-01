@@ -23,7 +23,7 @@ import sun.awt.shell.ShellFolder;
 
 /**
  * Created by IntelliJ IDEA.
- * User: Посетитель
+ * User: РџРѕСЃРµС‚РёС‚РµР»СЊ
  * Date: 04.05.2009
  * Time: 18:01:07
  */
