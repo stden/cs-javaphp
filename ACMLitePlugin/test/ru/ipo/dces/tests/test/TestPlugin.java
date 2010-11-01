@@ -21,46 +21,46 @@ import java.io.IOException;
 
 public class TestPlugin {
 
-  //URL сервера
+  //URL СЃРµСЂРІРµСЂР°
   private static final String SERVER_URL = "http://vm-2.spb.ru/~posov/dces/dces.php";
 
-  //логин и пароль суперадминистратора
+  //Р»РѕРіРёРЅ Рё РїР°СЂРѕР»СЊ СЃСѓРїРµСЂР°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂР°
   public static final String LOGIN = "admin";
   public static final String PASSWORD = "pass";
   
-  //номер соревнования, с помощью которого будет происходить отладка  
+  //РЅРѕРјРµСЂ СЃРѕСЂРµРІРЅРѕРІР°РЅРёСЏ, СЃ РїРѕРјРѕС‰СЊСЋ РєРѕС‚РѕСЂРѕРіРѕ Р±СѓРґРµС‚ РїСЂРѕРёСЃС…РѕРґРёС‚СЊ РѕС‚Р»Р°РґРєР°  
   public static final int CONTEST_ID = 50;
 
-  //ID отлаживаемого плагина клиента и сервер. Придумывается автором плагина
+  //ID РѕС‚Р»Р°Р¶РёРІР°РµРјРѕРіРѕ РїР»Р°РіРёРЅР° РєР»РёРµРЅС‚Р° Рё СЃРµСЂРІРµСЂ. РџСЂРёРґСѓРјС‹РІР°РµС‚СЃСЏ Р°РІС‚РѕСЂРѕРј РїР»Р°РіРёРЅР°
   public static final String CLIENT_PLUGIN_ALIAS = "ACMLitePlugin2";
   public static final String SERVER_PLUGIN_ALIAS = "MyDebugPlugin2";
   
-  //путь к отлаживаемым плагинам на диске
+  //РїСѓС‚СЊ Рє РѕС‚Р»Р°Р¶РёРІР°РµРјС‹Рј РїР»Р°РіРёРЅР°Рј РЅР° РґРёСЃРєРµ
   public static final String CLIENT_PLUGIN_PATH = "d:\\programming\\DCES\\plugins\\ACMLitePlugin.jar";
   public static final String SERVER_PLUGIN_PATH = "d:\\programming\\DCES\\ACMLitePlugin\\debug\\MyDebugPlugin2.php";
                                                                                                             
-  //каталог, в который при отладке будет положено скаченное с сервера условие
+  //РєР°С‚Р°Р»РѕРі, РІ РєРѕС‚РѕСЂС‹Р№ РїСЂРё РѕС‚Р»Р°РґРєРµ Р±СѓРґРµС‚ РїРѕР»РѕР¶РµРЅРѕ СЃРєР°С‡РµРЅРЅРѕРµ СЃ СЃРµСЂРІРµСЂР° СѓСЃР»РѕРІРёРµ
   public static final String DEBUG_STATEMENT_FOLDER = "C:/programming/dces/debug-problem-folder/";
-  //класс отлаживаемого плагина клиента
+  //РєР»Р°СЃСЃ РѕС‚Р»Р°Р¶РёРІР°РµРјРѕРіРѕ РїР»Р°РіРёРЅР° РєР»РёРµРЅС‚Р°
   public static final Class<? extends Plugin> PLUGIN_CLASS = ACMLitePlugin.class;
 
-  //Имя задачи, отображается при отладке, особого значения не имеет
-  public static final String PROBLEM_NAME = "Имя задачи";
-  //пути к каталогам или файлам с условием и ответом
+  //РРјСЏ Р·Р°РґР°С‡Рё, РѕС‚РѕР±СЂР°Р¶Р°РµС‚СЃСЏ РїСЂРё РѕС‚Р»Р°РґРєРµ, РѕСЃРѕР±РѕРіРѕ Р·РЅР°С‡РµРЅРёСЏ РЅРµ РёРјРµРµС‚
+  public static final String PROBLEM_NAME = "РРјСЏ Р·Р°РґР°С‡Рё";
+  //РїСѓС‚Рё Рє РєР°С‚Р°Р»РѕРіР°Рј РёР»Рё С„Р°Р№Р»Р°Рј СЃ СѓСЃР»РѕРІРёРµРј Рё РѕС‚РІРµС‚РѕРј
   private static final String STATEMENT_PATH = "d:\\programming\\DCES\\ACMLitePlugin\\debug\\1\\task";
   private static final String ANSWER_PATH = "d:\\programming\\DCES\\ACMLitePlugin\\debug\\1\\answer\\01.a";
 
   public static void main(String[] args) throws ServerReturnedError, GeneralRequestFailureException, IOException {
-    //создаем объект, соответствующий реальному серверу
+    //СЃРѕР·РґР°РµРј РѕР±СЉРµРєС‚, СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёР№ СЂРµР°Р»СЊРЅРѕРјСѓ СЃРµСЂРІРµСЂСѓ
     HttpServer server = new HttpServer(SERVER_URL);
 
-    //входим в систему от имени суперадминистратора
+    //РІС…РѕРґРёРј РІ СЃРёСЃС‚РµРјСѓ РѕС‚ РёРјРµРЅРё СЃСѓРїРµСЂР°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂР°
     ServerPluginProxy proxy = new ServerPluginProxy(server, LOGIN, PASSWORD, true);
-    //выбираем соревнование, внутри которого будет происходить тестирование
+    //РІС‹Р±РёСЂР°РµРј СЃРѕСЂРµРІРЅРѕРІР°РЅРёРµ, РІРЅСѓС‚СЂРё РєРѕС‚РѕСЂРѕРіРѕ Р±СѓРґРµС‚ РїСЂРѕРёСЃС…РѕРґРёС‚СЊ С‚РµСЃС‚РёСЂРѕРІР°РЅРёРµ
     proxy.selectContest(CONTEST_ID);
-    //Загрузить плагин клиента на сервер
+    //Р—Р°РіСЂСѓР·РёС‚СЊ РїР»Р°РіРёРЅ РєР»РёРµРЅС‚Р° РЅР° СЃРµСЂРІРµСЂ
     proxy.uploadClientPlugin(CLIENT_PLUGIN_ALIAS, new File(CLIENT_PLUGIN_PATH));
-    //Загрузить отлаживаемый плагин на сервер
+    //Р—Р°РіСЂСѓР·РёС‚СЊ РѕС‚Р»Р°Р¶РёРІР°РµРјС‹Р№ РїР»Р°РіРёРЅ РЅР° СЃРµСЂРІРµСЂ
     proxy.uploadServerPlugin(SERVER_PLUGIN_ALIAS, new File(SERVER_PLUGIN_PATH));
     proxy.setStatementFolder(new File(DEBUG_STATEMENT_FOLDER));
     proxy.createProblem(
@@ -69,19 +69,19 @@ public class TestPlugin {
             new File(STATEMENT_PATH),
             new File(ANSWER_PATH)
     );
-    //создать участника, от имени которого будет вестись отладка
+    //СЃРѕР·РґР°С‚СЊ СѓС‡Р°СЃС‚РЅРёРєР°, РѕС‚ РёРјРµРЅРё РєРѕС‚РѕСЂРѕРіРѕ Р±СѓРґРµС‚ РІРµСЃС‚РёСЃСЊ РѕС‚Р»Р°РґРєР°
     proxy.newParticipant();
 
-    //создаем окно для отладки
+    //СЃРѕР·РґР°РµРј РѕРєРЅРѕ РґР»СЏ РѕС‚Р»Р°РґРєРё
     PluginBox box = new PluginBox(
-            PLUGIN_CLASS, //класс файл с отлаживаемым плагином
-            proxy, //эмулятор плагина сервера
-            PROBLEM_NAME //имя задачи, параметр необязателен
+            PLUGIN_CLASS, //РєР»Р°СЃСЃ С„Р°Р№Р» СЃ РѕС‚Р»Р°Р¶РёРІР°РµРјС‹Рј РїР»Р°РіРёРЅРѕРј
+            proxy, //СЌРјСѓР»СЏС‚РѕСЂ РїР»Р°РіРёРЅР° СЃРµСЂРІРµСЂР°
+            PROBLEM_NAME //РёРјСЏ Р·Р°РґР°С‡Рё, РїР°СЂР°РјРµС‚СЂ РЅРµРѕР±СЏР·Р°С‚РµР»РµРЅ
     );
 
-    //делаем так, чтобы после закрытия окна программа закрывалась
+    //РґРµР»Р°РµРј С‚Р°Рє, С‡С‚РѕР±С‹ РїРѕСЃР»Рµ Р·Р°РєСЂС‹С‚РёСЏ РѕРєРЅР° РїСЂРѕРіСЂР°РјРјР° Р·Р°РєСЂС‹РІР°Р»Р°СЃСЊ
     box.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    //показываем окно на экране
+    //РїРѕРєР°Р·С‹РІР°РµРј РѕРєРЅРѕ РЅР° СЌРєСЂР°РЅРµ
     box.setVisible(true);
   }
 

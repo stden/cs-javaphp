@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 /**
  * Created by IntelliJ IDEA.
- * User: Посетитель
+ * User: РџРѕСЃРµС‚РёС‚РµР»СЊ
  * Date: 22.04.2009
  * Time: 12:06:48
  */
@@ -30,7 +30,7 @@ public class RadioButtonActionListener implements ActionListener {
         //is called when radio button is pressed
 
         HashMap<String, String> sol = new HashMap<String, String>();
-        sol.put("action", "answer"); //в кнопке для подсчета результат "action" -> "get results"
+        sol.put("action", "answer"); //РІ РєРЅРѕРїРєРµ РґР»СЏ РїРѕРґСЃС‡РµС‚Р° СЂРµР·СѓР»СЊС‚Р°С‚ "action" -> "get results"
         sol.put("question", "" + problemNumber);
         sol.put("answer", button.getText());
 

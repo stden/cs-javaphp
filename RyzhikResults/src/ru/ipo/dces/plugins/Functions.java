@@ -2,7 +2,7 @@ package ru.ipo.dces.plugins;
 
 /**
  * Created by IntelliJ IDEA.
- * User: Поля
+ * User: РџРѕР»СЏ
  * Date: 17.05.2009
  * Time: 2:00:13
  * To change this template use File | Settings | File Templates.

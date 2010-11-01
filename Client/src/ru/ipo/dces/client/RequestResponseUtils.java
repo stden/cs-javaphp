@@ -11,7 +11,7 @@ import java.util.Date;
 
 /**
  * Created by IntelliJ IDEA.
- * User: Посетитель
+ * User: РџРѕСЃРµС‚РёС‚РµР»СЊ
  * Date: 31.03.2009
  * Time: 17:34:59
  */

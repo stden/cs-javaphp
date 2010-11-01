@@ -5,7 +5,7 @@ import javax.swing.event.TableModelListener;
 
 /**
  * Created by IntelliJ IDEA.
- * User: Посетитель
+ * User: РџРѕСЃРµС‚РёС‚РµР»СЊ
  * Date: 13.04.2009
  * Time: 20:07:53
  */

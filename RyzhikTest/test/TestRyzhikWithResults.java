@@ -48,14 +48,14 @@ public class TestRyzhikWithResults {
     problemProxy.uploadServerPlugin("RyzhikChecker", new File("RyzhikTest/debug/RyzhikChecker.php"));
     problemProxy.uploadServerPlugin("EmptyPlugin", new File("RyzhikResults/debug/EmptyPlugin.php"));
 
-    //загрузить условия задач
+    //Р·Р°РіСЂСѓР·РёС‚СЊ СѓСЃР»РѕРІРёСЏ Р·Р°РґР°С‡
     for (int i = 1; i <= 6; i++) {
       problemProxy.selectProblem(290 + i);
       problemProxy.adjustProblem(
               "RyzhikTest",
               "RyzhikChecker",
-              new File("RyzhikTest/debug/" + i + ".gif"), //файл с картинкой
-              new File("RyzhikTest/debug/" + i + ".txt")  //файл с ответом
+              new File("RyzhikTest/debug/" + i + ".gif"), //С„Р°Р№Р» СЃ РєР°СЂС‚РёРЅРєРѕР№
+              new File("RyzhikTest/debug/" + i + ".txt")  //С„Р°Р№Р» СЃ РѕС‚РІРµС‚РѕРј
       );
 
       FileSystemUtils.deleteDir(new File("problems/" + (290 + i)));
@@ -82,7 +82,7 @@ public class TestRyzhikWithResults {
       break;
     }
 
-    System.out.println("Заходите от пользователя p" + pid + " пароль pass");
+    System.out.println("Р—Р°С…РѕРґРёС‚Рµ РѕС‚ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ p" + pid + " РїР°СЂРѕР»СЊ pass");
 
     Controller.main(new String[0]);
   }
@@ -94,20 +94,20 @@ public class TestRyzhikWithResults {
 
     UserDataField field1 = new UserDataField();
     field1.compulsory = true;
-    field1.data = "Имя";
+    field1.data = "РРјСЏ";
     field1.showInResult = true;
     UserDataField field2 = new UserDataField();
     field2.compulsory = false;
-    field2.data = "Класс";
+    field2.data = "РљР»Р°СЃСЃ";
     field2.showInResult = false;
 
     res.contestTiming = new ContestTiming();
     res.contestID = -1;
     res.start = now;
     res.data = new UserDataField[]{field1, field2};
-    res.description = "Пример соревнования на тесты рыжика. Регистрация по желанию";
+    res.description = "РџСЂРёРјРµСЂ СЃРѕСЂРµРІРЅРѕРІР°РЅРёСЏ РЅР° С‚РµСЃС‚С‹ СЂС‹Р¶РёРєР°. Р РµРіРёСЃС‚СЂР°С†РёСЏ РїРѕ Р¶РµР»Р°РЅРёСЋ";
     res.finish = new Date(now.getTime() + ((long)1000)*60*60*24*100); //100 days
-    res.name = "Тесты Рыжика. Пример";
+    res.name = "РўРµСЃС‚С‹ Р С‹Р¶РёРєР°. РџСЂРёРјРµСЂ";
     res.registrationType = ContestDescription.RegistrationType.Self;
     res.resultsAccessPolicy = new ResultsAccessPolicy();
 

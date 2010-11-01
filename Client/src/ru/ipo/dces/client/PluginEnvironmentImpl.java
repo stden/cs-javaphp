@@ -105,7 +105,7 @@ public class PluginEnvironmentImpl implements PluginEnvironment {
     panel2plugin.put(p.getPanel(), p);
 
     JTabbedPane tabbedPane = Controller.getClientDialog().getMainTabbedPane();
-    tabbedPane.addTab("Задача (!!!)", TAB_ICON, p.getPanel());
+    tabbedPane.addTab("Р—Р°РґР°С‡Р° (!!!)", TAB_ICON, p.getPanel());
     tabIndex = tabbedPane.getTabCount() - 1;    
     if (cachedTitle != null)
       setTitle(cachedTitle);

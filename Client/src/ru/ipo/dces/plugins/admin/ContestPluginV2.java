@@ -101,10 +101,10 @@ public class ContestPluginV2 implements Plugin, ActionListener {
 
     final Resources res = Resources.getInstance();
 
-    addContestButton = addButtonToContestToolBar(contestToolBar, "Добавить", new ImageIcon(res.getResourceAsByteArray("images/add.gif")));
-    removeContestButton = addButtonToContestToolBar(contestToolBar, "Удалить", new ImageIcon(res.getResourceAsByteArray("images/remove.gif")));
-    applyContestChangesButton = addButtonToContestToolBar(contestToolBar, "Применить", new ImageIcon(res.getResourceAsByteArray("images/bigApply.gif")));
-    undoContestChangesButton = addButtonToContestToolBar(contestToolBar, "Отменить", new ImageIcon(res.getResourceAsByteArray("images/cancel.gif")));
+    addContestButton = addButtonToContestToolBar(contestToolBar, "Р”РѕР±Р°РІРёС‚СЊ", new ImageIcon(res.getResourceAsByteArray("images/add.gif")));
+    removeContestButton = addButtonToContestToolBar(contestToolBar, "РЈРґР°Р»РёС‚СЊ", new ImageIcon(res.getResourceAsByteArray("images/remove.gif")));
+    applyContestChangesButton = addButtonToContestToolBar(contestToolBar, "РџСЂРёРјРµРЅРёС‚СЊ", new ImageIcon(res.getResourceAsByteArray("images/bigApply.gif")));
+    undoContestChangesButton = addButtonToContestToolBar(contestToolBar, "РћС‚РјРµРЅРёС‚СЊ", new ImageIcon(res.getResourceAsByteArray("images/cancel.gif")));
     mainPanel.add(contestToolBar, "0, 1");
 
     //start center
@@ -125,22 +125,22 @@ public class ContestPluginV2 implements Plugin, ActionListener {
     contestSplitPane.setRightComponent(rightPanel);
 
     JButtonBar userFieldsToolBar = new JButtonBar(JButtonBar.HORIZONTAL);
-    addUserField = addButtonToContestToolBar(userFieldsToolBar, "Добавить", new ImageIcon(res.getResourceAsByteArray("images/add.gif")));
-    removeUserField = addButtonToContestToolBar(userFieldsToolBar, "Удалить", new ImageIcon(res.getResourceAsByteArray("images/remove.gif")));
-    upUserField = addButtonToContestToolBar(userFieldsToolBar, "Вверх", new ImageIcon(res.getResourceAsByteArray("images/up.gif")));
-    downUserField = addButtonToContestToolBar(userFieldsToolBar, "Вниз", new ImageIcon(res.getResourceAsByteArray("images/down.gif")));
+    addUserField = addButtonToContestToolBar(userFieldsToolBar, "Р”РѕР±Р°РІРёС‚СЊ", new ImageIcon(res.getResourceAsByteArray("images/add.gif")));
+    removeUserField = addButtonToContestToolBar(userFieldsToolBar, "РЈРґР°Р»РёС‚СЊ", new ImageIcon(res.getResourceAsByteArray("images/remove.gif")));
+    upUserField = addButtonToContestToolBar(userFieldsToolBar, "Р’РІРµСЂС…", new ImageIcon(res.getResourceAsByteArray("images/up.gif")));
+    downUserField = addButtonToContestToolBar(userFieldsToolBar, "Р’РЅРёР·", new ImageIcon(res.getResourceAsByteArray("images/down.gif")));
     rightPanel.add(userFieldsToolBar, "0, 0");
 
     userFieldsTable = new UserFieldsTable();
     rightPanel.add(userFieldsTable, "0, 1");
 
     JButtonBar problemToolBar = new JButtonBar(JButtonBar.HORIZONTAL);
-    addProblemButton = addButtonToContestToolBar(problemToolBar, "Добавить", new ImageIcon(res.getResourceAsByteArray("images/add.gif")));
-    removeProblemButton = addButtonToContestToolBar(problemToolBar, "Удалить", new ImageIcon(res.getResourceAsByteArray("images/remove.gif")));
-    upProblemButton = addButtonToContestToolBar(problemToolBar, "Вверх", new ImageIcon(res.getResourceAsByteArray("images/up.gif")));
-    downProblemButton = addButtonToContestToolBar(problemToolBar, "Вниз", new ImageIcon(res.getResourceAsByteArray("images/down.gif")));
-    debugProblemButton = addButtonToContestToolBar(problemToolBar, "Отладить", new ImageIcon(res.getResourceAsByteArray("images/debug.gif")));
-    downloadProblemButton = addButtonToContestToolBar(problemToolBar, "Скачать", new ImageIcon(res.getResourceAsByteArray("images/download.gif")));
+    addProblemButton = addButtonToContestToolBar(problemToolBar, "Р”РѕР±Р°РІРёС‚СЊ", new ImageIcon(res.getResourceAsByteArray("images/add.gif")));
+    removeProblemButton = addButtonToContestToolBar(problemToolBar, "РЈРґР°Р»РёС‚СЊ", new ImageIcon(res.getResourceAsByteArray("images/remove.gif")));
+    upProblemButton = addButtonToContestToolBar(problemToolBar, "Р’РІРµСЂС…", new ImageIcon(res.getResourceAsByteArray("images/up.gif")));
+    downProblemButton = addButtonToContestToolBar(problemToolBar, "Р’РЅРёР·", new ImageIcon(res.getResourceAsByteArray("images/down.gif")));
+    debugProblemButton = addButtonToContestToolBar(problemToolBar, "РћС‚Р»Р°РґРёС‚СЊ", new ImageIcon(res.getResourceAsByteArray("images/debug.gif")));
+    downloadProblemButton = addButtonToContestToolBar(problemToolBar, "РЎРєР°С‡Р°С‚СЊ", new ImageIcon(res.getResourceAsByteArray("images/download.gif")));
     rightPanel.add(problemToolBar, "0, 2");
 
     JSplitPane problemSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
@@ -268,44 +268,44 @@ public class ContestPluginV2 implements Plugin, ActionListener {
     DefaultProperty nameProperty = newProperty(
             "name",
             String.class,
-            "Название",
-            "Название соревнования, которое видят участники и по которому они его выбирают"
+            "РќР°Р·РІР°РЅРёРµ",
+            "РќР°Р·РІР°РЅРёРµ СЃРѕСЂРµРІРЅРѕРІР°РЅРёСЏ, РєРѕС‚РѕСЂРѕРµ РІРёРґСЏС‚ СѓС‡Р°СЃС‚РЅРёРєРё Рё РїРѕ РєРѕС‚РѕСЂРѕРјСѓ РѕРЅРё РµРіРѕ РІС‹Р±РёСЂР°СЋС‚"
     );
     DefaultProperty descriptionProperty = newProperty(
             "description",
             String.class,
-            "Описание",
-            "Описание соревнования. Возможна html разметка"
+            "РћРїРёСЃР°РЅРёРµ",
+            "РћРїРёСЃР°РЅРёРµ СЃРѕСЂРµРІРЅРѕРІР°РЅРёСЏ. Р’РѕР·РјРѕР¶РЅР° html СЂР°Р·РјРµС‚РєР°"
     );
     DefaultProperty startProperty = newProperty(
             "start",
             DateBean.class,
-            "Начало",
-            "Время начала соревнования. До этого времени участники не могут подключиться к соревнованию"
+            "РќР°С‡Р°Р»Рѕ",
+            "Р’СЂРµРјСЏ РЅР°С‡Р°Р»Р° СЃРѕСЂРµРІРЅРѕРІР°РЅРёСЏ. Р”Рѕ СЌС‚РѕРіРѕ РІСЂРµРјРµРЅРё СѓС‡Р°СЃС‚РЅРёРєРё РЅРµ РјРѕРіСѓС‚ РїРѕРґРєР»СЋС‡РёС‚СЊСЃСЏ Рє СЃРѕСЂРµРІРЅРѕРІР°РЅРёСЋ"
     );
     DefaultProperty finishProperty = newProperty(
             "finish",
             DateBean.class,
-            "Окончание",
-            "Время конца соревнования. После этого времени участники не могут отсылать решения задач"
+            "РћРєРѕРЅС‡Р°РЅРёРµ",
+            "Р’СЂРµРјСЏ РєРѕРЅС†Р° СЃРѕСЂРµРІРЅРѕРІР°РЅРёСЏ. РџРѕСЃР»Рµ СЌС‚РѕРіРѕ РІСЂРµРјРµРЅРё СѓС‡Р°СЃС‚РЅРёРєРё РЅРµ РјРѕРіСѓС‚ РѕС‚СЃС‹Р»Р°С‚СЊ СЂРµС€РµРЅРёСЏ Р·Р°РґР°С‡"
     );
     DefaultProperty registrationTypeProperty = newProperty(
             "registrationType",
             ContestDescription.RegistrationType.class,
-            "Тип регистрации",
-            "Способ регистрации участников. Могут ли они регистрироваться самостоятельно либо их регистрирует только администратор"
+            "РўРёРї СЂРµРіРёСЃС‚СЂР°С†РёРё",
+            "РЎРїРѕСЃРѕР± СЂРµРіРёСЃС‚СЂР°С†РёРё СѓС‡Р°СЃС‚РЅРёРєРѕРІ. РњРѕРіСѓС‚ Р»Рё РѕРЅРё СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊСЃСЏ СЃР°РјРѕСЃС‚РѕСЏС‚РµР»СЊРЅРѕ Р»РёР±Рѕ РёС… СЂРµРіРёСЃС‚СЂРёСЂСѓРµС‚ С‚РѕР»СЊРєРѕ Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ"
     );
     DefaultProperty resultsAccessPolicyProperty = newProperty(
             "resultsAccessPolicy",
             ResultsAccessPolicyBean.class,
-            "Доступ к результатам",
-            "Описывает, какие пользователи и когда имеют доступ к результатам"
+            "Р”РѕСЃС‚СѓРї Рє СЂРµР·СѓР»СЊС‚Р°С‚Р°Рј",
+            "РћРїРёСЃС‹РІР°РµС‚, РєР°РєРёРµ РїРѕР»СЊР·РѕРІР°С‚РµР»Рё Рё РєРѕРіРґР° РёРјРµСЋС‚ РґРѕСЃС‚СѓРї Рє СЂРµР·СѓР»СЊС‚Р°С‚Р°Рј"
     );
     DefaultProperty contestTimingProperty = newProperty(
             "contestTiming",
             ContestTimingBean.class,
-            "Время проведения",
-            "Тонкая настройка времени проведения соревнования"
+            "Р’СЂРµРјСЏ РїСЂРѕРІРµРґРµРЅРёСЏ",
+            "РўРѕРЅРєР°СЏ РЅР°СЃС‚СЂРѕР№РєР° РІСЂРµРјРµРЅРё РїСЂРѕРІРµРґРµРЅРёСЏ СЃРѕСЂРµРІРЅРѕРІР°РЅРёСЏ"
     );
 
     //start properties
@@ -313,20 +313,20 @@ public class ContestPluginV2 implements Plugin, ActionListener {
     DefaultProperty startDayProperty = newProperty(
             "day",
             Date.class,
-            "День",
-            "День начала соревнования"
+            "Р”РµРЅСЊ",
+            "Р”РµРЅСЊ РЅР°С‡Р°Р»Р° СЃРѕСЂРµРІРЅРѕРІР°РЅРёСЏ"
     );
     DefaultProperty startHourProperty = newProperty(
             "hour",
             int.class,
-            "Час",
-            "Час начала соревнования"
+            "Р§Р°СЃ",
+            "Р§Р°СЃ РЅР°С‡Р°Р»Р° СЃРѕСЂРµРІРЅРѕРІР°РЅРёСЏ"
     );
     DefaultProperty startMinuteProperty = newProperty(
             "minute",
             int.class,
-            "Минуты",
-            "Минута начала соревнования"
+            "РњРёРЅСѓС‚С‹",
+            "РњРёРЅСѓС‚Р° РЅР°С‡Р°Р»Р° СЃРѕСЂРµРІРЅРѕРІР°РЅРёСЏ"
     );
 
     Property[] startProperties = {startDayProperty, startHourProperty, startMinuteProperty};
@@ -337,20 +337,20 @@ public class ContestPluginV2 implements Plugin, ActionListener {
     DefaultProperty finishDayProperty = newProperty(
             "day",
             Date.class,
-            "День",
-            "День начала соревнования"
+            "Р”РµРЅСЊ",
+            "Р”РµРЅСЊ РЅР°С‡Р°Р»Р° СЃРѕСЂРµРІРЅРѕРІР°РЅРёСЏ"
     );
     DefaultProperty finishHourProperty = newProperty(
             "hour",
             int.class,
-            "Час",
-            "Час начала соревнования"
+            "Р§Р°СЃ",
+            "Р§Р°СЃ РЅР°С‡Р°Р»Р° СЃРѕСЂРµРІРЅРѕРІР°РЅРёСЏ"
     );
     DefaultProperty finishMinuteProperty = newProperty(
             "minute",
             int.class,
-            "Минуты",
-            "Минута начала соревнования"
+            "РњРёРЅСѓС‚С‹",
+            "РњРёРЅСѓС‚Р° РЅР°С‡Р°Р»Р° СЃРѕСЂРµРІРЅРѕРІР°РЅРёСЏ"
     );
 
     Property[] finishProperties = {finishDayProperty, finishHourProperty, finishMinuteProperty};
@@ -360,20 +360,20 @@ public class ContestPluginV2 implements Plugin, ActionListener {
     DefaultProperty contestPermissionProperty = newProperty(
             "contestPermission",
             ResultsAccessPolicy.AccessPermission.class,
-            "Соревнование",
-            "Права доступа во время соревнования"
+            "РЎРѕСЂРµРІРЅРѕРІР°РЅРёРµ",
+            "РџСЂР°РІР° РґРѕСЃС‚СѓРїР° РІРѕ РІСЂРµРјСЏ СЃРѕСЂРµРІРЅРѕРІР°РЅРёСЏ"
     );
     DefaultProperty contestEndingPermissionProperty = newProperty(
             "contestEndingPermission",
             ResultsAccessPolicy.AccessPermission.class,
-            "Окончание",
-            "Права доступа во время окончания соревнования"
+            "РћРєРѕРЅС‡Р°РЅРёРµ",
+            "РџСЂР°РІР° РґРѕСЃС‚СѓРїР° РІРѕ РІСЂРµРјСЏ РѕРєРѕРЅС‡Р°РЅРёСЏ СЃРѕСЂРµРІРЅРѕРІР°РЅРёСЏ"
     );
     DefaultProperty afterContestPermissionProperty = newProperty(
             "afterContestPermission",
             ResultsAccessPolicy.AccessPermission.class,
-            "После",
-            "Права доступа после окончания соревнования"
+            "РџРѕСЃР»Рµ",
+            "РџСЂР°РІР° РґРѕСЃС‚СѓРїР° РїРѕСЃР»Рµ РѕРєРѕРЅС‡Р°РЅРёСЏ СЃРѕСЂРµРІРЅРѕРІР°РЅРёСЏ"
     );
 
     Property[] resultsAccessPolicyProperties = new Property[]{
@@ -385,26 +385,26 @@ public class ContestPluginV2 implements Plugin, ActionListener {
     DefaultProperty selfContestStartProperty = newProperty(
             "selfContestStart",
             boolean.class,
-            "Начинать самостоятельно",
-            "Возможно ли начинать соревнование самостоятельно"
+            "РќР°С‡РёРЅР°С‚СЊ СЃР°РјРѕСЃС‚РѕСЏС‚РµР»СЊРЅРѕ",
+            "Р’РѕР·РјРѕР¶РЅРѕ Р»Рё РЅР°С‡РёРЅР°С‚СЊ СЃРѕСЂРµРІРЅРѕРІР°РЅРёРµ СЃР°РјРѕСЃС‚РѕСЏС‚РµР»СЊРЅРѕ"
     );
     DefaultProperty maxContestDurationProperty = newProperty(
             "maxContestDuration",
             int.class,
-            "Длительность",
-            "Максимальная допустимая длительность соревнования"
+            "Р”Р»РёС‚РµР»СЊРЅРѕСЃС‚СЊ",
+            "РњР°РєСЃРёРјР°Р»СЊРЅР°СЏ РґРѕРїСѓСЃС‚РёРјР°СЏ РґР»РёС‚РµР»СЊРЅРѕСЃС‚СЊ СЃРѕСЂРµРІРЅРѕРІР°РЅРёСЏ"
     );
     DefaultProperty contestEndingStartProperty = newProperty(
             "contestEndingStart",
             int.class,
-            "Начало окончания",
-            "Начало окончания"
+            "РќР°С‡Р°Р»Рѕ РѕРєРѕРЅС‡Р°РЅРёСЏ",
+            "РќР°С‡Р°Р»Рѕ РѕРєРѕРЅС‡Р°РЅРёСЏ"
     );
     DefaultProperty contestEndingFinishProperty = newProperty(
             "contestEndingFinish",
             int.class,
-            "Конец окончания",
-            "Конец окончания"
+            "РљРѕРЅРµС† РѕРєРѕРЅС‡Р°РЅРёСЏ",
+            "РљРѕРЅРµС† РѕРєРѕРЅС‡Р°РЅРёСЏ"
     );
 
     Property[] conteseTimingProperties = new Property[]{
@@ -428,46 +428,46 @@ public class ContestPluginV2 implements Plugin, ActionListener {
     DefaultProperty nameProperty = newProperty(
             "name",
             String.class,
-            "Название",
-            "Название задачи"
+            "РќР°Р·РІР°РЅРёРµ",
+            "РќР°Р·РІР°РЅРёРµ Р·Р°РґР°С‡Рё"
     );
     DefaultProperty clientPluginAliasProperty = newProperty(
             "clientPluginAlias",
             String.class,
-            "Плагин клиента",
-            "Имя плагина стороны клиента"
+            "РџР»Р°РіРёРЅ РєР»РёРµРЅС‚Р°",
+            "РРјСЏ РїР»Р°РіРёРЅР° СЃС‚РѕСЂРѕРЅС‹ РєР»РёРµРЅС‚Р°"
     );
     DefaultProperty serverPluginAliasProperty = newProperty(
             "serverPluginAlias",
             String.class,
-            "Плагин сервера",
-            "Имя плагина стороны клиента"
+            "РџР»Р°РіРёРЅ СЃРµСЂРІРµСЂР°",
+            "РРјСЏ РїР»Р°РіРёРЅР° СЃС‚РѕСЂРѕРЅС‹ РєР»РёРµРЅС‚Р°"
     );
     DefaultProperty statementDataProperty = newProperty(
             "statementData",
             ZipBean.class,
-            "Условие",
-            "Файл или папка с данными для условия"
+            "РЈСЃР»РѕРІРёРµ",
+            "Р¤Р°Р№Р» РёР»Рё РїР°РїРєР° СЃ РґР°РЅРЅС‹РјРё РґР»СЏ СѓСЃР»РѕРІРёСЏ"
     );
     DefaultProperty answerDataProperty = newProperty(
             "answerData",
             ZipBean.class,
-            "Ответ",
-            "Файл или папка с данными для ответа"
+            "РћС‚РІРµС‚",
+            "Р¤Р°Р№Р» РёР»Рё РїР°РїРєР° СЃ РґР°РЅРЅС‹РјРё РґР»СЏ РѕС‚РІРµС‚Р°"
     );
 
     //statement zip subproperties
     DefaultProperty statementAsFileProperty = newProperty(
             "file",
             File.class,
-            "Файл",
-            "Задание условия в виде одного файла"
+            "Р¤Р°Р№Р»",
+            "Р—Р°РґР°РЅРёРµ СѓСЃР»РѕРІРёСЏ РІ РІРёРґРµ РѕРґРЅРѕРіРѕ С„Р°Р№Р»Р°"
     );
     DefaultProperty statementAsDirectoryProperty = newProperty(
             "file",
             File.class,
-            "Директория",
-            "Задание условия в виде директории"
+            "Р”РёСЂРµРєС‚РѕСЂРёСЏ",
+            "Р—Р°РґР°РЅРёРµ СѓСЃР»РѕРІРёСЏ РІ РІРёРґРµ РґРёСЂРµРєС‚РѕСЂРёРё"
     );
 
     statementDataProperty.addSubProperties(new Property[]{statementAsFileProperty, statementAsDirectoryProperty});
@@ -476,14 +476,14 @@ public class ContestPluginV2 implements Plugin, ActionListener {
     DefaultProperty answerAsFileProperty = newProperty(
             "file",
             File.class,
-            "Файл",
-            "Задание условия в виде одного файла"
+            "Р¤Р°Р№Р»",
+            "Р—Р°РґР°РЅРёРµ СѓСЃР»РѕРІРёСЏ РІ РІРёРґРµ РѕРґРЅРѕРіРѕ С„Р°Р№Р»Р°"
     );
     DefaultProperty answerAsDirectoryProperty = newProperty(
             "file",
             File.class,
-            "Директория",
-            "Задание условия в виде директории"
+            "Р”РёСЂРµРєС‚РѕСЂРёСЏ",
+            "Р—Р°РґР°РЅРёРµ СѓСЃР»РѕРІРёСЏ РІ РІРёРґРµ РґРёСЂРµРєС‚РѕСЂРёРё"
     );
 
     answerDataProperty.addSubProperties(new Property[]{answerAsFileProperty, answerAsDirectoryProperty});
@@ -553,8 +553,8 @@ public class ContestPluginV2 implements Plugin, ActionListener {
     } else if (e.getSource() == removeContestButton) {
       if (JOptionPane.showConfirmDialog(
               null,
-              "Вы уверены, что хотите удалить это соревнование?",
-              "Удаление соревования",
+              "Р’С‹ СѓРІРµСЂРµРЅС‹, С‡С‚Рѕ С…РѕС‚РёС‚Рµ СѓРґР°Р»РёС‚СЊ СЌС‚Рѕ СЃРѕСЂРµРІРЅРѕРІР°РЅРёРµ?",
+              "РЈРґР°Р»РµРЅРёРµ СЃРѕСЂРµРІРѕРІР°РЅРёСЏ",
               JOptionPane.YES_NO_CANCEL_OPTION
       ) != JOptionPane.YES_OPTION)        
           return;
@@ -601,8 +601,8 @@ public class ContestPluginV2 implements Plugin, ActionListener {
       if (bean.isModified()) {
         if (JOptionPane.showConfirmDialog(
                 null,
-                "Перед отладкой задачи все изменения соревнования должны бить применены. Применить их сейчас?",
-                "Отладка задачи",
+                "РџРµСЂРµРґ РѕС‚Р»Р°РґРєРѕР№ Р·Р°РґР°С‡Рё РІСЃРµ РёР·РјРµРЅРµРЅРёСЏ СЃРѕСЂРµРІРЅРѕРІР°РЅРёСЏ РґРѕР»Р¶РЅС‹ Р±РёС‚СЊ РїСЂРёРјРµРЅРµРЅС‹. РџСЂРёРјРµРЅРёС‚СЊ РёС… СЃРµР№С‡Р°СЃ?",
+                "РћС‚Р»Р°РґРєР° Р·Р°РґР°С‡Рё",
                 JOptionPane.YES_NO_CANCEL_OPTION
         ) != JOptionPane.YES_OPTION)
             return;
@@ -632,14 +632,14 @@ public class ContestPluginV2 implements Plugin, ActionListener {
   }
 
   /**
-   * @return Возвращает, верно ли что пользователь согласился продолжать работу, т.е. не нажал Cancel
+   * @return Р’РѕР·РІСЂР°С‰Р°РµС‚, РІРµСЂРЅРѕ Р»Рё С‡С‚Рѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ СЃРѕРіР»Р°СЃРёР»СЃСЏ РїСЂРѕРґРѕР»Р¶Р°С‚СЊ СЂР°Р±РѕС‚Сѓ, С‚.Рµ. РЅРµ РЅР°Р¶Р°Р» Cancel
    */
   private boolean applyChangesConfirmation() {
     if (bean.isModified()) {
       switch (JOptionPane.showConfirmDialog(
               null,
-              "У вас остались несохраненные изменения, сохранить?",
-              "Несохраненные изменения",
+              "РЈ РІР°СЃ РѕСЃС‚Р°Р»РёСЃСЊ РЅРµСЃРѕС…СЂР°РЅРµРЅРЅС‹Рµ РёР·РјРµРЅРµРЅРёСЏ, СЃРѕС…СЂР°РЅРёС‚СЊ?",
+              "РќРµСЃРѕС…СЂР°РЅРµРЅРЅС‹Рµ РёР·РјРµРЅРµРЅРёСЏ",
               JOptionPane.YES_NO_CANCEL_OPTION)
               ) {
         case JOptionPane.YES_OPTION:

@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class UserTable extends JTable {
     private UserTableModel userDataTableModel = new UserTableModel();
-    protected final String[] COLUMN_NAMES = new String [] {"Поле", "Значение"};
+    protected final String[] COLUMN_NAMES = new String [] {"РџРѕР»Рµ", "Р—РЅР°С‡РµРЅРёРµ"};
 
   //TODO add parameter for _selected_ values
     public void setKeys(String[] keys) {

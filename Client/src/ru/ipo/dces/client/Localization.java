@@ -8,25 +8,25 @@ import java.util.HashMap;
 
 /**
  * Created by IntelliJ IDEA.
- * User: Посетитель
+ * User: РџРѕСЃРµС‚РёС‚РµР»СЊ
  * Date: 13.04.2009
  * Time: 16:28:20
  */
 public class Localization {
 
-  public final static String LOGGER_NAME = "Система";
+  public final static String LOGGER_NAME = "РЎРёСЃС‚РµРјР°";
   private final static HashMap<Class<? extends Plugin>, String> adminPlugin2name;
 
   static {
     adminPlugin2name = new HashMap<Class<? extends Plugin>, String>();
-    adminPlugin2name.put(ResultsPlugin.class, "Результаты");
-//    adminPlugin2name.put(AdjustContestsPlugin.class, "Настроить контест");
-    adminPlugin2name.put(ContestPluginV2.class, "Настроить контест");
-    adminPlugin2name.put(CreateContestPlugin.class, "Создать сор-е");
-    adminPlugin2name.put(LoginPlugin.class, "Контесты");
-    adminPlugin2name.put(LogoutPlugin.class, "Управление");
-    adminPlugin2name.put(ManageUsersPlugin.class, "Пользователи");
-    adminPlugin2name.put(PluginsManagementPlugin.class, "Плагины");
+    adminPlugin2name.put(ResultsPlugin.class, "Р РµР·СѓР»СЊС‚Р°С‚С‹");
+//    adminPlugin2name.put(AdjustContestsPlugin.class, "РќР°СЃС‚СЂРѕРёС‚СЊ РєРѕРЅС‚РµСЃС‚");
+    adminPlugin2name.put(ContestPluginV2.class, "РќР°СЃС‚СЂРѕРёС‚СЊ РєРѕРЅС‚РµСЃС‚");
+    adminPlugin2name.put(CreateContestPlugin.class, "РЎРѕР·РґР°С‚СЊ СЃРѕСЂ-Рµ");
+    adminPlugin2name.put(LoginPlugin.class, "РљРѕРЅС‚РµСЃС‚С‹");
+    adminPlugin2name.put(LogoutPlugin.class, "РЈРїСЂР°РІР»РµРЅРёРµ");
+    adminPlugin2name.put(ManageUsersPlugin.class, "РџРѕР»СЊР·РѕРІР°С‚РµР»Рё");
+    adminPlugin2name.put(PluginsManagementPlugin.class, "РџР»Р°РіРёРЅС‹");
   }
 
   public static String getAdminPluginName(Class<? extends Plugin> plugin) {

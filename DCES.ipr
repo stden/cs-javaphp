@@ -492,30 +492,24 @@
     <option name="MAXIMUM_HEAP_SIZE" value="128" />
   </component>
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
-    <file url="file://$PROJECT_DIR$/Client/src/ru/ipo/dces/plugins/admin/LoginPlugin.java" charset="windows-1251" />
-    <file url="file://$PROJECT_DIR$/Editor" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/Client/src/ru/ipo/dces/plugins/admin/PluginsManagementPlugin.java" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/DCES_API/src/ru/ipo/dces/debug/ServerPluginProxy.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DCES_API/src/ru/ipo/dces/exceptions/ServerReturnedError.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DCES_API/src/ru/ipo/dces/server/http/StreamTokenizer.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DCES_API/src/ru/ipo/dces/utils/FileSystemUtils.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Editor/src/ru/ipo/structurededitor/testLang/comb/EvExpr.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Editor/src/ru/ipo/structurededitor/testLang/comb/IntDivExpr.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Editor/src/ru/ipo/structurededitor/view/editors/ArrayEditor.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Editor/src/ru/ipo/structurededitor/view/elements/BooleanEditorElement.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Editor/src/ru/ipo/structurededitor/view/elements/ComboBoxTextEditorElement.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Editor/src/ru/ipo/structurededitor/view/elements/TextElement.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/RyzhikResults/src/ru/ipo/dces/plugins/Functions.java" charset="windows-1251" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
   </component>
   <component name="IdProvider" IDEtalkID="B64FC0AE7D6BA504767C03DE6FA2DEDA" />
-  <component name="InspectionProjectProfileManager">
-    <profiles>
-      <profile version="1.0" is_locked="false">
-        <option name="myName" value="Project Default" />
-        <option name="myLocal" value="false" />
-        <inspection_tool class="SpellCheckingInspection" enabled="false" level="TYPO" enabled_by_default="false">
-          <option name="processCode" value="true" />
-          <option name="processLiterals" value="true" />
-          <option name="processComments" value="true" />
-        </inspection_tool>
-      </profile>
-    </profiles>
-    <option name="PROJECT_PROFILE" value="Project Default" />
-    <option name="USE_PROJECT_PROFILE" value="true" />
-    <version value="1.0" />
-  </component>
   <component name="JavadocGenerationManager">
     <option name="OUTPUT_DIRECTORY" />
     <option name="OPTION_SCOPE" value="protected" />
@@ -693,6 +687,12 @@
         <w>stepanov</w>
       </words>
     </dictionary>
+    <dictionary name="putin">
+      <words>
+        <w>monospace</w>
+        <w>rulez</w>
+      </words>
+    </dictionary>
   </component>
   <component name="ProjectKey">
     <option name="state" value="https://cs-javaphp.googlecode.com/svn/trunk/DCES.ipr" />
@@ -758,6 +758,39 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/BuildUtils">
+          <value>
+            <SvnBranchConfiguration>
+              <option name="branchMap">
+                <map>
+                  <entry key="https://cs-javaphp.googlecode.com/svn/branches">
+                    <value>
+                      <list />
+                    </value>
+                  </entry>
+                  <entry key="https://cs-javaphp.googlecode.com/svn/tags">
+                    <value>
+                      <list />
+                    </value>
+                  </entry>
+                  <entry key="https://cs-javaphp.googlecode.com/svn/wiki">
+                    <value>
+                      <list />
+                    </value>
+                  </entry>
+                </map>
+              </option>
+              <option name="branchUrls">
+                <list>
+                  <option value="https://cs-javaphp.googlecode.com/svn/branches" />
+                  <option value="https://cs-javaphp.googlecode.com/svn/tags" />
+                  <option value="https://cs-javaphp.googlecode.com/svn/wiki" />
+                </list>
+              </option>
+              <option name="trunkUrl" value="https://cs-javaphp.googlecode.com/svn/trunk" />
+            </SvnBranchConfiguration>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/Client">
           <value>
             <SvnBranchConfiguration>
               <option name="branchMap">
