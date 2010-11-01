@@ -1,5 +1,8 @@
 <?php
 
+$preIP = dirname(__FILE__);
+require_once "$preIP/../main.php";
+
 class GetRemoveAdjustUsersTestCase extends DCESWithAllRolesTestCase {
     
     protected $users = array();

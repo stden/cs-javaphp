@@ -17,7 +17,7 @@ import java.io.File;
 
 /**
  * Created by IntelliJ IDEA.
- * User: ����
+ * User: Илья
  * Date: 23.12.2008
  * Time: 2:07:39
  */
@@ -31,7 +31,7 @@ public class PluginsManagementPlugin implements Plugin {
     private JTextField fileTextField;
     private JButton findFileButton;
     private JButton removeButton;
-    private static final String NOT_SELECTED = "(���� �� ������)";
+    private static final String NOT_SELECTED = "(файл не выбран)";
 
     public PluginsManagementPlugin(PluginEnvironment env) {
 
@@ -51,9 +51,9 @@ public class PluginsManagementPlugin implements Plugin {
                 try {
                     final String alias = aliasTextField.getText();
                     if (alias.equals("")) {
-                        JOptionPane.showMessageDialog(null, "������� �������� ������� ��� ���������");
+                        JOptionPane.showMessageDialog(null, "Введите название плагина для изменения");
                         return;
-                    } else if (JOptionPane.showConfirmDialog(null, "����������� ��������� �������", "���������", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION)
+                    } else if (JOptionPane.showConfirmDialog(null, "Подтвердите изменение плагина", "Изменение", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION)
                         return;
 
                     final String fileText = fileTextField.getText();
@@ -64,11 +64,11 @@ public class PluginsManagementPlugin implements Plugin {
                         file = new File(fileText);
                     Controller.adjustClientPlugin(alias, descriptionTextPane.getText(), file);
 
-                    JOptionPane.showMessageDialog(null, "������ ������� �������");
+                    JOptionPane.showMessageDialog(null, "Плагин успешно изменен");
                 } catch (ServerReturnedError ee) {
-                    JOptionPane.showMessageDialog(null, "������ �������� �� ������: " + ee.getMessage());
+                    JOptionPane.showMessageDialog(null, "Сервер сообщает об ошибке: " + ee.getMessage());
                 } catch (GeneralRequestFailureException ee) {
-                    JOptionPane.showMessageDialog(null, "�� ������� �������� ������ ������� �������");
+                    JOptionPane.showMessageDialog(null, "Не удалось изменить плагин стороны клиента");
                 }
             }
         });
@@ -77,18 +77,18 @@ public class PluginsManagementPlugin implements Plugin {
                 try {
                     final String alias = aliasTextField.getText();
                     if (alias.equals("")) {
-                        JOptionPane.showMessageDialog(null, "������� �������� ������� ��� ��������");
+                        JOptionPane.showMessageDialog(null, "Введите название плагина для удаления");
                         return;
-                    } else if (JOptionPane.showConfirmDialog(null, "����������� �������� �������", "��������", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION)
+                    } else if (JOptionPane.showConfirmDialog(null, "Подтвердите удаление плагина", "Удаление", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION)
                         return;
 
                     Controller.removeClientPlugin(alias);
 
-                    JOptionPane.showMessageDialog(null, "������ ������� ������");
+                    JOptionPane.showMessageDialog(null, "Плагин успешно удален");
                 } catch (ServerReturnedError ee) {
-                    JOptionPane.showMessageDialog(null, "������ �������� �� ������: " + ee.getMessage());
+                    JOptionPane.showMessageDialog(null, "Сервер сообщает об ошибке: " + ee.getMessage());
                 } catch (GeneralRequestFailureException ee) {
-                    JOptionPane.showMessageDialog(null, "�� ������� ������� ������ ������� �������");
+                    JOptionPane.showMessageDialog(null, "Не удалось удалить плагин стороны клиента");
                 }
             }
         });

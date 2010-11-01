@@ -144,6 +144,7 @@ public class CreateContestPlugin extends JPanel implements Plugin {
         createContest.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
+
                 ContestDescription cd = new ContestDescription();
 
                 cd.description = contestDescription.getText();
@@ -177,7 +178,7 @@ public class CreateContestPlugin extends JPanel implements Plugin {
                 boolean setstatus = Controller.addContest(cd);
 
                 if (setstatus) {
-                    JOptionPane.showMessageDialog(null, "������� ������� ��������", "�������� ��������", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Контест успешно добавлен", "Создание контеста", JOptionPane.INFORMATION_MESSAGE);
 
                     contestName.setText("");
                     contestDescription.setText("");
@@ -189,7 +190,7 @@ public class CreateContestPlugin extends JPanel implements Plugin {
                     typeNameModel.clear();
                     typeNameField.setText("");
                 } else
-                    JOptionPane.showMessageDialog(null, "��������� ������ ��� �������� ��������", "�������� ��������", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Произошла ошибка при создании контеста", "Создание контеста", JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -242,7 +243,7 @@ public class CreateContestPlugin extends JPanel implements Plugin {
                 } else if (isInputCorrect(inputText, type)) {
 
                     renderField(field, LogMessageType.Error);
-                    environment.log("������� ���������� ���� (��.��.��) � ����� (��:��)", LogMessageType.Error);
+                    environment.log("Введите корректную дату (дд.мм.гг) и время (чч:мм)", LogMessageType.Error);
                     hasErrors = true;
 
                 } else {

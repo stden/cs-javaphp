@@ -19,7 +19,7 @@ import java.util.HashMap;
 
 /**
  * Created by IntelliJ IDEA.
- * User: ����
+ * User: Илья
  * Date: 07.12.2008
  * Time: 20:08:15
  */
@@ -77,7 +77,7 @@ public class Main extends JPanel implements Plugin {
             return;
         }
 
-        final String title = "���������";
+        final String title = "Заголовок";
         String resName = "";
         String resExt = "";
         int curPriority = 0;
@@ -140,7 +140,7 @@ public class Main extends JPanel implements Plugin {
                                 "</head>" +
                                 "<body>" +
                                 "<base href=\"" + "file:///" + folder.getCanonicalPath() + '/' + "\"/>" +
-                                "<img width=100% height=100% src=\"" + filename.toLowerCase() + "\" alt=\"������� ������\" />" +
+                                "<img width=100% height=100% src=\"" + filename.toLowerCase() + "\" alt=\"Условие задачи\" />" +
                                 "</body>" +
                                 "</html>"), null);
             } else if (curPriority != 0) {
@@ -153,7 +153,7 @@ public class Main extends JPanel implements Plugin {
             Document d = statementTextPane.getDocument();
             try {
                 d.remove(0, d.getLength());
-                d.insertString(0, "�� ������� ���������� �������", null);
+                d.insertString(0, "Не удается отобразить условие", null);
             } catch (BadLocationException e1) {
                 //do nothing
             }
@@ -166,7 +166,7 @@ public class Main extends JPanel implements Plugin {
             Document d = statementTextPane.getDocument();
             try {
                 d.remove(0, d.getLength());
-                d.insertString(0, "�� ������� ���������� �������", null);
+                d.insertString(0, "Не удается отобразить условие", null);
             } catch (BadLocationException e1) {
                 //do nothing
             }
@@ -184,29 +184,29 @@ public class Main extends JPanel implements Plugin {
                  *
                  * Represent a status (see SamplePluginProtocol.txt) with a label on the form (= status of a problem being solved)
                  * Statuses: not sent (can send), sent but wrong (can send), correct (can't send)
-                 * If 'solved' from a server then green color and "������ ������" message else red and other message
+                 * If 'solved' from a server then green color and "Задача решена" message else red and other message
                  */
 
                 if (answerTextField.getText().length() == 0) {
-                    JOptionPane.showMessageDialog(null, "�� �� ����� �����");
+                    JOptionPane.showMessageDialog(null, "Вы не ввели ответ");
                     return;
                 }
-                if (JOptionPane.showConfirmDialog(null, "����������� ������� �������") == JOptionPane.YES_OPTION) {
+                if (JOptionPane.showConfirmDialog(null, "Подтвердите отсылку решения") == JOptionPane.YES_OPTION) {
                     HashMap<String, String> res = new HashMap<String, String>();
                     res.put("answer", answerTextField.getText());
                     try {
                         final HashMap<String, String> ans = env.submitSolution(res);
                         if (ans.get("result").equals("answer accepted"))
-                            JOptionPane.showMessageDialog(null, "�� ���� ���������� �����!");
+                            JOptionPane.showMessageDialog(null, "Вы дали правильный ответ!");
                         else if (ans.get("result").equals("wrong answer"))
-                            JOptionPane.showMessageDialog(null, "�� ���� ������������ �����!!");
+                            JOptionPane.showMessageDialog(null, "Вы дали неправильный ответ!!");
                         else if (ans.get("result").equals("no submissions left"))
-                            JOptionPane.showMessageDialog(null, "� ��� ����� �� �������� �������");
+                            JOptionPane.showMessageDialog(null, "У Вас более не осталось попыток");
                         else
-                            JOptionPane.showMessageDialog(null, "����� �������: " + ans.get("result"));
+                            JOptionPane.showMessageDialog(null, "Ответ сервера: " + ans.get("result"));
                     }
                     catch (GeneralRequestFailureException e1) {
-                        JOptionPane.showMessageDialog(null, "�� ������� ��������� � ��������. ������: " + e1.getMessage());
+                        JOptionPane.showMessageDialog(null, "Не удалось связаться с сервером. Ошибка: " + e1.getMessage());
                     }
                 }
             }

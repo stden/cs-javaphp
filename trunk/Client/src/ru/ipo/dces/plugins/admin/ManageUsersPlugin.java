@@ -41,7 +41,7 @@ public class ManageUsersPlugin extends JPanel implements Plugin {
     private ManageUsersPluginBean newBean = null;
 
     /**
-     * ������������� plugin'�
+     * Инициализация plugin'а
      *
      * @param env environment for the plugin
      */
@@ -102,9 +102,9 @@ public class ManageUsersPlugin extends JPanel implements Plugin {
                             contest.contestID);
 
                 } catch (ServerReturnedError serverReturnedError) {
-                    JOptionPane.showMessageDialog(null, "������ ������ ������: " + serverReturnedError, "������ �������", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Сервер вернул ошибку: " + serverReturnedError, "Ошибка сервера", JOptionPane.ERROR_MESSAGE);
                 } catch (GeneralRequestFailureException serverReturnedNoAnswer) {
-                    JOptionPane.showMessageDialog(null, "�� ������� ��������� � ��������", "������ �������", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Не удалось связаться с сервером", "Ошибка сервера", JOptionPane.ERROR_MESSAGE);
                 }
 
                 fillDaFormWithData(contest.contestID, RequestResponseUtils.extractFieldNames(contest.data));
@@ -121,9 +121,9 @@ public class ManageUsersPlugin extends JPanel implements Plugin {
                 try {
                     Controller.removeUser(ulb.getDescription().userID);
                 } catch (ServerReturnedError serverReturnedError) {
-                    JOptionPane.showMessageDialog(null, "������ ������ ������: " + serverReturnedError, "������ �������", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Сервер вернул ошибку: " + serverReturnedError, "Ошибка сервера", JOptionPane.ERROR_MESSAGE);
                 } catch (GeneralRequestFailureException serverReturnedNoAnswer) {
-                    JOptionPane.showMessageDialog(null, "�� ������� ��������� � ��������", "������ �������", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Не удалось связаться с сервером", "Ошибка сервера", JOptionPane.ERROR_MESSAGE);
                 }
 
                 ContestDescription contest = getContest();

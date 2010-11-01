@@ -1,5 +1,8 @@
 <?php
 
+$preIP = dirname(__FILE__);
+require_once "$preIP/../main.php";
+
 class StopContestTestCase extends DCESWithAllRolesTestCase
 {
     public function testContestAndSuperAdminFailsToStopContest()

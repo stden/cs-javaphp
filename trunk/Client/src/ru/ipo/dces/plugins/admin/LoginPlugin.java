@@ -25,7 +25,7 @@ import java.io.IOException;
 
 /**
  * Created by IntelliJ IDEA.
- * User: ����
+ * User: Илья
  * Date: 06.12.2008
  * Time: 15:20:38
  */
@@ -44,7 +44,7 @@ public class
     private ContestChoosingPanel contestChoosingPanel;
 
     /**
-     * ������������� plugin'�
+     * Инициализация plugin'а
      *
      * @param env environment for the plugin
      */
@@ -134,14 +134,14 @@ public class
 
                 final String login = loginEdit.getText();
                 if (login.equals("")) {
-                    JOptionPane.showMessageDialog(null, "������� ����� ��� �����������");
+                    JOptionPane.showMessageDialog(null, "Укажите логин для регистрации");
                     return;
                 }
 
                 if (JOptionPane.showConfirmDialog(
                         null,
-                        "����������� ����������� ��������� � ������� " + login,
-                        "�����������",
+                        "Подтвердите регистрацию участника с логином " + login,
+                        "Регистрация",
                         JOptionPane.YES_NO_OPTION
                 ) == JOptionPane.NO_OPTION) return;
 
@@ -184,34 +184,34 @@ public class
             ContestConnection con = Controller.getContestConnection();
             switch (con.getUser().userType) {
                 case SuperAdmin:
-                    leftTimeMessage = "������������������";
+                    leftTimeMessage = "Суперадминистратор";
                     break;
                 case ContestAdmin:
-                    leftTimeMessage = "������������� ������������";
+                    leftTimeMessage = "Администратор соревнования";
                     break;
                 case Participant:
                     Date now = new Date();
                     if (now.before(con.getFinishTime()))
                         //TODO format only time if the finish is today
-                        leftTimeMessage = "��������� ������������ � " + DateFormat.getInstance().format(con.getFinishTime());
+                        leftTimeMessage = "Окончание соревнования в " + DateFormat.getInstance().format(con.getFinishTime());
                     else
-                        leftTimeMessage = "������������ ��� �����������";
+                        leftTimeMessage = "Соревнование уже закончилось";
                     break;
                 default:
-                    leftTimeMessage = "?? ����������� ��� ������������";
+                    leftTimeMessage = "?? Неизвестный тип пользователя";
             }
 
             Controller.getLogger().log(
-                    "�������� ����������� � ������������. " + leftTimeMessage,
+                    "Успешное подключение к соревнованию. " + leftTimeMessage,
                     LogMessageType.OK,
                     Localization.LOGGER_NAME
             );
 
-            // ������� ��� ���������� Plugin'�
+            // Удаляем все запущенные Plugin'ы
             Controller.getClientDialog().clearLeftPanel();
 
-            // ���� ������������ ������������� ��� ������������� �������
-            // ��������� ��� ���������������� Plugin'�
+            // Если пользователь администратор или администратор сервера
+            // загружаем ему административные Plugin'ы
             switch (con.getUser().userType) {
                 case ContestAdmin:
                     Controller.addAdminPlugin(ContestPluginV2.class);
@@ -229,7 +229,7 @@ public class
                     Controller.addAdminPlugin(LogoutPlugin.class);
                     break;
                 case Participant:
-                    // �������� ������ � �������
+                    // Получаем данные о задачах
                     Controller.refreshParticipantInfo(false, false);
             }
 
@@ -240,7 +240,7 @@ public class
             //log nothing
             Controller.getClientDialog().initialState();
         } catch (IOException e) {
-            Controller.getLogger().log("�� ������� ��������� �������", LogMessageType.Error, Localization.LOGGER_NAME);
+            Controller.getLogger().log("Не удалось загрузить плагины", LogMessageType.Error, Localization.LOGGER_NAME);
             Controller.getClientDialog().initialState();
         }
     }
