@@ -1,5 +1,8 @@
 <?php
 
+$preIP = dirname(__FILE__);
+require_once "$preIP/../main.php";
+
 class CreateContestRequestTestCase extends DCESWithAllRolesTestCase {
     
     public function setUp() 

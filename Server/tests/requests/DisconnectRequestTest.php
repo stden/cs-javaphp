@@ -1,5 +1,9 @@
 <?php
-class RegisterToContestTestCase extends DCESWithAllRolesTestCase
+
+$preIP = dirname(__FILE__);
+require_once "$preIP/../main.php";
+
+class DisconnectTestCase extends DCESWithAllRolesTestCase
 {
    /**
     * @dataProvider disconnectionDataProvider

@@ -58,7 +58,7 @@ public class AdjustContestsPlugin extends JPanel implements Plugin {
     private final PluginEnvironment environment;
 
     /**
-     * ������������� plugin'�
+     * Инициализация plugin'а
      *
      * @param env plugin environment
      */
@@ -102,8 +102,8 @@ public class AdjustContestsPlugin extends JPanel implements Plugin {
                     serverPlugin.setText(pb.getDescription().serverPluginAlias);
                     problemName.setText(pb.getDescription().name);
                     //TODO: save humane name or get files from server if name was not set
-                    problemAnswer.setText("��������� ������");
-                    problemStatement.setText("��������� ������");
+                    problemAnswer.setText("Некоторые данные");
+                    problemStatement.setText("Некоторые данные");
                 }
                 updatedBean.setUpdateAllowed(true);
             }
@@ -152,7 +152,7 @@ public class AdjustContestsPlugin extends JPanel implements Plugin {
                 ProblemDescription pb = new ProblemDescription();
 
                 pb.id = -1;
-                pb.name = "����� ������";
+                pb.name = "Новая задача";
                 pb.serverPluginAlias = "";
                 pb.clientPluginAlias = "";
                 pb.statementData = null;
@@ -370,7 +370,7 @@ public class AdjustContestsPlugin extends JPanel implements Plugin {
 
                     } catch (ParseException e1) {
                         //TODO: Handle a better validation here
-                        environment.log("������� ���������� ���� (��.��.��) � ����� (��:��)", LogMessageType.Error);
+                        environment.log("Введите корректную дату (дд.мм.гг) и время (чч:мм)", LogMessageType.Error);
                     }
                 } else if (e.getDocument() == beginTime.getDocument()) {
                     try {
@@ -392,7 +392,7 @@ public class AdjustContestsPlugin extends JPanel implements Plugin {
 
                     } catch (ParseException e1) {
                         //TODO: Handle a better validation here
-                        environment.log("������� ���������� ���� (��.��.��) � ����� (��:��)", LogMessageType.Error);
+                        environment.log("Введите корректную дату (дд.мм.гг) и время (чч:мм)", LogMessageType.Error);
                     }
 
                 } else if (e.getDocument() == endDate.getDocument()) {
@@ -415,7 +415,7 @@ public class AdjustContestsPlugin extends JPanel implements Plugin {
 
                     } catch (ParseException e1) {
                         //TODO: Handle a better validation here
-                        environment.log("������� ���������� ���� (��.��.��) � ����� (��:��)", LogMessageType.Error);
+                        environment.log("Введите корректную дату (дд.мм.гг) и время (чч:мм)", LogMessageType.Error);
                     }
                 } else if (e.getDocument() == endTime.getDocument()) {
                     try {
@@ -437,7 +437,7 @@ public class AdjustContestsPlugin extends JPanel implements Plugin {
 
                     } catch (ParseException e1) {
                         //TODO: Handle a better validation here
-                        environment.log("������� ���������� ���� (��.��.��) � ����� (��:��)", LogMessageType.Error);
+                        environment.log("Введите корректную дату (дд.мм.гг) и время (чч:мм)", LogMessageType.Error);
                     }
                 } else if (e.getDocument() == problemStatement.getDocument() || e.getDocument() == problemAnswer.getDocument()) {
 
@@ -455,7 +455,7 @@ public class AdjustContestsPlugin extends JPanel implements Plugin {
                             pb.getDescription().statementData = ZipUtils.zip(res);
 
                     } catch (IOException e1) {
-                        environment.log("�� ������� ���������� ������� ������", LogMessageType.Error);
+                        environment.log("Не удалось запаковать условие задачи", LogMessageType.Error);
 
                         if (e.getDocument() == problemAnswer.getDocument())
                             pb.getDescription().answerData = null;

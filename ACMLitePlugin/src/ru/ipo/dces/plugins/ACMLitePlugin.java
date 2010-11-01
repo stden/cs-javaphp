@@ -49,7 +49,7 @@ public class ACMLitePlugin extends JPanel implements Plugin {
         showStatement();
         showIn();
         textArea1.setEnabled(false);
-        textArea1.setText("������� �� �� ����������");
+        textArea1.setText("Решение ещё не отправлено");
 
 
         ButtonSubmit.addActionListener(new ActionListener() {
@@ -80,7 +80,7 @@ public class ACMLitePlugin extends JPanel implements Plugin {
         */
         File folder = env.getProblemFolder();
 
-        final String title = "���������";
+        final String title = "Заголовок";
         String resName = "";
         String resExt = "";
         int curPriority = 1;
@@ -93,7 +93,7 @@ public class ACMLitePlugin extends JPanel implements Plugin {
         }
         catch (IOException e) {
 
-            statementTextPane.setText("�� ������� ���������� �������, ��������� � ��������������");
+            statementTextPane.setText("Не удается отобразить условие, свяжитесь с организаторами");
 
         }
 
@@ -111,7 +111,7 @@ public class ACMLitePlugin extends JPanel implements Plugin {
         */
         File folder = env.getProblemFolder();
 
-        final String title = "���������";
+        final String title = "Заголовок";
 
         String resExt = "";
         int curPriority = 1;
@@ -134,7 +134,7 @@ public class ACMLitePlugin extends JPanel implements Plugin {
         }
         catch (IOException e) {
 
-            textArea2.setText("�� ������� ���������� ������� ����, ��������� � ��������������");
+            textArea2.setText("Не удается отобразить входной файл, свяжитесь с организаторами");
 
         }
 
@@ -178,12 +178,12 @@ public class ACMLitePlugin extends JPanel implements Plugin {
                 }
 
                 public String getDescription() {
-                    return "������ .txt";
+                    return "Только .txt";
                 }
             });
 
 
-            //jFileChooser.setDialogTitle("����� ����� � ��������");
+            //jFileChooser.setDialogTitle("Выбор файла с решением");
 
 
         }
@@ -256,14 +256,14 @@ public class ACMLitePlugin extends JPanel implements Plugin {
 
 
             if (ans.get("result").equals("yes"))
-                JOptionPane.showMessageDialog(null, "�� ���� ���������� �����!");
+                JOptionPane.showMessageDialog(null, "Вы дали правильный ответ!");
             else if (ans.get("result").equals("no"))
-                JOptionPane.showMessageDialog(null, "�� ���� ������������ �����!!");
+                JOptionPane.showMessageDialog(null, "Вы дали неправильный ответ!!");
             else
-                JOptionPane.showMessageDialog(null, "����� �������: " + ans.get("result"));
+                JOptionPane.showMessageDialog(null, "Ответ сервера: " + ans.get("result"));
         }
         catch (GeneralRequestFailureException e1) {
-            JOptionPane.showMessageDialog(null, "�� ������� ��������� � ��������. ������: " + e1.getMessage());
+            JOptionPane.showMessageDialog(null, "Не удалось связаться с сервером. Ошибка: " + e1.getMessage());
         }
 
     }

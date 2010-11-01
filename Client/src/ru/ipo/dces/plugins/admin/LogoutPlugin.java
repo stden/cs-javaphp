@@ -15,7 +15,7 @@ import java.awt.event.ActionListener;
 
 /**
  * Created by IntelliJ IDEA.
- * User: ����
+ * User: Илья
  * Date: 11.12.2008
  * Time: 20:06:45
  */
@@ -30,7 +30,7 @@ public class LogoutPlugin extends JPanel implements Plugin {
     private JButton stopContestButton;
 
     /**
-     * ������������� plugin'�
+     * Инициализация plugin'а
      *
      * @param env environment for the plugin
      */
@@ -40,15 +40,15 @@ public class LogoutPlugin extends JPanel implements Plugin {
 
         logoutButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (JOptionPane.showConfirmDialog(null, "������������� �����?",
-                        "�������������", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+                if (JOptionPane.showConfirmDialog(null, "Действительно выйти?",
+                        "Подтверждение", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
                     Controller.logout();
             }
         });
         refreshProblemsButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (Controller.getContestConnection().getUser().userType != UserDescription.UserType.Participant) {
-                    JOptionPane.showMessageDialog(null, "������ ��������� ����� ��������� ������ �����");
+                    JOptionPane.showMessageDialog(null, "Только участники могут обновлять список задач");
                     return;
                 }
 
@@ -56,9 +56,9 @@ public class LogoutPlugin extends JPanel implements Plugin {
                     Controller.getClientDialog().clearLeftPanel();
                     //the first plugin will be selected after this call
                     Controller.refreshParticipantInfo(true, false);
-                    JOptionPane.showMessageDialog(null, "������� ������� ���������");
+                    JOptionPane.showMessageDialog(null, "Условия успешно обновлены");
                 } catch (Exception ee) {
-                    JOptionPane.showMessageDialog(null, "�� ������� �������� �������");
+                    JOptionPane.showMessageDialog(null, "Не удалось обновить условия");
                     Controller.getClientDialog().initialState();
                 }
             }
@@ -66,7 +66,7 @@ public class LogoutPlugin extends JPanel implements Plugin {
         refreshPluginsButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (Controller.getContestConnection().getUser().userType == UserDescription.UserType.SuperAdmin) {
-                    JOptionPane.showMessageDialog(null, "����� ������������� �� ����� �������� ������");
+                    JOptionPane.showMessageDialog(null, "Супер администратор не может обновить модули");
                     return;
                 }
 
@@ -74,16 +74,16 @@ public class LogoutPlugin extends JPanel implements Plugin {
                     Controller.getClientDialog().clearLeftPanel();
                     //the first plugin will be selected after this call
                     Controller.refreshParticipantInfo(false, true); //refresh = false
-                    JOptionPane.showMessageDialog(null, "������ ����� ������� ���������");
+                    JOptionPane.showMessageDialog(null, "Модули задач успешно обновлены");
                 } catch (Exception ee) {
-                    JOptionPane.showMessageDialog(null, "�� ������� �������� ������ �����");
+                    JOptionPane.showMessageDialog(null, "Не удалось обновить модули задач");
                     Controller.getClientDialog().initialState();
                 }
             }
         });
         stopContestButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (JOptionPane.showConfirmDialog(null, "������������� �����?", "�������������",
+                if (JOptionPane.showConfirmDialog(null, "Действительно выйти?", "Подтверждение",
                         JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
                     Controller.stopContest();
             }

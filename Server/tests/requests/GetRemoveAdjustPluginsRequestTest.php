@@ -1,5 +1,8 @@
 <?php
 
+$preIP = dirname(__FILE__);
+require_once "$preIP/../main.php";
+
 class GetRemoveAdjustPluginsTestCase extends DCESWithAllRolesTestCase {
     
     protected $clientPluginAliases = array();

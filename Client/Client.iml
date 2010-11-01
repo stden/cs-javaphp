@@ -19,6 +19,16 @@
     <orderEntry type="library" name="JCalendar" level="project" />
     <orderEntry type="library" name="Forms" level="project" />
     <orderEntry type="module" module-name="Editor" />
+    <orderEntry type="module-library">
+      <library name="PHP 5.3.3-1ubuntu9.1">
+        <CLASSES>
+          <root url="file:///usr/share/php" />
+          <root url="file:///usr/bin/pear" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
 
