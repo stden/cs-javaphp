@@ -323,28 +323,67 @@ public class BinToBeanConverter {
         if (title.isEmpty())
             title = field.getName();
 
-        //new Horiz(
-        out.printf("%snew %s(\n", indent, Horiz.class.getCanonicalName());
-        //    new ConstCell("fieldName"),
-        out.printf(
-                "%s%snew %s(\"%s:\"),\n",
-                indent,
-                CodeGeneratorSettings.INDENT,
-                ConstantCell.class.getCanonicalName(),
-                title
-        );
-        //    new FieldCell("fieldName")
-        out.printf(
-                "%s%snew %s(\"%s\")\n",
-                indent,
-                CodeGeneratorSettings.INDENT,
-                field.getType().isArray() ?
-                        VertArray.class.getCanonicalName() :
-                        FieldCell.class.getCanonicalName(),
-                field.getName()
-        );
-        //close Horiz
-        out.print(indent + ")");
+        if (needsConversion(field.getType())) {
+            //new Vert(
+            out.printf("%snew %s(\n", indent, Vert.class.getCanonicalName());
+            //    new ConstCell("fieldName"),
+            out.printf(
+                    "%s%snew %s(\"%s:\"),\n",
+                    indent,
+                    CodeGeneratorSettings.INDENT,
+                    ConstantCell.class.getCanonicalName(),
+                    title
+            );
+            //    new Horiz(
+            out.printf("%s%snew %s(\n", indent, CodeGeneratorSettings.INDENT, Horiz.class.getCanonicalName());
+            //        new ConstCell("    "),
+            out.printf(
+                    "%s%s%snew %s(\"%s\"),\n",
+                    indent,
+                    CodeGeneratorSettings.INDENT,
+                    CodeGeneratorSettings.INDENT,
+                    ConstantCell.class.getCanonicalName(),
+                    CodeGeneratorSettings.INDENT
+            );
+            //        new FieldCell("fieldName")
+            out.printf(
+                    "%s%s%snew %s(\"%s\")\n",
+                    indent,
+                    CodeGeneratorSettings.INDENT,
+                    CodeGeneratorSettings.INDENT,
+                    field.getType().isArray() ?
+                            VertArray.class.getCanonicalName() :
+                            FieldCell.class.getCanonicalName(),
+                    field.getName()
+            );
+            //close Horiz
+            out.println(indent + CodeGeneratorSettings.INDENT + ")");
+            //close Vert
+            out.print(indent + ")");
+        } else {
+            //new Horiz(
+            out.printf("%snew %s(\n", indent, Horiz.class.getCanonicalName());
+            //    new ConstCell("fieldName"),
+            out.printf(
+                    "%s%snew %s(\"%s:\"),\n",
+                    indent,
+                    CodeGeneratorSettings.INDENT,
+                    ConstantCell.class.getCanonicalName(),
+                    title
+            );
+            //    new FieldCell("fieldName")
+            out.printf(
+                    "%s%snew %s(\"%s\")\n",
+                    indent,
+                    CodeGeneratorSettings.INDENT,
+                    field.getType().isArray() ?
+                            VertArray.class.getCanonicalName() :
+                            FieldCell.class.getCanonicalName(),
+                    field.getName()
+            );
+            //close Horiz
+            out.print(indent + ")");
+        }
     }
 
     private String makeNewClassName(Class<?> className) {

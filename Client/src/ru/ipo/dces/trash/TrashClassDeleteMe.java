@@ -5,7 +5,6 @@ package ru.ipo.dces.trash;
  * User: putin
  * Date: 11.11.2010
  * Time: 16:00:11
- * To change this template use File | Settings | File Templates.
  */
 public class TrashClassDeleteMe {
 
