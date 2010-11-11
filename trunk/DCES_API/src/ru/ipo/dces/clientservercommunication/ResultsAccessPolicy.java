@@ -31,7 +31,11 @@ public class ResultsAccessPolicy {
   /**
    * права на доступ во время соревнования
    */
-  @PHPDefaultValue("'FullAccess'")
+  @BinInfo(
+          phpDefaultValue="'FullAccess'",
+          defaultValue = "NoAccess",
+          title="В течение соревнования"
+  )
   public AccessPermission contestPermission;
 
   /**
@@ -42,13 +46,21 @@ public class ResultsAccessPolicy {
    * <p>Например, в соревнованиях ACM результаты перестают быть видны участникам за час до конца, а становятся видны
    * уже через некоторое время после окончания соревнования, чтобы не портить интригу при награждении
    */
-  @PHPDefaultValue("'FullAccess'")
+  @BinInfo(
+          phpDefaultValue="'FullAccess'",
+          defaultValue = "NoAccess",
+          title="В течение окончания"
+  )
   public AccessPermission contestEndingPermission;
 
   /**
    * права на доступ после соревнования
    */
-  @PHPDefaultValue("'FullAccess'")
+  @BinInfo(
+          phpDefaultValue="'FullAccess'",
+          defaultValue = "NoAccess",
+          title="После соревнования"
+  )
   public AccessPermission afterContestPermission;  
 
 }

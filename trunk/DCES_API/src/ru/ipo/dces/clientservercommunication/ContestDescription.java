@@ -26,30 +26,42 @@ public class ContestDescription {
     /**
      * ID соревнования
      */
-    @PHPDefaultValue("-1")
-    @BinInfo(editable = false)
+    @BinInfo(
+            phpDefaultValue="array()",
+            editable = false,
+            defaultValue = "-1"            
+    )
     public int contestID;
 
     /**
      * Название соревнования
      */
-    @PHPDefaultValue("'Sample contest'")
-    @BinInfo(title = "Название")
+    @BinInfo(
+            phpDefaultValue="array()",
+            defaultValue = "Новое соревнование",
+            title = "Название"
+    )
     public String name;
 
     /**
      * Расширенное описание соревнования
      */
-    @PHPDefaultValue("'Description of sample contest'")
-    @BinInfo(title = "Описание")
+    @BinInfo(
+            phpDefaultValue="array()",
+            defaultValue = "",
+            title = "Описание"
+    )
     public String description;
 
     /**
      * Время начала соревнования. До этого времени подключение участников к соревнованию
      * физически невозможно
      */
-    @PHPDefaultValue("time()")
-    @BinInfo(title = "Начало")
+    @BinInfo(
+            phpDefaultValue="array()",
+            defaultValue = BinInfo.NEW_INSTANCE_DEFAULT_VALUE,
+            title = "Начало соревнования"
+    )
     public Date start;
 
     /**
@@ -57,22 +69,31 @@ public class ContestDescription {
      * но отсылка решений более невозможна. (Под отсылкой решений понимаются запросы SubmitSolutinRequest, которые
      * при обработке плагином стороны сервера помечаются плагином как "решение")
      */
-    @PHPDefaultValue("time() + 3600")
-    @BinInfo(title = "Окончание")
+    @BinInfo(
+            phpDefaultValue="array()",
+            defaultValue = BinInfo.NEW_INSTANCE_DEFAULT_VALUE,
+            title = "Конец соревнования"
+    )
     public Date finish;
 
     /**
      * Способ регистрации на соревнование
      */
-    @PHPDefaultValue("'ByAdmins'")
-    @BinInfo(title = "Тип регистрации")
+    @BinInfo(
+            phpDefaultValue="array()",
+            defaultValue = "ByAdmins",
+            title = "Тип регистрации"
+    )
     public RegistrationType registrationType;
 
     /**
      * Набор данных об участнике
      */
-    @PHPDefaultValue("array()")
-    @BinInfo(title = "Поля о пользователе")
+    @BinInfo(
+            phpDefaultValue="array()",
+            defaultValue = BinInfo.NEW_INSTANCE_DEFAULT_VALUE,
+            title = "Поля о пользователе"
+    )
     public UserDataField[] data;
 
     /**
@@ -80,22 +101,31 @@ public class ContestDescription {
      * участникам и анонимным пользователям разрешен доступ к результатам соревнования.
      * Администраторы всегда имеют доступ к результатам
      */
-    @PHPDefaultValue("")
-    @BinInfo(title = "Ружим доступа к результатам")
+    @BinInfo(
+            phpDefaultValue="",
+            defaultValue = BinInfo.NEW_INSTANCE_DEFAULT_VALUE,
+            title = "Ружим доступа к результатам"
+    )
     public ResultsAccessPolicy resultsAccessPolicy;
 
     /**
      * Тонкая настройка времени проведения соревнования
      */
-    @PHPDefaultValue("")
-    @BinInfo(title = "Время соревнования")
+    @BinInfo(
+            phpDefaultValue="",
+            defaultValue = BinInfo.NEW_INSTANCE_DEFAULT_VALUE,
+            title = "Время соревнования"
+    )
     public ContestTiming contestTiming;
 
     /**
      * Настройки задач по умолчанию
      */
-    @PHPDefaultValue("")
-    @BinInfo(title = "Настройки задач")
+    @BinInfo(
+            phpDefaultValue="",
+            defaultValue = BinInfo.NEW_INSTANCE_DEFAULT_VALUE,
+            title = "Настройки задач"
+    )
     public ContestSpecificSettings problemsDefaultSettings;
 
 }

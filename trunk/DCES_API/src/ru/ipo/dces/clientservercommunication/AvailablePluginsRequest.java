@@ -10,13 +10,13 @@ package ru.ipo.dces.clientservercommunication;
  */
 public class AvailablePluginsRequest implements Request {  
 
-  @PHPDefaultValue("null")
+  @BinInfo(phpDefaultValue="null")
   public String sessionID;
 
   /**
    * Выбор, какие плагины придут по запросу
    */
-  @PHPDefaultValue("'Client'")
+  @BinInfo(phpDefaultValue="'Client'")
   public PluginSide pluginSide;
 
 }

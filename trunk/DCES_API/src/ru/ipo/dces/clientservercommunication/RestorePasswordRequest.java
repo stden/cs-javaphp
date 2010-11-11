@@ -8,12 +8,12 @@ public class RestorePasswordRequest implements Request {
   /**
    * Идентификатор соревнования, у пользователя которого восстанавливается пароль
    */
-  @PHPDefaultValue("null")
+  @BinInfo(phpDefaultValue="null")
   public String contestID;
 
   /**
    * Логин пользователя, которому система восстанавливает пароль
    */
-  @PHPDefaultValue("'test_login'")
+  @BinInfo(phpDefaultValue="'test_login'")
   public String login;
 }

@@ -13,32 +13,32 @@ public class AdjustUserDataRequest implements Request {
   /**
    * id пользователя, информацию о котором требуется изменить
    */
-  @PHPDefaultValue("0")
+  @BinInfo(phpDefaultValue="0")
   public int userID;
 
   /**
    * Идентификатор сессии. Должен быть идентификатором администратора сервера или администратора соревнования,
    * которому принадлежит изменяемый пользователь.
    */
-  @PHPDefaultValue("null")
+  @BinInfo(phpDefaultValue="null")
   public String sessionID;
 
   /**
    * Новый login этого пользователя, либо null, если новый логин устанавливать не нужно
    */
-  @PHPDefaultValue("'test_login'")
+  @BinInfo(phpDefaultValue="'test_login'")
   public String login;
 
   /**
    * Новый пароль этого пользователя, либо null, если новый пароль устанавливать не нужно
    */
-  @PHPDefaultValue("'test_password'")
+  @BinInfo(phpDefaultValue="'test_password'")
   public String password;
 
   /**
    * Новый тип этого пользователя, либо null, если тип изменять не нужно
    */
-  @PHPDefaultValue("'Participant'")
+  @BinInfo(phpDefaultValue="'Participant'")
   public UserDescription.UserType newType;
 
   /**
@@ -46,6 +46,6 @@ public class AdjustUserDataRequest implements Request {
    * к которому относится изменяемый пользователь).
    * Если информацию по пользователю изменять не нужно, в поле userData подставляется null 
    */
-  @PHPDefaultValue("array()")
+  @BinInfo(phpDefaultValue="array()")
   public String[] userData;
 }

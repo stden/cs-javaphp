@@ -7,15 +7,15 @@ public class DownloadPluginRequest implements Request {
   /**
    * Сессия суперадминистратора необходима при скачивании сервер плагина, иначе сессия не нужна
    */
-  @PHPDefaultValue("null")
+  @BinInfo(phpDefaultValue="null")
   public String sessionID;
 
   /**
    * Идентификатор плагина, который требуется установить
    */
-  @PHPDefaultValue("'Test client plugin'")
+  @BinInfo(phpDefaultValue="'Test client plugin'")
   public String pluginAlias;
 
-  @PHPDefaultValue("'Client'")
+  @BinInfo(phpDefaultValue="'Client'")
   public PluginSide side;
 }

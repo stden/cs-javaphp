@@ -27,26 +27,26 @@ public class GetContestDataRequest implements Request {
   /**
    * Идентификатор сессии, может быть null, если запрос выполняется анонимно
    */
-  @PHPDefaultValue("null")
+  @BinInfo(phpDefaultValue="null")
   public String sessionID;
 
   /**
    * ID соревнования, по которому производится запрос. Актуален для администратора сервера и для анонима.
    * Участник соревнования и админитратор соревнования должны указать -1 или id своего соревнования
    */
-  @PHPDefaultValue("null")
+  @BinInfo(phpDefaultValue="null")
   public int contestID;
 
   /**
    * Тип запрашиваемой информации
    */
-  @PHPDefaultValue("'ParticipantInfo'")
+  @BinInfo(phpDefaultValue="'ParticipantInfo'")
   public InformationType infoType; 
 
   /**
    * Для задач с этими id требуется прислать расширенные данные. null - значит данные для всех задач
    * Если данные не нужны, information type требуется выбрать как NoInfo
    */
-   @PHPDefaultValue("array()")
+   @BinInfo(phpDefaultValue="array()")
    public int[] extendedData;                                                                                             
 }

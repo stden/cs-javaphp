@@ -7,15 +7,15 @@ public class RemovePluginRequest implements Request {
   /**
    * Идентификатор сессии администратора сервера
    */
-  @PHPDefaultValue("null")
+  @BinInfo(phpDefaultValue="null")
   public String sessionID;
 
-  @PHPDefaultValue("'Client'")
+  @BinInfo(phpDefaultValue="'Client'")
   public PluginSide side;
 
   /**
    * Идентификатор плагина стороны клиента
    */
-  @PHPDefaultValue("'Test client plugin'")
+  @BinInfo(phpDefaultValue="'Test client plugin'")
   public String pluginAlias;
 }

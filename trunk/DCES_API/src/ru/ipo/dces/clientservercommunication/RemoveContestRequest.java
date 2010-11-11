@@ -8,12 +8,12 @@ public class RemoveContestRequest implements Request {
   /**
    * Идентификатор сессии администратора сервера
    */
-  @PHPDefaultValue("null")
+  @BinInfo(phpDefaultValue="null")
   public String sessionID;
 
   /**
    * Идентификатор удаляемого соревнования
    */
-  @PHPDefaultValue("null")
+  @BinInfo(phpDefaultValue="null")
   public int contestID;
 }

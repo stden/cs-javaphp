@@ -14,20 +14,32 @@ public class UserDataField {
   /**
    * Имя поля. Например, "школа" или "класс" или "e-mail"
    */
-  @PHPDefaultValue("'name'")
+  @BinInfo(
+          phpDefaultValue = "'name'",
+          defaultValue = "Заголовок поля",
+          title = "Заголовок"
+  )
   public String data;
 
   /**
    * Обязательно ли поле должно быть заполнено
    */
-  @PHPDefaultValue("true")
+  @BinInfo(
+          phpDefaultValue = "true",
+          defaultValue = "false",
+          title = "Обязательно заполнить"
+  )
   public boolean compulsory;
 
   /**
    * Отображать ли поле в общедоступных результатах соревнования. Например, имя участника отобразить
    * в результатах логично, а его адрес - нет
    */
-  @PHPDefaultValue("true")
+  @BinInfo(
+          phpDefaultValue="true",
+          defaultValue = "true",
+          title="Отображать в таблице результатов"
+  )
   public boolean showInResult;
 
 }

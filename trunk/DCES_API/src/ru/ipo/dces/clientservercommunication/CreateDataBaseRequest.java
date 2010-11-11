@@ -14,13 +14,13 @@ public class CreateDataBaseRequest implements Request {
   /**
    * Логин администратора сервера
    */
-  @PHPDefaultValue("'admin'")
+  @BinInfo(phpDefaultValue="'admin'")
   public String login;
 
   /**
    * Пароль администратора сервера
    */
-  @PHPDefaultValue("'superpassword'")
+  @BinInfo(phpDefaultValue="'superpassword'")
   public String password;
 
 }

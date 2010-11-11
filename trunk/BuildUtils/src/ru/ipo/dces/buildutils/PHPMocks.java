@@ -1,6 +1,6 @@
 package ru.ipo.dces.buildutils;
 
-import ru.ipo.dces.clientservercommunication.PHPDefaultValue;
+import ru.ipo.dces.clientservercommunication.BinInfo;
 import ru.ipo.dces.results.Key;
 
 import java.io.*;
@@ -31,13 +31,13 @@ public class PHPMocks {
             //getting all needed require_once statements
             boolean preIPWasPrinted = false;
             for (Field fld : c.getFields()) {
-                PHPDefaultValue a = fld.getAnnotation(PHPDefaultValue.class);
+                BinInfo a = fld.getAnnotation(BinInfo.class);
 
                 if (a == null) {
                     continue;
                 }
 
-                if (a.value().equals("")) {
+                if (a.phpDefaultValue().equals("")) {
                     if (!preIPWasPrinted) {
                         preIPWasPrinted = true;
                         pw.println("$preIP = dirname(__FILE__);");
@@ -50,14 +50,14 @@ public class PHPMocks {
 
             //printing fields
             for (Field fld : c.getFields()) {
-                PHPDefaultValue a = fld.getAnnotation(PHPDefaultValue.class);
+                BinInfo a = fld.getAnnotation(BinInfo.class);
 
                 String val;
 
                 if (a == null)
                     val = getDefaultValueByType(fld.getType());
                 else
-                    val = a.value();
+                    val = a.phpDefaultValue();
 
                 pw.println("    public $" + fld.getName() + ";");
 

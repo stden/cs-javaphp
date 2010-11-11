@@ -16,19 +16,31 @@ public class ContestSpecificSettings {
     /**
      * Максимальное количество посылок задачи
      */
-    @PHPDefaultValue("1000")
+    @BinInfo(
+            phpDefaultValue="1000",
+            defaultValue = "1000",
+            title = "Количество отсылок"
+    )
     public int sendCount;
 
     /**
      * Преобразование результатов в таблицу
      */
-    @PHPDefaultValue("''")
+    @BinInfo(
+            phpDefaultValue="''",
+            defaultValue = "",
+            title = "Перенос результата"
+    )
     public String resultTransition;
 
 
     /**
      * Выбор результата для таблицы
      */
-    @PHPDefaultValue("'Best'")
+    @BinInfo(
+            phpDefaultValue="'Best'",
+            defaultValue = "Best",
+            title = "Выбор результата"
+    )
     public TableResultChoice tableResultChoice;
 }

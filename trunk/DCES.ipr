@@ -667,6 +667,8 @@
     <dictionary name="ilya">
       <words>
         <w>args</w>
+        <w>autodetect</w>
+        <w>autodetected</w>
         <w>dbname</w>
         <w>dces</w>
         <w>enums</w>

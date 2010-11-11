@@ -14,7 +14,7 @@ public class GetContestResultsRequest implements Request {
   /**
    * Идентификатор сессии участника или null, если запрос вызывается анонимно
    */
-  @PHPDefaultValue("null")
+  @BinInfo(phpDefaultValue="null")
   public String sessionID;
 
   /**
@@ -22,7 +22,7 @@ public class GetContestResultsRequest implements Request {
    * запроса от администратора сервера. Участник или администратор соревнования должны указать -1 или id своего
    * соревнования
    */
-  @PHPDefaultValue("null")
+  @BinInfo(phpDefaultValue="null")
   public int contestID;    
 
 }

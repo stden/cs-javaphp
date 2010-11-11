@@ -9,12 +9,12 @@ public class RemoveUserRequest implements Request {
    * Идентификатор сессии администратора соревнования, которому принадлежит пользователь, или администратора
    * сервера
    */
-  @PHPDefaultValue("null")
+  @BinInfo(phpDefaultValue="null")
   public String sessionID;
 
   /**
    * Идентификатор удаляемого пользователя
    */
-  @PHPDefaultValue("null")
+  @BinInfo(phpDefaultValue="null")
   public int userID;
 }

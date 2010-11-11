@@ -18,7 +18,11 @@ public class ContestTiming {
    * <p>В обоих случаях поля start и finish из ContestDescription ограничивают возможности пользователя по времени
    * первого подключения (start) и времени отсылке решений (finish)
    */
-  @PHPDefaultValue("false")
+  @BinInfo(
+          phpDefaultValue="false",
+          defaultValue = "false",
+          title = "Самостоятельное начало"
+  )
   public boolean selfContestStart;
 
   /**
@@ -28,7 +32,11 @@ public class ContestTiming {
    * (Под отсылкой решений понимаются запросы SubmitSolutinRequest, которые
    * при обработке плагином стороны сервера помечаются плагином как "решение")
    */
-  @PHPDefaultValue("60")
+  @BinInfo(
+          phpDefaultValue="60",
+          defaultValue = "60",
+          title = "Максимальное время соревнования"
+  )
   public int maxContestDuration;
 
   /**
@@ -36,7 +44,11 @@ public class ContestTiming {
    * Неотрицательное число. Окончание соревнования используется только если selfContestStart = false.
    * <p>Определение понятию "окончание соревнования" см. в ResultsAccessPolicy.contestEndingPermission
    */
-  @PHPDefaultValue("15")
+  @BinInfo(
+          phpDefaultValue="15",
+          defaultValue = "0",
+          title = "Начало окончания"
+  )
   public int contestEndingStart;
 
   /**
@@ -44,7 +56,11 @@ public class ContestTiming {
    * Окончание контеста используется только если selfContestStart = false
    * <p>Определение понятию "окончание соревнования" см. в ResultsAccessPolicy.contestEndingPermission
    */
-  @PHPDefaultValue("15")
+  @BinInfo(
+          phpDefaultValue="15",
+          defaultValue = "0",
+          title = "Конец окончания"
+  )
   public int contestEndingFinish;
 
 }

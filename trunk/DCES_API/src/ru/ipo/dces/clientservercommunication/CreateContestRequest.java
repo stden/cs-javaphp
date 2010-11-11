@@ -8,7 +8,7 @@ public class CreateContestRequest implements Request {
   /**
    * Идентификатор сессии. Подходит сессия только администратора сервера
    */
-  @PHPDefaultValue("null")
+  @BinInfo(phpDefaultValue="null")
   public String             sessionID;
 
   /**
@@ -16,7 +16,7 @@ public class CreateContestRequest implements Request {
    * должны быть заполнены, т.е. не допускается использовать null в качестве значения
    */
 
-  @PHPDefaultValue("")
+  @BinInfo(phpDefaultValue="")
   public ContestDescription contest;
 
 }
