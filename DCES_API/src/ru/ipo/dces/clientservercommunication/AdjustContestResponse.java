@@ -15,7 +15,7 @@ public class AdjustContestResponse implements Response {
    * содержит id всех задач, в частности только что созданные id новых задач. Если в запросе problems был null, в
    * этом поле тоже возвращается как null
    */
-  @PHPDefaultValue("array()")
+  @BinInfo(phpDefaultValue="array()")
   public int[] problemIDs;
 
 }

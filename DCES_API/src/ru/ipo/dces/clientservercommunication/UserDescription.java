@@ -26,19 +26,19 @@ public class UserDescription {
   /**
    * Идентификатор пользователя
    */
-  @PHPDefaultValue("null")
+  @BinInfo(phpDefaultValue="null")
   public int      userID;
 
   /**
    * Логин
    */
-  @PHPDefaultValue("'test_login'")
+  @BinInfo(phpDefaultValue="'test_login'")
   public String   login;
 
   /**
    * Пароль. В ответах сервера это поле не заполняется
    */
-  @PHPDefaultValue("'test_password'")
+  @BinInfo(phpDefaultValue="'test_password'")
   public String   password;
 
   /**
@@ -46,12 +46,12 @@ public class UserDescription {
    * элемента массива хранятся в описании контеста. ContestDescription содержит
    * UserDataField[] data c информацией о полях с данными
    */
-  @PHPDefaultValue("array()")
+  @BinInfo(phpDefaultValue="array()")
   public String[] dataValue;
 
   /** Тип пользователя */
   //TODO избавиться от инициализатора
-  @PHPDefaultValue("'Participant'")
+  @BinInfo(phpDefaultValue="'Participant'")
   public UserType userType = UserType.Participant;
 
 }

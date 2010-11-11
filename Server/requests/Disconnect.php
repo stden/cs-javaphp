@@ -5,7 +5,7 @@ function processDisconnectRequest($request) {
     $where = sprintf("WHERE session_id = %s", Data::quote_smart($request->sessionID));
 
     //TODO think how to implement this more efficient in our architecture
-    if (!Data::getRow("SELECT FROM ${prfx}session $where"))
+    if (!Data::getRow("SELECT * FROM ${prfx}session $where"))
         throwBusinessLogicError(3);
 
     Data::submitModificationQuery("DELETE FROM ${prfx}session ${where}");

@@ -6,7 +6,7 @@ package ru.ipo.dces.clientservercommunication;
 public class DisconnectRequest implements Request {
 
   /** Сессия пользователя, который хочет отлючиться от сервера */
-  @PHPDefaultValue("null")
+  @BinInfo(phpDefaultValue="null")
   public String sessionID;
 
 }

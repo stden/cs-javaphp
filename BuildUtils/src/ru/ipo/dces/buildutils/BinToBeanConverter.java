@@ -15,6 +15,7 @@ import java.util.LinkedList;
  */
 public class BinToBeanConverter {
 
+
     private final String postfix;
 
     public BinToBeanConverter(String postfix) {
@@ -46,6 +47,8 @@ public class BinToBeanConverter {
         //get all public fields
         LinkedList<Field> publicFields = new LinkedList<Field>();
 
+        outputConstructor(out, newClassName);
+
         //iterate over all public fields
         for (Field field : c.getFields())
             if (Modifier.isPublic(field.getModifiers()))
@@ -64,7 +67,7 @@ public class BinToBeanConverter {
 
         outputGetBin(out, publicFields, c);
 
-        outputLoadBin(out, publicFields, c);
+        outputLoadBin(out, publicFields, c, newClassName);
 
         outputGetLayoutMethod(out, publicFields.toArray(new Field[publicFields.size()]));
 
@@ -74,11 +77,21 @@ public class BinToBeanConverter {
         return newClassName;
     }
 
-    private void outputLoadBin(PrintStream out, LinkedList<Field> publicFields, Class<?> c) {
+    private void outputConstructor(PrintStream out, String newClassName) {
+        out.println(CodeGeneratorSettings.INDENT + "public " + newClassName + "() {");
+        out.println(CodeGeneratorSettings.INDENT + "}");
+    }
+
+    /*private void outputConstructor(PrintStream out, LinkedList<Field> publicFields) {
+        out.println();
+    }*/
+
+    private void outputLoadBin(PrintStream out, LinkedList<Field> publicFields, Class<?> c, String newClassName) {
         out.println();
         out.printf(
-                "%spublic void loadBin(%s %s) {\n",
+                "%spublic %s(%s %s) {\n",
                 CodeGeneratorSettings.INDENT,
+                newClassName,
                 c.getCanonicalName(),
                 CodeGeneratorSettings.getUniqueVariable()
         );
@@ -98,8 +111,18 @@ public class BinToBeanConverter {
     private void outputToFieldTransformer(PrintStream out, Class<?> fieldType, String fieldName, String indent, int extraVarInd) {
         if (fieldType.isArray()) {
             out.printf(
-                "%s%s = new %s;\n",
+                    "%sif (%s == null) {\n%s%s%s = null;\n%s} else {\n",
                     indent,
+                    CodeGeneratorSettings.getUniqueVariable() + "." + fieldName,
+                    indent,
+                    CodeGeneratorSettings.INDENT,
+                    fieldName,
+                    indent
+            );
+            String indent2 = indent + CodeGeneratorSettings.INDENT;
+            out.printf(
+                "%s%s = new %s;\n",
+                    indent2,
                     fieldName,
                     createArray(
                             type2string(fieldType.getComponentType()),
@@ -108,27 +131,33 @@ public class BinToBeanConverter {
             );
             out.printf(
                     "%sfor (int %s = 0; %s < %s.%s.length; %s++) {\n",
-                    indent,
+                    indent2,
                     CodeGeneratorSettings.getUniqueVariable(extraVarInd),
                     CodeGeneratorSettings.getUniqueVariable(extraVarInd),
                     CodeGeneratorSettings.getUniqueVariable(),
                     fieldName,
                     CodeGeneratorSettings.getUniqueVariable(extraVarInd)
             );
+            String newFieldName = fieldName + "[" + CodeGeneratorSettings.getUniqueVariable(extraVarInd) + "]";
+            Class<?> newFieldType = fieldType.getComponentType();
             outputToFieldTransformer(
                     out,
-                    fieldType.getComponentType(),
-                    fieldName + "[" + CodeGeneratorSettings.getUniqueVariable(extraVarInd) + "]",
-                    indent + CodeGeneratorSettings.INDENT,
+                    newFieldType,
+                    newFieldName,
+                    indent2 + CodeGeneratorSettings.INDENT,
                     extraVarInd + 1
             );
+            out.println(indent2 + "}");
             out.println(indent + "}");
         } else {
             if (needsConversion(fieldType)) {
                 out.printf(
-                    "%s%s.loadBin(%s.%s);\n",
+                    "%s%s = %s.%s == null ? null : new %s(%s.%s);\n",
                     indent,
                     fieldName,
+                    CodeGeneratorSettings.getUniqueVariable(),
+                    fieldName,
+                    type2string(fieldType),
                     CodeGeneratorSettings.getUniqueVariable(),
                     fieldName
                 );
@@ -183,15 +212,26 @@ public class BinToBeanConverter {
     private void outputFromFieldTransformer(PrintStream out, Class<?> fieldType, String fieldName, String indent, int extraVarInd) {
         if (fieldType.isArray()) {
             out.printf(
+                    "%sif (%s == null) {\n%s%s%s.%s = null;\n%s} else {\n",
+                    indent,
+                    fieldName,
+                    indent,
+                    CodeGeneratorSettings.INDENT,
+                    CodeGeneratorSettings.getUniqueVariable(),
+                    fieldName,
+                    indent
+            );
+            String indent2 = indent + CodeGeneratorSettings.INDENT;
+            out.printf(
                 "%s%s.%s = new %s;\n",
-                    indent,                  
+                    indent2,
                     CodeGeneratorSettings.getUniqueVariable(),
                     fieldName,
                     createArray(fieldType.getComponentType().getCanonicalName(), fieldName + ".length")
             );
             out.printf(
                     "%sfor (int %s = 0; %s < %s.length; %s++) {\n",
-                    indent,
+                    indent2,
                     CodeGeneratorSettings.getUniqueVariable(extraVarInd),
                     CodeGeneratorSettings.getUniqueVariable(extraVarInd),
                     fieldName,
@@ -201,19 +241,30 @@ public class BinToBeanConverter {
                     out,
                     fieldType.getComponentType(),
                     fieldName + "[" + CodeGeneratorSettings.getUniqueVariable(extraVarInd) + "]",
-                    indent + CodeGeneratorSettings.INDENT,
+                    indent2 + CodeGeneratorSettings.INDENT,
                     extraVarInd + 1
             );
+            out.println(indent2 + "}");
             out.println(indent + "}");
-        } else
+        } else {
             out.printf(
-                "%s%s.%s = %s%s;\n",
+                "%s%s.%s = ",
                 indent,
                 CodeGeneratorSettings.getUniqueVariable(),
-                fieldName,
-                fieldName,
-                needsConversion(fieldType) ? ".getBin()" : ""
+                fieldName
             );
+
+            if (needsConversion(fieldType)) {
+                out.printf(
+                        "%s == null ? null : %s.getBin()",
+                        fieldName,
+                        fieldName
+                );
+            } else
+                out.print(fieldName);
+
+            out.println(";");
+        }
     }
 
     private String createArray(String name, String ind) {
@@ -305,6 +356,17 @@ public class BinToBeanConverter {
 
     private void outputGetter(PrintStream out, Field field) {
         out.println();
+
+        //get field annotations and add new annotations
+        //BinInfo binInfo = field.getAnnotation(BinInfo.class);
+
+        /*if (noModification.equals("null"))
+            out.printf(
+                    "%s@%s(allowNull=false)\n",
+                    CodeGeneratorSettings.INDENT,
+                    DSLBeanProperty.class.getCanonicalName()
+            );*/
+
         out.printf(
                 "%spublic %s %s() {\n%s%sreturn %s;\n%s}\n",
                 CodeGeneratorSettings.INDENT,
@@ -333,16 +395,50 @@ public class BinToBeanConverter {
     }
 
     private void outputDeclaration(PrintStream out, Field field) {
-        BinInfo binInfo = field.getAnnotation(BinInfo.class);
-        String defaultValue = binInfo == null ? "" : binInfo.defaultValue();
-
         out.printf(
-                "%sprivate %s %s%s;\n",
+                "%sprivate %s %s",
                 CodeGeneratorSettings.INDENT,
                 type2string(field.getType()),
-                field.getName(),
-                defaultValue.isEmpty() ? "" : " = " + defaultValue
+                field.getName()
         );
+
+        BinInfo binInfo = field.getAnnotation(BinInfo.class);
+        String defaultValue = binInfo == null ? BinInfo.NO_DEFAULT_VALUE : binInfo.defaultValue();
+
+        if (! defaultValue.equals(BinInfo.NO_DEFAULT_VALUE)) {
+            out.print(" = ");
+            out.print(convertDefaultValue(defaultValue, field.getType()));
+        }
+
+        out.println(";");
+    }
+
+    //must not be called with BinInfo.NO_DEFAULT_VALUE
+    private String convertDefaultValue(String binInfoDefaultValue, Class<?> fieldType) {
+        boolean newInst = binInfoDefaultValue.equals(BinInfo.NEW_INSTANCE_DEFAULT_VALUE);
+
+        //enum
+        if (fieldType.isEnum())
+            return type2string(fieldType) + "." + binInfoDefaultValue;
+
+        //String
+        if (fieldType == String.class) {
+            if (newInst)
+                return "\"\"";
+            else
+                return "\"" + binInfoDefaultValue + "\"";
+        }
+
+        //Object
+        if (fieldType.isArray() && newInst)
+            return "new " + type2string(fieldType) + "{}";
+
+        //Any object
+        if (! fieldType.isPrimitive() && newInst)
+            return "new " + type2string(fieldType) + "()";
+
+        //Any other
+        return binInfoDefaultValue;
     }
 
     private void outputSetter(PrintStream out, Field field) {

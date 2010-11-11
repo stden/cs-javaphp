@@ -10,12 +10,12 @@ import java.util.HashMap;
  */
 public class CheckerRequest implements Request {
 
-    @PHPDefaultValue("null")
+    @BinInfo(phpDefaultValue="null")
     public String sessionID;
 
-    @PHPDefaultValue("0")
+    @BinInfo(phpDefaultValue="0")
     public int submissionID;
 
-    @PHPDefaultValue("array()")
+    @BinInfo(phpDefaultValue="array()")
     public HashMap<String, String> result;
 }

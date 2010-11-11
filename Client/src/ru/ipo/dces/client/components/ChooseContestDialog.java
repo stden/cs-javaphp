@@ -14,86 +14,87 @@ import ru.ipo.dces.client.Controller;
 
 public class ChooseContestDialog extends JDialog {
 
-  private JList contestsList;
-  private JLabel idLabel;
-  private ContestDescription selectedContest;
+    private JList contestsList;
+    private JLabel idLabel;
+    private ContestDescription selectedContest;
 
-  public ChooseContestDialog(/*JFrame frame*/) {
-    super(Controller.getClientDialog());
-    initGUI();
-  }
+    public ChooseContestDialog(/*JFrame frame*/) {
+        super(Controller.getClientDialog());
+        initGUI();
+    }
 
-  private void initGUI() {
-    setModalityType(ModalityType.APPLICATION_MODAL);
+    private void initGUI() {
+        setModalityType(ModalityType.APPLICATION_MODAL);
 
-    JPanel buttonsPanel = new JPanel();
-    add(buttonsPanel, BorderLayout.SOUTH);
+        JPanel buttonsPanel = new JPanel();
+        add(buttonsPanel, BorderLayout.SOUTH);
 
-    idLabel = new JLabel();
-    buttonsPanel.add(idLabel);
-    idLabel.setText("");
+        idLabel = new JLabel();
+        buttonsPanel.add(idLabel);
+        idLabel.setText("");
 
-    JButton okButton = new JButton();
-    buttonsPanel.add(okButton);
-    okButton.setText("Выбрать");
+        JButton okButton = new JButton();
+        buttonsPanel.add(okButton);
+        okButton.setText("Выбрать");
 
-    JButton cancelButton = new JButton();
-    buttonsPanel.add(cancelButton);
-    cancelButton.setText("Отменить");
+        JButton cancelButton = new JButton();
+        buttonsPanel.add(cancelButton);
+        cancelButton.setText("Отменить");
 
-    contestsList = new JList();
-    JScrollPane contestsListScroll = new JScrollPane(contestsList);
-    add(contestsListScroll, BorderLayout.CENTER);
+        contestsList = new JList();
+        JScrollPane contestsListScroll = new JScrollPane(contestsList);
+        add(contestsListScroll, BorderLayout.CENTER);
 
-    setSize(400, 300);
-    setTitle("Выберите соревнование");
-        
-    //add action
-    okButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent evt) {
-        ContestsListBean val = (ContestsListBean) contestsList.getSelectedValue();
-        if (val == null)
-          selectedContest = null;
-        else
-          selectedContest = val.getDescription();
-        ChooseContestDialog.this.setVisible(false);
-      }
-    });
+        setSize(400, 300);
+        setLocationRelativeTo(null);
+        setTitle("Выберите соревнование");
 
-    cancelButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        cancelClick();
-      }
-    });
+        //add action
+        okButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                ContestsListBean val = (ContestsListBean) contestsList.getSelectedValue();
+                if (val == null)
+                    selectedContest = null;
+                else
+                    selectedContest = val.getDescription();
+                ChooseContestDialog.this.setVisible(false);
+            }
+        });
 
-    this.addWindowListener(new WindowAdapter() {     
-      public void windowClosing(WindowEvent e) {
-        cancelClick();
-      }
-    });
+        cancelButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                cancelClick();
+            }
+        });
 
-    contestsList.addListSelectionListener(new ListSelectionListener() {
-      public void valueChanged(ListSelectionEvent e) {
-        final ContestsListBean value = (ContestsListBean)contestsList.getSelectedValue();
-        if (value == null) return;
-        idLabel.setText("contest id = " + value.getDescription().contestID);
-      }
-    });
-  }
+        this.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                cancelClick();
+            }
+        });
 
-  private void cancelClick() {
-    selectedContest = null;
-    this.setVisible(false);
-  }
+        contestsList.addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent e) {
+                final ContestsListBean value = (ContestsListBean) contestsList.getSelectedValue();
+                if (value == null) return;
+                idLabel.setText("contest id = " + value.getDescription().contestID);
+            }
+        });
+    }
 
-  public ContestDescription run() {
-    ContestsListBean[] contestDescriptions = ContestChoosingPanel.getContestList();
-    ListModel listModel = new DefaultComboBoxModel(contestDescriptions);
-    contestsList.setModel(listModel);
+    private void cancelClick() {
+        selectedContest = null;
+        this.setVisible(false);
+    }
 
-    selectedContest = null;
-    this.setVisible(true);
-    return selectedContest;
-  }
+    public ContestDescription run() {
+        ContestsListBean[] contestDescriptions = ContestChoosingPanel.getContestList();
+        ListModel listModel = new DefaultComboBoxModel(contestDescriptions);
+        contestsList.setModel(listModel);
+
+        selectedContest = null;
+        this.setVisible(true);
+        return selectedContest;
+    }
 
 }

@@ -2,10 +2,8 @@ package ru.ipo.dces.trashtests;
 
 import ru.ipo.dces.serverbeans.BeansRegistrator;
 import ru.ipo.dces.serverbeans.ContestDescriptionBean;
-import ru.ipo.dces.serverbeans.CreateContestRequestBean;
 import ru.ipo.structurededitor.Defaults;
 import ru.ipo.structurededitor.StructuredEditor;
-import ru.ipo.structurededitor.controller.EditorsRegistry;
 import ru.ipo.structurededitor.model.DSLBeansRegistry;
 import ru.ipo.structurededitor.view.EditorRenderer;
 import ru.ipo.structurededitor.view.StructuredEditorModel;

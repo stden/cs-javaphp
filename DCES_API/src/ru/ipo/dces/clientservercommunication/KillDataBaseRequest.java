@@ -10,7 +10,7 @@ package ru.ipo.dces.clientservercommunication;
  */
 public class KillDataBaseRequest {
 
-  @PHPDefaultValue("null")
+  @BinInfo(phpDefaultValue="null")
   public String sessionID;
 
 }

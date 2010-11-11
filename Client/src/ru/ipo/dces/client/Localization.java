@@ -22,6 +22,7 @@ public class Localization {
     adminPlugin2name.put(ResultsPlugin.class, "Результаты");
 //    adminPlugin2name.put(AdjustContestsPlugin.class, "Настроить контест");
     adminPlugin2name.put(ContestPluginV2.class, "Настроить контест");
+    adminPlugin2name.put(ContestPluginV3.class, "Настроить контест");
     adminPlugin2name.put(CreateContestPlugin.class, "Создать сор-е");
     adminPlugin2name.put(LoginPlugin.class, "Контесты");
     adminPlugin2name.put(LogoutPlugin.class, "Управление");

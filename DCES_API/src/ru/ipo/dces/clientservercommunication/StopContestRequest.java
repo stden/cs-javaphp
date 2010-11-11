@@ -13,7 +13,7 @@ public class StopContestRequest implements Request {
   /**
    * Идентификатор сессии участника
    */
-  @PHPDefaultValue("null")
+  @BinInfo(phpDefaultValue="null")
   public String sessionID;
 
 }

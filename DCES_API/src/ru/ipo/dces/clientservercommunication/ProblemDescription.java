@@ -8,17 +8,24 @@ public class ProblemDescription {
     /**
      * идентификатор задачи
      */
-    @PHPDefaultValue("-1")
-    @BinInfo(editable = false)
+    @BinInfo(
+            phpDefaultValue="-1",
+            editable = false
+    )
     public int id;
 
     /**
      * Binary data with ZipProblem
      */
-    @PHPDefaultValue("null")
+    @BinInfo(
+            phpDefaultValue="null"
+    )
     public byte[] problem;
 
-    @PHPDefaultValue("")
+    @BinInfo(
+            phpDefaultValue="",
+            defaultValue = BinInfo.NEW_INSTANCE_DEFAULT_VALUE
+    )
     public ContestSpecificSettings settings;
 
     /**
@@ -26,8 +33,7 @@ public class ProblemDescription {
      *
      * @deprecated используется поле problem
      */
-    @PHPDefaultValue("'Test client plugin'")
-    @BinInfo(editable = false)
+    @BinInfo(phpDefaultValue="'Test client plugin'", editable = false)
     public String clientPluginAlias;
 
     /**
@@ -35,8 +41,7 @@ public class ProblemDescription {
      *
      * @deprecated используется поле problem
      */
-    @PHPDefaultValue("'Test server plugin'")
-    @BinInfo(editable = false)
+    @BinInfo(phpDefaultValue="'Test server plugin'", editable = false)
     public String serverPluginAlias;
 
     /**
@@ -44,8 +49,7 @@ public class ProblemDescription {
      *
      * @deprecated используется поле problem
      */
-    @PHPDefaultValue("'Test problem'.rand(0,239239)")
-    @BinInfo(editable = false)
+    @BinInfo(phpDefaultValue="'Test problem'.rand(0,239239)", editable = false)
     public String name;
 
     /**
@@ -54,8 +58,7 @@ public class ProblemDescription {
      *
      * @deprecated используется поле problem
      */
-    @PHPDefaultValue("null")
-    @BinInfo(editable = false)
+    @BinInfo(phpDefaultValue="null", editable = false)
     public byte[] statement;
 
     /**
@@ -63,8 +66,7 @@ public class ProblemDescription {
      *
      * @deprecated используется поле problem
      */
-    @PHPDefaultValue("null")
-    @BinInfo(editable = false)
+    @BinInfo(phpDefaultValue="null", editable = false)
     public byte[] statementData;
 
     /**
@@ -72,8 +74,7 @@ public class ProblemDescription {
      *
      * @deprecated используется поле problem
      */
-    @PHPDefaultValue("null")
-    @BinInfo(editable = false)
+    @BinInfo(phpDefaultValue="null", editable = false)
     public byte[] answerData;
 
 }
