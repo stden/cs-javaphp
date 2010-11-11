@@ -15,6 +15,7 @@ import ru.ipo.dces.plugins.admin.LogoutPlugin;
 import ru.ipo.dces.plugins.admin.ResultsPlugin;
 import ru.ipo.dces.server.ServerFacade;
 import ru.ipo.dces.server.http.HttpServer;
+import ru.ipo.dces.serverbeans.BeansRegistrator;
 import ru.ipo.dces.utils.FileSystemUtils;
 import ru.ipo.dces.utils.ZipUtils;
 
@@ -28,8 +29,8 @@ import java.net.Proxy;
 import java.util.HashSet;
 
 /**
- * Контроллер, который хранит данные о соединении с сервером и позволяет
- * выполнять стандартные действия с сервером
+ * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+ * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  */
 public class Controller {
 
@@ -50,7 +51,7 @@ public class Controller {
     }
 
     /**
-     * Добавление Plugin'а в клиент
+     * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Plugin'пїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
      *
      * @param pd the description of the problem for which the plugin is added
      */
@@ -66,12 +67,12 @@ public class Controller {
             pe.init(p);
         } catch (Exception e) {
             //something wrong with plugins
-            Controller.getLogger().log("Не удалось загрузить плагин", LogMessageType.Error, Localization.LOGGER_NAME);
+            Controller.getLogger().log("пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", LogMessageType.Error, Localization.LOGGER_NAME);
         }
     }
 
     /**
-     * Добавление Plugin'а в клиент
+     * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Plugin'пїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
      *
      * @param pluginClass class of new Plugin
      * @return added plugin
@@ -94,7 +95,7 @@ public class Controller {
         GetContestDataRequest rq = new GetContestDataRequest();
         rq.contestID = -1;
         rq.infoType = GetContestDataRequest.InformationType.ParticipantInfo;
-        rq.extendedData = null; //TODO download only problems that are not already on disk
+        rq.extendedData = null; //TODO dowload only problems that are not already on disk
         rq.sessionID = contestConnection.getSessionID();
         GetContestDataResponse rs = Controller.server.doRequest(rq);
 
@@ -108,7 +109,7 @@ public class Controller {
                 File pluginFile = new File(Settings.getInstance().getPluginsDirectory() + '/' + contestPlugin + ".jar");
                 if (!pluginFile.delete())
                     getLogger().log(
-                            "Не удалось обновить плагин: " + pluginFile.getName(),
+                            "пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ: " + pluginFile.getName(),
                             LogMessageType.Error,
                             Localization.LOGGER_NAME
                     );
@@ -146,7 +147,7 @@ public class Controller {
     }
 
     /**
-     * Запуск клиента
+     * пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
      *
      * @param args the command line input
      */
@@ -173,6 +174,8 @@ public class Controller {
         clientDialog.initGUI();
         clientDialog.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         clientDialog.setVisible(true);
+
+        BeansRegistrator.register();
     }
 
     private static void processArgs(String[] args) {
@@ -278,7 +281,7 @@ public class Controller {
 
         try {
             server.doRequest(r);
-            Controller.getLogger().log("Регистрация прошла успешно", LogMessageType.OK, Localization.LOGGER_NAME);
+            Controller.getLogger().log("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", LogMessageType.OK, Localization.LOGGER_NAME);
         } catch (ServerReturnedError serverReturnedError) {
             Controller.log(serverReturnedError);
         } catch (GeneralRequestFailureException GeneralRequestFailureException) {
@@ -428,7 +431,7 @@ public class Controller {
         r.sessionID = contestConnection.getSessionID();
         try {
             server.doRequest(r);
-            getLogger().log("Соревнование остановлено", LogMessageType.OK, Localization.LOGGER_NAME);
+            getLogger().log("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", LogMessageType.OK, Localization.LOGGER_NAME);
         } catch (ServerReturnedError e) {
             log(e);
         } catch (GeneralRequestFailureException e) {
