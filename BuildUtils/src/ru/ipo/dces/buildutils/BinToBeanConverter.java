@@ -1,11 +1,9 @@
 package ru.ipo.dces.buildutils;
 
-import ru.ipo.dces.clientservercommunication.BinInfo;
+import ru.ipo.dces.buildutils.raw.BinInfo;
 import ru.ipo.structurededitor.model.*;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.LinkedList;
@@ -14,7 +12,6 @@ import java.util.LinkedList;
  * Gets all public fields of class and creates class that has the same properties
  */
 public class BinToBeanConverter {
-
 
     private final String postfix;
 
@@ -27,13 +24,13 @@ public class BinToBeanConverter {
      *
      * @param c bin to convert
      * @return name of created class name
-     * @throws FileNotFoundException if failed to create file for generated class
+     * @throws IOException if failed to create file for generated class
      */
-    public String convert(Class<?> c) throws FileNotFoundException {
+    public String convert(Class<?> c) throws IOException {
         String newClassName = makeNewClassName(c);
         File beanFile = new File(CodeGeneratorSettings.EDITOR_BEANS_FOLDER + newClassName + ".java");
 
-        PrintStream out = new PrintStream(beanFile);
+        PrintStream out = new PrintStream(beanFile, "UTF-8");
 
         out.println("package " + CodeGeneratorSettings.EDITOR_BEANS_PACKAGE + ";");
         out.println();
@@ -92,7 +89,7 @@ public class BinToBeanConverter {
                 "%spublic %s(%s %s) {\n",
                 CodeGeneratorSettings.INDENT,
                 newClassName,
-                c.getCanonicalName(),
+                changeBinPackage(c.getCanonicalName()),
                 CodeGeneratorSettings.getUniqueVariable()
         );
 
@@ -121,7 +118,7 @@ public class BinToBeanConverter {
             );
             String indent2 = indent + CodeGeneratorSettings.INDENT;
             out.printf(
-                "%s%s = new %s;\n",
+                    "%s%s = new %s;\n",
                     indent2,
                     fieldName,
                     createArray(
@@ -152,22 +149,22 @@ public class BinToBeanConverter {
         } else {
             if (needsConversion(fieldType)) {
                 out.printf(
-                    "%s%s = %s.%s == null ? null : new %s(%s.%s);\n",
-                    indent,
-                    fieldName,
-                    CodeGeneratorSettings.getUniqueVariable(),
-                    fieldName,
-                    type2string(fieldType),
-                    CodeGeneratorSettings.getUniqueVariable(),
-                    fieldName
+                        "%s%s = %s.%s == null ? null : new %s(%s.%s);\n",
+                        indent,
+                        fieldName,
+                        CodeGeneratorSettings.getUniqueVariable(),
+                        fieldName,
+                        type2string(fieldType),
+                        CodeGeneratorSettings.getUniqueVariable(),
+                        fieldName
                 );
             } else {
                 out.printf(
-                    "%s%s = %s.%s;\n",
-                    indent,
-                    fieldName,
-                    CodeGeneratorSettings.getUniqueVariable(),
-                    fieldName
+                        "%s%s = %s.%s;\n",
+                        indent,
+                        fieldName,
+                        CodeGeneratorSettings.getUniqueVariable(),
+                        fieldName
                 );
             }
         }
@@ -179,16 +176,16 @@ public class BinToBeanConverter {
         out.printf(
                 "%spublic %s getBin() {\n",
                 CodeGeneratorSettings.INDENT,
-                c.getCanonicalName()
+                changeBinPackage(c.getCanonicalName())
         );
 
         out.printf(
                 "%s%s%s %s = new %s();\n",
                 CodeGeneratorSettings.INDENT,
                 CodeGeneratorSettings.INDENT,
-                c.getCanonicalName(),
+                changeBinPackage(c.getCanonicalName()),
                 CodeGeneratorSettings.getUniqueVariable(),
-                c.getCanonicalName()
+                changeBinPackage(c.getCanonicalName())
         );
 
         for (Field field : publicFields)
@@ -223,7 +220,7 @@ public class BinToBeanConverter {
             );
             String indent2 = indent + CodeGeneratorSettings.INDENT;
             out.printf(
-                "%s%s.%s = new %s;\n",
+                    "%s%s.%s = new %s;\n",
                     indent2,
                     CodeGeneratorSettings.getUniqueVariable(),
                     fieldName,
@@ -248,10 +245,10 @@ public class BinToBeanConverter {
             out.println(indent + "}");
         } else {
             out.printf(
-                "%s%s.%s = ",
-                indent,
-                CodeGeneratorSettings.getUniqueVariable(),
-                fieldName
+                    "%s%s.%s = ",
+                    indent,
+                    CodeGeneratorSettings.getUniqueVariable(),
+                    fieldName
             );
 
             if (needsConversion(fieldType)) {
@@ -272,7 +269,7 @@ public class BinToBeanConverter {
         if (name.endsWith("[]"))
             return createArray(name.substring(0, name.length() - 2), ind) + "[]";
         else
-            return name + "[" + ind + "]";         
+            return name + "[" + ind + "]";
     }
 
     private void outputGetLayoutMethod(PrintStream out, Field[] publicFields) {
@@ -444,7 +441,7 @@ public class BinToBeanConverter {
         BinInfo binInfo = field.getAnnotation(BinInfo.class);
         String defaultValue = binInfo == null ? BinInfo.NO_DEFAULT_VALUE : binInfo.defaultValue();
 
-        if (! defaultValue.equals(BinInfo.NO_DEFAULT_VALUE)) {
+        if (!defaultValue.equals(BinInfo.NO_DEFAULT_VALUE)) {
             out.print(" = ");
             out.print(convertDefaultValue(defaultValue, field.getType()));
         }
@@ -453,6 +450,7 @@ public class BinToBeanConverter {
     }
 
     //must not be called with BinInfo.NO_DEFAULT_VALUE
+
     private String convertDefaultValue(String binInfoDefaultValue, Class<?> fieldType) {
         boolean newInst = binInfoDefaultValue.equals(BinInfo.NEW_INSTANCE_DEFAULT_VALUE);
 
@@ -473,7 +471,7 @@ public class BinToBeanConverter {
             return "new " + type2string(fieldType) + "{}";
 
         //Any object
-        if (! fieldType.isPrimitive() && newInst)
+        if (!fieldType.isPrimitive() && newInst)
             return "new " + type2string(fieldType) + "()";
 
         //Any other
@@ -509,14 +507,21 @@ public class BinToBeanConverter {
         //TODO rewrite it in the following manner: if type is connected anyhow with the old package
         if (needsConversion(type))
             name = CodeGeneratorSettings.EDITOR_BEANS_PACKAGE + '.' +
-                    makeNewClassName(type);        
-        return name;
+                    makeNewClassName(type);
+        return changeBinPackage(name);
+    }
+
+    private String changeBinPackage(String className) {
+        if (className.startsWith(CodeGeneratorSettings.BINS_PACKAGE))
+            return CodeGeneratorSettings.BINS_OUT_PACKAGE +
+                    className.substring(1 + CodeGeneratorSettings.BINS_PACKAGE.length());
+        return className;
     }
 
     private boolean needsConversion(Class<?> type) {
         return
                 type.getCanonicalName().startsWith(CodeGeneratorSettings.BINS_PACKAGE)
-                        &&                        
+                        &&
                         !type.isEnum();
     }
 }

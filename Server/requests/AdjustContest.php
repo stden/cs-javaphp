@@ -4,9 +4,6 @@ require_once 'utils/Problem.php';
 require_once getServerPluginFile();
 require_once 'utils/ResultUtils.php';
 
-//global variable to store new contest problems
-$__new_contest_settings = null;
-
 /**
  * Copies fields from from to to, doesn't copy values that have 'ignore' values
  * @param $from from
@@ -34,19 +31,20 @@ function copyValues($from, $to) {
     return $res;
 }
 
-function queryForContestDescription($c, $contest_id) {
+//TODO implement coping only of changed values
+function queryForContestDescription($contest_description, $contest_id) {
     //get current contest settings
-    $prfx = DB_PREFIX;
+/*    $prfx = DB_PREFIX;
     $row = Data::getRow("SELECT settings FROM ${prfx}contest WHERE id=$contest_id");
-    $settings = Data::_unserialize($row['settings']);
+    $settings = Data::_unserialize($row['settings']);*/
 
-    copyValues($c, $settings);
+    //copyValues($contest_description, $settings);
 
-    RequestUtils::assertContestSettingsIntegrity($settings);
+    RequestUtils::assertContestSettingsIntegrity($contest_description);
 
-    $__new_contest_settings = $settings;
+    //$__new_contest_settings = $settings;
 
-    $col_value = array('settings' => @serialize($settings));
+    $col_value = array('settings' => @serialize($contest_description));
     Data::submitModificationQuery(
         Data::composeUpdateQuery("contest", $col_value, "id=$contest_id")
     );
