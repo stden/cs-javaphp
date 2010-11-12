@@ -4,6 +4,7 @@ import ru.ipo.structurededitor.model.DSLBeansRegistry;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.reflect.Modifier;
 import java.util.LinkedList;
@@ -18,7 +19,7 @@ public class GenerateBeans {
 
     //TODO don't generate code for Annotations
 
-    public static void main(String[] args) throws FileNotFoundException, ClassNotFoundException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
 
         BinToBeanConverter converter = new BinToBeanConverter("Bean");
         //converter.setBaseClass();

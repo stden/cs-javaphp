@@ -11,7 +11,7 @@ import java.util.ArrayList;
  */
 public class PHPCodeGenerator {
 
-    public static void main(String[] args) throws ClassNotFoundException, FileNotFoundException {
+    public static void main(String[] args) throws Exception {
 
         PHPMocks.generatePHPMocks();
         PHPMocks.generatePHPKeys();

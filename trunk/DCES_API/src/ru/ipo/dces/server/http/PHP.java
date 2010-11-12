@@ -229,7 +229,7 @@ class PHP {
         {
           String s = getString(st, ';');
           if (s.length() != 1)
-            throw new IllegalArgumentException("Lenght must be 1!");
+            throw new IllegalArgumentException("Length must be 1!");
           return cls.cast(s.charAt(0));
         }
         else if (cls == String.class)
