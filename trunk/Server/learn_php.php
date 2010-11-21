@@ -1,5 +1,17 @@
 <?php
 
+class A{};
+
+$a = new A;
+$a->p = NULL;
+var_dump(isset($a->p));
+var_dump(is_null($a->p));
+var_dump(isset($a->q));
+var_dump(is_null($a->q));
+
+
+die();
+
 //phpinfo();
 var_dump(mysql_connect("localhost", "root", "239"));
 
@@ -35,7 +47,7 @@ $t = 239;
 var_dump($t);
 
 EOD;
-
+/*
   eval($str);
 
   die('<br> end');
@@ -51,7 +63,7 @@ EOD;
   $a->a = array();  
   $b = $a;
   $a->a[42] = 239;
-    
+    */
   /*
   $a->f1 = new A();
   $a->f2 = new A();
