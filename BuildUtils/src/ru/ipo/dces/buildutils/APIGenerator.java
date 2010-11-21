@@ -3,6 +3,7 @@ package ru.ipo.dces.buildutils;
 import ru.ipo.dces.buildutils.raw.BinInfo;
 
 import java.io.*;
+import java.math.BigInteger;
 
 /**
  * Created by IntelliJ IDEA.
@@ -21,7 +22,7 @@ public class APIGenerator {
         File binsFolder = new File(CodeGeneratorSettings.BINS_SRC_FOLDER);
         File[] binFiles = binsFolder.listFiles(new FilenameFilter() {
             public boolean accept(File dir, String name) {
-                return name.endsWith(".java") && !name.equals(binInfoSimpleName);
+                return name.endsWith(".java") && !name.equals(binInfoSimpleName + ".java");
             }
         });
 

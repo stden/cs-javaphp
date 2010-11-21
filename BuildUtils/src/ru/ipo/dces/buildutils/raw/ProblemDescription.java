@@ -10,6 +10,7 @@ public class ProblemDescription {
      */
     @BinInfo(
             phpDefaultValue="-1",
+            defaultValue = "-1",
             editable = false
     )
     public int id;

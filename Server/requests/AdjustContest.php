@@ -34,17 +34,15 @@ function copyValues($from, $to) {
 //TODO implement coping only of changed values
 function queryForContestDescription($contest_description, $contest_id) {
     //get current contest settings
-/*    $prfx = DB_PREFIX;
+    $prfx = DB_PREFIX;
     $row = Data::getRow("SELECT settings FROM ${prfx}contest WHERE id=$contest_id");
-    $settings = Data::_unserialize($row['settings']);*/
+    $settings = Data::_unserialize($row['settings']);
 
-    //copyValues($contest_description, $settings);
+    copyValues($contest_description, $settings);
 
-    RequestUtils::assertContestSettingsIntegrity($contest_description);
+    RequestUtils::assertContestSettingsIntegrity($settings);
 
-    //$__new_contest_settings = $settings;
-
-    $col_value = array('settings' => @serialize($contest_description));
+    $col_value = array('settings' => @serialize($settings));
     Data::submitModificationQuery(
         Data::composeUpdateQuery("contest", $col_value, "id=$contest_id")
     );
@@ -83,7 +81,7 @@ function queriesToAdjustProblems($problems, $contest_id) {
         //find problem file or make temporary if a new problem was sent
         if ($p->problem) {
             $problem_file = getTemporaryProblemFile();
-            @file_put_contents($problem_file, $p->problem) or throwServerProblem('200', 'failed to write problem file');
+            @file_put_contents($problem_file, $p->problem) or throwServerProblem(200, 'failed to write problem file: ' . $problem_file);
             $temp_probs[] = $problem_file;
         } else {
             if ($p->id < 0)
@@ -138,7 +136,7 @@ function queriesToAdjustProblems($problems, $contest_id) {
     return $temp_probs;
 }
 
-function processAdjstContestRequest($request) {
+function processAdjustContestRequest($request) {
 
     if (!$request->contest)
         throwBusinessLogicError(1, 'contest is null');

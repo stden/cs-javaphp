@@ -224,7 +224,7 @@ public class BinToBeanConverter {
                     indent2,
                     CodeGeneratorSettings.getUniqueVariable(),
                     fieldName,
-                    createArray(fieldType.getComponentType().getCanonicalName(), fieldName + ".length")
+                    createArray(changeBinPackage(fieldType.getComponentType().getCanonicalName()), fieldName + ".length")
             );
             out.printf(
                     "%sfor (int %s = 0; %s < %s.length; %s++) {\n",
@@ -514,7 +514,7 @@ public class BinToBeanConverter {
     private String changeBinPackage(String className) {
         if (className.startsWith(CodeGeneratorSettings.BINS_PACKAGE))
             return CodeGeneratorSettings.BINS_OUT_PACKAGE +
-                    className.substring(1 + CodeGeneratorSettings.BINS_PACKAGE.length());
+                    className.substring(CodeGeneratorSettings.BINS_PACKAGE.length());
         return className;
     }
 

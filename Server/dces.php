@@ -51,7 +51,7 @@ switch (get_class($request)) {
 
     case 'AdjustContestRequest':
         require("requests/AdjustContest.php");
-        $result = processAdjstContestRequest($request);
+        $result = processAdjustContestRequest($request);
         break;
 
     case 'GetContestDataRequest':
