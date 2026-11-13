@@ -1,0 +1,756 @@
+<root xmlns:sys="http://obr.1c.ru/mathkit/">
+  <construction-defaults>
+    <buttons sys:id="61" sys:version="2.0.0.10" sys:type="component-template">
+      <model-restriction sys:id="59" sys:version="2.0.0.10" sys:type="common-mr">
+        <removable sys:type="bool" value="true" />
+        <editable sys:type="bool" value="false" />
+        <selectable sys:type="bool" value="true" />
+        <movable sys:type="bool" value="true" />
+      </model-restriction>
+      <style sys:id="58" sys:version="2.0.0.10" sys:type="component-style">
+        <resize-by-content sys:type="bool" value="true" />
+        <font sys:type="font" value="Arial plain 14" />
+        <background-color sys:type="color" value="#80cccccc" />
+        <color sys:type="color" value="#ff000000" />
+        <border sys:type="enum" value="enumborder.button" class="rus.sketchpad.view.styles.EnumBorder" />
+        <margin sys:type="insets" value="5, 10, 5, 10" />
+        <text-mode sys:type="enum" value="textmode.tex" class="rus.sketchpad.view.TextMode" />
+        <background-opaque sys:type="bool" value="true" />
+        <size sys:type="dimension" value="80,30" />
+      </style>
+      <show-default-tooltip sys:type="bool" value="false" />
+      <underline sys:type="bool" value="false" />
+      <z-order sys:type="int" value="20" />
+      <italic sys:type="bool" value="false" />
+      <default-text sys:id="60" sys:version="2.0.0.10" sys:type="rich-text">
+        <type sys:type="enum" value="textmode.tex" class="rus.sketchpad.view.TextMode" />
+        <text sys:type="string">\begin{document}\end{document}</text>
+      </default-text>
+      <bold sys:type="bool" value="false" />
+      <alignment sys:type="int" value="0" />
+      <visibility sys:type="enum" value="visibility.visible" class="rus.sketchpad.model.Visibility" />
+    </buttons>
+    <functions sys:id="57" sys:version="2.0.0.10" sys:type="function-template">
+      <default-text sys:id="56" sys:version="2.0.0.10" sys:type="rich-text">
+        <type sys:type="enum" value="textmode.tex" class="rus.sketchpad.view.TextMode" />
+        <text sys:type="string">\begin{document}\end{document}</text>
+      </default-text>
+      <z-order sys:type="int" value="5" />
+      <model-restriction sys:id="55" sys:version="2.0.0.10" sys:type="common-mr">
+        <removable sys:type="bool" value="true" />
+        <editable sys:type="bool" value="false" />
+        <selectable sys:type="bool" value="true" />
+        <movable sys:type="bool" value="true" />
+      </model-restriction>
+      <italic sys:type="bool" value="false" />
+      <attributes>
+        <underline sys:type="bool" value="false" />
+        <font sys:type="font" value="Arial plain 14" />
+        <color sys:type="color" value="#ff000000" />
+        <italic sys:type="bool" value="false" />
+        <bold sys:type="bool" value="false" />
+      </attributes>
+      <underline sys:type="bool" value="false" />
+      <alignment sys:type="int" value="0" />
+      <visibility sys:type="enum" value="visibility.visible" class="rus.sketchpad.model.Visibility" />
+      <bold sys:type="bool" value="false" />
+      <variable-name sys:type="string">x</variable-name>
+      <show-default-tooltip sys:type="bool" value="false" />
+      <style sys:id="54" sys:version="2.0.0.10" sys:type="component-style">
+        <resize-by-content sys:type="bool" value="true" />
+        <font sys:type="font" value="Arial plain 14" />
+        <background-color sys:type="color" value="#8099ccff" />
+        <color sys:type="color" value="#ff000000" />
+        <border sys:type="enum" value="enumborder.empty" class="rus.sketchpad.view.styles.EnumBorder" />
+        <margin sys:type="insets" value="5, 10, 5, 10" />
+        <text-mode sys:type="enum" value="textmode.tex" class="rus.sketchpad.view.TextMode" />
+        <background-opaque sys:type="bool" value="true" />
+        <size sys:type="dimension" value="80,30" />
+      </style>
+    </functions>
+    <labels sys:id="27" sys:version="2.0.0.10" sys:type="label-template">
+      <auto-italic-letters sys:type="bool" value="true" />
+      <z-order sys:type="int" value="5" />
+      <distance sys:type="int" value="15" />
+      <model-restriction sys:id="26" sys:version="2.0.0.10" sys:type="common-mr">
+        <removable sys:type="bool" value="true" />
+        <editable sys:type="bool" value="true" />
+        <selectable sys:type="bool" value="true" />
+        <movable sys:type="bool" value="true" />
+      </model-restriction>
+      <auto-label-measured sys:type="bool" value="true" />
+      <auto-beautify sys:type="bool" value="true" />
+      <auto-label-transform sys:type="bool" value="true" />
+      <visibility sys:type="null" />
+      <show-default-tooltip sys:type="bool" value="false" />
+      <auto-label-points sys:type="bool" value="true" />
+      <style sys:id="25" sys:version="2.0.0.10" sys:type="label-style">
+        <font sys:type="font" value="Arial plain 14" />
+        <color sys:type="color" value="#ff000000" />
+      </style>
+      <angles-label-greek sys:type="bool" value="false" />
+    </labels>
+    <checkboxes sys:id="69" sys:version="2.0.0.10" sys:type="component-template">
+      <model-restriction sys:id="67" sys:version="2.0.0.10" sys:type="common-mr">
+        <removable sys:type="bool" value="true" />
+        <editable sys:type="bool" value="true" />
+        <selectable sys:type="bool" value="true" />
+        <movable sys:type="bool" value="true" />
+      </model-restriction>
+      <style sys:id="66" sys:version="2.0.0.10" sys:type="component-style">
+        <resize-by-content sys:type="bool" value="false" />
+        <font sys:type="font" value="Arial plain 14" />
+        <background-color sys:type="color" value="#00ffffff" />
+        <color sys:type="color" value="#ff000000" />
+        <border sys:type="enum" value="enumborder.empty" class="rus.sketchpad.view.styles.EnumBorder" />
+        <margin sys:type="insets" value="5, 10, 5, 10" />
+        <text-mode sys:type="enum" value="textmode.tex" class="rus.sketchpad.view.TextMode" />
+        <background-opaque sys:type="bool" value="true" />
+        <size sys:type="dimension" value="80,30" />
+      </style>
+      <show-default-tooltip sys:type="bool" value="false" />
+      <underline sys:type="bool" value="false" />
+      <z-order sys:type="int" value="0" />
+      <italic sys:type="bool" value="false" />
+      <default-text sys:id="68" sys:version="2.0.0.10" sys:type="rich-text">
+        <type sys:type="enum" value="textmode.tex" class="rus.sketchpad.view.TextMode" />
+        <text sys:type="string">\begin{document}\end{document}</text>
+      </default-text>
+      <bold sys:type="bool" value="false" />
+      <alignment sys:type="int" value="0" />
+      <visibility sys:type="enum" value="visibility.visible" class="rus.sketchpad.model.Visibility" />
+    </checkboxes>
+    <selection-spot sys:type="int" value="4" />
+    <sliders sys:id="65" sys:version="2.0.0.10" sys:type="slider-template">
+      <max-value sys:type="double" value="100.0" />
+      <paint-ticks-labels sys:type="bool" value="true" />
+      <default-text sys:id="64" sys:version="2.0.0.10" sys:type="rich-text">
+        <type sys:type="enum" value="textmode.tex" class="rus.sketchpad.view.TextMode" />
+        <text sys:type="string">\begin{document}\end{document}</text>
+      </default-text>
+      <z-order sys:type="int" value="0" />
+      <minor-ticks-size sys:type="double" value="2.0" />
+      <major-ticks-size sys:type="double" value="10.0" />
+      <model-restriction sys:id="63" sys:version="2.0.0.10" sys:type="common-mr">
+        <removable sys:type="bool" value="true" />
+        <editable sys:type="bool" value="true" />
+        <selectable sys:type="bool" value="true" />
+        <movable sys:type="bool" value="true" />
+      </model-restriction>
+      <italic sys:type="bool" value="false" />
+      <alignment sys:type="int" value="0" />
+      <underline sys:type="bool" value="false" />
+      <snap-to-ticks sys:type="bool" value="true" />
+      <paint-major-ticks sys:type="bool" value="true" />
+      <bold sys:type="bool" value="false" />
+      <min-value sys:type="double" value="0.0" />
+      <style sys:id="62" sys:version="2.0.0.10" sys:type="component-style">
+        <resize-by-content sys:type="bool" value="false" />
+        <font sys:type="font" value="Arial plain 14" />
+        <background-color sys:type="color" value="#00ffffff" />
+        <color sys:type="color" value="#ff000000" />
+        <border sys:type="enum" value="enumborder.empty" class="rus.sketchpad.view.styles.EnumBorder" />
+        <margin sys:type="insets" value="0, 0, 0, 0" />
+        <text-mode sys:type="enum" value="textmode.tex" class="rus.sketchpad.view.TextMode" />
+        <background-opaque sys:type="bool" value="true" />
+        <size sys:type="dimension" value="200,50" />
+      </style>
+      <show-default-tooltip sys:type="bool" value="true" />
+      <visibility sys:type="enum" value="visibility.visible" class="rus.sketchpad.model.Visibility" />
+      <step-size />
+      <horizontal sys:type="bool" value="true" />
+      <paint-minor-ticks />
+    </sliders>
+    <strokes sys:id="33" sys:version="2.0.0.10" sys:type="stroke-template">
+      <model-restriction sys:id="32" sys:version="2.0.0.10" sys:type="common-mr">
+        <removable sys:type="bool" value="true" />
+        <editable sys:type="bool" value="false" />
+        <selectable sys:type="bool" value="true" />
+        <movable sys:type="bool" value="false" />
+      </model-restriction>
+      <style sys:id="31" sys:version="2.0.0.10" sys:type="curve-style">
+        <color sys:type="color" value="#ff0000cc" />
+        <line-type sys:type="enum" value="linetype.normal" class="rus.sketchpad.view.LineType" />
+      </style>
+      <show-default-tooltip sys:type="bool" value="false" />
+      <length sys:type="int" value="7" />
+      <step sys:type="int" value="5" />
+      <z-order sys:type="int" value="10" />
+      <strokes-length />
+      <strokes-count sys:type="int" value="1" />
+      <stroke-variant sys:type="enum" value="stroke-variant.straight" class="rus.sketchpad.model.impl.decorative.stroke.StrokeVariant" />
+      <visibility sys:type="enum" value="visibility.visible" class="rus.sketchpad.model.Visibility" />
+    </strokes>
+    <default-colors sys:type="list">
+      <item sys:type="color" value="#ff000000" />
+      <item sys:type="color" value="#ff666666" />
+      <item sys:type="color" value="#ff999999" />
+      <item sys:type="color" value="#ffcccccc" />
+      <item sys:type="color" value="#ffffffff" />
+      <item sys:type="color" value="#ffff0000" />
+      <item sys:type="color" value="#ffff9933" />
+      <item sys:type="color" value="#ff009900" />
+      <item sys:type="color" value="#ff0000cc" />
+      <item sys:type="color" value="#ffcc3399" />
+      <item sys:type="color" value="#ffffcccc" />
+      <item sys:type="color" value="#ffffff99" />
+      <item sys:type="color" value="#ff99ff99" />
+      <item sys:type="color" value="#ff99ccff" />
+      <item sys:type="color" value="#ffcc99ff" />
+    </default-colors>
+    <text sys:id="37" sys:version="2.0.0.10" sys:type="component-template">
+      <model-restriction sys:id="35" sys:version="2.0.0.10" sys:type="common-mr">
+        <removable sys:type="bool" value="true" />
+        <editable sys:type="bool" value="true" />
+        <selectable sys:type="bool" value="true" />
+        <movable sys:type="bool" value="true" />
+      </model-restriction>
+      <style sys:id="34" sys:version="2.0.0.10" sys:type="component-style">
+        <resize-by-content sys:type="bool" value="false" />
+        <font sys:type="font" value="Arial plain 14" />
+        <background-color sys:type="color" value="#00ffffff" />
+        <color sys:type="color" value="#ff000000" />
+        <border sys:type="enum" value="enumborder.empty" class="rus.sketchpad.view.styles.EnumBorder" />
+        <margin sys:type="insets" value="5, 10, 5, 10" />
+        <text-mode sys:type="enum" value="textmode.tex" class="rus.sketchpad.view.TextMode" />
+        <background-opaque sys:type="bool" value="false" />
+        <size sys:type="dimension" value="100,100" />
+      </style>
+      <show-default-tooltip sys:type="bool" value="false" />
+      <underline sys:type="bool" value="false" />
+      <z-order sys:type="int" value="15" />
+      <italic sys:type="bool" value="false" />
+      <default-text sys:id="36" sys:version="2.0.0.10" sys:type="rich-text">
+        <type sys:type="enum" value="textmode.tex" class="rus.sketchpad.view.TextMode" />
+        <text sys:type="string">\begin{document}\end{document}</text>
+      </default-text>
+      <bold sys:type="bool" value="false" />
+      <alignment sys:type="int" value="0" />
+      <visibility sys:type="enum" value="visibility.visible" class="rus.sketchpad.model.Visibility" />
+    </text>
+    <plot sys:id="15" sys:version="2.0.0.10" sys:type="locus-template">
+      <z-order sys:type="int" value="0" />
+      <smoothness sys:type="double" value="0.0" />
+      <resolution sys:type="double" value="0.05" />
+      <model-restriction sys:id="13" sys:version="2.0.0.10" sys:type="common-mr">
+        <removable sys:type="bool" value="true" />
+        <editable sys:type="bool" value="true" />
+        <selectable sys:type="bool" value="true" />
+        <movable sys:type="bool" value="true" />
+      </model-restriction>
+      <style sys:id="12" sys:version="2.0.0.10" sys:type="curve-style">
+        <color sys:type="color" value="#ffff0000" />
+        <line-type sys:type="enum" value="linetype.thick" class="rus.sketchpad.view.LineType" />
+      </style>
+      <screen-resolution sys:type="double" value="0.5" />
+      <max-x sys:type="double" value="6.0" />
+      <max-derivation sys:type="double" value="0.1" />
+      <min-y sys:type="double" value="-6.0" />
+      <min-x sys:type="double" value="-6.0" />
+      <color-source sys:id="14" sys:version="2.0.0.10" sys:type="circle-color-source">
+        <colors sys:type="list">
+          <item sys:type="color" value="#ffff0000" />
+          <item sys:type="color" value="#ffff9933" />
+          <item sys:type="color" value="#ff009900" />
+          <item sys:type="color" value="#ff0000cc" />
+          <item sys:type="color" value="#ffcc3399" />
+        </colors>
+      </color-source>
+      <start-points sys:type="int" value="31" />
+      <show-default-tooltip sys:type="bool" value="false" />
+      <visibility sys:type="enum" value="visibility.visible" class="rus.sketchpad.model.Visibility" />
+      <max-y sys:type="double" value="6.0" />
+      <auto-adjust-frame sys:type="bool" value="true" />
+      <autotune sys:type="bool" value="true" />
+    </plot>
+    <user-colors sys:type="list" />
+    <transformations sys:id="45" sys:version="2.0.0.10" sys:type="transformation-template">
+      <default-text sys:id="44" sys:version="2.0.0.10" sys:type="rich-text">
+        <type sys:type="enum" value="textmode.tex" class="rus.sketchpad.view.TextMode" />
+        <text sys:type="string">\begin{document}\end{document}</text>
+      </default-text>
+      <z-order sys:type="int" value="15" />
+      <model-restriction sys:id="43" sys:version="2.0.0.10" sys:type="common-mr">
+        <removable sys:type="bool" value="true" />
+        <editable sys:type="bool" value="true" />
+        <selectable sys:type="bool" value="true" />
+        <movable sys:type="bool" value="true" />
+      </model-restriction>
+      <italic sys:type="bool" value="false" />
+      <alignment sys:type="int" value="0" />
+      <underline sys:type="bool" value="false" />
+      <default-rotation-angle sys:type="double" value="1.5707963267948966" />
+      <default-rotation-center sys:type="vector" value="0.0 : 0.0" />
+      <bold sys:type="bool" value="false" />
+      <default-dilation-scale sys:type="double" value="0.5" />
+      <style sys:id="42" sys:version="2.0.0.10" sys:type="component-style">
+        <resize-by-content sys:type="bool" value="true" />
+        <font sys:type="font" value="Arial plain 14" />
+        <background-color sys:type="color" value="#80ffcccc" />
+        <color sys:type="color" value="#ff000000" />
+        <border sys:type="enum" value="enumborder.empty" class="rus.sketchpad.view.styles.EnumBorder" />
+        <margin sys:type="insets" value="5, 10, 5, 10" />
+        <text-mode sys:type="enum" value="textmode.tex" class="rus.sketchpad.view.TextMode" />
+        <background-opaque sys:type="bool" value="true" />
+        <size sys:type="dimension" value="80,30" />
+      </style>
+      <show-default-tooltip sys:type="bool" value="false" />
+      <visibility sys:type="enum" value="visibility.visible" class="rus.sketchpad.model.Visibility" />
+      <default-dilation-center sys:type="vector" value="0.0 : 0.0" />
+      <default-translation sys:type="vector" value="5.0 : 5.0" />
+    </transformations>
+    <lines sys:id="5" sys:version="2.0.0.10" sys:type="curve-template">
+      <model-restriction sys:id="4" sys:version="2.0.0.10" sys:type="common-mr">
+        <removable sys:type="bool" value="true" />
+        <editable sys:type="bool" value="false" />
+        <selectable sys:type="bool" value="true" />
+        <movable sys:type="bool" value="true" />
+      </model-restriction>
+      <style sys:id="3" sys:version="2.0.0.10" sys:type="curve-style">
+        <color sys:type="color" value="#ff0000cc" />
+        <line-type sys:type="enum" value="linetype.normal" class="rus.sketchpad.view.LineType" />
+      </style>
+      <show-default-tooltip sys:type="bool" value="false" />
+      <z-order sys:type="int" value="5" />
+      <smart-extent sys:type="double" value="100.0" />
+      <visibility sys:type="enum" value="visibility.visible" class="rus.sketchpad.model.Visibility" />
+      <smart sys:type="bool" value="false" />
+    </lines>
+    <curves sys:id="20" sys:version="2.0.0.10" sys:type="curve-template">
+      <model-restriction sys:id="19" sys:version="2.0.0.10" sys:type="common-mr">
+        <removable sys:type="bool" value="true" />
+        <editable sys:type="bool" value="false" />
+        <selectable sys:type="bool" value="true" />
+        <movable sys:type="bool" value="true" />
+      </model-restriction>
+      <style sys:id="18" sys:version="2.0.0.10" sys:type="curve-style">
+        <color sys:type="color" value="#ff0000cc" />
+        <line-type sys:type="enum" value="linetype.thick" class="rus.sketchpad.view.LineType" />
+      </style>
+      <show-default-tooltip sys:type="bool" value="false" />
+      <z-order sys:type="int" value="5" />
+      <smart-extent sys:type="double" value="50.0" />
+      <visibility sys:type="null" />
+      <smart sys:type="bool" value="false" />
+    </curves>
+    <circles sys:id="11" sys:version="2.0.0.10" sys:type="curve-template">
+      <model-restriction sys:id="10" sys:version="2.0.0.10" sys:type="common-mr">
+        <removable sys:type="bool" value="true" />
+        <editable sys:type="bool" value="false" />
+        <selectable sys:type="bool" value="true" />
+        <movable sys:type="bool" value="true" />
+      </model-restriction>
+      <style sys:id="9" sys:version="2.0.0.10" sys:type="curve-style">
+        <color sys:type="color" value="#ff009900" />
+        <line-type sys:type="enum" value="linetype.normal" class="rus.sketchpad.view.LineType" />
+      </style>
+      <show-default-tooltip sys:type="bool" value="false" />
+      <z-order sys:type="int" value="5" />
+      <smart-extent sys:type="double" value="50.0" />
+      <visibility sys:type="enum" value="visibility.visible" class="rus.sketchpad.model.Visibility" />
+      <smart sys:type="bool" value="false" />
+    </circles>
+    <angles sys:id="30" sys:version="2.0.0.10" sys:type="angle-template">
+      <filled-inner-radius sys:type="double" value="0.0" />
+      <z-order sys:type="int" value="4" />
+      <model-restriction sys:id="29" sys:version="2.0.0.10" sys:type="common-mr">
+        <removable sys:type="bool" value="true" />
+        <editable sys:type="bool" value="false" />
+        <selectable sys:type="bool" value="true" />
+        <movable sys:type="bool" value="false" />
+      </model-restriction>
+      <style sys:id="28" sys:version="2.0.0.10" sys:type="angle-style">
+        <color sys:type="color" value="#ff0000ff" />
+        <angle-type sys:type="enum" value="angletype.arc" class="rus.sketchpad.view.AngleType" />
+        <line-type sys:type="enum" value="linetype.normal" class="rus.sketchpad.view.LineType" />
+        <filling-color sys:type="color" value="#ffffff00" />
+      </style>
+      <filled-outer-radius sys:type="double" value="25.0" />
+      <filled sys:type="bool" value="true" />
+      <arcs-count sys:type="int" value="1" />
+      <choose-smaller sys:type="bool" value="true" />
+      <simple sys:type="bool" value="true" />
+      <show-default-tooltip sys:type="bool" value="false" />
+      <visibility sys:type="null" />
+      <arcs-step sys:type="double" value="5.0" />
+      <inner-radius sys:type="double" value="25.0" />
+    </angles>
+    <points sys:id="2" sys:version="2.0.0.10" sys:type="point-template">
+      <model-restriction sys:id="1" sys:version="2.0.0.10" sys:type="common-mr">
+        <removable sys:type="bool" value="true" />
+        <editable sys:type="bool" value="false" />
+        <selectable sys:type="bool" value="true" />
+        <movable sys:type="bool" value="true" />
+      </model-restriction>
+      <style sys:id="0" sys:version="2.0.0.10" sys:type="point-style">
+        <paint-interior sys:type="bool" value="true" />
+        <point-type sys:type="enum" value="pointtype.circle" class="rus.sketchpad.view.PointType" />
+        <color sys:type="color" value="#ff000000" />
+        <paint-border sys:type="bool" value="true" />
+        <filling-color sys:type="color" value="#ffffff00" />
+        <size sys:type="int" value="3" />
+      </style>
+      <show-default-tooltip sys:type="bool" value="false" />
+      <z-order sys:type="int" value="10" />
+      <visibility sys:type="null" />
+    </points>
+    <locus sys:id="17" sys:version="2.0.0.10" sys:type="locus-template">
+      <z-order sys:type="int" value="0" />
+      <smoothness sys:type="double" value="0.0" />
+      <resolution sys:type="double" value="0.05" />
+      <model-restriction sys:ref-id="13" sys:type="ref" />
+      <style sys:ref-id="12" sys:type="ref" />
+      <screen-resolution sys:type="double" value="0.5" />
+      <max-x sys:type="double" value="6.0" />
+      <max-derivation sys:type="double" value="0.1" />
+      <min-y sys:type="double" value="-6.0" />
+      <min-x sys:type="double" value="-6.0" />
+      <color-source sys:id="16" sys:version="2.0.0.10" sys:type="static-color-source">
+        <color sys:type="color" value="#ffff0000" />
+      </color-source>
+      <start-points sys:type="int" value="31" />
+      <show-default-tooltip sys:type="bool" value="false" />
+      <visibility sys:type="enum" value="visibility.visible" class="rus.sketchpad.model.Visibility" />
+      <max-y sys:type="double" value="6.0" />
+      <auto-adjust-frame sys:type="bool" value="true" />
+      <autotune sys:type="bool" value="true" />
+    </locus>
+    <frames sys:id="72" sys:version="2.0.0.10" sys:type="frame-template">
+      <z-order sys:type="int" value="0" />
+      <default-size sys:type="rectangle" value="0.0, 0.0, 400.0, 400.0" />
+      <may-scroll-by-origin sys:type="bool" value="true" />
+      <may-change-scales-by-unit sys:type="bool" value="true" />
+      <model-restriction sys:id="71" sys:version="2.0.0.10" sys:type="common-mr">
+        <removable sys:type="bool" value="true" />
+        <editable sys:type="bool" value="false" />
+        <selectable sys:type="bool" value="false" />
+        <movable sys:type="bool" value="false" />
+      </model-restriction>
+      <may-change-scale-x sys:type="bool" value="true" />
+      <may-change-scale-y sys:type="bool" value="true" />
+      <may-change-scales sys:type="bool" value="true" />
+      <scrollable sys:type="bool" value="true" />
+      <lock-scales sys:type="bool" value="true" />
+      <snap-type sys:type="enum" value="NONE" class="rus.sketchpad.model.SnapType" />
+      <style sys:id="70" sys:version="2.0.0.10" sys:type="frame-style">
+        <labels-color sys:type="color" value="#ff000000" />
+        <label-axis-ticks sys:type="bool" value="true" />
+        <ticks-font />
+        <ticks-color sys:type="color" value="#ff000000" />
+        <background-color sys:type="color" value="#ffffffff" />
+        <background-opaque sys:type="bool" value="true" />
+        <axis-style sys:type="enum" value="linetype.normal" class="rus.sketchpad.view.LineType" />
+        <draw-axis sys:type="bool" value="true" />
+        <draw-secondary-border-ticks sys:type="bool" value="false" />
+        <color sys:type="color" value="#ff000000" />
+        <secondary-grid-step sys:type="double" value="0.5" />
+        <draw-secondary-grid sys:type="bool" value="true" />
+        <main-grid-color sys:type="color" value="#ff99ccff" />
+        <clip-bounds sys:type="bool" value="true" />
+        <bounds-color sys:type="color" value="#ff99ccff" />
+        <draw-main-border-ticks sys:type="bool" value="false" />
+        <draw-secondary-axis-ticks sys:type="bool" value="false" />
+        <labels-font sys:type="font" value="Arial plain 10" />
+        <secondary-grid-color sys:type="color" value="#c899ccff" />
+        <draw-main-axis-ticks sys:type="bool" value="true" />
+        <draw-axis-ex />
+        <secondary-grid-style sys:type="enum" value="linetype.normal" class="rus.sketchpad.view.LineType" />
+        <draw-main-grid sys:type="bool" value="true" />
+        <main-grid-style sys:type="enum" value="linetype.normal" class="rus.sketchpad.view.LineType" />
+        <bounds-style sys:type="enum" value="linetype.thick" class="rus.sketchpad.view.LineType" />
+        <axis-color sys:type="color" value="#ff000000" />
+        <main-grid-step sys:type="double" value="2.0" />
+        <draw-bounds sys:type="bool" value="true" />
+        <label-border-ticks sys:type="bool" value="false" />
+      </style>
+      <show-default-tooltip sys:type="bool" value="false" />
+      <scale-x sys:type="double" value="30.0" />
+      <visibility sys:type="enum" value="visibility.visible" class="rus.sketchpad.model.Visibility" />
+      <scale-y sys:type="double" value="30.0" />
+      <may-scroll-by-arrows sys:type="bool" value="false" />
+    </frames>
+    <light-colors sys:type="list">
+      <item sys:type="color" value="#ffffcccc" />
+      <item sys:type="color" value="#ffffff99" />
+      <item sys:type="color" value="#ff99ff99" />
+      <item sys:type="color" value="#ff99ccff" />
+      <item sys:type="color" value="#ffcc99ff" />
+    </light-colors>
+    <dark-colors sys:type="list">
+      <item sys:type="color" value="#ffff0000" />
+      <item sys:type="color" value="#ffff9933" />
+      <item sys:type="color" value="#ff009900" />
+      <item sys:type="color" value="#ff0000cc" />
+      <item sys:type="color" value="#ffcc3399" />
+    </dark-colors>
+    <parameters sys:id="41" sys:version="2.0.0.10" sys:type="parameter-template">
+      <show-parameter-value sys:type="bool" value="true" />
+      <default-text sys:id="40" sys:version="2.0.0.10" sys:type="rich-text">
+        <type sys:type="enum" value="textmode.tex" class="rus.sketchpad.view.TextMode" />
+        <text sys:type="string">\begin{document}\end{document}</text>
+      </default-text>
+      <z-order sys:type="int" value="20" />
+      <model-restriction sys:id="39" sys:version="2.0.0.10" sys:type="common-mr">
+        <removable sys:type="bool" value="true" />
+        <editable sys:type="bool" value="true" />
+        <selectable sys:type="bool" value="true" />
+        <movable sys:type="bool" value="true" />
+      </model-restriction>
+      <italic sys:type="bool" value="false" />
+      <show-parameter-name sys:type="bool" value="true" />
+      <alignment sys:type="int" value="0" />
+      <underline sys:type="bool" value="false" />
+      <changing-digit sys:type="int" value="-1" />
+      <show-measure-units sys:type="bool" value="false" />
+      <bold sys:type="bool" value="false" />
+      <measure-units sys:type="string" />
+      <style sys:id="38" sys:version="2.0.0.10" sys:type="component-style">
+        <resize-by-content sys:type="bool" value="true" />
+        <font sys:type="font" value="Arial plain 14" />
+        <background-color sys:type="color" value="#80cc99ff" />
+        <color sys:type="color" value="#ff000000" />
+        <border sys:type="enum" value="enumborder.empty" class="rus.sketchpad.view.styles.EnumBorder" />
+        <margin sys:type="insets" value="5, 10, 5, 10" />
+        <text-mode sys:type="enum" value="textmode.tex" class="rus.sketchpad.view.TextMode" />
+        <background-opaque sys:type="bool" value="true" />
+        <size sys:type="dimension" value="80,30" />
+      </style>
+      <show-default-tooltip sys:type="bool" value="false" />
+      <visibility sys:type="enum" value="visibility.visible" class="rus.sketchpad.model.Visibility" />
+      <fraction-digits sys:type="int" value="1" />
+    </parameters>
+    <filled sys:id="24" sys:version="2.0.0.10" sys:type="filled-template">
+      <model-restriction sys:id="22" sys:version="2.0.0.10" sys:type="common-mr">
+        <removable sys:type="bool" value="true" />
+        <editable sys:type="bool" value="false" />
+        <selectable sys:type="bool" value="true" />
+        <movable sys:type="bool" value="true" />
+      </model-restriction>
+      <style sys:id="21" sys:version="2.0.0.10" sys:type="filled-style">
+        <border-type sys:type="enum" value="linetype.normal" class="rus.sketchpad.view.LineType" />
+        <color sys:type="color" value="#8099ccff" />
+        <border-color sys:type="color" value="#ffff9900" />
+        <pattern-color sys:type="color" value="#ff000000" />
+        <pattern-type sys:type="enum" value="patterntype.solid" class="rus.sketchpad.view.FilledPatternType" />
+        <draw-border sys:type="bool" value="false" />
+        <fill sys:type="bool" value="true" />
+      </style>
+      <show-default-tooltip sys:type="bool" value="false" />
+      <z-order sys:type="int" value="0" />
+      <visibility sys:type="enum" value="visibility.visible" class="rus.sketchpad.model.Visibility" />
+      <color-source sys:id="23" sys:version="2.0.0.10" sys:type="static-color-source">
+        <color sys:type="color" value="#8099ccff" />
+      </color-source>
+    </filled>
+    <input-fields sys:id="49" sys:version="2.0.0.10" sys:type="component-template">
+      <model-restriction sys:id="47" sys:version="2.0.0.10" sys:type="common-mr">
+        <removable sys:type="bool" value="true" />
+        <editable sys:type="bool" value="true" />
+        <selectable sys:type="bool" value="true" />
+        <movable sys:type="bool" value="true" />
+      </model-restriction>
+      <style sys:id="46" sys:version="2.0.0.10" sys:type="component-style">
+        <resize-by-content sys:type="bool" value="false" />
+        <font sys:type="font" value="Arial plain 14" />
+        <background-color sys:type="color" value="#80ffcccc" />
+        <color sys:type="color" value="#ff000000" />
+        <border sys:type="enum" value="enumborder.lowered-bevel" class="rus.sketchpad.view.styles.EnumBorder" />
+        <margin sys:type="insets" value="5, 10, 5, 10" />
+        <text-mode sys:type="enum" value="textmode.tex" class="rus.sketchpad.view.TextMode" />
+        <background-opaque sys:type="bool" value="true" />
+        <size sys:type="dimension" value="100,40" />
+      </style>
+      <show-default-tooltip sys:type="bool" value="false" />
+      <underline sys:type="bool" value="false" />
+      <z-order sys:type="int" value="15" />
+      <italic sys:type="bool" value="false" />
+      <default-text sys:id="48" sys:version="2.0.0.10" sys:type="rich-text">
+        <type sys:type="enum" value="textmode.tex" class="rus.sketchpad.view.TextMode" />
+        <text sys:type="string">\begin{document}\end{document}</text>
+      </default-text>
+      <bold sys:type="bool" value="false" />
+      <alignment sys:type="int" value="0" />
+      <visibility sys:type="enum" value="visibility.visible" class="rus.sketchpad.model.Visibility" />
+    </input-fields>
+    <vectors sys:id="8" sys:version="2.0.0.10" sys:type="vector-template">
+      <model-restriction sys:id="7" sys:version="2.0.0.10" sys:type="common-mr">
+        <removable sys:type="bool" value="true" />
+        <editable sys:type="bool" value="true" />
+        <selectable sys:type="bool" value="true" />
+        <movable sys:type="bool" value="true" />
+      </model-restriction>
+      <style sys:id="6" sys:version="2.0.0.10" sys:type="vector-style">
+        <arrow-length sys:type="int" value="10" />
+        <arrow-width sys:type="int" value="5" />
+        <color sys:type="color" value="#ff000000" />
+        <line-type sys:type="enum" value="linetype.normal" class="rus.sketchpad.view.LineType" />
+        <arrow-size sys:type="int" value="10" />
+        <arrow-type sys:type="enum" value="arrow.rounded" class="rus.sketchpad.view.VectorArrowType" />
+      </style>
+      <show-default-tooltip sys:type="bool" value="false" />
+      <z-order sys:type="int" value="0" />
+      <visibility sys:type="enum" value="visibility.visible" class="rus.sketchpad.model.Visibility" />
+    </vectors>
+    <expressions sys:id="53" sys:version="2.0.0.10" sys:type="expression-template">
+      <calculation-format sys:type="string">{0,number,0.0;'−'0.0}</calculation-format>
+      <show-result sys:type="bool" value="true" />
+      <formula-attributes>
+        <underline sys:type="bool" value="false" />
+        <font sys:type="null" />
+        <color sys:type="null" />
+        <italic sys:type="bool" value="false" />
+        <bold sys:type="bool" value="false" />
+      </formula-attributes>
+      <suffix sys:type="string" />
+      <alignment sys:type="int" value="0" />
+      <prefix-attributes>
+        <underline sys:type="bool" value="false" />
+        <font sys:type="null" />
+        <color sys:type="null" />
+        <italic sys:type="bool" value="false" />
+        <bold sys:type="bool" value="false" />
+      </prefix-attributes>
+      <italic sys:type="bool" value="false" />
+      <model-restriction sys:id="51" sys:version="2.0.0.10" sys:type="common-mr">
+        <removable sys:type="bool" value="true" />
+        <editable sys:type="bool" value="true" />
+        <selectable sys:type="bool" value="true" />
+        <movable sys:type="bool" value="true" />
+      </model-restriction>
+      <show-prefix sys:type="bool" value="true" />
+      <area-units sys:type="string">&lt;html&gt;см&lt;sup&gt;2&lt;/sup&gt;&lt;/html&gt;</area-units>
+      <visibility sys:type="enum" value="visibility.visible" class="rus.sketchpad.model.Visibility" />
+      <style sys:id="50" sys:version="2.0.0.10" sys:type="component-style">
+        <resize-by-content sys:type="bool" value="true" />
+        <font sys:type="font" value="Arial plain 14" />
+        <background-color sys:type="color" value="#8099ff99" />
+        <color sys:type="color" value="#ff000000" />
+        <border sys:type="enum" value="enumborder.empty" class="rus.sketchpad.view.styles.EnumBorder" />
+        <margin sys:type="insets" value="5, 10, 5, 10" />
+        <text-mode sys:type="enum" value="textmode.tex" class="rus.sketchpad.view.TextMode" />
+        <background-opaque sys:type="bool" value="true" />
+        <size sys:type="dimension" value="80,30" />
+      </style>
+      <prefix sys:type="string" />
+      <show-formula sys:type="bool" value="true" />
+      <show-default-tooltip sys:type="bool" value="false" />
+      <bold sys:type="bool" value="false" />
+      <lightweight sys:type="bool" value="true" />
+      <underline sys:type="bool" value="false" />
+      <angle-format sys:type="string">{0,number,0.0;'−'0.0}</angle-format>
+      <area-format sys:type="string">{0,number,0.0;'−'0.0}</area-format>
+      <distance-format sys:type="string">{0,number,0.0;'−'0.0}</distance-format>
+      <z-order sys:type="int" value="15" />
+      <distance-units sys:type="string">см</distance-units>
+      <angle-units sys:type="enum" value="angle-mu-deg" class="rus.sketchpad.model.AngleMU" />
+      <default-text sys:id="52" sys:version="2.0.0.10" sys:type="rich-text">
+        <type sys:type="enum" value="textmode.tex" class="rus.sketchpad.view.TextMode" />
+        <text sys:type="string">\begin{document}\end{document}</text>
+      </default-text>
+      <result-format-pattern sys:type="string">##0.0</result-format-pattern>
+      <show-suffix sys:type="bool" value="true" />
+      <suffix-attributes>
+        <underline sys:type="bool" value="false" />
+        <font sys:type="null" />
+        <color sys:type="null" />
+        <italic sys:type="bool" value="false" />
+        <bold sys:type="bool" value="false" />
+      </suffix-attributes>
+      <result-attributes>
+        <underline sys:type="bool" value="false" />
+        <font sys:type="null" />
+        <color sys:type="null" />
+        <italic sys:type="bool" value="false" />
+        <bold sys:type="bool" value="false" />
+      </result-attributes>
+      <default-expression sys:type="string" />
+    </expressions>
+    <sheet sys:id="76" sys:version="2.0.0.10" sys:type="sheet-template">
+      <selection-color sys:type="color" value="#ffff00ff" />
+      <width sys:type="int" value="1200" />
+      <fill-viewport />
+      <size-by-window sys:type="bool" value="true" />
+      <background-color sys:type="color" value="#ffffffff" />
+      <rollover-component-content sys:type="bool" value="false" />
+      <root-frame-template sys:id="75" sys:version="2.0.0.10" sys:type="frame-template">
+        <z-order sys:type="int" value="0" />
+        <default-size sys:type="rectangle" value="0.0, 0.0, 400.0, 400.0" />
+        <may-scroll-by-origin sys:type="bool" value="false" />
+        <may-change-scales-by-unit sys:type="bool" value="true" />
+        <model-restriction sys:id="74" sys:version="2.0.0.10" sys:type="common-mr">
+          <removable sys:type="bool" value="false" />
+          <editable sys:type="bool" value="false" />
+          <selectable sys:type="bool" value="false" />
+          <movable sys:type="bool" value="false" />
+        </model-restriction>
+        <may-change-scale-x sys:type="bool" value="true" />
+        <may-change-scale-y sys:type="bool" value="true" />
+        <may-change-scales sys:type="bool" value="true" />
+        <scrollable sys:type="bool" value="false" />
+        <lock-scales sys:type="bool" value="true" />
+        <snap-type sys:type="enum" value="NONE" class="rus.sketchpad.model.SnapType" />
+        <style sys:id="73" sys:version="2.0.0.10" sys:type="frame-style">
+          <labels-color sys:type="color" value="#ff000000" />
+          <label-axis-ticks sys:type="bool" value="false" />
+          <ticks-font />
+          <ticks-color sys:type="color" value="#ff000000" />
+          <background-color sys:type="color" value="#ffffffff" />
+          <background-opaque sys:type="bool" value="false" />
+          <axis-style sys:type="enum" value="linetype.normal" class="rus.sketchpad.view.LineType" />
+          <draw-axis sys:type="bool" value="false" />
+          <draw-secondary-border-ticks sys:type="bool" value="false" />
+          <color sys:type="color" value="#ff000000" />
+          <secondary-grid-step sys:type="double" value="1.0" />
+          <draw-secondary-grid sys:type="bool" value="false" />
+          <main-grid-color sys:type="color" value="#ff99ccff" />
+          <clip-bounds sys:type="bool" value="false" />
+          <bounds-color sys:type="color" value="#ff99ccff" />
+          <draw-main-border-ticks sys:type="bool" value="false" />
+          <draw-secondary-axis-ticks sys:type="bool" value="true" />
+          <labels-font sys:type="font" value="Arial plain 10" />
+          <secondary-grid-color sys:type="color" value="#c899ccff" />
+          <draw-main-axis-ticks sys:type="bool" value="true" />
+          <draw-axis-ex />
+          <secondary-grid-style sys:type="enum" value="linetype.normal" class="rus.sketchpad.view.LineType" />
+          <draw-main-grid sys:type="bool" value="false" />
+          <main-grid-style sys:type="enum" value="linetype.normal" class="rus.sketchpad.view.LineType" />
+          <bounds-style sys:type="enum" value="linetype.thick" class="rus.sketchpad.view.LineType" />
+          <axis-color sys:type="color" value="#ff000000" />
+          <main-grid-step sys:type="double" value="5.0" />
+          <draw-bounds sys:type="bool" value="false" />
+          <label-border-ticks sys:type="bool" value="false" />
+        </style>
+        <show-default-tooltip sys:type="bool" value="false" />
+        <scale-x sys:type="double" value="30.0" />
+        <visibility sys:type="enum" value="visibility.visible" class="rus.sketchpad.model.Visibility" />
+        <scale-y sys:type="double" value="30.0" />
+        <may-scroll-by-arrows sys:type="bool" value="false" />
+      </root-frame-template>
+      <margins sys:type="int" value="0" />
+      <height sys:type="int" value="800" />
+    </sheet>
+  </construction-defaults>
+  <help>
+    <folders sys:type="map" />
+    <help-folder />
+    <urls sys:type="map">
+      <entry>
+        <value sys:type="string">http://obr.1c.ru/mathkit/help</value>
+        <key sys:type="locale" value="ru" />
+      </entry>
+      <entry>
+        <value sys:type="string">http://obr.1c.ru/mathkit/en/help</value>
+        <key sys:type="locale" value="en" />
+      </entry>
+    </urls>
+    <help-url sys:type="string">http://obr.1c.ru/mathkit/help</help-url>
+  </help>
+  <application-settings>
+    <selection-color sys:type="color" value="#ffff00ff" />
+    <rollover-color sys:type="color" value="#c8646464" />
+    <measure-units />
+    <highlighted-color sys:type="color" value="#ffffafaf" />
+    <hidden-color sys:type="color" value="#c8646464" />
+    <precisions />
+  </application-settings>
+</root>

@@ -1,0 +1,13 @@
+create file dces-settings.php in this directory containing text:
+
+<?php
+//Data Base
+define('DB_HOST', 'localhost:3306');
+define('DB_USER',  'root');
+define('DB_PASSWORD', '239');
+define('DB_NAME', 'dces');
+define('DB_PREFIX', 'dces_');
+
+//logging
+define('SYS_LOG_ENABLED', false);
+?>
